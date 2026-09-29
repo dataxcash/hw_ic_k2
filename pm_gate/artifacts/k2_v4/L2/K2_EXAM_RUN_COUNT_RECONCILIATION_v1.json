@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_exam_run_count_reconciliation_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-414 sec.3: one page, authorised vs actually run, following the repeated-work-dir token redlines.",
+ "exam_runs_by_record": [
+  {
+   "record": "EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT1_RECORD_v1.json",
+   "run_count": null,
+   "verdict": null,
+   "state": null
+  },
+  {
+   "record": "EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT2_RECORD_v1.json",
+   "run_count": "1/1",
+   "verdict": "FAIL",
+   "state": "GRADED"
+  },
+  {
+   "record": "EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT3_RECORD_v1.json",
+   "run_count": "1/1",
+   "verdict": "FAIL",
+   "state": "GRADED"
+  },
+  {
+   "record": "EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT4_RECORD_v1.json",
+   "run_count": "1/1",
+   "verdict": "FAIL",
+   "state": "GRADED"
+  }
+ ],
+ "this_window_non_exam_runs": {
+  "description": "the only board touches this window are DRY verifications (read-only or /tmp outputs); NOT exam runs; quota 0 consumed.",
+  "items": [
+   "corridor occupancy re-measure under B1 (read-only)",
+   "maze dry run B1+B2 (/tmp output)",
+   "maze dry run B2-only (/tmp output)",
+   "two kicad-cli DRC reads on the /tmp outputs"
+  ]
+ },
+ "conclusion": "no exam run was consumed beyond the authorised ones; the repeated-signature redlines were on a WORK-DIRECTORY token, not on exam runs.",
+ "OWNER-ITEMS": 0
+}

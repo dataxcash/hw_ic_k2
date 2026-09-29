@@ -29,6 +29,12 @@ def main():
                     help="C35 in-loop wall x0,y0,x1,y1 (mm) - set on the maze module so out-of-domain cells "
                          "are never selectable (forwarded, not repaired afterwards)")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--reflowable", default="",
+                    help="B1 (#K2-414 sec.2.1): comma list of POUR-REFLOWABLE nets - their copper is NOT an "
+                         "obstacle in the maze model (it reflows after routing); the landing no-isolated-copper "
+                         "gate is unchanged. '' = disable.")
+    ap.add_argument("--coarse-step", dest="coarse_step", default="fine",
+                    help="B2 (#K2-414 sec.2.2): 'fine' = use the in-register FINE_STEP (0.10); or a number.")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard"],
                     help="#K2-396: the maze's in-register deterministic routing order (default unchanged)")
     a = ap.parse_args()
@@ -39,11 +45,24 @@ def main():
     cv._req = lambda x, y: max(orig(x, y), a.floor)
     if a.bound_rect:                                  # C35：把域作为**搜索约束**注入（不改迷宫本体）
         mr.WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))
+    # ── #K2-414 §二.1 **B1 敷铜重分类**：可回流网（默认 GND）的铜**不入障碍模型** ──────────────
+    POUR = frozenset(n for n in (a.reflowable or "").split(",") if n)
+    if POUR and getattr(mr, "f3", None) is not None:
+        _orig_ctx = mr.f3.Ctx
+
+        def _ctx_no_pour(b):
+            c = _orig_ctx(b)
+            c.tracks = [t for t in c.tracks if t["net"] not in POUR]
+            c.vias = {u: v for u, v in c.vias.items() if v["net"] not in POUR}
+            c.pads = {u: p for u, p in c.pads.items() if p["net"] not in POUR}
+            return c
+        mr.f3.Ctx = _ctx_no_pour
     # ── #K2-392 第三边：**端口感知目标（port-aware goals）** ────────────────────────────
     # 端点「无空闲起止位」（no-free-start/goal-node）多因该端点落在**框外**（框被 C35 封死），
     # 迷宫在界内找不到属于该岛的格。处置：把**框切残段端口**（∂R 上、同网的 track 端点）当**目标**，
     # 把「跨框另猜目标」改成「接回该网在 ∂R 的端口」——同网铜在框外继续，故接到端口即恢复连通。
     # **不改迷宫本体**：运行期在 wrapper 内给 `mr.solve_edge` 打补丁（与 `cv._req`/`WALL_RECT` 同法）。
+    _set_step(a.coarse_step)
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
@@ -53,6 +72,8 @@ def main():
         pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,
                "n_failed_edges": len(recs),
                "endpoint_own_cell_hits": getattr(mr, "_endpoint_own_cell_hits", {}).get("hits", 0),
+               "b1_reflowable": sorted(POUR),
+               "b2_grid_step": ("FINE_STEP=%s" % getattr(mr, "FINE_STEP", "?")) if _FINE else _FINE_NUM,
                "endpoint_own_cell_rule": "#K2-412 sec.4.3 (D1): the endpoint-own-cell snap relaxation "
                                          "(bounded, C35-held, seg_exact/via_exact still gate) fires when the plain "
                                          "snap prunes a cell that lies on the net's OWN copper.",
@@ -63,6 +84,21 @@ def main():
         json.dump(pre, open(a.ledger + ".precheck.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json_dumps(s))
     return 0
+
+
+_FINE = True          # B2 default: use the in-register FINE_STEP (#K2-414 sec.2.2)
+_FINE_NUM = None      # explicit numeric override (None = unused)
+
+
+def _set_step(mode):
+    """B2: 'fine' => use mr.FINE_STEP; a number => that number; anything falsy => keep the caller's step."""
+    global _FINE, _FINE_NUM
+    if mode in (None, "", "keep"):
+        _FINE, _FINE_NUM = False, None
+    elif mode == "fine":
+        _FINE, _FINE_NUM = True, None
+    else:
+        _FINE, _FINE_NUM = False, float(mode)
 
 
 def _install_port_aware_goals(mr, wall, tol=0.02):
@@ -150,6 +186,8 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     REC = []
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+        # ── #K2-414 §二.2 **B2**：考试迷宫改用在册 `FINE_STEP`(0.10)（粗栅格剪掉的格在细栅格本就可通行）──
+        coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
         sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
         if sol is not None:

@@ -47,14 +47,14 @@ def rect_gap(a, b):
     return (dx * dx + dy * dy) ** 0.5
 
 
-def occupant_rects(b, layers, net, clearance):
+def occupant_rects(b, layers, net, clearance, reflowable=frozenset()):
     """**只读取数**：板上（层∈layers）**异网**铜的包围盒 ＋ 是否与 corridor 相交由调用方用 `rect_gap` 判。
     返回 `[{"kind","net","layer","bbox","at"/"ref"/"pad"}...]`（确定性顺序：先 track/via 后 pad）。"""
     import pcbnew as P
     out = []
     for t in b.GetTracks():
         ln = b.GetLayerName(t.GetLayer())
-        if ln not in layers or t.GetNetname() == net:
+        if ln not in layers or t.GetNetname() == net or t.GetNetname() in reflowable:
             continue
         bb = t.GetBoundingBox()
         out.append({"kind": "track/via", "net": t.GetNetname(), "layer": ln,
@@ -62,7 +62,7 @@ def occupant_rects(b, layers, net, clearance):
                     "at": [round(P.ToMM(t.GetStart().x), 3), round(P.ToMM(t.GetStart().y), 3)]})
     for fp in b.GetFootprints():
         for pd in fp.Pads():
-            if pd.GetNetname() == net:
+            if pd.GetNetname() == net or pd.GetNetname() in reflowable:
                 continue
             for lay in pd.GetLayerSet().Seq():
                 ln = b.GetLayerName(lay)
@@ -76,7 +76,7 @@ def occupant_rects(b, layers, net, clearance):
     return out
 
 
-def audit(board_path, plan_path):
+def audit(board_path, plan_path, reflowable=frozenset()):
     import pcbnew as P
     plan = json.load(open(plan_path, encoding="utf-8"))
     gaps = (plan.get("corrected_complete_plan") or {}).get("per_gap_drawing") or []
@@ -85,7 +85,7 @@ def audit(board_path, plan_path):
            "clear_mm": CLEAR, "corridors": [], "OWNER-ITEMS": 0}
     for gi, g in enumerate(gaps):
         layers, rect = parse_corridor(g.get("corridor"))
-        occ = [o for o in occupant_rects(b, layers, g["net"], CLEAR)
+        occ = [o for o in occupant_rects(b, layers, g["net"], CLEAR, reflowable)
                if rect_gap(rect, o["bbox"]) <= CLEAR + 1e-9]
         for o in occ:
             o.pop("bbox", None)
@@ -102,9 +102,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--board", required=True)
     ap.add_argument("--plan", required=True)
+    ap.add_argument("--reflowable", default="GND", help="comma list of nets treated as POUR-REFLOWABLE (B1, #K2-414 sec.2.1)")
     ap.add_argument("--json-out", default=None)
     a = ap.parse_args()
-    rep = audit(a.board, a.plan)
+    rep = audit(a.board, a.plan, frozenset(x for x in a.reflowable.split(",") if x))
     if a.json_out:
         json.dump(rep, open(a.json_out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(rep, ensure_ascii=False))

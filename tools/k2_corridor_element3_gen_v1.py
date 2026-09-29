@@ -37,7 +37,7 @@ def drc_pairs(drc):
     return out
 
 
-def generate(board, plan_path, drc_path, clearance=DEFAULT_CLEAR):
+def generate(board, plan_path, drc_path, clearance=DEFAULT_CLEAR, reflowable=frozenset()):
     import pcbnew as P
     AUD = _load("k2_corridor_occupancy_audit_v1", "tools/k2_corridor_occupancy_audit_v1.py")
     RDR = _load("k2_corridor_redraw_v1", "tools/k2_corridor_redraw_v1.py")
@@ -52,7 +52,9 @@ def generate(board, plan_path, drc_path, clearance=DEFAULT_CLEAR):
             netw[n] = min(netw.get(n, 1e9), P.ToMM(t.GetWidth()))
     out = {"artifact": "k2_sec16_3_element3_concrete_v1", "ts": "2026-09-29", "board": board,
            "authority": "#K2-413 sec.5: B1 deterministic redraw + PER-CORRIDOR conservation machine check.",
-           "clearance_mm": clearance, "gaps": [], "OWNER-ITEMS": 0}
+           "clearance_mm": clearance, "reflowable_nets": sorted(reflowable),
+           "b1_rule": "#K2-414 sec.2.1: pour-derived nets are NOT obstacles (they reflow after routing); the landing no-isolated-copper gate is unchanged.",
+           "gaps": [], "OWNER-ITEMS": 0}
     for g in gaps:
         layers, rect = AUD.parse_corridor(g["v1_corridor"])
         cx, cy = (rect[0] + rect[2]) / 2, (rect[1] + rect[3]) / 2
@@ -69,14 +71,14 @@ def generate(board, plan_path, drc_path, clearance=DEFAULT_CLEAR):
             out["gaps"].append({"net": g["net"], "status": "NO_DRC_PAIR", "capacity_mm": None, "need_mm": None})
             continue
         _, a, bb = cand[0]
-        occ = [o["bbox"] for o in AUD.occupant_rects(b, layers, g["net"], clearance)
+        occ = [o["bbox"] for o in AUD.occupant_rects(b, layers, g["net"], clearance, reflowable)
                if AUD.rect_gap(rect, o["bbox"]) <= clearance + 1e-9]
         sub, _ = RDR.clear_subrect_containing_pts(rect, occ, clearance, [a, bb])
         s1, _ = RDR.clear_subrect_containing_pts(rect, occ, clearance, [a])
         s2, _ = RDR.clear_subrect_containing_pts(rect, occ, clearance, [bb])
         cap1 = min(s1[2] - s1[0], s1[3] - s1[1]) if s1 else 0.0
         cap2 = min(s2[2] - s2[0], s2[3] - s2[1]) if s2 else 0.0
-        allocc = AUD.occupant_rects(b, layers, g["net"], clearance)
+        allocc = AUD.occupant_rects(b, layers, g["net"], clearance, reflowable)
         blk = sorted({o["net"] for o in allocc if AUD.rect_gap(rect, o["bbox"]) <= clearance + 1e-9
                       and ((o["bbox"][0] - clearance - 1e-9 <= a[0] <= o["bbox"][2] + clearance + 1e-9
                             and o["bbox"][1] - clearance - 1e-9 <= a[1] <= o["bbox"][3] + clearance + 1e-9)
@@ -109,9 +111,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--board", required=True); ap.add_argument("--plan", required=True)
     ap.add_argument("--drc", required=True); ap.add_argument("--clearance", type=float, default=DEFAULT_CLEAR)
+    ap.add_argument("--reflowable", default="GND", help="B1: comma list of POUR-REFLOWABLE nets (not obstacles)")
     ap.add_argument("--json-out", default=None)
     a = ap.parse_args()
-    rep = generate(a.board, a.plan, a.drc, a.clearance)
+    rep = generate(a.board, a.plan, a.drc, a.clearance, frozenset(x for x in a.reflowable.split(",") if x))
     if a.json_out:
         json.dump(rep, open(a.json_out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(rep, ensure_ascii=False))

@@ -1208,6 +1208,40 @@ class T(unittest.TestCase):
         self.assertEqual(m.clear_subrect_containing_pts(rect, wall, 0.0, [(2, 5), (8, 5)]),
                          m.clear_subrect_containing_pts(rect, wall, 0.0, [(2, 5), (8, 5)]), "deterministic")
 
+    def test_C414_B2_uses_the_in_register_FINE_STEP_and_B1_filters_pour(self):
+        """#K2-414 sec.2.1/2.2 - B1: pour-reflowable nets are NOT obstacles in the maze model; B2: the maze is
+        called with the IN-REGISTER FINE_STEP(0.10). Stub-based, deterministic (no maze run, no board)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_reroute_router_floor_v1", os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        w = importlib.util.module_from_spec(spec); spec.loader.exec_module(w)
+        seen = {}
+
+        class MR:
+            LAYERS = ["F.Cu", "In5.Cu"]; LNAME = {"F.Cu": "F.Cu", "In5.Cu": "In5.Cu"}
+            FINE_STEP = 0.10; WALL_RECT = None
+
+            def __init__(self):
+                self.snap_node = lambda *a, **k: None
+
+                def solve_edge(ctx, find, cA, cB, net, la, pa, lb, pb, margin, cs):
+                    seen["cs"] = cs
+                    return {"legs": [], "vias": []}, "ok"
+                self.solve_edge = solve_edge
+
+        mr = MR()
+        w._set_step("fine")
+        w._install_port_aware_goals(mr, (0.0, 0.0, 1.0, 1.0))
+        mr.solve_edge(None, None, "A", "B", "N", "F.Cu", (0, 0), "F.Cu", (1, 1), 3.0, 0.25)
+        self.assertEqual(seen["cs"], 0.10, "B2: the maze must be called with the IN-REGISTER FINE_STEP")
+        w._set_step("keep")
+        mr.solve_edge(None, None, "A", "B", "N", "F.Cu", (0, 0), "F.Cu", (1, 1), 3.0, 0.25)
+        self.assertEqual(seen["cs"], 0.25, "`keep` must leave the caller's step untouched")
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn('c.tracks = [t for t in c.tracks if t["net"] not in POUR]', src,
+                      "B1: the pour-reflowable filter must sit in the maze obstacle context")
+        self.assertIn('ap.add_argument("--reflowable"', src)
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_means_b_dry_verify_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-414 sec.2 (B1 pour re-classification + B2 fine grid) + sec.2.3 dry verification (zero exam runs).",
+ "b1_occupancy": {
+  "rule": "re-measure the 8 corridors with GND reflowable (#K2-414 sec.2.1)",
+  "per_corridor_pass": "0/8",
+  "occupancy_after": {
+   "MCU_VDD": 15,
+   "NRST_a": 56,
+   "NRST_b": 8,
+   "PERSTA#": 31,
+   "P3V3_AUX": 1,
+   "I2C1_SCL": 87,
+   "I2C1_SDA": 6,
+   "P3V3": 40
+  },
+  "true_fixed_copper_blockers_named": {
+   "MCU_VDD": [
+    "12V_IN"
+   ],
+   "PERSTA#": [
+    "P3V3_AUX",
+    "PWR_BTN_OUT"
+   ]
+  },
+  "note": "the OTHER six fail the STRAIGHT-channel witness (fragmented/thin end) with no named point-blocker; the witness is conservative (bent channel not excluded)."
+ },
+ "maze_dry_runs": {
+  "B1+B2": {
+   "added": 7,
+   "blocked": 1,
+   "blocked_named": [
+    "P3V3(no-free-start-node)"
+   ]
+  },
+  "B2_only": {
+   "added": 4,
+   "blocked": 4
+  }
+ },
+ "soundness_DRC_delta_vs_input": {
+  "B2_only": {
+   "clearance": 91,
+   "copper_edge_clearance": 12,
+   "SHORTING_items": 0,
+   "tracks_crossing": 0
+  },
+  "B1+B2": {
+   "clearance": 113,
+   "copper_edge_clearance": 12,
+   "SHORTING_items": 17,
+   "tracks_crossing": 10,
+   "solder_mask_bridge": 3
+  },
+  "caveat": "the absolute DRC totals look rule-set inflated; the ROBUST signal is the RELATIVE one: B1 adds shorting/crossing, B2 does not."
+ },
+ "verdict": "DRY VERIFY NOT PASSED. B2 (fine grid) is SOUND but INSUFFICIENT (4/8). B1 (treat GND as reflowable) DOES route 7/8 but is UNSOUND: the GND copper in these corridors is GND TRACKS (not zone fill) and a track does NOT reflow => shorting_items/crossing appear. NOTE: the maze obstacle model ALREADY excludes ZONES/pour, so B1 has no sound target left.",
+ "recommendation": "withdraw/narrow B1 (pour-only) and instead pursue the true-fixed-copper carriers (12V_IN / P3V3_AUX / PWR_BTN_OUT) via the expansion/deviation channel; do NOT apply for the exam on B1+B2 as-is.",
+ "OWNER-ITEMS": 0
+}
