@@ -1395,6 +1395,22 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C442_out_of_dR_items_must_be_DECLARED_not_silently_accepted(self):
+        """#K2-446 sec.2.3(3) same-class regression: anything leaving dR must EITHER be refused loudly OR carry an
+        explicit allow_outside_dR declaration (sec.2.7 'declare, do not hide')."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location(
+            "k2pps2", os.path.join("tools", "k2_port_plane_stitch_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        rect = [22.95, 32.95, 51.5, 78.0]
+        lane = {"n": "R-g", "kind": "lane", "net": "P3V3", "layer": "In4.Cu",
+                "poly": [[42.8, 39.0], [58.5, 39.0]]}
+        self.assertEqual([r["why"] for r in m.validate({"lines": [dict(lane)]}, rect)],
+                         ["lane point outside dR"], "an undeclared outside-dR item must be refused LOUDLY")
+        declared = dict(lane); declared["allow_outside_dR"] = True
+        self.assertEqual(m.validate({"lines": [declared]}, rect), [],
+                         "an explicitly declared outside-dR item is allowed (and recorded by stitch())")
+
     def test_C442_the_outside_copper_check_can_see_zones(self):
         """#K2-442 sec.2.7: 'outside copper unchanged' must include ZONE fills - the legacy predicate read segments
         + vias only, which is a false-green blind spot. Zone edges must contribute, deterministically."""
