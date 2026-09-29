@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_e_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (same latched family) + the sec.2.3 blocker-report requirement.",
+ "object_named": {
+  "token": "k2t",
+  "what": "a WORK-DIRECTORY path constant of an EARLIER authorised run, referenced by read-only evidence commands; this window actually used a different work dir."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_window": 1,
+  "param_or_tool_edits": 0,
+  "reruns": 0,
+  "note": "the single run was the authorised N=1 (quota); there was no same-parameter rerun and no change-a-parameter->rerun."
+ },
+ "classification": "LATCHED FALSE POSITIVE, 4th instance of the same family (m1m2 -> m1m2 -> work-dir -> work-dir); the scanner accumulates historical path-constant occurrences with no ack/TTL/window, so it re-fires every turn.",
+ "blocker_report": {
+  "tried": "R1316 (R-e/R-f + one run, flat) -> R1318/R1320 (R-g/R-h analysed) -> R1322 (C6/zone blind spot closed, false green quantified at 943) -> R1324 (lane primitive + pad-field measurement) -> geometric full-lane: NONE found -> drafter fed a foreign DRC: zero output -> SAME-SOURCE draft succeeded -> R1326 (R-h frozen, 59 constants) -> R1328 (R-g bridge zone + sec.20 + one run: C1 3->2 with I2C1_SCL closed, but C2 newly broken).",
+  "why_it_fails": [
+   "the drawing toolchain lacks obstacle-avoiding lane generation (hand/geometric attempts provably infeasible)",
+   "the drafter was fed a non-same-source DRC (zero output; fixed in R1326)",
+   "CURRENT: the frozen lane and the maze's own copper cross, because the lane is added BEFORE the maze and nothing tells the maze it is fixed."
+  ],
+  "gap_layer": "the SCHEME (drawing) layer x the IMPLEMENTATION layer: the drawing gives the lane GEOMETRY but not the statement that the maze must not invade it; the cleared field and the maze share one search domain, so they must cross. NOT a criteria-layer issue (criteria read-only rev=6), NOT a classification issue."
+ },
+ "plan_recap": {
+  "q1": "power rides inner-layer planes (P3V3_AUX closed; P3V3 via the bridge zone pending judgement); the I2C1 pair is ONE group corridor -> one layer change -> into the chip (I2C1_SCL closed); control = short F.Cu links (NRST closed).",
+  "q2": "nothing is physically missing; the two DRAWN/ROUTED sets cross because neither is told the other is fixed (shared search domain).",
+  "q3": "reserve-then-route: mark the lane's corridor as fixed (no-go for the maze), or route first and draw the fixed lane afterwards; either works - pick one, then ONE run."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "fix tracks_crossing: (a) reserve the lane corridor / (b) draft after the maze / (c) fold the lane into the channel constraints",
+  "add I2C1_SDA's own lane (same method as SCL)",
+  "re-judge P3V3 after the C2 fix",
+  "then ONE N=1"
+ ],
+ "OWNER-ITEMS": 0
+}
