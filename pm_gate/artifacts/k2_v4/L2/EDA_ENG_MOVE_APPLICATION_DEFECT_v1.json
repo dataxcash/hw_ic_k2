@@ -1,0 +1,25 @@
+{
+ "artifact": "k2_eda_eng_move_application_defect_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-399 sec.2 step 1 follow-up: close M-ENG-MOVE-APPLICATION-PARTIAL with a per-ref machine check.",
+ "status": "CLOSED AS A CONFIRMED PRODUCT DEFECT (and it is larger than first thought)",
+ "evidence": [
+  "edit_placement_at(shadow, 25 members, [0,4]) -> applied 25 / missing 0; it edits L2/PLACEMENT_SOLUTION_v1.json.",
+  "BUT mech_probe_moves([('J13',0.0,4.0)], work, return_board=True) returns a GEN board on which J13.2 is STILL at [29.21,46.54] - i.e. J13 DID NOT MOVE.",
+  "=> the generator's effective position for J13 does not come from PLACEMENT_SOLUTION_v1.json (or the edit is not reaching it), so a requested move can be SILENTLY ABSENT from the board the placement gate DRCs."
+ ],
+ "impact": {
+  "placement_gate": "mech_probe_moves can evaluate a board that does NOT reflect part of the requested displacement => 'gate PASS' for such a step is vacuous for that part.",
+  "derivations": "the A-double-prime / A-triple-prime per-part maps may contain steps that never reached the probed board (J13 is proven; the set of affected refs is not yet bounded).",
+  "explains": "the rigid probe's '[S1 PAD_OVERLAP] C88.1 (moved) vs J13.2 (unmoved)' message."
+ },
+ "needed_fix": [
+  "1. make mech_probe_moves FAIL-CLOSED when a requested ref's position on the produced board does not equal base + delta (a per-ref verification; the current code never checks).",
+  "2. find the generator's real placement source for refs like J13 and make the edit path reach it (or declare the ref unmovable)."
+ ],
+ "per_K2_399": {
+  "anti_idling": "this is a NEW cause (a product defect in the move-application path), not a same-family derivation failure; it invalidates any further derivation until fixed.",
+  "recommend": "sec.17.4 change of means is now strongly supported; alternatively an A-class DEFECT-FIX window (zero exam runs) before any further derivation."
+ },
+ "OWNER-ITEMS": 0
+}
