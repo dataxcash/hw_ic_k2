@@ -1,0 +1,133 @@
+{
+ "artifact": "k2_exam_a_quadruple_prime_derivation_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-397 sec.3.1: re-derive exam A^4 over the ORIGINAL directive's true scope (the cluster moves DOWN into the J12 vacated band).",
+ "per_part_DOWN_derivation": {
+  "method": "regen.rearrange_probe(l14, rect4=[22.95,32.95,51.5,78.0], members, work, direction=(0,1)) - a NEW deterministic direction parameter (default (1,1) = the SE lattice, unchanged).",
+  "result": {
+   "n_moved": 22,
+   "n_members": 25,
+   "probes": 65,
+   "moved": {
+    "J11": [
+     0,
+     4.0
+    ],
+    "J13": [
+     0,
+     4.0
+    ],
+    "J9": [
+     0,
+     4.0
+    ],
+    "J12": [
+     0,
+     4.0
+    ],
+    "J6": [
+     0,
+     4.0
+    ],
+    "E2": [
+     0,
+     1.0
+    ],
+    "L1": [
+     0,
+     4.0
+    ],
+    "C84": [
+     0,
+     4.0
+    ],
+    "U5": [
+     0,
+     4.0
+    ],
+    "U4": [
+     0,
+     4.0
+    ],
+    "C73": [
+     0,
+     4.0
+    ],
+    "C88": [
+     0,
+     3.5
+    ],
+    "R1": [
+     0,
+     2.5
+    ],
+    "R28": [
+     0,
+     4.0
+    ],
+    "C86": [
+     0,
+     4.0
+    ],
+    "D1": [
+     0,
+     4.0
+    ],
+    "R21": [
+     0,
+     4.0
+    ],
+    "R40": [
+     0,
+     3.0
+    ],
+    "R41": [
+     0,
+     4.0
+    ],
+    "C90": [
+     0,
+     0.5
+    ],
+    "C85": [
+     0,
+     4.0
+    ],
+    "C87": [
+     0,
+     4.0
+    ]
+   },
+   "no_step": [
+    "U1",
+    "D2",
+    "U2"
+   ]
+  },
+  "diagnosis": "the per-part derivation moves U1 FIRST (largest pad area) with every OTHER part still unmoved, so a DOWN shift of U1 runs into J9's band (the mask/copper gate rejects it) - a COHERENT cluster translation can never emerge from a per-part, independence-assuming derivation.",
+  "conclusion": "the per-part family is the WRONG sub-family for the original directive (#K2-397 sec.2)."
+ },
+ "rigid_cluster_translation": {
+  "method": "regen.mech_probe_moves([(ref,0,dy) for ref in members], ...) - ONE identical delta for ALL 25 members (a rigid move).",
+  "result": {
+   "dy_1.0mm": {
+    "new_violations": {}
+   },
+   "dy_2.0mm": {
+    "new_violations": {}
+   },
+   "dy_4.0mm": {
+    "new_violations": {}
+   }
+  },
+  "note": "a rigid down-shift of 1/2/4 mm introduces ZERO new violations (and even CLEARS the baseline's courtyards_overlap x2, pth_inside_courtyard x1 and all silk classes - raw post-move classes = {}).",
+  "conclusion": "A^4 = a RIGID cluster translation DOWNWARD - exactly the owner's original directive ('left parts move down'). This is the block-move model (block.move_block / relocate_block_chain), not the per-part one."
+ },
+ "next_steps_for_the_A4_run": {
+  "delta_choice": "deterministically the LARGEST rigid dy whose gate probe stays clean, bounded by the directive's band (y up to the H1 keepout north edge - 2mm); the probe already shows 4mm clean.",
+  "scenario_wiring": "an A^4 scenario (rect4 = the x-band extended DOWN + the 25 members + the rigid map) must be registered and the chain pointed at it (the chain currently reads L2/EXAM_A_PRIME_SCENARIO_v1.json).",
+  "judging": "nine rows C1-C9; C6 restated as 'diff = 0 outside the NEW frame'.",
+  "status": "NOT run in this window (the wiring + the delta selection are the remaining bounded steps)."
+ },
+ "OWNER-ITEMS": 0
+}

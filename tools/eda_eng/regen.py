@@ -388,7 +388,8 @@ def member_expansion(board, rect, members, buried_points, radius=1.0, margin=0.5
                     "re-checked; C6 is from here on 'diff = 0 OUTSIDE THE NEW FRAME'; NO second expansion."}
 
 
-def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board=False):
+def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board=False,
+                    direction=(1, 1)):
     """**A′（#K2-372 §二.1）目标相对位由闸逐件出**：N5 方向（SE，`(k*0.5, k*0.5)` 格点）· 逐件降序最大步
     优先 · 确定性序（默认：焊盘面积降序，面积大者先动 —— N5 是**面积**均衡规则）；逐件过
     `mech_probe_moves`（基线相对）⇒ 目标相对位 = 闸通过的逐件位移集合。"""
@@ -411,7 +412,7 @@ def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board
     for r in order:
         got = None
         for k in range(kmax, 0, -1):
-            d = (round(k * 0.5, 4), round(k * 0.5, 4))
+            d = (round(direction[0] * k * 0.5, 4), round(direction[1] * k * 0.5, 4))
             bx = bb_area.get(r, {}).get("bbox")
             if bx is None:
                 continue
