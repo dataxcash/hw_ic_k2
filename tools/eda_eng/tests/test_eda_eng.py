@@ -1259,6 +1259,25 @@ class T(unittest.TestCase):
         self.assertIn('"after_rip_clear"', src)
         self.assertIn("clear_subrect_containing_pts(rect, []", src, "the after-rip check is knowingly the ALL-removed case")
 
+    def test_C419_endpoint_reach_planner_is_order_preserving_and_zero_search(self):
+        """#K2-419 sec.5: the endpoint-reachability / re-layout generator. RED: a naive index-order fan INVERTS the
+        row order (lanes cross). GREEN: plan_lanes sorts along the row and assigns lanes ORDER-PRESERVINGLY (no
+        crossing), with EXACTLY ONE layer change per lane. Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_endpoint_reach_planner_v1", os.path.join("tools", "k2_endpoint_reach_planner_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        pts = [("A", 0.0, 3.0, "F.Cu"), ("B", 0.0, 1.0, "F.Cu"), ("C", 0.0, 2.0, "F.Cu")]   # a SHUFFLED row
+        naive = {n: (i - 1) * 0.25 for i, (n, _, _, _) in enumerate(pts)}
+        self.assertLess(naive["A"], naive["B"],
+                        "RED: the naive index-order fan gives the TOP pad (A,y=3) a SMALLER lane than the bottom (B,y=1) => inverted/crossing")
+        lanes = m.plan_lanes(pts, 0.25)
+        off = {l["net"]: l["offset"] for l in lanes}
+        self.assertLess(off["B"], off["C"]); self.assertLess(off["C"], off["A"])       # GREEN: order preserved
+        g = m.lane_geometry(next(l for l in lanes if l["net"] == "B"), 1.2, "In5.Cu")
+        self.assertEqual(g["n_via"], 1, "exactly ONE layer change per lane (reference policy)")
+        self.assertIsNone(m.lane_geometry(lanes[0], 1.2, None)["via"], "no layer change => no via")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

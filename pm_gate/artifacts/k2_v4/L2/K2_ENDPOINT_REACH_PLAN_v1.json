@@ -1,0 +1,281 @@
+{
+ "artifact": "k2_endpoint_reach_plan_v1",
+ "ts": "2026-09-29",
+ "board": "/tmp/opencode/a5s2/s3c_disposed.kicad_pcb",
+ "authority": "#K2-419 sec.5: the endpoint-reachability / re-layout generator (deterministic, zero search).",
+ "method": "group fanout / long straight runs / exactly ONE layer change per lane (copied reference policy)",
+ "lanes": [
+  {
+   "net": "P3V3",
+   "x": 43.4,
+   "y": 44.0,
+   "layer": "F.Cu",
+   "order": 0,
+   "lane": 0,
+   "offset": -0.875,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       43.4,
+       44.0
+      ],
+      [
+       44.6,
+       44.0
+      ],
+      [
+       44.6,
+       43.125
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 2,
+   "blockers_named": [
+    "GND",
+    "NRST"
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "x": 50.05,
+   "y": 45.0,
+   "layer": "F.Cu",
+   "order": 1,
+   "lane": 1,
+   "offset": -0.625,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       50.05,
+       45.0
+      ],
+      [
+       51.25,
+       45.0
+      ],
+      [
+       51.25,
+       44.375
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 2,
+   "blockers_named": [
+    "GND",
+    "NRST"
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "x": 29.21,
+   "y": 46.54,
+   "layer": "F.Cu",
+   "order": 2,
+   "lane": 2,
+   "offset": -0.375,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       29.21,
+       46.54
+      ],
+      [
+       30.41,
+       46.54
+      ],
+      [
+       30.41,
+       46.165
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 2,
+   "blockers_named": [
+    "GND",
+    "MCU_VDD"
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "x": 40.163,
+   "y": 50.25,
+   "layer": "F.Cu",
+   "order": 3,
+   "lane": 3,
+   "offset": -0.125,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       40.163,
+       50.25
+      ],
+      [
+       41.363,
+       50.25
+      ],
+      [
+       41.363,
+       50.125
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 1,
+   "blockers_named": [
+    "I2C1_SDA"
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "x": 29.65,
+   "y": 53.5,
+   "layer": "F.Cu",
+   "order": 4,
+   "lane": 4,
+   "offset": 0.125,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       29.65,
+       53.5
+      ],
+      [
+       30.85,
+       53.5
+      ],
+      [
+       30.85,
+       53.625
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 1,
+   "blockers_named": [
+    "GND"
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "x": 34.75,
+   "y": 55.775,
+   "layer": "In5.Cu",
+   "order": 5,
+   "lane": 5,
+   "offset": 0.375,
+   "segs": [
+    {
+     "layer": "In5.Cu",
+     "poly": [
+      [
+       34.75,
+       55.775
+      ],
+      [
+       35.95,
+       55.775
+      ],
+      [
+       35.95,
+       56.15
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 0,
+   "blockers_named": []
+  },
+  {
+   "net": "I2C1_SDA",
+   "x": 52.205,
+   "y": 61.905,
+   "layer": "B.Cu",
+   "order": 6,
+   "lane": 6,
+   "offset": 0.625,
+   "segs": [
+    {
+     "layer": "B.Cu",
+     "poly": [
+      [
+       52.205,
+       61.905
+      ],
+      [
+       53.405,
+       61.905
+      ],
+      [
+       53.405,
+       62.53
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 0,
+   "blockers_named": []
+  },
+  {
+   "net": "I2C1_SDA",
+   "x": 51.5,
+   "y": 67.455,
+   "layer": "F.Cu",
+   "order": 7,
+   "lane": 7,
+   "offset": 0.875,
+   "segs": [
+    {
+     "layer": "F.Cu",
+     "poly": [
+      [
+       51.5,
+       67.455
+      ],
+      [
+       52.7,
+       67.455
+      ],
+      [
+       52.7,
+       68.33
+      ]
+     ]
+    }
+   ],
+   "via": false,
+   "n_via": 0,
+   "n_blockers": 0,
+   "blockers_named": []
+  }
+ ],
+ "OWNER-ITEMS": 0,
+ "reading": "the asset is a DETERMINISTIC, ZERO-SEARCH fanout planner (order-preserving lanes; exactly one layer change per lane - the copied reference policy) that NAMES every foreign item each lane would hit. On the eight residual endpoints 6/8 lanes still report blockers (GND/NRST/MCU_VDD/I2C1_SDA) => the generator PLANS and DIAGNOSES deterministically; it does not magic the space away (that is the honest scope).",
+ "honest_scope": "the lane offsets are a fixed equal-pitch fan (a reference policy, not a search); the clearance check is conservative (21-point segment sampling + AABB)."
+}
