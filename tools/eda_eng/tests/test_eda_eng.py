@@ -1044,6 +1044,23 @@ class T(unittest.TestCase):
         self.assertIn("endpoint_stitch_applied", seg)
         self.assertLess(seg.index("endpoint_stitch_planned"), seg.index("pour_islands_detected"))
 
+    def test_C410_partial_apply_excludes_out_of_bound_stitches_by_name(self):
+        """#K2-410 §四.1：stitch **部分应用 ＋ 具名排除** —— 越框者**具名排除**、界内者**保留**
+        （确定性 · 零搜索 · 不再让单条越框计划作废整批）。"""
+        plans = [{"net": "IN", "polys": [[[1.0, 1.0], [2.0, 1.0], [2.0, 2.0]]], "layers": ["F.Cu"]},
+                 {"net": "OUT", "polys": [[[1.0, 1.0], [9.0, 1.0], [9.0, 2.0]]], "layers": ["F.Cu"]}]
+        inb, exc = regen.partition_stitch_plans(plans, [0, 0, 5, 5])
+        self.assertEqual([p["net"] for p in inb], ["IN"], "the in-bound plan must be kept")
+        self.assertEqual([e["net"] for e in exc], ["OUT"], "the out-of-bound plan must be NAMED, not dropped silently")
+
+    def test_C410_the_chain_partitions_before_applying(self):
+        """路径感知 ＋ 顺序：先**分区**（具名排除）再**落板**。"""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        self.assertIn("endpoint_stitch_partitioned", seg)
+        self.assertLess(seg.index("endpoint_stitch_partitioned"), seg.index("endpoint_stitch_applied"))
+        self.assertIn("partition_stitch_plans(st_plans, rect)", seg)
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

@@ -1293,6 +1293,22 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
 # **exam A″（#K2-379 owner 简化令）**：局部清空 + 全流程重解（弃一切"保留手术"）
 # 单一谓词：与 R 相交的铜**全删**（不分类）→ 块内 N 网用**在册标准流程**在 域=R 内重解 → 复敷铜 → C1–C7
 # ─────────────────────────────────────────────────────────────────────────────
+def partition_stitch_plans(plans, bound_rect, tol=1e-6):
+    """**纯函数**（#K2-410 §四.1）：把 stitch 计划按**框**分成 `(in_bound, excluded)` ——
+    越框者**具名排除**（`{"net","points"}`），**绝不**整批拖垮（原 `--bound-rect` 为全有/全无）。
+    确定性 · 零搜索。"""
+    x0, y0, x1, y1 = (float(bound_rect[0]) - tol, float(bound_rect[1]) - tol,
+                      float(bound_rect[2]) + tol, float(bound_rect[3]) + tol)
+    inb, exc = [], []
+    for pl in plans:
+        pts = [q for poly in pl.get("polys", []) for q in poly] + [v["at"] for v in pl.get("vias", [])]
+        if all(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 for q in pts):
+            inb.append(pl)
+        else:
+            exc.append({"net": pl.get("net"), "points": pts})
+    return inb, exc
+
+
 def stitch_layer_of(desc):
     """**纯函数**（#K2-408 §四.2）：从 DRC item 描述里取**层名**（取不到 ⇒ F.Cu）。"""
     import re as _re
@@ -1413,10 +1429,18 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
         sf = os.path.join(work, "s2c_stitch.json")
         json.dump(st_plans, open(sf, "w", encoding="utf-8"), ensure_ascii=False)
         stitched = os.path.join(work, "s2c_stitched.kicad_pcb")
-        rc_s, st_out = _cli("route", "--apply-batch", sf, "--board", resolved, "--out", stitched,
-                            "--bound-rect", ",".join(str(x) for x in rect))
-        if rc_s == 0 and os.path.isfile(stitched):
-            resolved = stitched
+        # #K2-410 §四.1：**框内预过滤 ⇒ 部分应用 ＋ 具名排除**（不再让单条越框计划作废整批）
+        inb, exc = partition_stitch_plans(st_plans, rect)
+        chain.append({"stage": "endpoint_stitch_partitioned", "in_bound": len(inb), "excluded": len(exc),
+                      "excluded_named": [e["net"] for e in exc]})
+        if inb:
+            sf2 = os.path.join(work, "s2c_stitch_inb.json")
+            json.dump(inb, open(sf2, "w", encoding="utf-8"), ensure_ascii=False)
+            stitched = os.path.join(work, "s2c_stitched.kicad_pcb")
+            rc_s, st_out = _cli("route", "--apply-batch", sf2, "--board", resolved, "--out", stitched,
+                                "--bound-rect", ",".join(str(x) for x in rect))
+            if rc_s == 0 and os.path.isfile(stitched):
+                resolved = stitched
     chain.append({"stage": "endpoint_stitch_applied", "exit": (st_out or {}).get("status") if isinstance(st_out, dict) else st_out})
 
     # ③ refill（块内 zone 重跑 filler）= apply-batch 空计划（其内建 ZONE_FILLER）

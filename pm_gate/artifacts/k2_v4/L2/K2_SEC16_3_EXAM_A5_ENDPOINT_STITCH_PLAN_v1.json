@@ -26,5 +26,27 @@
  },
  "buildability": "relocation_listed",
  "regression_required": "a same-kind regression (RED first, then GREEN): a named endpoint that the maze refuses must be STITCHED by the new stage and the resulting board must show it connected (C1 decremented for that net).",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "segment1_update_K2_410": {
+  "authority": "#K2-410 sec.4.1: update the sec.16.3 artifact with the partial-apply semantics + the gate reading.",
+  "partial_apply": "new pure helper partition_stitch_plans(plans, bound_rect) splits the stitch plans into (in_bound, excluded) and the chain now applies ONLY the in-bound subset while NAMING the excluded ones (no more all-or-nothing batch refusal at --bound-rect).",
+  "gate_reading": {
+   "measured_on": "the A-quintuple-prime run's post-second-maze board",
+   "k_in_bound": 4,
+   "of": 8,
+   "excluded_named": [
+    "PERSTA#",
+    "P3V3_AUX",
+    "I2C1_SDA",
+    "P3V3"
+   ],
+   "in_bound_nets": [
+    "I2C1_SCL",
+    "MCU_VDD",
+    "NRST"
+   ]
+  },
+  "consequence": "#K2-410 sec.4.2: k < 8 => DO NOT burn segment 2. The four excluded gaps have plans whose endpoint pairs inherently reach OUTSIDE the frame (their pair distance spans the frame), so they cannot be stitched in-bound by this stage.",
+  "sec16_layer_gate": "the four excluded gaps are a DRAWING-layer matter (their connectivity must be re-derived INSIDE the domain, i.e. the maze must route them, not a direct stitch) => return to the planning layer for those four; the in-bound four are stitchable as implemented."
+ }
 }
