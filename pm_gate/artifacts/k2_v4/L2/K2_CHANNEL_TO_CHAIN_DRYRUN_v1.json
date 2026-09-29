@@ -1,0 +1,18 @@
+{
+ "artifact": "k2_channel_to_chain_dryrun_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3.2: the dry run feeding the per-row channels into --channels.",
+ "reading": {
+  "added": 0,
+  "blocked": 5,
+  "segs": 0,
+  "vias": 0,
+  "len": 0,
+  "reasons": {
+   "exception:NameError": 5
+  }
+ },
+ "void": "INVALID: the opt-in channel path raises NameError per edge (blocked 5/5, added 0). The DEFAULT path (no --channels) is UNAFFECTED (the flag defaults to empty), so no existing measurement is invalidated. The wiring needs a debug pass.",
+ "next": "debug the channel path (find the NameError), then re-run the dry reading; zero exam runs.",
+ "OWNER-ITEMS": 0
+}
