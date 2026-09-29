@@ -1013,6 +1013,37 @@ class T(unittest.TestCase):
         self.assertTrue(all("pass" in v for v in r["rows"].values()))
         self.assertEqual(sorted(set(r["render_rows"].values())), ["RENDER_REQUIRED"])
 
+    def test_C408_endpoint_stitch_turns_pairs_into_deterministic_l_stitches(self):
+        """#K2-408 §四.2：**端口可达性感知缝合段** —— 同网成对端点 ⇒ 一条**确定性 L 型 stitch**
+        （`[a, corner, b]` · corner=(b.x,a.y) · 跨层在 corner 落**一个**过孔）；异网/非成对 ⇒ **不产计划**（防误缝）。
+        **先 RED**（该纯函数此前不存在）**后 GREEN**。"""
+        drc = {"unconnected_items": [
+            {"items": [{"description": "F.Cu 上 C73 的焊盘 1 [NRST]", "pos": {"x": 1.0, "y": 2.0}},
+                       {"description": "F.Cu 上 U1 的焊盘 10 [NRST]", "pos": {"x": 3.0, "y": 5.0}}]},
+            {"items": [{"description": "走线 [PERSTA#] (In5.Cu), 长度: 0.25 mm", "pos": {"x": 7.0, "y": 8.0}},
+                       {"description": "F.Cu 上 R1 的焊盘 1 [PERSTA#]", "pos": {"x": 9.0, "y": 8.5}}]},
+            {"items": [{"description": "F.Cu 上 A [NET1]", "pos": {"x": 0.0, "y": 0.0}},
+                       {"description": "F.Cu 上 B [NET2]", "pos": {"x": 1.0, "y": 1.0}}]}]}
+        plans = regen.endpoint_stitch_plans(drc)
+        self.assertEqual(len(plans), 2, "same-net pairs only")
+        self.assertEqual(plans[0]["net"], "NRST")
+        self.assertEqual(plans[0]["polys"][0][1], [3.0, 2.0], "deterministic L corner")
+        self.assertEqual(plans[1]["layers"], ["In5.Cu"])
+        self.assertEqual(plans[1].get("vias", [{}])[0]["layers"], ["In5.Cu", "F.Cu"])
+        self.assertEqual(regen.stitch_layer_of("走线 [X] (In5.Cu)"), "In5.Cu")
+        self.assertEqual(regen.stitch_layer_of(""), "F.Cu")
+
+    def test_C408_the_chain_stitches_endpoints_before_the_refill(self):
+        """路径感知：缝合段必须在 **refill/孤岛阶段之前**（#K2-408 §四.2）。"""
+        import ast
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        tree = ast.parse(src)
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "wipe_resolve_chain")
+        seg = "\n".join(src.splitlines()[fn.lineno - 1:fn.end_lineno])
+        self.assertIn("endpoint_stitch_planned", seg)
+        self.assertIn("endpoint_stitch_applied", seg)
+        self.assertLess(seg.index("endpoint_stitch_planned"), seg.index("pour_islands_detected"))
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

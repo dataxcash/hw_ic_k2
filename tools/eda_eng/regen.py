@@ -1293,6 +1293,38 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
 # **exam A″（#K2-379 owner 简化令）**：局部清空 + 全流程重解（弃一切"保留手术"）
 # 单一谓词：与 R 相交的铜**全删**（不分类）→ 块内 N 网用**在册标准流程**在 域=R 内重解 → 复敷铜 → C1–C7
 # ─────────────────────────────────────────────────────────────────────────────
+def stitch_layer_of(desc):
+    """**纯函数**（#K2-408 §四.2）：从 DRC item 描述里取**层名**（取不到 ⇒ F.Cu）。"""
+    import re as _re
+    m = _re.search(r"(F\.Cu|B\.Cu|In\d+\.Cu)", desc or "")
+    return m.group(1) if m else "F.Cu"
+
+
+def endpoint_stitch_plans(drc_json, bound_rect=None):
+    """**纯函数**（#K2-408 §四.2 · 确定性 · 零搜索）：把 DRC 里**同网未接的成对端点**变成**一条 L 型 stitch**
+    （`[a, corner, b]`，corner=(b.x,a.y)）；跨层 ⇒ 在 corner 落**一个**过孔（层对 = 两端点层）。
+    返回 plans（list）。**不做任何搜索/参数试探**；越界者在 `apply-batch --bound-rect` 处被拒并具名。"""
+    out = []
+    for it in (drc_json.get("unconnected_items") or []):
+        its = it.get("items") or []
+        if len(its) != 2:
+            continue
+        da, db = its[0].get("description", ""), its[1].get("description", "")
+        import re as _re
+        ma, mb = _re.search(r"\[([^\]]+)\]", da or ""), _re.search(r"\[([^\]]+)\]", db or "")
+        if not ma or not mb or ma.group(1) != mb.group(1):
+            continue
+        pa = [its[0]["pos"]["x"], its[0]["pos"]["y"]]
+        pb = [its[1]["pos"]["x"], its[1]["pos"]["y"]]
+        corner = [pb[0], pa[1]]
+        la, lb = stitch_layer_of(da), stitch_layer_of(db)
+        plan = {"net": ma.group(1), "layer": None, "polys": [[pa, corner, pb]], "layers": [la]}
+        if la != lb:
+            plan["vias"] = [{"at": corner, "layers": [la, lb]}]
+        out.append(plan)
+    return out
+
+
 def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
@@ -1363,6 +1395,29 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,
                           "ledger": (json.load(open(led2, encoding="utf-8")) if os.path.isfile(led2) else None)})
+
+    # ②″ **端口可达性感知缝合段（#K2-408 §四.2 · 2c_endpoint_stitch）**：照抄在册 C17 v1 的 islands→stitch 语义 ——
+    # 对 DRC 仍报的**同网成对端点**，逐对落一条**确定性 L 型 stitch**（跨层一个过孔）；**零搜索/零试参**；
+    # 越界或不合规者由 `apply-batch --bound-rect` 与后续 DRC **具名**（绝不静默丢）。
+    d2c = os.path.join(work, "s2c_before_stitch_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d2c, resolved])
+    st_plans, st_out = [], None
+    if os.path.isfile(d2c):
+        try:
+            st_plans = endpoint_stitch_plans(json.load(open(d2c, encoding="utf-8")))
+        except Exception:                                          # noqa: BLE001
+            st_plans = []
+    chain.append({"stage": "endpoint_stitch_planned", "n": len(st_plans),
+                  "nets": sorted({pl["net"] for pl in st_plans})})
+    if st_plans:
+        sf = os.path.join(work, "s2c_stitch.json")
+        json.dump(st_plans, open(sf, "w", encoding="utf-8"), ensure_ascii=False)
+        stitched = os.path.join(work, "s2c_stitched.kicad_pcb")
+        rc_s, st_out = _cli("route", "--apply-batch", sf, "--board", resolved, "--out", stitched,
+                            "--bound-rect", ",".join(str(x) for x in rect))
+        if rc_s == 0 and os.path.isfile(stitched):
+            resolved = stitched
+    chain.append({"stage": "endpoint_stitch_applied", "exit": (st_out or {}).get("status") if isinstance(st_out, dict) else st_out})
 
     # ③ refill（块内 zone 重跑 filler）= apply-batch 空计划（其内建 ZONE_FILLER）
     final = os.path.join(work, "s3_refilled.kicad_pcb")
