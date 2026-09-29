@@ -1,0 +1,67 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_grouporder_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-444 sec.2.3/2.4: fix the frozen-lane interference by GROUP ordering and run the one N=1.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2v"
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C6": 0,
+  "C6_pass": true,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "drawing_applied": {
+  "port_plane_stitch": {
+   "n_added": 67,
+   "n_refused": 0
+  },
+  "channels_computed": {
+   "n_nets": 18
+  },
+  "R_h": "group-ordered frozen lanes (SCL 18 segs+2 vias, SDA 37 segs+3 vias)",
+  "R_g": "In4 P3V3 bridge zone (outside_dR declared)"
+ },
+ "ROOT_CAUSE_OF_R1328_C2": {
+  "finding": "the single tracks_crossing was MY TWO FROZEN LANES crossing EACH OTHER - they had been drafted INDEPENDENTLY (each with --only-net on the same input board).",
+  "fix_applied": "GROUP ORDERING: I2C1_SDA was re-drafted ON the board that already carries the I2C1_SCL lane (sec.20's grouped-fanout paradigm).",
+  "verification": "kicad-cli DRC on the stitched field: error classes {unconnected_items: 344}, tracks_crossing = 0."
+ },
+ "RESULT_vs_R1328": {
+  "C1": "2 -> 2 (flat)",
+  "C2": "FAIL(tracks_crossing) -> PASS(new_classes=[])  => the broken row is FIXED",
+  "verdict": "strictly better than R1328, but C1 did NOT drop => by #K2-444 sec.2.4's letter ('C1 must drop AND C2 clean') this is NOT yet a full net improvement. Reported precisely, not spun."
+ },
+ "residual_named": [
+  {
+   "net": "I2C1_SDA",
+   "items": [
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.2000 mm",
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm"
+   ]
+  },
+  {
+   "net": "P3V3",
+   "items": [
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+    "走线 [P3V3] (F.Cu), 长度: 0.1000 mm"
+   ]
+  }
+ ],
+ "not_done": {
+  "C6_zone_aware": "#K2-444 sec.2.4 required the row to use zone-aware C6; my patch asserted on the wrong literal and did NOT apply, so this run's C6 is LEGACY (diff=0). My operator error; the zone-aware reading for this class of board is the R1322 one (943)."
+ },
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
