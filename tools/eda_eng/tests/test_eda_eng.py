@@ -1172,6 +1172,25 @@ class T(unittest.TestCase):
         self.assertLessEqual(m.rect_gap((0, 0, 1, 1), (1.1, 0, 2, 1)), 0.20, "inside clearance => occupant")
         self.assertGreater(m.rect_gap((0, 0, 1, 1), (1.5, 0, 2, 1)), 0.20, "outside clearance => not an occupant")
 
+    def test_C412_corridor_redraw_is_deterministic_zero_search(self):
+        """#K2-412 sec.4.1 (v2 element 3): the REDRAW engine -- the largest clear axis-aligned sub-rectangle of the
+        corridor that CONTAINS the endpoint and avoids every (occupant + clearance); when the endpoint is BOXED the
+        items blocking it at the point are NAMED (the relocation list). Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_corridor_redraw_v1", os.path.join("tools", "k2_corridor_redraw_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        rect, cl, wall = (0, 0, 10, 10), 0.2, [[4, 0, 5, 8]]     # the wall inflates to [3.8,-0.2,5.2,8.2]
+        sub, blk = m.clear_subrect_containing(rect, wall, cl, (6, 5))
+        self.assertEqual(sub, (5.2, 0.0, 10.0, 10.0), "the clear side of the wall must be returned")
+        self.assertEqual(blk, [])
+        self.assertEqual(m.clear_subrect_containing(rect, wall, cl, (1, 5))[0], (0.0, 0.0, 3.8, 10.0))
+        self.assertEqual(m.clear_subrect_containing(rect, wall, cl, (6, 5))[0], sub, "must be deterministic")
+        # a BOXED endpoint (the point sits inside an occupant) => None + the blockers NAMED, never guessed
+        sub3, blk3 = m.clear_subrect_containing(rect, [[4, 4, 6, 6]], 0.0, (5, 5))
+        self.assertIsNone(sub3, "a boxed endpoint must be reported, not invented")
+        self.assertEqual(len(blk3), 1, "the item blocking the endpoint must be NAMED")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
