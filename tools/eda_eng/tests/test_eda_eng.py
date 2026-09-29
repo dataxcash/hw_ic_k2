@@ -1279,6 +1279,22 @@ class T(unittest.TestCase):
         bp = m.boundary_ports(blk, netof)
         self.assertIn("I2C1_SDA", bp["POWER"], "a net crossing blocks is a NAMED boundary port")
 
+    def test_C434_K3_multi_block_plan_is_simultaneous_disjoint_and_named(self):
+        """#K2-434 K-3 RED->GREEN: a block-by-block serial placement can overlap/starve; the deterministic
+        simultaneous plan stacks the blocks disjointly with the preconditions checked and NAMED on failure."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_functional_block_v1", os.path.join("tools", "k2_functional_block_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        blocks = {"POWER": {"members": ["U1"], "nets": ["MCU_VDD"]}, "BUS": {"members": ["E2"], "nets": ["I2C1_SDA"]}}
+        r = m.multi_block_plan(blocks, {"POWER": (4.0, 3.0), "BUS": (3.0, 2.0)}, (0, 0, 10, 20))
+        self.assertEqual(r["verdict"], "FEASIBLE", "the plan fits => FEASIBLE")
+        self.assertTrue(r["checks"]["disjoint"] and r["checks"]["area_ok"] and r["checks"]["hs_safe"])
+        self.assertEqual(len(r["plan"]), 2, "N=2 blocks move in ONE plan (simultaneous)")
+        big = m.multi_block_plan(blocks, {"POWER": (4.0, 30.0), "BUS": (3.0, 2.0)}, (0, 0, 10, 20))
+        self.assertEqual(big["verdict"], "INFEASIBLE", "does not fit => INFEASIBLE, never silent")
+        self.assertTrue(big["named"], "infeasibility is NAMED to the block")
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net

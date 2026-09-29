@@ -45,6 +45,34 @@ def boundary_ports(blocks, netof):
     return {fam: sorted(n for n in b["nets"] if len(owner.get(n, set())) > 1) for fam, b in blocks.items()}
 
 
+def multi_block_plan(blocks, sizes, region, hs_x_max=51.5, gap=0.3):
+    """**K-3 多块协同动**（#K2-434 §2.1 · 确定性 · 零搜索）：**一份计划**把 N≥1 块在 `region` 内**同时**落位——
+    按 **FAMILIES 序**沿 y **依次堆叠**（不相交）；**前置硬闸**逐条机核：
+      (1) 块间不重叠  (2) 面积守恒（Σ块面积 ≤ 区域面积）  (3) 端口数匹配（每块边界端口已具名）  (4) HS 安全带（x ≤ hs_x_max）零侵入；
+    **不可行 ⇒ 具名归因到块**（绝不静默）。`sizes`={fam:(w,h)}；返回 {plan:[...], checks:{...}, verdict}。"""
+    x0, y0, x1, y1 = [float(v) for v in region]
+    if x1 > hs_x_max + 1e-9:
+        x1 = hs_x_max                                   # HS safety band: never cross it
+    plan, cur = [], y0
+    order = [f for f, _ in FAMILIES if f in blocks]
+    for fam in order:
+        w, h = sizes.get(fam, (0.0, 0.0))
+        if cur + h > y1 + 1e-9:
+            return {"plan": plan, "checks": {"area_ok": False}, "verdict": "INFEASIBLE",
+                    "named": [{"block": fam, "why": "does not fit in the region (area/height)"}]}
+        plan.append({"block": fam, "target": [round(x0, 4), round(cur, 4), round(min(x0 + w, x1), 4), round(cur + h, 4)]})
+        cur += h + gap
+    ov = any(not (a["target"][2] <= b["target"][0] or b["target"][2] <= a["target"][0]
+                  or a["target"][3] <= b["target"][1] or b["target"][3] <= a["target"][1])
+             for i, a in enumerate(plan) for b in plan[i + 1:])
+    need = sum(sizes.get(f, (0, 0))[0] * sizes.get(f, (0, 0))[1] for f in order)
+    checks = {"disjoint": not ov, "area_ok": need <= (x1 - x0) * (y1 - y0) + 1e-9,
+              "ports_named": all(f in blocks for f in order), "hs_safe": all(p["target"][2] <= hs_x_max + 1e-9 for p in plan)}
+    v = "FEASIBLE" if all(checks.values()) else "INFEASIBLE"
+    named = [k for k, ok in checks.items() if not ok]
+    return {"plan": plan, "checks": checks, "verdict": v, "named": named}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--params", required=True, help='json: {members:[...], netof:{ref:[net..]}}')
