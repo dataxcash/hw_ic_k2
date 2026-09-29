@@ -1,0 +1,37 @@
+{
+ "artifact": "k2_rg_read_and_c6_zone_aware_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-444 sec.2.3/2.4: (i) read the R-g bridge effect separately, (ii) implement the zone-aware C6 row. Zero exam runs.",
+ "R_g_read_on_the_R1332_judged_board": {
+  "C84.1_cluster_items": 88,
+  "zones_in_cluster": 1,
+  "reaches_out_of_frame_blind_via_81_60_6": false,
+  "zones_present_on_the_final_board": [
+   {
+    "net": "P3V3",
+    "prio": 0,
+    "bbox_x": [
+     57.95,
+     142.7
+    ]
+   },
+   {
+    "net": "P3V3",
+    "prio": 100,
+    "bbox_x": [
+     34.271,
+     58.421
+    ]
+   }
+  ],
+  "DECISIVE_FINDING": "the bridge zone I added is NOT on the final board (the zone list still holds only the two originals) => the chain's own isolated-copper disposal stage removed it: after refill its fill touches no pad, so it is an orphan island and is disposed. R-g mechanism B therefore CANNOT work as drawn under the chain's current order.",
+  "implication": "R-g must be re-thought as either (a) a bridge that is anchored to the P3V3 pads/routes (so it is not an orphan), or (b) a zone-outline/priority change on the EXISTING finger zone (which IS anchored), or (c) a declared change that the disposal stage is told to keep."
+ },
+ "C6_zone_aware_implemented": {
+  "in": "tools/eda_eng/regen.py (wipe_resolve_chain only)",
+  "what": "the C6 row now compares zone-aware outside_geometry(include_zones=True) and additionally reports legacy_diff",
+  "why": "#K2-444 sec.2.4 ordered the row to use the zone-aware read; the previous attempt failed on an ambiguous literal (4 call sites) - this edit targets the single call inside wipe_resolve_chain.",
+  "measured_expectation": "per R1322, a judged board's zone-aware C6 diff is ~943 vs the baseline, so this row is expected to FAIL until either the chain stops touching outside fills or the supervisor restates the scope."
+ },
+ "OWNER-ITEMS": 0
+}
