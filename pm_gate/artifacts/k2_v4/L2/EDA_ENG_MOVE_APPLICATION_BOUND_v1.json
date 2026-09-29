@@ -39,7 +39,12 @@
   "denied_hypothesis": "the only J13/J9 special-case in build_device_table is the `value` field (J_SWD / J_OOB_HEADER); the COORDINATE is unconditionally dev[ref]['at'] = ref_pos[ref] = the edited PLACEMENT_SOLUTION entry.",
   "file_level_verdict": "edit_placement_at reports the 5 connectors APPLIED (writes refs[ref]['at']) and gen_v5 reads exactly that field, yet the produced board shows them unmoved => the override is NOT in the documented source chain; it is downstream and NOT yet named.",
   "declaration_per_K2_400_sec6_3": "FILED (second option): the five connectors are declared **NOT MOVABLE VIA THE CURRENT EDIT PATH** until the downstream override is named. The meter now NAMES every such case (move_not_applied), so the defect can no longer pass silently.",
-  "open_one_step": "name the downstream override for J6/J9/J11/J12/J13 (candidates: a connector placement stage in the k2_p4_build_l9 `crtyd`/later stages, or a re-emit of connector coordinates from the YAML sheets) and then either make the edit reach it or keep the declaration."
+  "open_one_step": "name the downstream override for J6/J9/J11/J12/J13 (candidates: a connector placement stage in the k2_p4_build_l9 `crtyd`/later stages, or a re-emit of connector coordinates from the YAML sheets) and then either make the edit reach it or keep the declaration.",
+  "K2_402_declaration": {
+   "rule": "#K2-402 sec.2.1 second option: connectors are NOT movable via the placement path.",
+   "evidence": "edit_placement_at writes refs[ref]['at']; gen_v5.load_placement() returns ref_pos from that same field and the emitter writes (at x y rot) from dev[ref]['at']=ref_pos[ref]; the only J13/J9 special-case is the `value` field. Yet the produced board is unmoved => the override is outside the documented chain and remains UNNAMED.",
+   "consequence": "their changes go via the BOARD-LEVEL ECO path (governance: J9/J6 removal, J11 already netlist-side removed - per #K2-345/#K2-377)."
+  }
  },
  "per_K2_400": {
   "anti_idling": "item 1 asset + regression DELIVERED => the window's hard precondition is met.",
