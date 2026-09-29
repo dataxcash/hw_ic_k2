@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_corridor_granularity_design_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-450 sec.2.4 (adopted means) + R1404 / the two refutations (whole-net granularity is infeasible). ZERO exam runs.",
+ "why_whole_net_granularity_is_dead": [
+  "y-band packing of whole nets needs sum(max(net y-extent, pitch)+pitch) = 239.92 mm vs a 45.05 mm corridor => 13/18 nets unplaced.",
+  "layer-colouring of whole-net y-intervals also fails: nets like MCU_VDD/P3V3/GND span nearly the whole frame, so their intervals overlap almost every other net => each demands a private layer => the chromatic number exceeds the 4 signal layers (measured: 11 placed, 7 unsat)."
+ ],
+ "correct_formulation": {
+  "step1": "subdivide the frame's y-span [32.95,78.0] into corridors of height>= ceil(n_crossing*x pitch): with up to ~18 nets crossing, a corridor must be >= 18*0.40 = 7.2 mm, so use 8 mm corridors (6 of them over 45.05mm).",
+  "step2": "for each corridor, take only the nets whose y-interval OVERLAPS that corridor (a net crosses only a few corridors, and inside one its span is short).",
+  "step3": "in each corridor, pack those nets with joint() over that corridor's own y-span at the 0.40 mm pitch => capacity per corridor = 8/0.4 = 20 slots >= 18 nets => FEASIBLE (this is the finished-product grouped-fanout/shared-corridor shape).",
+  "step4": "emit, per net, one channel rect PER CORRIDOR it crosses: (net.x0, slot_y, net.x1, slot_y+0.40)."
+ },
+ "the_blocking_interface_change": "the current --channels format is ONE rect per net (`net:x0,y0,x1,y1`), and the maze keeps `_CHANNELS[net] = rect`. A per-corridor formulation needs MULTIPLE rects per net (one per corridor), i.e. the format must allow a net to repeat, and the maze's channel application must become per-corridor (a net is constrained to the union of its corridor slots; inside corridor k it may only use its k-th slot's y-band).",
+ "therefore": "item (2) is DESIGNED and its required interface change is named; implementing it is the next code change (maze channel parser/application + channels_by_corridor + a pure regression that every corridor's crossing nets are packed with zero unsat).",
+ "expected_effect_if_implemented": "each net owns a disjoint y-slot in every corridor it crosses => no net can take another's slot => the starvation that produced the residual rotation (P3V3 -> PWR_BTN_OUT -> I2C2_SCL) disappears.",
+ "OWNER-ITEMS": 0
+}
