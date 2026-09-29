@@ -33,9 +33,51 @@ def touches(item, pads, routes, tol=TOL):
 
 
 def audit(added, pads, routes, tol=TOL):
-    """**响亮失败**：返回 `{"ok", "padless":[...]}`；`ok=False` ⇒ 存在无锚加件（不得出图）。"""
-    padless = [it for it in added if not touches(it, pads, routes, tol)]
-    return {"ok": not padless, "padless": padless, "n_added": len(added)}
+    """**簇判定**（#K2-449 sec.2.4 corrected）：把「加件 ＋ 既存走线 ＋ 焊盘」并成连通簇（重合端点；过孔连其层对；
+    端点落在焊盘 bbox 内即接焊盘），**加件有锚 ⇔ 其簇含焊盘**。无锚 ⇒ `ok=False`（响亮失败 · 不得出图）。"""
+    n = len(added)
+    parent = list(range(n + len(routes) + len(pads)))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    r0, p0 = n, n + len(routes)
+
+    def ends(it):
+        if it.get("kind") == "via":
+            return [tuple(it["at"])]
+        return [tuple(it["a"]), tuple(it["b"])]
+
+    for i, it in enumerate(added):
+        for pt in ends(it):
+            for k, bb in enumerate(pads):
+                if _pt_in_bbox(pt, bb, tol):
+                    union(i, p0 + k)
+            for j, rr in enumerate(routes):
+                if it.get("kind") != "via" and rr.get("layer") and rr["layer"] != it.get("layer"):
+                    continue
+                if any(abs(pt[0] - q[0]) <= tol and abs(pt[1] - q[1]) <= tol for q in (rr["a"], rr["b"])):
+                    union(i, r0 + j)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if any(abs(a[0] - b[0]) <= tol and abs(a[1] - b[1]) <= tol for a in ends(added[i]) for b in ends(added[j])):
+                if added[i].get("kind") == "via" or added[j].get("kind") == "via" or added[i].get("layer") == added[j].get("layer"):
+                    union(i, j)
+    for j, rr in enumerate(routes):                    # 既存走线亦可接焊盘
+        for pt in (rr["a"], rr["b"]):
+            for k, bb in enumerate(pads):
+                if _pt_in_bbox(pt, bb, tol):
+                    union(r0 + j, p0 + k)
+    anchored_roots = {find(p0 + k) for k in range(len(pads))}
+    padless = [added[i] for i in range(n) if find(i) not in anchored_roots]
+    return {"ok": not padless, "padless": padless, "n_added": n}
 
 
 def audit_board(board, rect, added):

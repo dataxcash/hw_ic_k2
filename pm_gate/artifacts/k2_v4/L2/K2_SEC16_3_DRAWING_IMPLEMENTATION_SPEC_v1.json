@@ -59,14 +59,15 @@
    "kind": "via",
    "net": "P3V3_AUX",
    "at": [
-    51.5,
-    38.75
+    51.65,
+    39.1
    ],
    "layers": [
     "In5.Cu",
     "In4.Cu"
    ],
-   "why": "R-c refinement: the In5 fragment starts exactly ON the boundary at (51.5,38.75); the previously frozen (51.55,39.0) lies OUTSIDE dR and a via there would change the outside geometry (C6). Land it at the fragment's in-frame start instead."
+   "why": "R1380 fix: this In5-In4 tie via was at (51.5,38.75) - 0.05mm from PWR_BTN_OUT's dR port start (51.5,38.7), i.e. it OCCUPIED that port and starved the net (drawing-side obligation, #K2-449 sec.2.5(2)). Moved outward along the In5 fragment to (51.65,39.1) (an existing In5 fragment endpoint, ~0.43mm from the port => clears the 0.20mm requirement); declared outside_dR accordingly.",
+   "allow_outside_dR": true
   },
   {
    "n": 4,

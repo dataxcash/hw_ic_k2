@@ -84,7 +84,7 @@ def stitch(board, rect, spec, out):
         code = _n.GetNetCode()
         if kind == "via":
             at = [float(v) for v in L["at"]]
-            if not (x0 - 1e-6 <= at[0] <= x1 + 1e-6 and y0 - 1e-6 <= at[1] <= y1 + 1e-6):
+            if (not L.get("allow_outside_dR")) and not (x0 - 1e-6 <= at[0] <= x1 + 1e-6 and y0 - 1e-6 <= at[1] <= y1 + 1e-6):
                 report["refused"].append(dict(item, why="via outside dR", at=at))
                 continue
             la, lb = L["layers"]
