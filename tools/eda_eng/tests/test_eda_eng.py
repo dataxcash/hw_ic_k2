@@ -1387,6 +1387,26 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C439_the_port_plane_stitch_sets_the_via_type_and_refuses_outside_dR(self):
+        """#K2-439 sec.2.10 means implementation: the drawing implementer must (a) SET THE VIA TYPE - an untyped
+        PCB_VIA comes out as a THROUGH via and shorted an In2 track in the first attempt (caught by DRC, not by a
+        run) - and (b) refuse any landing outside dR. The validation rule is pure, so it is unit-tested here."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location(
+            "k2pps", os.path.join("tools", "k2_port_plane_stitch_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        src = open(os.path.join("tools", "k2_port_plane_stitch_v1.py"), encoding="utf-8").read()
+        self.assertIn("SetViaType", src); self.assertIn("VIATYPE_BLIND", src)
+        rect = [22.95, 32.95, 51.5, 78.0]
+        self.assertEqual(m.validate({"lines": [
+            {"n": 1, "kind": "via", "net": "P3V3", "at": [42.8, 39.0], "layers": ["F.Cu", "In4.Cu"]},
+            {"n": 2, "kind": "port_stub", "net": "NRST", "layer": "F.Cu",
+             "near": [51.5, 40.45], "far": [50.9, 40.45]}]}, rect), [])
+        bad = m.validate({"lines": [
+            {"n": 1, "kind": "via", "net": "P3V3", "at": [52.0, 39.0], "layers": ["F.Cu", "In4.Cu"]},
+            {"n": 2, "kind": "track", "net": "P3V3", "layer": "F.Cu", "a": [43.4, 44.0], "b": [43.4, 79.0]}]}, rect)
+        self.assertEqual([r["why"] for r in bad], ["via outside dR", "endpoint outside dR"])
+
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
         inside the frame), so the sound lever is ORDER - the eight objective nets must be routed first."""

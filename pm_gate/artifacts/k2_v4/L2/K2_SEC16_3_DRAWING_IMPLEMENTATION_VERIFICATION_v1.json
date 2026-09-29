@@ -1,0 +1,60 @@
+{
+ "artifact": "k2_sec16_3_drawing_implementation_verification_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-439 sec.2.10 branch (forced means change): implement the sec.16.3 drawing as a standalone, deterministic tool, and VERIFY it mechanically BEFORE asking for approval. Zero exam runs.",
+ "tool": "tools/k2_port_plane_stitch_v1.py (new; NOT wired into the production chain)",
+ "spec": "K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json (8 frozen items: 3 port stubs, 4 plane-tie vias, 1 track)",
+ "applied_to": "/tmp/opencode/k2r/s1c_unfilled.kicad_pcb (the cleared field of the authorised N=1) -> /tmp/opencode/k2r/stitched_v3.kicad_pcb",
+ "added": {
+  "n": 8,
+  "n_refused": 0,
+  "items": [
+   "L1 NRST port_stub F.Cu (51.5,40.45)->(50.90,40.45) w=0.20",
+   "L2 P3V3_AUX blind via F.Cu-In4 @(29.65,53.5) [C90.1 plane tie]",
+   "L3 P3V3_AUX blind via B.Cu-In4 @(50.95,37.0)",
+   "L3 P3V3_AUX blind via In5-In4 @(51.5,38.75) [R-c]",
+   "L4 I2C1_SDA port_stub F.Cu (51.5,67.455)->(50.90,67.455)",
+   "L4 I2C1_SDA port_stub B.Cu (51.5,61.905)->(50.90,61.905)",
+   "L5 P3V3 track F.Cu (43.4,44.0)->(42.8,39.0)",
+   "L5 P3V3 blind via F.Cu-In4 @(42.8,39.0) [R-b]"
+  ]
+ },
+ "DEFECT_FOUND_AND_FIXED": {
+  "what": "the FIRST attempt created THROUGH vias (via type unset on a fresh PCB_VIA), so the added In5->In4 via was really F.Cu->B.Cu and SHORTED an In2.Cu PWR_BTN_OUT track: DRC showed 1 new class (shorting_items) - caught by the mechanical check, NOT by a run.",
+  "fix": "set the via TYPE (VIATYPE_BLIND for every non-F.Cu/B.Cu pair); the board already uses blind vias (228 F.Cu-In6, 153 F.Cu-In1, 92 In2-In5, 4 F.Cu-In4, ...), so blind vias are legitimate here.",
+  "after_fix": {
+   "new_drc_classes": "NONE",
+   "classes_before": {
+    "unconnected_items": 348
+   },
+   "classes_after": {
+    "unconnected_items": 349
+   }
+  }
+ },
+ "C6_predicate": {
+  "check": "geometry_equal(outside_geometry(board, dR), outside_geometry(B0, dR))",
+  "before": {
+   "diff": 0,
+   "equal": true
+  },
+  "after": {
+   "diff": 0,
+   "equal": true
+  },
+  "reading": "the added copper changes NOTHING outside dR => C6-safe (all landings stop AT or stay INSIDE x=51.5)."
+ },
+ "refinements_named": [
+  {
+   "id": "R-c",
+   "what": "line 3's In5 tie was frozen at (51.55,39.0) which lies OUTSIDE dR - a via there would change the outside geometry. Landed at the In5 fragment's in-frame start (51.5,38.75) instead."
+  },
+  {
+   "id": "R-d",
+   "what": "every non-through pair must be declared BLIND; a fresh PCB_VIA defaults to THROUGH and shorts across the stack (R-d is enforced by the tool and covered by test_C439)."
+  }
+ ],
+ "honest_caveat": "this board has the planes UNFILLED (it is the pre-route field), so the plane ties cannot show a connectivity benefit here. What is PROVEN is contract safety: C6 unchanged and no new DRC class. The connectivity effect can only be judged after refill, i.e. in a chain run.",
+ "status": "PROPOSED - NOT WIRED. Wiring it into wipe_resolve_chain (between the pour-aware clear and the maze) is the next generator edit and needs the supervisor's approval, as does the N=1 that would judge it.",
+ "OWNER-ITEMS": 0
+}

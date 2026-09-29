@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_sec16_3_drawing_implementation_spec_v1",
+ "ts": "2026-09-30",
+ "status": "PROPOSED - NOT WIRED into the production chain (red line: no generator edits without approval)",
+ "authority": "#K2-439 sec.2.10 branch (C1>0 with port/policy OLD causes => sec.17.4 forced means change, sec.16.2 back to the scheme layer). This file is that means, expressed as frozen constants.",
+ "target_tool": "tools/k2_port_plane_stitch_v1.py (new, standalone, deterministic)",
+ "rect": [22.95, 32.95, 51.5, 78.0],
+ "lines": [
+  {"n": 1, "kind": "port_stub", "net": "NRST", "layer": "F.Cu", "near": [51.5, 40.45], "far": [50.90, 40.45],
+   "why": "the crossing net ends in a dangling half-stub at x=51.5; a landing stub stopping AT the boundary restores the link and gives the maze an in-frame start cell (no-free-start-node)."},
+  {"n": 2, "kind": "via", "net": "P3V3_AUX", "at": [29.65, 53.5], "layers": ["F.Cu", "In4.Cu"],
+   "why": "C90 pad 1 is an F.Cu-only SMD pad and no footprint has an In4 pad; the In4 P3V3_AUX plane is VERIFIED filled at this point, so a via is the only possible plane tie."},
+  {"n": 3, "kind": "via", "net": "P3V3_AUX", "at": [50.95, 37.0], "layers": ["B.Cu", "In4.Cu"],
+   "why": "tie the B.Cu fragment to the same In4 plane (verified filled here)."},
+  {"n": 3, "kind": "via", "net": "P3V3_AUX", "at": [51.5, 38.75], "layers": ["In5.Cu", "In4.Cu"],
+   "why": "R-c refinement: the In5 fragment starts exactly ON the boundary at (51.5,38.75); the previously frozen (51.55,39.0) lies OUTSIDE dR and a via there would change the outside geometry (C6). Land it at the fragment's in-frame start instead."},
+  {"n": 4, "kind": "port_stub", "net": "I2C1_SDA", "layer": "F.Cu", "near": [51.5, 67.455], "far": [50.90, 67.455],
+   "why": "boundary landing for the F.Cu crossing; the in-frame polyline (incl. any single via) stays the maze's job."},
+  {"n": 4, "kind": "port_stub", "net": "I2C1_SDA", "layer": "B.Cu", "near": [51.5, 61.905], "far": [50.90, 61.905],
+   "why": "boundary landing for the B.Cu crossing."},
+  {"n": 5, "kind": "track", "net": "P3V3", "layer": "F.Cu", "a": [43.4, 44.0], "b": [42.8, 39.0],
+   "why": "C84 pad 1 has NO filled P3V3 plane under it; the nearest in-frame P3V3 In4 copper is on the finger at y=39.0, and (42.8,39.0) is the nearest point on it that is clear of C87 pad 1 (PERSTA#) - R-b."},
+  {"n": 5, "kind": "via", "net": "P3V3", "at": [42.8, 39.0], "layers": ["F.Cu", "In4.Cu"],
+   "why": "tie the stub to the In4 P3V3 plane (VERIFIED filled at this point)."}
+ ],
+ "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
+ "OWNER-ITEMS": 0
+}
