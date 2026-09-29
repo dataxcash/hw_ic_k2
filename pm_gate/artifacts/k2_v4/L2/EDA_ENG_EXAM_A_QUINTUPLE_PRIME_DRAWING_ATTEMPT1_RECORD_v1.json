@@ -1,0 +1,105 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_drawing_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-440 sec.3: the ONE authorised N=1 after the sec.16.3 drawing is implemented into the chain.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2s",
+  "judged_board": "/tmp/opencode/k2s/s3c_disposed.kicad_pcb"
+ },
+ "nine_rows": {
+  "C1": 3,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "C3_pass": true,
+  "C4_pass": true,
+  "C5_pass": true,
+  "rows_present": 9
+ },
+ "DRAWING_APPLIED": {
+  "stage": "port_plane_stitch",
+  "n_added": 8,
+  "n_refused": 0,
+  "added": [
+   "L1 NRST port_stub F.Cu (51.5,40.45)->(50.90,40.45)",
+   "L2 P3V3_AUX blind via F.Cu-In4 @(29.65,53.5)",
+   "L3 P3V3_AUX blind via B.Cu-In4 @(50.95,37.0)",
+   "L3 P3V3_AUX blind via In5-In4 @(51.5,38.75) [R-c]",
+   "L4 I2C1_SDA port_stub F.Cu (51.5,67.455)->(50.90,67.455)",
+   "L4 I2C1_SDA port_stub B.Cu (51.5,61.905)->(50.90,61.905)",
+   "L5 P3V3 track F.Cu (43.4,44.0)->(42.8,39.0)",
+   "L5 P3V3 blind via F.Cu-In4 @(42.8,39.0) [R-b]"
+  ]
+ },
+ "CHANNEL_NON_EMPTY_PROOF": {
+  "stage": "channels_computed",
+  "n_nets": 19
+ },
+ "improvement": {
+  "C1_prev_R1302": 4,
+  "C1_now": 3,
+  "closed": [
+   "NRST (sec.16.3 line 1: the dR port landing)",
+   "P3V3_AUX (sec.16.3 lines 2+3: the plane ties)"
+  ],
+  "attribution": "the drawing implementation closed exactly the two nets it was drawn for => the means is EFFECTIVE"
+ },
+ "per_block_named_attribution": [
+  {
+   "block": "BUS",
+   "net": "I2C1_SCL",
+   "drc_items": [
+    "F.Cu 上 U1 的焊盘 47 [I2C1_SCL]",
+    "走线 [I2C1_SCL] (F.Cu), 长度: 0.1000 mm"
+   ],
+   "maze_reason": "no-path-coarse(exhausted-1)",
+   "new_or_old": "NEW",
+   "cause_class": "NEW - the added I2C1_SDA boundary landing sits in the SAME corner as I2C1_SCL; the read-out shows several 0.1-0.7mm I2C1_SDA fragments clustered at (51.5,61.9) => the pair must be drawn as a GROUP"
+  },
+  {
+   "block": "BUS",
+   "net": "I2C1_SDA",
+   "drc_items": [
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.1414 mm",
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm"
+   ],
+   "maze_reason": "(not in the pass-2 blocked list)",
+   "new_or_old": "OLD",
+   "cause_class": "OLD (port/policy)"
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3",
+   "drc_items": [
+    "走线 [P3V3] (F.Cu), 长度: 0.1000 mm",
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]"
+   ],
+   "maze_reason": "no-free-goal-node",
+   "new_or_old": "OLD",
+   "cause_class": "OLD (port/policy)"
+  }
+ ],
+ "new_vs_old": {
+  "NEW": [
+   "I2C1_SCL"
+  ],
+  "OLD": [
+   "I2C1_SDA",
+   "P3V3"
+  ]
+ },
+ "P3V3_detail": {
+  "finding": "the added blind via at (42.8,39.0) IS present with the correct type, and the In4 P3V3 plane IS filled at BOTH that via and the out-of-frame blind via (81.60.6) => the PLANE side is tied. The remaining break is on the F.Cu side (a 0.1mm F.Cu fragment and a blind via reported unconnected); the maze now fails with no-free-GOAL-node (not no-free-start-node) => the start was fixed by the drawing and the goal end still needs a drawing decision."
+ },
+ "branch": "#K2-440 sec.2.10: C1>0 => stop + per-block named attribution (new/old). 2 are OLD (I2C1_SDA, P3V3) and 1 is NEW (I2C1_SCL, adjacent to an added landing). Report the split; do not draw conclusions beyond it.",
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}

@@ -1316,7 +1316,12 @@ class T(unittest.TestCase):
         j = open(os.path.join("tools", "k2_joint_alloc_v1.py"), encoding="utf-8").read()
         self.assertIn("def channels_arg_by_block(", j)
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
-        self.assertIn("channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(", r)
+        # #K2-440: the preferred-then-fallback logic now lives in the BEHAVIOUR-TESTED helper channels_for_maze
+        # (see test_C440_...); the chain must consume that helper.
+        h = r[r.index("def channels_for_maze("):r.index("def wipe_resolve_chain(")]
+        self.assertIn("channels_arg_by_block(wiped, drc, list(rect))", h)
+        self.assertIn("or ja_module.channels_arg(wiped, drc, list(rect))", h)
+        self.assertIn("channels_for_maze(wiped, d0, rect)", r[r.index("def wipe_resolve_chain("):])
 
     def test_C434_K4_the_chain_reads_the_per_block_C1_gate(self):
         """#K2-434 K-4: the chain must emit the per-functional-block C1 gate evidence (failures localise to a block)."""
@@ -1372,9 +1377,12 @@ class T(unittest.TestCase):
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         seg = src[src.index("def wipe_resolve_chain("):]
         i_d0 = seg.index('d0 = os.path.join(work, "s1_wiped_drc.json")')
-        i_ch = seg.index("channels_arg_by_block(")
+        i_ch = seg.index("channels_for_maze(wiped, d0, rect)")     # #K2-440: the tested helper
         self.assertLess(i_d0, i_ch, "the channel computation must come AFTER d0 exists")
-        self.assertIn("channels_compute_empty", seg, "an empty channel set must be FAIL-LOUD, not swallowed")
+        h = src[src.index("def channels_for_maze("):src.index("def wipe_resolve_chain(")]
+        self.assertIn("channels_compute_empty", h, "an empty channel set must be FAIL-LOUD, not swallowed")
+        self.assertIn("channels_compute_failed", h)
+        self.assertIn("W1B_CHANNELS_EMPTY", seg, "the chain must bail out loudly")
 
     def test_C438_M2_the_block_channel_source_never_returns_empty(self):
         """#K2-438 M-2 RED->GREEN: channels_arg_by_block returns '' on its own input (multi_block_plan INFEASIBLE
@@ -1386,6 +1394,45 @@ class T(unittest.TestCase):
         self.assertNotIn('        return ""', seg, "an empty channel set must never be returned")
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
+
+    def test_C440_channels_for_maze_fails_LOUD_on_empty_and_on_error(self):
+        """#K2-440 sec.3.3 BEHAVIOUR regression (not a source-string proxy). RED was the R1286 run: an EMPTY channel
+        set was silently swallowed and the maze ran with NO constraint. GREEN: drive the REAL code path with stub
+        sources and assert it refuses loudly - empty => channels_compute_empty, raise => channels_compute_failed,
+        and only a non-empty set yields the --channels args."""
+        class _JA:
+            def __init__(self, by_block, arg=None, boom=False): self._b, self._a, self._boom = by_block, arg, boom
+            def channels_arg_by_block(self, *a):
+                if self._boom: raise RuntimeError("stub")
+                return self._b
+            def channels_arg(self, *a):
+                if self._boom: raise RuntimeError("stub")
+                return self._a
+        rect = [22.95, 32.95, 51.5, 78.0]
+        r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", ""))
+        self.assertFalse(r["ok"]); self.assertEqual(r["stage"], "channels_compute_empty"); self.assertEqual(r["args"], [])
+        r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", None, boom=True))
+        self.assertFalse(r["ok"]); self.assertEqual(r["stage"], "channels_compute_failed")
+        r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", "NRST:0,0,1,1;P3V3:0,0,1,1"))
+        self.assertTrue(r["ok"]); self.assertEqual(r["stage"], "channels_computed")
+        self.assertEqual(r["args"][0], "--channels"); self.assertEqual(r["n_nets"], 2)
+        # the chain must consume the helper and bail out loudly (no silent run)
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        self.assertIn("channels_for_maze(wiped, d0, rect)", seg)
+        self.assertIn("W1B_CHANNELS_EMPTY", seg); self.assertIn("W1B_CHANNELS_FAILED", seg)
+
+    def test_C440_the_chain_stitches_the_frozen_drawing_before_the_maze(self):
+        """#K2-440 sec.3.1: the chain applies the frozen sec.16.3 drawing (port/plane stitch) AFTER the pour-aware
+        clear and BEFORE the maze, refuses on a frame mismatch, and counts the added items."""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        i_st = seg.index('_pps.stitch(wiped, list(rect), _spec, _st)')
+        i_unf = seg.index('"stage": "pour_aware_unfill"')
+        i_ch = seg.index("channels_for_maze(wiped, d0, rect)")
+        self.assertLess(i_unf, i_st, "the stitch must follow the pour-aware clear")
+        self.assertLess(i_st, i_ch, "the stitch must precede the maze (its ports are routing goals)")
+        self.assertIn("REFUSED_FRAME_MISMATCH", seg)
 
     def test_C439_the_port_plane_stitch_sets_the_via_type_and_refuses_outside_dR(self):
         """#K2-439 sec.2.10 means implementation: the drawing implementer must (a) SET THE VIA TYPE - an untyped

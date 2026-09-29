@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_k234_in_chain_noop_check_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-440 sec.3.2: re-check that K-1/K-2/K-3/K-4 are actually effective in the run (not no-ops), with machine evidence.",
+ "evidence": {
+  "K1_pour_aware_clear": {
+   "stage": "pour_aware_unfill",
+   "n_zones_unfilled": 18,
+   "reading": "K-1 really ran (18 zones unfilled) - refill happens after routing."
+  },
+  "K2K3_channels": {
+   "stage": "channels_computed",
+   "n_nets": 19,
+   "reading": "K-2/K-3 feed the maze a non-empty per-net channel set (19); the MAZE argv carries --channels => not a no-op."
+  },
+  "K4_per_block_gate": {
+   "stage": "per_block_C1_gate",
+   "present": true,
+   "reading": "the K-4 per-functional-block C1 gate evidence is emitted on the real path."
+  },
+  "drawing": {
+   "stage": "port_plane_stitch",
+   "n_added": 8,
+   "n_refused": 0,
+   "reading": "the sec.16.3 drawing is applied end to end."
+  }
+ },
+ "verdict": "K-1..K-4 + the drawing are all effective on the executed path (machine-evidenced); none is a no-op.",
+ "OWNER-ITEMS": 0
+}

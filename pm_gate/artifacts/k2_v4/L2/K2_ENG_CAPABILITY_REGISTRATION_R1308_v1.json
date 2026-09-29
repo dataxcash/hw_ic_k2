@@ -1,0 +1,64 @@
+{
+ "artifact": "k2_eng_capability_registration_r1308_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-440 sec.3.2/3.3 (re-check the means in-chain; replace the source-string proxy with a BEHAVIOUR regression).",
+ "behaviour_regression_delivered": {
+  "item": "M-ENG-CHAIN-SILENT-SWALLOW closing criterion (#K2-439 sec.2.4: 'the same entry must fail LOUDLY on an empty channel set, and the regression must PASS')",
+  "what": "regen.channels_for_maze(wiped, drc, rect, ja_module=None) - the channel hand-off is now a real, injectable function; the chain consumes it and bails out with W1B_CHANNELS_EMPTY / W1B_CHANNELS_FAILED.",
+  "RED": "the R1286 run itself: an EMPTY channel set was swallowed, the maze ran unconstrained, and the run was graded as if valid (machine evidence: chain stage channels_compute_failed + an empty --channels argv).",
+  "GREEN": "test_C440_channels_for_maze_fails_LOUD_on_empty_and_on_error drives the REAL function with stub sources: empty => ok=False/stage=channels_compute_empty/args=[]; raising => ok=False/stage=channels_compute_failed; non-empty => ok=True/args=['--channels', ...]/n_nets=2. NOT a source-string read.",
+  "status": "closing evidence offered - supervisor to rule."
+ },
+ "source_string_proxy": {
+  "item": "M-ENG-SELFTEST-SOURCE-STRING",
+  "status": "still present elsewhere",
+  "note": "the M-1/M-2 tests remain partly source-string based (they also carry the pure validate()/ordering assertions). Replacing the remaining proxies is a standing item, not claimed closed here.",
+  "this_window": "two older source-string tests were UPDATED for the #K2-440 refactor and made less brittle (they now point at the helper and at the tested entry point)."
+ },
+ "drawing_refinement_proposed": [
+  {
+   "id": "R-e",
+   "what": "the I2C1 pair must be drawn as a GROUP at the boundary",
+   "why": "line 4 gave I2C1_SDA two independent single-net landings at the (51.5,61.905)/(51.5,67.455) corner; the read-out shows several 0.1-0.7mm I2C1_SDA fragments clustered there and I2C1_SCL became a NEW residual in the same corner. Two independent single-net landings interfere; the sec.20 EVM policy for a bus pair is one corridor carrying the group (long runs straight, one layer change per group).",
+   "proposed": "draw lines 4 as a PAIR: one corridor of width >= 2 nets + clearance at the corner, two landings spaced by the netclass pitch, one shared layer-change. Deterministic; a boundary-condition change to the spec, not a search."
+  },
+  {
+   "id": "R-f",
+   "what": "line 5's goal end needs a drawing decision",
+   "why": "P3V3 now fails with no-free-GOAL-node: the start is fixed (the added stub) but the goal end (the out-of-frame blind via) has no free in-frame node. The PLANE side is proven tied (the In4 P3V3 zone is filled at both the added via and the out-of-frame via); the break is on the F.Cu side.",
+   "proposed": "either land the C84.1 stub directly onto the plane finger (drop the separate F.Cu run) or declare the out-of-frame goal as a frozen PORT so the maze is allowed to end there."
+  }
+ ],
+ "measure": {
+  "C1_prev": 4,
+  "C1_now": 3,
+  "closed": [
+   "NRST",
+   "P3V3_AUX"
+  ],
+  "new": [
+   "I2C1_SCL"
+  ],
+  "old": [
+   "I2C1_SDA",
+   "P3V3"
+  ]
+ },
+ "still_open_not_to_be_closed": [
+  "M-ENG-POUR-AWARE-CLEAR",
+  "M-ENG-FUNCTIONAL-BLOCK",
+  "M-ENG-MULTI-BLOCK-PLAN",
+  "M-ENG-PER-BLOCK-FLOW",
+  "M-ENG-PORT-REACHABILITY-DRAWING",
+  "M-ENG-CHANNEL-TO-CHAIN-WIRING",
+  "M-ENG-BLOCK-SIZE-SOURCE",
+  "M-ENG-PLANE-TIE-FOR-POWER-PADS",
+  "M-ENG-ROUTER-REROUTE",
+  "M-ENG-BLOCK-CONTENTION-NEGOTIATION",
+  "M-ENG-CONSERVATION-CORRIDOR-SPECIFIC",
+  "M-ENG-CHAIN-W2-RESOLVE"
+ ],
+ "zero_extra_runs": true,
+ "board_frozen": "l14/rev-61",
+ "OWNER-ITEMS": 0
+}

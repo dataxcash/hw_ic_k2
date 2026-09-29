@@ -62,6 +62,9 @@ def main(argv=None):
                         "scenario L2/EXAM_A_PRIME_SCENARIO_v1.json)")
     p.add_argument("--max-nets", type=int, default=None)
     p.add_argument("--work", default=None)
+    p.add_argument("--stitch-spec", dest="stitch_spec", default=None,
+                   help="#K2-440 sec.3.1: the frozen sec.16.3 drawing spec applied as port/plane stitch before the "
+                        "maze (default: L2/K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json)")
     p = sub.add_parser("eco", help="validate the ECO chain form")
     p.add_argument("--json-out")
     p = sub.add_parser("docs", help="document-chain status (#K2-357 five links)")
@@ -203,7 +206,9 @@ def main(argv=None):
                                               erase_refs=([x.strip() for x in a.erase_refs.split(",") if x.strip()]
                                                           if a.erase_refs else None),
                                               keep_nets=([x.strip() for x in a.keep_nets.split(",") if x.strip()]
-                                                         if getattr(a, "keep_nets", None) else None))
+                                                         if getattr(a, "keep_nets", None) else None),
+                                              stitch_spec=(a.stitch_spec or os.path.join(
+                                                  L2, "K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json")))
                 out = {"artifact": "eda_eng_exam", "exam": a.which, "chain": "wipe_resolve",
                        "entry": "eda_eng exam A --run --chain wipe_resolve", "run_count": "1/1",
                        "gate": gate,

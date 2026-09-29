@@ -1371,7 +1371,29 @@ GAP_NETS = ("MCU_VDD", "NRST", "PERSTA#", "P3V3_AUX", "I2C1_SCL", "I2C1_SDA", "P
 PORT_REFS = "J13"          # #K2-431 sec.2.6 fix 1: the KEPT in-region connector's pads are FIXED PORTS
 
 
-def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None):
+def channels_for_maze(wiped, drc, rect, ja_module=None):
+    """**可测 · 行为**（#K2-440 sec.3.3）：为迷宫算 `--channels`。
+    **空集合 ⇒ 响亮失败**（`ok=False` + 具名 stage），**异常 ⇒ 响亮失败** —— **绝不静默**（#K2-438 病根）。
+    `ja_module` 可注入（回归用桩），默认从仓内单一来源 `tools/k2_joint_alloc_v1.py` 装载。
+    返回 `{"ok","stage","args","n_nets","err"}`；纯判定，不改板、不写盘（写盘由调用方按 `ok` 决定）。"""
+    try:
+        if ja_module is None:
+            import importlib.util as _iu
+            _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
+            ja_module = _iu.module_from_spec(_sp); _sp.loader.exec_module(ja_module)
+        ch = (ja_module.channels_arg_by_block(wiped, drc, list(rect))
+              or ja_module.channels_arg(wiped, drc, list(rect)))
+    except Exception as _e:                                            # noqa: BLE001
+        return {"ok": False, "stage": "channels_compute_failed", "err": type(_e).__name__, "args": [], "n_nets": 0}
+    if not ch:
+        return {"ok": False, "stage": "channels_compute_empty",
+                "err": "no channels from either source", "args": [], "n_nets": 0}
+    return {"ok": True, "stage": "channels_computed", "err": None,
+            "args": ["--channels", ch], "n_nets": len([x for x in ch.split(";") if x.strip()])}
+
+
+
+def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None, stitch_spec=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
     # (#K2-415 sec.2.2 lever "顺序"): the eight objective nets are routed FIRST. WHY this is the sound lever:
@@ -1422,26 +1444,39 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     if rc_u == 0 and os.path.isfile(_unf):
         wiped = _unf
     chain.append({"stage": "pour_aware_unfill", "exit": rc_u, "result": _ur})
+    # ── #K2-440 sec.3.1 照图施工（§17.4 换手段）：**∂R 端口落点 ＋ 电源平面缝合** ──────────────────
+    # 冻结常量（§16.3 五线图纸 · R-b/R-c 折入后**五线皆 no_move**）· 逐线确定 · **零搜索 · 零试参**（连连看）。
+    # 只加：走线止于 ∂R / 过孔落在 ∂R 之内或线上 ⇒ C6「界外铜零改动」安全（机验：outside_geometry diff=0）。
+    if stitch_spec:
+        try:
+            import importlib.util as _iu2
+            _sp2 = _iu2.spec_from_file_location("k2pps", os.path.join(ROOT, "tools", "k2_port_plane_stitch_v1.py"))
+            _pps = _iu2.module_from_spec(_sp2); _sp2.loader.exec_module(_pps)
+            _spec = json.load(open(stitch_spec, encoding="utf-8")) if isinstance(stitch_spec, str) else stitch_spec
+            if [round(float(v), 4) for v in rect] != [round(float(v), 4) for v in _spec["rect"]]:
+                chain.append({"stage": "port_plane_stitch", "state": "REFUSED_FRAME_MISMATCH",
+                              "rect": list(rect), "spec_rect": _spec["rect"]})
+            else:
+                _st = os.path.join(work, "s1d_stitched.kicad_pcb")
+                _rep = _pps.stitch(wiped, list(rect), _spec, _st)
+                if _rep["n_refused"] == 0 and os.path.isfile(_st):
+                    wiped = _st
+                chain.append({"stage": "port_plane_stitch", "n_added": _rep["n_added"],
+                              "n_refused": _rep["n_refused"], "refused": _rep["refused"],
+                              "added": _rep["added"]})
+        except Exception as _e2:                                        # noqa: BLE001
+            chain.append({"stage": "port_plane_stitch", "err": type(_e2).__name__})
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
     d0 = os.path.join(work, "s1_wiped_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])
-    # #K2-431 sec.2.6 fix 2/3 / #K2-438 M-1: the per-net reach-inclusive FROZEN channels (single source) are
-    # handed to the maze. MUST be computed AFTER d0 exists (the previous placement read d0 before assignment =>
-    # UnboundLocalError, swallowed => an EMPTY --channels, i.e. a no-channel run). Empty result is FAIL-LOUD.
-    _charg = []
-    try:
-        import importlib.util as _iu
-        _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
-        _ja = _iu.module_from_spec(_sp); _sp.loader.exec_module(_ja)
-        _ch = _ja.channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(wiped, d0, list(rect))
-        if not _ch:
-            chain.append({"stage": "channels_compute_empty", "err": "no channels from either source"})
-            return {"state": "W1B_CHANNELS_EMPTY", "chain": chain}
-        _charg = ["--channels", _ch]
-        chain.append({"stage": "channels_computed", "n_nets": len([x for x in _ch.split(";") if x.strip()])})
-    except Exception as _e:                                            # noqa: BLE001
-        chain.append({"stage": "channels_compute_failed", "err": type(_e).__name__})
-        return {"state": "W1B_CHANNELS_FAILED", "chain": chain}
+    # #K2-431 sec.2.6 / #K2-438 M-1 / #K2-440 sec.3.3: the per-net FROZEN channels, computed AFTER d0 exists and
+    # via a BEHAVIOUR-TESTED helper (channels_for_maze). Empty or raising => LOUD failure, never a silent run.
+    _cr = channels_for_maze(wiped, d0, rect)
+    chain.append({"stage": _cr["stage"], "n_nets": _cr["n_nets"], "err": _cr["err"]})
+    if not _cr["ok"]:
+        return {"state": ("W1B_CHANNELS_EMPTY" if _cr["stage"] == "channels_compute_empty"
+                          else "W1B_CHANNELS_FAILED"), "chain": chain}
+    _charg = _cr["args"]
     resolved = os.path.join(work, "s2_resolved.kicad_pcb")
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
