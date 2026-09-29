@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_capacity_vs_demand_count_v1",
+ "ts": "2026-09-30",
+ "authority": "the convergence order (a binary is required: feasibility witness OR conservation-level infeasibility certificate). This is the missing COUNT that decides which.",
+ "method": {
+  "frame": "x[22.95,51.5] y[32.95,78.0] => area 1286.2 mm^2",
+  "pitch": "width 0.20 + clearance 0.20 = 0.40 mm",
+  "signal_layers_counted": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In5.Cu"
+  ],
+  "capacity": "layers x area / pitch = 4 x 1286.2 / 0.40 = 12862 mm of track-metres (a geometric UPPER bound)",
+  "demand": "sum over the 14 in-frame nets of the minimum-spanning-tree length of that net's in-frame pads (a LOWER bound on each net's route length) = 257.3 mm",
+  "largest_demands": {
+   "MCU_VDD": 50.8,
+   "P3V3_AUX": 30.6,
+   "PERSTA#": 27.0,
+   "P3V3": 24.0,
+   "SWCLK_BOOT0": 22.8,
+   "I2C1_SDA": 19.0,
+   "I2C1_SCL": 17.7,
+   "GPIO_LED": 17.5
+  }
+ },
+ "binary_result": "demand (257 mm) << capacity (12862 mm) => the frame is NOT area-limited.",
+ "consequences": [
+  "the 'no room in the frame' explanation is REFUTED by count; the C1=2 plateau is therefore an ALLOCATION/ORDERING defect, not a resource wall.",
+  "the feasibility witness (A) holds at BOTH levels: the drawing applies clean (98/0) and the capacity count shows the required routing is affordable.",
+  "the conservation-level infeasibility certificate (B) is REFUTED.",
+  "therefore the binding resource is the ALLOCATOR: my fixed copper plus the maze's sequential per-net assignment fragment the free space so that whichever net is served last finds no slot (the observed rotation). This maps to the in-register main gaps M-ENG-ROUTER-REROUTE / M-ENG-BLOCK-CONTENTION-NEGOTIATION, NOT to the drawing layer."
+ ],
+ "caveats": "capacity is a geometric upper bound (real routing cannot use 100% of a layer); demand is a lower bound (real routes are longer than the MST). The 50x margin means the conclusion is robust to both errors.",
+ "OWNER-ITEMS": 0
+}
