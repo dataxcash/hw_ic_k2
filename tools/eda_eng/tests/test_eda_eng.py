@@ -1418,6 +1418,18 @@ class T(unittest.TestCase):
         self.assertEqual(m.joint_channel_assignment(nets, (0, 0, 10, 10), 0.6, 0.2), ch, "deterministic")
         self.assertEqual(m.artifact_hash16(ch), m.artifact_hash16(ch), "stable artifact hash")
 
+    def test_C426_contraction_lists_are_deterministic_and_net_aware(self):
+        """#K2-426 sec.3: the deterministic contraction - parts on the certificate's non-reconnectable nets become
+        STAY candidates, the rest MOVE candidates. Deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_contraction_v1", os.path.join("tools", "k2_contraction_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        netof = {"A": ["MCU_VDD"], "B": ["GND"], "C": ["NRST", "P3V3"]}
+        st, mv = m.contraction_lists(["A", "B", "C"], netof, ["MCU_VDD", "P3V3"])
+        self.assertEqual(st, ["A", "C"]); self.assertEqual(mv, ["B"])
+        self.assertEqual(m.contraction_lists(["A", "B", "C"], netof, ["MCU_VDD", "P3V3"]), (st, mv), "deterministic")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""
