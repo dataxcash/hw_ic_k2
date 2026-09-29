@@ -1,0 +1,157 @@
+{
+ "artifact": "k2_owner_clearall_residual_attribution_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-431 sec.2.6 (FAIL => stop + NAMED attribution, one-by-one fixable) confirmed as the only direction by #K2-432.",
+ "run": "R1260: GRADED FAIL, C1=7, C2 clean, C6=0, C7=0, C8=[], nine rows. Board FROZEN (no landing).",
+ "residuals": [
+  {
+   "net": "P3V3_AUX",
+   "ends": [
+    "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]",
+    "走线 [P3V3_AUX] (In2.Cu), 长度: 0.7071 mm"
+   ],
+   "at": [
+    [
+     29.65,
+     53.5
+    ],
+    [
+     34.75,
+     55.7
+    ]
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "ends": [
+    "走线 [P3V3_AUX] (In5.Cu), 长度: 0.2000 mm",
+    "走线 [P3V3_AUX] (B.Cu), 长度: 2.0000 mm"
+   ],
+   "at": [
+    [
+     51.55,
+     39.0
+    ],
+    [
+     50.95,
+     37.0
+    ]
+   ]
+  },
+  {
+   "net": "SWDIO",
+   "ends": [
+    "J13 的PTH 焊盘 1 [SWDIO]",
+    "F.Cu 上 U1 的焊盘 35 [SWDIO]"
+   ],
+   "at": [
+    [
+     31.75,
+     46.54
+    ],
+    [
+     40.163,
+     50.75
+    ]
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "ends": [
+    "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+    "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]"
+   ],
+   "at": [
+    [
+     29.21,
+     46.54
+    ],
+    [
+     40.163,
+     50.25
+    ]
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "ends": [
+    "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+    "F.Cu 上 R28 的焊盘 1 [SWCLK_BOOT0]"
+   ],
+   "at": [
+    [
+     40.163,
+     50.25
+    ],
+    [
+     50.05,
+     45.0
+    ]
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "ends": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm"
+   ],
+   "at": [
+    [
+     51.5,
+     67.455
+    ],
+    [
+     52.205,
+     61.905
+    ]
+   ]
+  },
+  {
+   "net": "P3V3",
+   "ends": [
+    "F.Cu 上 C84 的焊盘 1 [P3V3]",
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]"
+   ],
+   "at": [
+    [
+     43.4,
+     44.0
+    ],
+    [
+     81.0,
+     60.6
+    ]
+   ]
+  }
+ ],
+ "attribution_by_class": [
+  {
+   "class": "PTH / connector port (J13)",
+   "items": [
+    "SWDIO @J13.1",
+    "SWCLK_BOOT0 @J13.2"
+   ],
+   "policy": "the J13 pads are through-hole crossing all layers; the region's re-route must terminate ON the fixed connector pad (a boundary port), not invent a route end.",
+   "fix": "treat the connector PAD as a FIXED PORT goal for its net (the port-aware goal already does this for dR ports; extend the same to in-region connector pads)."
+  },
+  {
+   "class": "layer-change policy (In5<->F.Cu)",
+   "items": [
+    "P3V3_AUX (C90.1 <-> In5 track)",
+    "I2C1_SDA (F.Cu <-> B.Cu)"
+   ],
+   "policy": "the two ends sit on different layers and the re-route must place exactly ONE via inside the region.",
+   "fix": "give these nets a determinate one-via corridor (the R1250 channel already does this for the row; apply per net)."
+  },
+  {
+   "class": "pad-to-own-copper stub",
+   "items": [
+    "P3V3 (C84.1)"
+   ],
+   "policy": "the pad's own fragment must be joined by a short in-region stub.",
+   "fix": "the R1222 pad-ladder corridor (+the R1250 reach) already produces it; ensure it is applied to this net."
+  }
+ ],
+ "next": "apply the three class fixes in the (zero-exam) capability space, then request a ruled re-run; no self-run.",
+ "OWNER-ITEMS": 0
+}
