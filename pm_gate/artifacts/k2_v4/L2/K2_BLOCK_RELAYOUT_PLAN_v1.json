@@ -32,19 +32,19 @@
    "relayout_request": [
     {
      "net": "MCU_VDD",
-     "move_mm": 0.2,
+     "move_mm": 3.71,
      "dir": "+y",
      "yield_order": 0
     },
     {
      "net": "NRST",
-     "move_mm": 0.2,
+     "move_mm": 5.15,
      "dir": "+y",
      "yield_order": 1
     },
     {
      "net": "P3V3_AUX",
-     "move_mm": 0.2,
+     "move_mm": 8.365,
      "dir": "-y",
      "yield_order": 2
     }
@@ -64,9 +64,14 @@
     "need_mm": 0.6,
     "pass": false
    },
-   "corridor_after_yield": null,
+   "corridor_after_yield": [
+    39.7625,
+    50.050001,
+    40.5625,
+    50.4
+   ],
    "conservation_after_yield": {
-    "capacity_mm": 0.0,
+    "capacity_mm": 0.35,
     "need_mm": 0.6,
     "pass": false
    },
@@ -74,12 +79,57 @@
    "relayout_request": [
     {
      "net": "P3V3_AUX",
-     "move_mm": 0.2,
+     "move_mm": 5.525,
      "dir": "-y",
      "yield_order": 0
     }
    ],
-   "per_line": [],
+   "per_line": [
+    {
+     "net": "SWCLK_BOOT0",
+     "order": 0,
+     "from": [
+      40.1625,
+      50.25
+     ],
+     "to": [
+      39.7625,
+      50.125
+     ],
+     "via": {
+      "at": [
+       39.7625,
+       50.125
+      ],
+      "layers": [
+       "F.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "order": 1,
+     "from": [
+      40.1625,
+      50.25
+     ],
+     "to": [
+      39.7625,
+      50.375
+     ],
+     "via": {
+      "at": [
+       39.7625,
+       50.375
+      ],
+      "layers": [
+       "F.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
    "buildability": "relocation_listed"
   },
   {
@@ -150,22 +200,50 @@
     "need_mm": 0.6,
     "pass": false
    },
-   "corridor_after_yield": null,
+   "corridor_after_yield": [
+    34.35,
+    55.375,
+    35.15,
+    56.175
+   ],
    "conservation_after_yield": {
-    "capacity_mm": 0.0,
+    "capacity_mm": 0.8,
     "need_mm": 0.6,
-    "pass": false
+    "pass": true
    },
-   "status": "BLOCKED",
+   "status": "OK_BY_YIELD",
    "relayout_request": [
     {
      "net": "GND",
-     "move_mm": 0.2,
+     "move_mm": 1.925,
      "dir": "-y",
      "yield_order": 0
     }
    ],
-   "per_line": [],
+   "per_line": [
+    {
+     "net": "P3V3_AUX",
+     "order": 0,
+     "from": [
+      34.75,
+      55.775
+     ],
+     "to": [
+      34.35,
+      55.775
+     ],
+     "via": {
+      "at": [
+       34.35,
+       55.775
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
    "buildability": "relocation_listed"
   },
   {
@@ -185,7 +263,7 @@
     51.1,
     60.2,
     51.9,
-    61.935
+    62.305
    ],
    "conservation_after_yield": {
     "capacity_mm": 0.8,
@@ -196,7 +274,7 @@
    "relayout_request": [
     {
      "net": "I2C1_SCL",
-     "move_mm": 0.2,
+     "move_mm": 5.0,
      "dir": "+y",
      "yield_order": 0
     }
@@ -233,12 +311,12 @@
      ],
      "to": [
       51.1,
-      61.935
+      62.03
      ],
      "via": {
       "at": [
        51.1,
-       61.935
+       62.03
       ],
       "layers": [
        "B.Cu",
@@ -309,9 +387,9 @@
  "policy": "REF-CASE-LIBRARY A1: group fanout / straight runs / one layer change per escape",
  "closing": {
   "1_one_command_end_to_end": true,
-  "2_per_line_geometry": 3,
+  "2_per_line_geometry": 5,
   "3_conservation_pass": 1,
-  "3b_conservation_pass_after_yield": 2,
+  "3b_conservation_pass_after_yield": 3,
   "4_buildability": "relocation_listed",
   "n_rows": 6
  },

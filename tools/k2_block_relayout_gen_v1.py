@@ -76,14 +76,11 @@ def row_relayout_request(row, occupants_by_net, clearance=0.20):
     for n in names:
         need = 0.0
         for (net, px, py, _l) in row:
-            best = None
             for bb in occupants_by_net.get(n, []):
-                dx = max(bb[0] - clearance - px, px - (bb[2] + clearance), 0.0)
-                dy = max(bb[1] - clearance - py, py - (bb[3] + clearance), 0.0)
-                d = _m.hypot(dx, dy)
-                best = d if best is None else min(best, d)
-            if best is not None:
-                need = max(need, clearance - best)
+                cyt = (bb[1] + bb[3]) / 2.0
+                # EXACT: push the NEAR edge to clearance past the point (frees it even when covered)
+                near = (bb[1] - clearance - py) if cyt >= py else (py - (bb[3] + clearance))
+                need = max(need, clearance - near)
         out.append({"net": n, "move_mm": max(0.0, round(need, 4)),
                     "dir": "+y" if (sum(o["bbox"][1] + o["bbox"][3] for o in
                                         [{"bbox": bb} for bb in occupants_by_net.get(n, [])]) / (2 * max(1, len(occupants_by_net.get(n, []))))) >= cy
