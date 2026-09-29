@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_channel_to_chain_dryrun_v4",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3: the targeted fix attempt on the residual 2 (bounded channel-width ladder).",
+ "change": "solve() now retries a blocked channeled edge with a BOUNDED widen ladder (m, 2m, 4m; m=0.5) - deterministic, not a search.",
+ "reading": {
+  "added": 3,
+  "blocked": 2,
+  "segs": 71,
+  "vias": 5,
+  "len": 28.1391,
+  "reasons": {
+   "no-free-start-node": 1,
+   "no-path-coarse(exhausted-1)": 1
+  }
+ },
+ "finding": "NO improvement: still 3/5 with the same two reasons (MCU_VDD exhausted-1, I2C1_SDA no-free-start-node). => the residual 2 are NOT channel-WIDTH limited; widening does not help. They need a different deterministic fix (start reachability / a different channel PLACEMENT), not a wider channel.",
+ "OWNER-ITEMS": 0
+}

@@ -201,14 +201,19 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
         _saved = mr.WALL_RECT
         _CH = getattr(mr, "_CHANNELS", {})                # NOTE: `CH` lives on `mr` because solve is defined in a
-        if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
-            _c = _CH[net]                                 # widen by the channel margin so the net's reachable
-            _w = float(getattr(mr, "_CH_MARGIN", 0.5))    # own-copper cell is not cut off by the wall (R1242
-            mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)   #  diagnosis), still deterministic
-        # ── #K2-414 §二.2 **B2**：考试迷宫改用在册 `FINE_STEP`(0.10)（粗栅格剪掉的格在细栅格本就可通行）──
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
-        sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
+        if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
+            _c = _CH[net]
+            _m = float(getattr(mr, "_CH_MARGIN", 0.5))
+            sol, why = None, "no-attempt"
+            for _w in (_m, _m * 2, _m * 4):               # BOUNDED deterministic ladder (not a search): a wider
+                mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)   # channel must not cut the net's
+                sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)   # reachable cell
+                if sol is not None:
+                    break
+        else:
+            sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
         mr.WALL_RECT = _saved
         if sol is not None:
             return sol, why
