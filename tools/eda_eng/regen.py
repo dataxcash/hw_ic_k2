@@ -1403,7 +1403,10 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
     if not ch:
         return {"ok": False, "stage": "channels_compute_empty",
                 "err": "no channels from either source", "args": [], "n_nets": 0}
+    # #K2-450/R1404: a non-executed means must NEVER look like a tested one. The joint builder tags its channels
+    # with "@<layer>"; the legacy builders do not => the source is self-proving (no extra bookkeeping).
     return {"ok": True, "stage": "channels_computed", "err": None,
+            "source": ("joint" if "@" in ch else "fallback"),
             "args": ["--channels", ch], "n_nets": len([x for x in ch.split(";") if x.strip()])}
 
 
@@ -1487,7 +1490,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # #K2-431 sec.2.6 / #K2-438 M-1 / #K2-440 sec.3.3: the per-net FROZEN channels, computed AFTER d0 exists and
     # via a BEHAVIOUR-TESTED helper (channels_for_maze). Empty or raising => LOUD failure, never a silent run.
     _cr = channels_for_maze(wiped, d0, rect)
-    chain.append({"stage": _cr["stage"], "n_nets": _cr["n_nets"], "err": _cr["err"]})
+    chain.append({"stage": _cr["stage"], "n_nets": _cr["n_nets"], "err": _cr["err"],
+                  "source": _cr.get("source", "fallback")})
     if not _cr["ok"]:
         return {"state": ("W1B_CHANNELS_EMPTY" if _cr["stage"] == "channels_compute_empty"
                           else "W1B_CHANNELS_FAILED"), "chain": chain}

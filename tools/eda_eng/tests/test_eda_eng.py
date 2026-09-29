@@ -1540,6 +1540,10 @@ class T(unittest.TestCase):
         self.assertFalse(r["ok"]); self.assertEqual(r["stage"], "channels_compute_failed")
         r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", "NRST:0,0,1,1;P3V3:0,0,1,1"))
         self.assertTrue(r["ok"]); self.assertEqual(r["stage"], "channels_computed")
+        self.assertEqual(r["source"], "fallback", "legacy channels carry no @layer tag => source=fallback")
+        self.assertEqual(regen.channels_for_maze("B", "D", rect,
+                         ja_module=_JA("N:1,2,3,4@F.Cu", ""))["source"], "joint",
+                         "the joint builder's @layer tag proves the source")
         self.assertEqual(r["args"][0], "--channels"); self.assertEqual(r["n_nets"], 2)
         # the chain must consume the helper and bail out loudly (no silent run)
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
