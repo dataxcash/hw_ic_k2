@@ -1,0 +1,25 @@
+{
+ "artifact": "k2_exam_a_triple_prime_authorisation_application_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-392 sec.2.2: after implementing the third edge, APPLY for the new exam window (apply != self-run).",
+ "status": "APPLIED_AWAITING_AUTHORISATION",
+ "window_requested": {
+  "chain": "wipe_resolve",
+  "runs": "1 (N=1, new count)",
+  "entry": "eda_eng exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_triple_witness/placed.kicad_pcb --work /tmp/opencode/aprime_triple_final_v2",
+  "gate": "the C34 sec.20 gate must hit this entry first (DEFAULT_GATE_CAPABILITY[wipe_resolve] = A_double_prime_placement_pour)",
+  "judging": "nine rows C1-C9 (incl C6=0 / C8); a missing row is fail-closed"
+ },
+ "prerequisites_on_file": {
+  "third_edge": "tools/k2_reroute_router_floor_v1.py :: _install_port_aware_goals (+ 2 unit tests; 86/86 green)",
+  "island_disposition": "R1082 (route.dispose_isolated_copper + CLI dispose-islands + the landing precondition)",
+  "placement_gate": "R1078 (the gate consumes the in-register mask-dam rule; the A-triple-prime placement is gate-clean)",
+  "nine_row_lock": "verify.LOCKED_EXAM_ROWS + required_rows fail-closed"
+ },
+ "honest_expected_reading": {
+  "C2": "expected PASS (unchanged from R1082: new_classes = [])",
+  "C1": "expected to IMPROVE from 18; NOT expected to reach 0 (the port edge closes 14 of the 21 blocked edges; the residual 7 are endpoint congestion).",
+  "note": "if C1 != 0 the outcome is FAIL => stop + back to the planning layer (sec.16); the residual cause (endpoint congestion / no-port nets) is a NEW, different cause from the two already closed."
+ },
+ "OWNER-ITEMS": 0
+}

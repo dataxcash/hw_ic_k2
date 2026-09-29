@@ -1,0 +1,49 @@
+{
+ "artifact": "k2_exam_a_triple_prime_port_edge_measurement_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-392 sec.2.1: implement the plan's third edge (port-aware goals) - incremental, unit-tested.",
+ "method": "tools/k2_reroute_router_floor_v1.py (the wrapper, NOT the in-register maze): when `solve_edge` fails with no-free-start-node / no-free-goal-node, retry with a SAME-NET ∂R PORT (a track endpoint on the frame boundary, i.e. a frame-cut stub) as the goal or the start; a targeted snap relaxation lets the maze LAND on a port point (the final seg_exact/via_exact gate still validates). Deterministic (ports sorted by (layer,x,y,uuid)); no search.",
+ "measurement_on_the_A_triple_prime_wiped_board": {
+  "in": "/tmp/opencode/aprime_triple_final/s1_wiped.kicad_pcb",
+  "drc": "/tmp/opencode/aprime_triple_final/s1_wiped_drc.json",
+  "bound_rect": [
+   22.95,
+   32.95,
+   51.5,
+   66.5
+  ],
+  "before": {
+   "edges": 80,
+   "added": 59,
+   "blocked": 21,
+   "reasons": {
+    "no-free-start-node": 17,
+    "no-free-goal-node": 4
+   }
+  },
+  "after": {
+   "edges": 80,
+   "added": 73,
+   "blocked": 7,
+   "reasons": {
+    "no-free-start-node": 6,
+    "no-free-goal-node": 1
+   }
+  },
+  "delta": "14 of the 21 blocked edges CLOSED by ports (added +14)."
+ },
+ "residual_7": {
+  "nets": {
+   "NRST": 2,
+   "PERSTA#": 1,
+   "GND": 1,
+   "MCU_VDD": 1,
+   "P3V3_AUX": 1,
+   "P3V3": 1
+  },
+  "diagnosis": "endpoint CONGESTION, not port availability: probing PERSTA#'s port (51.5,37.5,In5.Cu) shows node_in_island=True but snap_node=None (the boundary cell is pruned as too close to foreign copper); and for these edges the OTHER endpoint is itself buried, so neither a->port nor port->b solves. P3V3 has no ∂R port at all.",
+  "consequence": "C1 will improve (18 -> expected ~7) but is NOT expected to reach 0 solely from this edge."
+ },
+ "why_the_exam_run_is_still_applied_for": "sec.2.2 of #K2-392 says to apply after implementing; the application records the honest expected reading.",
+ "OWNER-ITEMS": 0
+}

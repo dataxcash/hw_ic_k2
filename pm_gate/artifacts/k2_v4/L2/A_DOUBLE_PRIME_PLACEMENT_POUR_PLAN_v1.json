@@ -86,5 +86,16 @@
   ],
   "residual": "C1 unconnected = 18 (was 22), every gap blocked at an ENDPOINT (no-free-start-node 14 / no-free-goal-node 4)",
   "next_mean": "edge iii (port-aware goals): hand the frame-cut stubs to the maze as legal PORTS instead of re-deriving goals across the block. NOT authorised in this window."
+ },
+ "edge_iii_implemented": {
+  "authority": "#K2-392 sec.2.1 (this window).",
+  "where": "tools/k2_reroute_router_floor_v1.py :: _install_port_aware_goals (wrapper patch; the in-register maze is NOT modified)",
+  "what": "on no-free-start/goal-node, retry with a same-net ∂R port (frame-cut stub) as goal or start; a targeted snap relaxation lets the maze land on a port point (the final DRC gate still validates).",
+  "measurement": "blocked 21 -> 7 (added 59 -> 73) on the A-triple-prime wiped board.",
+  "residual": "7 endpoint-congestion edges (nets NRST/PERSTA#/GND/MCU_VDD/P3V3_AUX/P3V3).",
+  "tests": [
+   "test_C392_port_aware_goals_use_the_wall_ports",
+   "test_C392_the_floor_wrapper_installs_port_goals_only_with_a_wall"
+  ]
  }
 }

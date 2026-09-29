@@ -824,6 +824,49 @@ class T(unittest.TestCase):
         self.assertLess(seg.index('"dispose-islands"'), seg.index("W3B_REFUSED_ISOLATED_COPPER"),
                         "the dispose step must run BEFORE the landing precondition")
 
+    def test_C392_port_aware_goals_use_the_wall_ports(self):
+        """#K2-392 第三边（端口感知目标）：`solve_edge` 正常失败（no-free-start/goal-node）时，
+        以**同网 ∂R 端口**（目标或起点）重试。用桩对象做**确定性**单测（不跑迷宫、不碰板）。"""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_reroute_router_floor_v1", os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        w = importlib.util.module_from_spec(spec); spec.loader.exec_module(w)
+
+        class MR:
+            LAYERS = ["F.Cu", "In5.Cu"]
+
+            def __init__(self):
+                self.calls = []
+                self.snap_node = lambda *a, **k: None
+
+            def solve_edge(self, ctx, find, compa, compb, net, la, pa, lb, pb, margin, cs):
+                self.calls.append((compa, compb, la, pa, lb, pb))
+                if compb == "PORT" and pb == (51.5, 37.5):
+                    return {"legs": [], "vias": []}, "ok"
+                if compa == "PORT" and pa == (51.5, 37.5):
+                    return {"legs": [], "vias": []}, "ok"
+                return None, "no-free-start-node"
+
+        mr = MR()
+        ctx = type("C", (), {"tracks": [{"net": "N1", "layer": "In5.Cu", "x1": 51.5, "y1": 37.5,
+                                         "x2": 55.0, "y2": 37.5, "uuid": "u1"}]})()
+        find = lambda k: "PORT" if k == "t:u1" else "OTHER"          # noqa: E731
+        w._install_port_aware_goals(mr, (22.95, 32.95, 51.50, 66.50))
+        sol, why = mr.solve_edge(ctx, find, "A", "B", "N1", "F.Cu", (10.0, 10.0), "F.Cu", (20.0, 20.0), 3.0, 0.25)
+        self.assertIsNotNone(sol, "the port retry must succeed")
+        self.assertTrue(why.startswith("ok-port"), why)
+        # 非同网/无端口 ⇒ 行为不变（仍然失败，且不搜索）
+        sol2, why2 = mr.solve_edge(ctx, find, "A", "B", "N2", "F.Cu", (10.0, 10.0), "F.Cu", (20.0, 20.0), 3.0, 0.25)
+        self.assertIsNone(sol2)
+        self.assertEqual(why2, "no-free-start-node")
+
+    def test_C392_the_floor_wrapper_installs_port_goals_only_with_a_wall(self):
+        """路径感知：wrapper 仅在**设了框（WALL_RECT）**时安装端口感知目标（C35 域内语义不放松）。"""
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("_install_port_aware_goals", src)
+        self.assertIn("if mr.WALL_RECT:", src)
+        self.assertIn("mr.snap_node = snap", src)
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
