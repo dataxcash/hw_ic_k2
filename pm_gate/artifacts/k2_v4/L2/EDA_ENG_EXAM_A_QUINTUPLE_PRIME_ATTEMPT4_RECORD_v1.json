@@ -1,0 +1,100 @@
+{
+ "artifact": "k2_exam_a_quintuple_prime_attempt4_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-411 sec.2: the authorised re-run (run 1/1) with MAZE-FIRST + DROP-NAMED.",
+ "run": {
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json --work /tmp/opencode/aprime_a5_final_v4",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 8,
+  "C1_pass": false,
+  "C2": {
+   "total": 122,
+   "ref": 148,
+   "new_classes": [],
+   "pass": true
+  },
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "rows_present": 9
+ },
+ "stitch_stage": {
+  "endpoint_stitch_planned": {
+   "n": 8,
+   "nets": [
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "MCU_VDD",
+    "NRST",
+    "P3V3",
+    "P3V3_AUX",
+    "PERSTA#"
+   ]
+  },
+  "endpoint_stitch_clipped_to_port": {
+   "clipped": [
+    "NRST",
+    "PERSTA#",
+    "P3V3_AUX",
+    "I2C1_SDA",
+    "P3V3"
+   ]
+  },
+  "endpoint_stitch_partitioned": {
+   "in_bound": 8,
+   "excluded": 0,
+   "excluded_named": []
+  },
+  "endpoint_stitch_dropped_named": {
+   "dropped": 8,
+   "dropped_named": [
+    {
+     "net": "MCU_VDD",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "NRST",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "NRST",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "PERSTA#",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "P3V3_AUX",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "I2C1_SCL",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "I2C1_SDA",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    },
+    {
+     "net": "P3V3",
+     "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+    }
+   ]
+  },
+  "endpoint_stitch_applied": {
+   "exit": null
+  }
+ },
+ "reading": {
+  "C2_clean_again": "122 vs 148, new_classes = [] => the reckless direct-L damage is GONE (the R1146 C2 = 253 with 4 new classes is fixed).",
+  "C1_unchanged_at_8": "with the direct-L FORBIDDEN, the maze refuses all eight endpoints => all eight are DROPPED-NAMED => C1 stays 8.",
+  "formal_drop_list": "the EIGHT named gaps (nets MCU_VDD / NRST x2 / PERSTA# / P3V3_AUX / I2C1_SCL / I2C1_SDA / P3V3) are the CAPABILITY-LIMIT LIST of the current means."
+ },
+ "deviation_channel": "per #K2-411 sec.2: remaining drops => the deviation channel (engineering layer first; owner only if requirements are touched).",
+ "OWNER-ITEMS": 0
+}
