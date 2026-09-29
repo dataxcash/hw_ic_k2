@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_rh_lane_drafting_finding_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-442 sec.2.5/3.2: R-h is approved; its extra condition is either draw the full polyline to the pad, or prove non-contention.",
+ "delivered_this_window": {
+  "stitcher": "tools/k2_port_plane_stitch_v1.py now supports kind='lane' (an N-point polyline emitted as consecutive tracks) and validate() checks every lane point against dR.",
+  "regression": "test_C439 extended with lane cases (validate accepts an in-frame lane, refuses an out-of-frame point); selftest 135/135 PASS.",
+  "change_scope": "tool only - the approved R-e spec is NOT yet modified (the freeze is the next step)."
+ },
+ "measured_obstacle_to_the_full_lane": {
+  "first_attempt": "a hand-typed 8-point SCL lane and 8-point SDA lane from the pair corridor to U1.47/U1.48",
+  "result": "22 foreign hits (SCL) and 21 (SDA) against pads: E2.7/E2.8 (GND/MCU_VDD), U5.4 (PWR_CTRL_OUT), U1.19/U1.20 (GND), plus SDA clipping SCL's own pad E2.6",
+  "reading": "the E2/U1 pad field is dense, so 'draw the lane fully' is not a hand-typed constant: it needs an obstacle-aware path.",
+  "honest_note": "R-h's slots/corridor/pitch remain valid; only the pad-avoiding run is open."
+ },
+ "proposed_method_for_the_freeze": {
+  "method": "draft the lane ONCE with the in-register router on the CLEARED field (a drawing action, not an exam run), then FREEZE the resulting polyline as a constant in the spec and re-emit it with the stitcher.",
+  "why_this_satisfies_sec.17.4_one_shot_drawing": "the solver is used as a DRAFTSMAN once; its output becomes a frozen drawing constant, so the later construction run performs no search for that lane.",
+  "alternative": "or route the pair on B.Cu where the pad field is sparser (needs a measurement).",
+  "ask": "confirm the drafting-as-drawing method (or pick the B.Cu alternative) - then R-h freezes, R-g lands per the C6/zone decision, and ONE construction + ONE N=1 follow."
+ },
+ "not_done": [
+  "R-h freeze into the spec",
+  "R-g (blocked on the C6/zone criteria decision, see K2_C6_ZONE_BLINDSPOT_CLOSED_v1.json)",
+  "the one N=1"
+ ],
+ "OWNER-ITEMS": 0
+}

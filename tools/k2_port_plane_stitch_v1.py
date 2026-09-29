@@ -44,6 +44,11 @@ def validate(spec, rect):
         if L.get("kind") == "via":
             if not _in([float(v) for v in L["at"]]):
                 out.append(dict(it, why="via outside dR", at=L["at"]))
+        elif L.get("kind") == "lane":
+            for pt in (L.get("poly") or []):
+                if not _in([float(v) for v in pt]):
+                    out.append(dict(it, why="lane point outside dR", at=pt))
+                    break
         else:
             for k in (("near", "far") if L.get("kind") == "port_stub" else ("a", "b")):
                 if not _in([float(v) for v in L[k]]):
@@ -88,6 +93,21 @@ def stitch(board, rect, spec, out):
             vi.SetLayerPair(layers[la], layers[lb]); vi.SetNetCode(code)
             b.Add(vi)
             report["added"].append(dict(item, at=at, layers=L["layers"], via_type=vt, size=float(L.get("size", 0.45))))
+        elif kind == "lane":
+            layer = L["layer"]
+            if layer not in layers:
+                report["refused"].append(dict(item, why="unknown layer", layer=layer))
+                continue
+            w = float(L.get("width") or _default_width(b, net, layer, P))
+            poly = [[float(v) for v in pt] for pt in L["poly"]]
+            segs = 0
+            for p0, p1 in zip(poly, poly[1:]):
+                tr = P.PCB_TRACK(b)
+                tr.SetStart(P.VECTOR2I(P.FromMM(p0[0]), P.FromMM(p0[1])))
+                tr.SetEnd(P.VECTOR2I(P.FromMM(p1[0]), P.FromMM(p1[1])))
+                tr.SetWidth(P.FromMM(w)); tr.SetLayer(layers[layer]); tr.SetNetCode(code)
+                b.Add(tr); segs += 1
+            report["added"].append(dict(item, layer=layer, segments=segs, width_mm=w, poly=poly))
         else:
             layer = L["layer"]
             if layer not in layers:

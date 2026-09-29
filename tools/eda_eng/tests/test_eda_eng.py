@@ -1465,6 +1465,14 @@ class T(unittest.TestCase):
             {"n": 1, "kind": "via", "net": "P3V3", "at": [52.0, 39.0], "layers": ["F.Cu", "In4.Cu"]},
             {"n": 2, "kind": "track", "net": "P3V3", "layer": "F.Cu", "a": [43.4, 44.0], "b": [43.4, 79.0]}]}, rect)
         self.assertEqual([r["why"] for r in bad], ["via outside dR", "endpoint outside dR"])
+        # #K2-442 sec.3.2 (R-h): a multi-segment LANE is validated point by point
+        lane_ok = m.validate({"lines": [{"n": 1, "kind": "lane", "net": "I2C1_SCL", "layer": "F.Cu",
+            "poly": [[51.5, 66.185], [50.90, 66.185], [50.90, 61.635]]}]}, rect)
+        self.assertEqual(lane_ok, [])
+        lane_bad = m.validate({"lines": [{"n": 1, "kind": "lane", "net": "I2C1_SCL", "layer": "F.Cu",
+            "poly": [[51.5, 66.185], [79.0, 61.635]]}]}, rect)
+        self.assertEqual([r["why"] for r in lane_bad], ["lane point outside dR"])
+        self.assertIn('"lane"', open(os.path.join("tools", "k2_port_plane_stitch_v1.py"), encoding="utf-8").read())
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
