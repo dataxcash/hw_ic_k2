@@ -162,11 +162,16 @@ def plan_from_board(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0
         _obn = {n: byn[n] for n in byn if n not in own}
         req = row_relayout_request(rw, _obn, clearance)
         # **内容感知分配版**：先应用本排的确定性让位，再重建廊道（若由不通转通 ⇒ 记 OK_BY_YIELD）
-        _mv = {}
-        for _z in req:
-            _s = 1.0 if _z["dir"] == "+y" else -1.0
-            _mv[_z["net"]] = [[b[0], b[1] + _s * _z["move_mm"], b[2], b[3] + _s * _z["move_mm"]] for b in _obn.get(_z["net"], [])]
-        _occ2 = [bb for n, bbs in {**_obn, **_mv}.items() if n not in own for bb in bbs]
+        # **联合让位（有界多趟 · 确定性 · 非搜索）**：每趟在当前（已让位）场上重算请求并再让；固定 2 趟。
+        _state = {n: [list(b) for b in bbs] for n, bbs in _obn.items()}
+        for _pass in range(2):
+            _rq = row_relayout_request(rw, _state, clearance)
+            if not any(z["move_mm"] > 0 for z in _rq):
+                break
+            for _z in _rq:
+                _s = 1.0 if _z["dir"] == "+y" else -1.0
+                _state[_z["net"]] = [[b[0], b[1] + _s * _z["move_mm"], b[2], b[3] + _s * _z["move_mm"]] for b in _state.get(_z["net"], [])]
+        _occ2 = [bb for n, bbs in _state.items() if n not in own for bb in bbs]
         sub2, _ = RD.clear_subrect_containing_pts(box, _occ2, clearance, [(p[1], p[2]) for p in rw])
         cons2 = corridor_conservation(sub2, _occ2, clearance, need) if sub2 else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
         esc = escape_into_corridor(rw, sub2 or sub) if (sub2 or sub) else []
