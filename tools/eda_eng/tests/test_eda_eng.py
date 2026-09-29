@@ -1409,6 +1409,10 @@ class T(unittest.TestCase):
         self.assertEqual(m.audit([anchored], pads, routes), {"ok": True, "padless": [], "n_added": 1})
         bad = m.audit([anchored, orphan], pads, routes)
         self.assertFalse(bad["ok"]); self.assertEqual(bad["padless"], [orphan])
+        # a dR port stub anchored on KEPT copper (not a pad) must PASS (R1386 refinement)
+        port = {"kind": "track", "layer": "B.Cu", "a": [51.5, 61.905], "b": [50.9, 61.905]}
+        kept = [{"layer": "B.Cu", "a": (51.5, 61.905), "b": (52.205, 61.905)}]
+        self.assertTrue(m.audit([port], pads, kept)["ok"], "a port stub anchored on kept copper is anchored")
         via_ok = {"kind": "via", "at": [45.95, 62.905]}
         self.assertTrue(m.audit([via_ok], pads, routes)["ok"])
 

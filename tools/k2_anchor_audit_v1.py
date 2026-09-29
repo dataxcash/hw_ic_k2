@@ -75,7 +75,9 @@ def audit(added, pads, routes, tol=TOL):
             for k, bb in enumerate(pads):
                 if _pt_in_bbox(pt, bb, tol):
                     union(r0 + j, p0 + k)
-    anchored_roots = {find(p0 + k) for k in range(len(pads))}
+    # #K2-449 sec.2.4 refinement (R1386): the anchored roots are pads AND PRE-EXISTING (kept) copper - a dR port
+    # stub's anchor is the KEPT OUTSIDE half-stub, not a pad, so pads alone over-flag every boundary piece.
+    anchored_roots = {find(p0 + k) for k in range(len(pads))} | {find(r0 + j) for j in range(len(routes))}
     padless = [added[i] for i in range(n) if find(i) not in anchored_roots]
     return {"ok": not padless, "padless": padless, "n_added": n}
 
