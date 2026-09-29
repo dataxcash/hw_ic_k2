@@ -141,5 +141,42 @@
    "consequence": "per #K2-394 sec.2.2 reaching these endpoints needs either (i) A*-level acceptance of a congested port cell plus congestion relief, or (ii) MEMBER-SET EXPANSION (new neighbours join -> block boundary redrawn -> the C7 mutual-exclusion re-check -> C6 restated as 'new frame outside diff = 0'), or (iii) micro-adjusting the member part that owns the buried endpoint (#K2-394 sec.2.3). All three are planning-layer operations beyond this window's edge-iv item 1.",
    "request": "authorise the member-set-expansion / placement-micro-adjust window (zero exam runs) before any further run."
   }
+ },
+ "edge_iv_C_status": {
+  "authority": "#K2-395 sec.2.1: run (C) the in-block micro-adjustment of the member parts owning the buried endpoints FIRST.",
+  "detector_finding": {
+   "first_cut": "a geometric pad-vs-foreign-copper rule (route.pad_clearance_violations)",
+   "verdict": "UNSOUND - WITHDRAWN, NOT SHIPPED",
+   "evidence": "it flagged 366 pads on the clean l14 reference board (with negative gaps), while the true buried set on the A-triple-prime wiped board is 7 endpoints => the approximation (centre-to-segment minus the pad half-diagonal) over-flags by orders of magnitude.",
+   "consequence": "the (C) detector must be the MAZE'S OWN model (k2_p4_mroute_v1.snap_node / _mark geometry), not a hand-rolled approximation. The port-reachability pre-check already implements exactly that (it NAMES the buried endpoints)."
+  },
+  "owner_determination": {
+   "buried_in_frame_endpoints": [
+    [
+     31.837,
+     53.75
+    ],
+    [
+     31.837,
+     51.75
+    ],
+    [
+     34.25,
+     56.163
+    ],
+    [
+     34.05,
+     58.5
+    ],
+    [
+     47.4,
+     44.0
+    ]
+   ],
+   "owners": "the (31.8375, 53.75) and (31.8375, 51.75) endpoints are U1 pads (U1.10 NRST / U1.2-class); U1 did NOT move in the A-triple-prime derivation because EVERY SE lattice step was inadmissible (R1078: k=1,2 copper overlap; k=3 the mask bridge; k=4 mask+clearance; k=8 gen failure).",
+   "verdict": "(C) IS EXHAUSTED for the U1-owned endpoints: the owning member has NO admissible in-block step under the current deterministic gate, so 'micro-adjust the owner' has no legal move to take."
+  },
+  "conclusion": "per #K2-395 sec.2.2 the next step is (B): ONE BOUNDED MEMBER-SET EXPANSION (the neighbours crowding these endpoints join the member set; region_select re-run; block boundary redrawn; C7 HS mutual-exclusion re-check; C6 restated as 'new frame outside diff = 0'; NO second expansion). (C) cannot be delivered as specified.",
+  "no_exam_run": "not applied - running now would be a same-cause rerun."
  }
 }
