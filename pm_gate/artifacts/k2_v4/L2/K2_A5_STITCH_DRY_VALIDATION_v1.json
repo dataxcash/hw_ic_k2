@@ -1,0 +1,228 @@
+{
+ "artifact": "k2_a5_stitch_dry_validation_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-408 sec.4.2 dry validation (zero exam runs, no board change): does the new 2c_endpoint_stitch stage FIRE, and with what plans?",
+ "input": "/tmp/opencode/aprime_a5_final/s2b_resolved.kicad_pcb (the A-quintuple-prime run's post-second-maze board) + its DRC",
+ "pre_refill_unconnected": 8,
+ "plans_emitted": 8,
+ "plans": [
+  {
+   "net": "MCU_VDD",
+   "poly": [
+    [
+     31.8375,
+     52.75
+    ],
+    [
+     29.25,
+     52.75
+    ],
+    [
+     29.25,
+     44.9
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": [
+    {
+     "at": [
+      29.25,
+      52.75
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    }
+   ]
+  },
+  {
+   "net": "NRST",
+   "poly": [
+    [
+     27.55,
+     51.9
+    ],
+    [
+     31.8375,
+     51.9
+    ],
+    [
+     31.8375,
+     54.75
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": []
+  },
+  {
+   "net": "NRST",
+   "poly": [
+    [
+     51.500001,
+     40.450001
+    ],
+    [
+     31.8375,
+     40.450001
+    ],
+    [
+     31.8375,
+     54.75
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": []
+  },
+  {
+   "net": "PERSTA#",
+   "poly": [
+    [
+     51.75,
+     37.5
+    ],
+    [
+     50.05,
+     37.5
+    ],
+    [
+     50.05,
+     39.0
+    ]
+   ],
+   "layers": [
+    "In5.Cu"
+   ],
+   "vias": [
+    {
+     "at": [
+      50.05,
+      37.5
+     ],
+     "layers": [
+      "In5.Cu",
+      "F.Cu"
+     ]
+    }
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "poly": [
+    [
+     51.15,
+     38.3
+    ],
+    [
+     51.55,
+     38.3
+    ],
+    [
+     51.55,
+     38.8
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": [
+    {
+     "at": [
+      51.55,
+      38.3
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SCL",
+   "poly": [
+    [
+     33.75,
+     48.8375
+    ],
+    [
+     45.95,
+     48.8375
+    ],
+    [
+     45.95,
+     61.635
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": []
+  },
+  {
+   "net": "I2C1_SDA",
+   "poly": [
+    [
+     51.500001,
+     67.455001
+    ],
+    [
+     52.205,
+     67.455001
+    ],
+    [
+     52.205,
+     61.905
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": [
+    {
+     "at": [
+      52.205,
+      67.455001
+     ],
+     "layers": [
+      "F.Cu",
+      "B.Cu"
+     ]
+    }
+   ]
+  },
+  {
+   "net": "P3V3",
+   "poly": [
+    [
+     81.0,
+     60.6
+    ],
+    [
+     43.4,
+     60.6
+    ],
+    [
+     43.4,
+     44.0
+    ]
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "vias": []
+  }
+ ],
+ "reading": "the stage fires deterministically on the A^5 board's pre-refill gaps; the plans are simple L stitches (one via only when layers differ). No board was changed.",
+ "OWNER-ITEMS": 0,
+ "honest_correction": {
+  "to_the_sec16_3_plan": "the plan's 'all eight are micro (0.06-2.0mm)' referred to the FRAGMENT lengths in the DRC text, NOT the PAIR distance: some pair distances are LONG (e.g. P3V3 spans ~37mm, I2C1_SCL ~12mm).",
+  "consequence": "the maze-first rule is essential; the L fallback is a LAST RESORT and its emissions are subject to the final DRC (rejected stitches are NAMED). A long L that violates clearance/detour rules will be named, not silently accepted."
+ }
+}
