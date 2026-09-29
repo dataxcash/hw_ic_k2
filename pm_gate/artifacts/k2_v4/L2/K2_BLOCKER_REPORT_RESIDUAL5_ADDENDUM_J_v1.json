@@ -1,0 +1,32 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_j_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (latched family, VOID four times) + the sec.2.3 blocker-report requirement.",
+ "object_named": {
+  "token": "k2v",
+  "what": "a work-dir path constant of an earlier run; this period's commands used other work dirs."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_period": 0,
+  "param_or_tool_edits": 2,
+  "reruns": 0,
+  "ENG_owning": "this period had two 'modify-and-retry' moves (the anchor gate's criterion; the tie via's address). Zero exam runs, but the pattern is what the red line targets => owned and stopped."
+ },
+ "blocker_report": {
+  "tried": "R1380 (built the anchor gate; its first criterion over-flagged 75/96 because it tested pieces individually rather than by cluster; and it DETERMINED that PWR_BTN_OUT's port was occupied by my own tie via) -> R1382 (gate criterion corrected to cluster-based via union-find, 75 -> 11; the tie via moved from (51.5,38.75) to (51.65,39.1) freeing the port and declared outside_dR; the stitcher's via branch now honours allow_outside_dR). Re-apply: 96 added / 0 refused; stitched-field DRC {unconnected_items: 344} with zero shorts/crossings/clearance.",
+  "why_not_yet": "11 added pieces remain untriaged (genuinely pad-less => would be disposed, vs outside/by-design pieces) so #K2-449 sec.2.5 prerequisite (1) is not yet closed; the N=1 stays unrun (fail-closed).",
+  "gap_layer": "IMPLEMENTATION layer (the ENG's own tooling/drawing procedure): a wrong gate criterion and a missing via-branch bypass, both now fixed. NOT the scheme layer (the five-line drawing is complete), NOT criteria (read-only rev=6)."
+ },
+ "plan_recap": {
+  "q1": "inner-layer planes for power (P3V3_AUX closed; P3V3 via the y=35.5 bridge plus the D2.1 tie); the I2C1 pair as one group corridor (SCL closed; SDA gained a PAD-ANCHORED segment to E2.5); short direct links for control (NRST closed).",
+  "q2": "only one CLASS of obstruction remains: added pieces without an anchor get disposed by the chain (proved twice), and there is now a gate to check before running.",
+  "q3": "triage the 11 pieces, anchor the genuinely pad-less ones, get a green audit and a clean DRC, then ONE run."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "read-only triage of the 11 pieces",
+  "anchor the genuinely pad-less ones (determined drafts only)",
+  "then the authorised N=1 (hard gate C1<2)"
+ ],
+ "OWNER-ITEMS": 0
+}
