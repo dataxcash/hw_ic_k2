@@ -1370,7 +1370,7 @@ def endpoint_stitch_plans(drc_json, bound_rect=None):
 GAP_NETS = ("MCU_VDD", "NRST", "PERSTA#", "P3V3_AUX", "I2C1_SCL", "I2C1_SDA", "P3V3")
 
 
-def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
+def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
     # (#K2-415 sec.2.2 lever "顺序"): the eight objective nets are routed FIRST. WHY this is the sound lever:
@@ -1403,8 +1403,9 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
     # ① wipe（与 R 相交的铜全删）＋ 逐件位移 —— `move_parts` 即此语义（删到 ∂R，框外半段留作固定端口）
     mv_arg = ",".join("%s:%s:%s" % (r_, float(dx), float(dy)) for (r_, dx, dy) in moves)
     wiped = os.path.join(work, "s1_wiped.kicad_pcb")
+    _keep = ["--keep-nets", ",".join(keep_nets)] if keep_nets else []
     rc, mp = _cli("move-parts", "--board", B0, "--rect", ",".join(str(x) for x in rect),
-                  "--moves", mv_arg, "--out", wiped)
+                  "--moves", mv_arg, "--out", wiped, *_keep)
     if rc != 0 or not mp:
         return {"state": "W1_WIPE_FAILED", "chain": chain, "exit": rc}
     # #K2-406 / #K2-404 §三①：**板级 ERASE**（治理令指向的 footprint）——清空之后、重解之前

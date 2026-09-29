@@ -53,6 +53,8 @@ def main(argv=None):
                         "wipe_resolve -> A_double_prime_placement_pour)")
     p.add_argument("--from-placed", default=None,
                    help="c17v1: read the per-part map back from this (gate-validated) board - step-1 alignment")
+    p.add_argument("--keep-nets", dest="keep_nets", default=None,
+                   help="#K2-418 sec.3: comma nets whose accepted routing is KEPT (not wiped) - the U1-pinned A6 form")
     p.add_argument("--erase-refs", dest="erase_refs", default=None,
                    help="#K2-406: board-level ERASE refs (comma-separated) applied after the wipe, before the re-solve")
     p.add_argument("--scenario", default=None,
@@ -118,6 +120,7 @@ def main(argv=None):
     p = sub.add_parser("move-parts", help="(subprocess only) per-part move + in-block copper re-lay preparation")
     p.add_argument("--board"); p.add_argument("--rect", required=True)
     p.add_argument("--moves", required=True, help="ref:dx:dy,ref:dx:dy,...")
+    p.add_argument("--keep-nets", dest="keep_nets", default=None)
     p.add_argument("--out", required=True)
     p.add_argument("--json-out")
     p = sub.add_parser("bound-outside", help="(subprocess only) C35: restore the outside-frame copper to the base geometry")
@@ -193,7 +196,9 @@ def main(argv=None):
                     mvv = [(m["ref"], m["delta_mm"][0], m["delta_mm"][1]) for m in aps["witness"]["moves"]]
                 rp = regen_mod.wipe_resolve_chain(rect, mvv, W, members,
                                               erase_refs=([x.strip() for x in a.erase_refs.split(",") if x.strip()]
-                                                          if a.erase_refs else None))
+                                                          if a.erase_refs else None),
+                                              keep_nets=([x.strip() for x in a.keep_nets.split(",") if x.strip()]
+                                                         if getattr(a, "keep_nets", None) else None))
                 out = {"artifact": "eda_eng_exam", "exam": a.which, "chain": "wipe_resolve",
                        "entry": "eda_eng exam A --run --chain wipe_resolve", "run_count": "1/1",
                        "gate": gate,
@@ -372,7 +377,9 @@ def main(argv=None):
         for item in [x.strip() for x in a.moves.split(",") if x.strip()]:
             r_, dx, dy = item.split(":")
             moves.append((r_, float(dx), float(dy)))
-        r = block_mod.move_parts(a.board or REF_BOARD, rect, moves, a.out)
+        r = block_mod.move_parts(a.board or REF_BOARD, rect, moves, a.out,
+                                 keep_nets=([x.strip() for x in a.keep_nets.split(",") if x.strip()]
+                                            if getattr(a, "keep_nets", None) else None))
         return _emit(r, a.json_out, 0)
 
     if a.cmd == "bound-outside":

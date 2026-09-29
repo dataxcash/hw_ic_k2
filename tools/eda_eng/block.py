@@ -720,7 +720,7 @@ def geometric_digest(board, nd=3):
             "rule": "canonical geometric digest over (net, layer, quantized geometry, width); byte-level SHA is NOT a criterion"}
 
 
-def move_parts(board, rect, moves, out):
+def move_parts(board, rect, moves, out, keep_nets=None):
     """**A′（#K2-372 §二.1）逐件位移 ＋ 块内铜重铺**：
       · 成员 footprint 按**各自** Δ 移动（pad 随动）；
       · 块内铜（两端在 rect 内）与**穿边线的块内半段** ⇒ **删除**（相对重排后不可整块平移 ⇒ 必须重连）；
@@ -732,10 +732,13 @@ def move_parts(board, rect, moves, out):
     mmap = {r: (float(dx), float(dy)) for (r, dx, dy) in moves}
     ports = collections.defaultdict(list)
     port_layer = collections.defaultdict(list)
+    KEEP = frozenset(keep_nets or ())                 # #K2-418: these nets keep their accepted routing (not wiped)
     to_rm, to_add = [], []
     del_seg = del_via = 0
     for t in list(b.GetTracks()):
         net = nets_map.get(t.GetNetCode(), "")
+        if net in KEEP:
+            continue                                  # #K2-418 sec.3: U1's nets 原线保留不 wipe
         if t.GetClass() == "PCB_VIA":
             pos = t.GetPosition()
             xx, yy = P.ToMM(pos.x), P.ToMM(pos.y)

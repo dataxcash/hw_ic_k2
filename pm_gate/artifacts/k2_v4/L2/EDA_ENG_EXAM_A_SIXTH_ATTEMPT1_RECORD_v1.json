@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_exam_a_sixth_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-418 sec.3: exam A^6 = the final form (U1 stays + the movable set moves down; U1's nets keep their accepted routing, not wiped).",
+ "run": {
+  "chain": "wipe_resolve",
+  "from_placed": "the A^6 witness (U1 pinned at the baseline position; the scenario's 18 movable parts moved)",
+  "erase_refs": [
+   "J9",
+   "J6",
+   "J11"
+  ],
+  "keep_nets": [
+   "MCU_VDD",
+   "NRST",
+   "PERSTA#",
+   "P3V3_AUX",
+   "I2C1_SCL",
+   "I2C1_SDA",
+   "P3V3"
+  ],
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 4,
+  "C1_pass": false,
+  "C2_new_classes": [
+   "clearance",
+   "hole_clearance",
+   "shorting_items",
+   "solder_mask_bridge"
+  ],
+  "C2_pass": false,
+  "C3_pass": true,
+  "C4_pass": true,
+  "C5_pass": true,
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "verdict": "FAIL on BOTH C1 (=4) and C2 (new classes: clearance / hole_clearance / shorting_items / solder_mask_*).",
+ "attribution": "keeping the SEVEN U1 nets' accepted routing VERBATIM while the movable parts ON THOSE NETS are moved BREAKS those connections and lets the KEPT copper clash with the re-routed copper (new clearance/shorting classes). The premise 'U1 stays => its nets need no reconnection' conflicts with the movable set, which contains parts on U1's nets (C73/C84/C85/C86/C87/C90/R1/R28/E2/U4 ...).",
+ "fix_options": [
+  "(a) U1 stays (footprint pinned) but its nets ARE re-resolved (i.e. do NOT keep their copper) - the honest reading of 'U1 stays';",
+  "(b) shrink the movable set to parts NOT on U1's nets (then keeping U1's routing is consistent)."
+ ],
+ "owner_note": "per #K2-418 sec.4 the 'partial evacuation' final form is REQUIREMENTS-level - and A^6 has now FAILED, so the owner item must be presented with this failure, not after a pass.",
+ "zero": {
+  "board_changes": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
