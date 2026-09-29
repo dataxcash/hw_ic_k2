@@ -1,0 +1,24 @@
+{
+ "artifact": "k2_eda_eng_a4_rigid_move_retraction_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-398 sec.2 (one-stop A^4) - and an ENG SELF-CORRECTION before any run.",
+ "type": "RETRACTION / CORRECTION of R1094's decisive claim",
+ "retracted_claim": "R1094 (and my #K2-397 receipt) stated: 'a RIGID cluster down-shift of 1/2/4 mm passes the placement gate with ZERO new violations'. THAT IS WRONG.",
+ "why_it_was_wrong": "mech_probe_moves returns `{\"mechanical_violations\": {}}` when gen_v5 FAILS (its early-return branch). My sweep treated an EMPTY violations dict as 'clean' without checking gen_exit, so a GEN FAILURE masqueraded as a clean pass.",
+ "the_truth": {
+  "sweep_with_gen_exit_required": "dy = 0.5,1.0,...,11.0 mm: ALL of them GEN_FAIL (gen_exit = 1) => NO rigid dy is admissible.",
+  "root_cause_evidence": "shadow build + `edit_placement_at(all 25 members, [0, +4])` + gen_v5 => rc=1, stderr: '[S1 PAD_OVERLAP] C88/1 (28.750,45.150)-(29.350,45.850) 与 J13/2 (28.460,45.790)-(29.960,47.290) 重叠 dx=0.600 dy=0.060 (容差 0.01)' - a REAL copper overlap in the generator's own layout.",
+  "note": "the gate probes the SHADOW/GEN board; the exam chain runs on l14. The two layouts diverge (registered earlier: ECO-K2-0004 sec.6c), so a move admissible on one may be refused by the other - this must be resolved explicitly before any A^4 conclusion."
+ },
+ "consequences": {
+  "exam_a4_run": "NOT RUN - #K2-398 sec.2's premise (a clean rigid dy exists) is not satisfied.",
+  "claim_in_R1094": "must be struck; the A^4 'rigid translation' finding is NOT established.",
+  "still_valid_from_R1094": "the PER-PART derivation result (22/25 down, U1/D2/U2 no step, and WHY) stands; the 'per-part family cannot produce a coherent cluster translation' diagnosis stands."
+ },
+ "proposed_next_honest_steps": [
+  "A. decide the A^4 evaluation base explicitly: gate on the GEN board (current) vs the L14 board (what the exam actually moves) - the divergence must be resolved before any 'admissible dy' claim.",
+  "B. if the base is l14: derive the admissible rigid dy by a gate that probes L14 + the move (a new, named instrument), not the shadow.",
+  "C. the per-member map may also need to be non-uniform (the original directive says 'the cluster and its neighbours move down', not necessarily identically) - the per-part derivation with a COHERENT seeding order (e.g., move the connectors first, the cluster last) is the in-register alternative."
+ ],
+ "OWNER-ITEMS": 0
+}

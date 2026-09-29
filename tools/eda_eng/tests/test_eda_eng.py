@@ -957,6 +957,18 @@ class T(unittest.TestCase):
         r = open(os.path.join("tools", "eda_eng", "route.py"), encoding="utf-8").read()
         self.assertNotIn("def pad_clearance_violations", r, "the unsound bypass detector must not ship")
 
+    def test_C398_a_gen_failure_is_distinguishable_from_a_clean_probe(self):
+        """#K2-398 自我更正：`mech_probe_moves` 在 **gen_v5 失败**时返回**空 violations**（`{}`）——
+        调用方**必须**同时看 `gen_exit`/`gen_failed`，否则「生成失败」会被读成「干净通过」
+        （我上一窗的 dy 扫描就是这样把 A⁴ 的刚性下移误判为过闸）。本测试把该契约钉住。"""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn('"gen_failed": True', src, "the gen-failure branch must be NAMED")
+        self.assertIn('s.get("gen_exit") == 0', src, "rearrange_probe must require gen_exit == 0")
+        # the CLI gained an explicit exam scenario option (the A^4 wiring) - default keeps A-double-prime behaviour
+        cli = open(os.path.join("tools", "eda_eng", "cli.py"), encoding="utf-8").read()
+        self.assertIn('p.add_argument("--scenario"', cli)
+        self.assertIn('a.scenario or os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json")', cli)
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

@@ -53,6 +53,9 @@ def main(argv=None):
                         "wipe_resolve -> A_double_prime_placement_pour)")
     p.add_argument("--from-placed", default=None,
                    help="c17v1: read the per-part map back from this (gate-validated) board - step-1 alignment")
+    p.add_argument("--scenario", default=None,
+                   help="#K2-398: the exam scenario artifact for the wipe_resolve chain (default: the A-double-prime "
+                        "scenario L2/EXAM_A_PRIME_SCENARIO_v1.json)")
     p.add_argument("--max-nets", type=int, default=None)
     p.add_argument("--work", default=None)
     p = sub.add_parser("eco", help="validate the ECO chain form")
@@ -175,7 +178,7 @@ def main(argv=None):
                 return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
                               "preflight": pr}, None, 2)
             if a.chain == "wipe_resolve":
-                aps = json.load(open(os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json"), encoding="utf-8"))
+                aps = json.load(open(a.scenario or os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json"), encoding="utf-8"))
                 rect = aps["scenario"]["frame_rect"]; members = aps["scenario"]["members"]
                 if a.from_placed:
                     mvv, unch, miss = block_mod.moves_from_board(REF_BOARD, a.from_placed, members)
