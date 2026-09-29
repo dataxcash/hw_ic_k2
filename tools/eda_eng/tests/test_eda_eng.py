@@ -1286,7 +1286,7 @@ class T(unittest.TestCase):
             "k2_endpoint_reach_planner_v1", os.path.join("tools", "k2_endpoint_reach_planner_v1.py"))
         m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
         seg = ((0.0, 0.0), (1.0, 0.0))
-        blk = [{"net": "FAR", "bbox": [0.2, 0.6, 0.8, 0.65]}, {"net": "NEAR", "bbox": [0.2, 0.28, 0.8, 0.32]}]
+        blk = [{"net": "NEAR", "bbox": [0.2, 0.10, 0.8, 0.14]}, {"net": "FAR", "bbox": [0.2, 0.20, 0.8, 0.24]}]
         ys = m.yield_sequence(seg, blk, 0.20)
         self.assertEqual([y["net"] for y in ys], ["FAR", "NEAR"], "fewest-to-move yields FIRST")
         self.assertLess(ys[0]["move_mm"], ys[1]["move_mm"])
