@@ -66,6 +66,34 @@ def row_blockers(row, occupants_by_net, clearance=0.20):
     return sorted(out)
 
 
+def row_relayout_request(row, occupants_by_net, clearance=0.20):
+    """**确定性 · 零搜索**：一排的**重排请求** ＝ { 具名堵网 → 让位量/方向 }。
+    某网的让位量 ＝ `max over 该排端点( clearance − 该点到该网膨胀 bbox 的距离 )`（≥0；一个网一个数，移一次）；方向＝**背离该排中心**。"""
+    import math as _m
+    cy = sum(p[2] for p in row) / len(row)
+    names = row_blockers(row, occupants_by_net, clearance)
+    out = []
+    for n in names:
+        need = 0.0
+        for (net, px, py, _l) in row:
+            best = None
+            for bb in occupants_by_net.get(n, []):
+                dx = max(bb[0] - clearance - px, px - (bb[2] + clearance), 0.0)
+                dy = max(bb[1] - clearance - py, py - (bb[3] + clearance), 0.0)
+                d = _m.hypot(dx, dy)
+                best = d if best is None else min(best, d)
+            if best is not None:
+                need = max(need, clearance - best)
+        out.append({"net": n, "move_mm": max(0.0, round(need, 4)),
+                    "dir": "+y" if (sum(o["bbox"][1] + o["bbox"][3] for o in
+                                        [{"bbox": bb} for bb in occupants_by_net.get(n, [])]) / (2 * max(1, len(occupants_by_net.get(n, []))))) >= cy
+                                else "-y"})
+    out.sort(key=lambda z: (z["move_mm"], z["net"]))
+    for i, z in enumerate(out):
+        z["yield_order"] = i
+    return out
+
+
 def row_corridors(rows, occupants, clearance=0.20, pad=0.4):
     """**内容感知 · 确定性 · 零搜索**：每排的廊道 ＝ 含**该排全部端点**、且避开（占位者⊕净空）的**最大净空子矩**；
     取不到 ⇒ **UNPLACEABLE（具名）**（绝不硬塞）。取代等分切片（后者在真板 4/6 容量为 0）。"""

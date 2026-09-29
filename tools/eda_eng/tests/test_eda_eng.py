@@ -1385,6 +1385,21 @@ class T(unittest.TestCase):
         self.assertEqual(m.row_blockers(row, occ, 0.20), ["W1"], "only the net actually covering the point is named")
         self.assertEqual(m.row_blockers([("W1", 0.0, 0.0, "F.Cu")], occ, 0.20), [], "a net's own copper never blocks it")
 
+    def test_C421_row_relayout_request_is_ordered_and_named(self):
+        """#K2-421 sec.4: the deterministic re-layout request - per row, the named blocker nets with their move_mm
+        and yield order (fewest-to-move first). Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        row = [("A", 0.0, 0.0, "F.Cu")]
+        occ = {"NEAR": [[-0.1, -0.05, 0.1, 0.05]], "FAR": [[-0.1, -0.19, 0.1, -0.11]]}   # both cover the point
+        r = m.row_relayout_request(row, occ, 0.20)
+        self.assertEqual([z["net"] for z in r], ["FAR", "NEAR"], "tie on move_mm => ordered by net name")
+        self.assertEqual([z["yield_order"] for z in r], [0, 1])
+        self.assertTrue(all(z["move_mm"] >= 0 for z in r))
+        self.assertEqual(m.row_relayout_request(row, occ, 0.20), r, "deterministic")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""
