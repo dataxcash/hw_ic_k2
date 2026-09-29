@@ -73,6 +73,26 @@ def multi_block_plan(blocks, sizes, region, hs_x_max=51.5, gap=0.3):
     return {"plan": plan, "checks": checks, "verdict": v, "named": named}
 
 
+PER_BLOCK_STEPS = ("1_block", "2_multi_block_place", "3_pour_aware_clear", "4_in_block_route",
+                   "5_cross_block_stitch", "6_refill", "7_judge")
+
+
+def per_block_flow(blocks, plan):
+    """**K-4 逐块工序**（#K2-434 §2.1 · 确定性）：产**七步序** ＋ **逐块验收行**。
+    硬规则：**块内 C1 先归零**（失败可定位到块）；**电源/平面走铺铜，不走细线**（`POWER` 块只列端口，不列细线计划）。"""
+    rows = []
+    for p_ in plan:
+        fam = p_["block"]
+        b = blocks.get(fam, {})
+        rows.append({"block": fam, "members": b.get("members", []), "nets": b.get("nets", []),
+                     "gate": "in_block_C1_zero", "route_mode": ("pour/plane (NO thin track)" if fam == "POWER" else "signal straight"),
+                     "target": p_["target"]})
+    return {"steps": list(PER_BLOCK_STEPS), "per_block": rows,
+            "rules": ["block-internal C1 must reach zero FIRST (failures localise to a block)",
+                      "power/plane nets go through pours, never thin tracks",
+                      "cross-block connectivity only via the NAMED boundary ports"]}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--params", required=True, help='json: {members:[...], netof:{ref:[net..]}}')

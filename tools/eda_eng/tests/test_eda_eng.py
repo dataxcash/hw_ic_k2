@@ -1295,6 +1295,21 @@ class T(unittest.TestCase):
         self.assertEqual(big["verdict"], "INFEASIBLE", "does not fit => INFEASIBLE, never silent")
         self.assertTrue(big["named"], "infeasibility is NAMED to the block")
 
+    def test_C434_K4_per_block_flow_is_ordered_and_puts_power_on_pours(self):
+        """#K2-434 K-4: the per-block flow fixes the 7-step order, requires the BLOCK-INTERNAL C1 to reach zero
+        first (failures localise to a block), and sends POWER nets through pours (never thin tracks)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_functional_block_v1", os.path.join("tools", "k2_functional_block_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        blocks = {"POWER": {"members": ["U1"], "nets": ["MCU_VDD"]}}
+        plan = m.multi_block_plan(blocks, {"POWER": (4.0, 3.0)}, (0, 0, 10, 20))["plan"]
+        f = m.per_block_flow(blocks, plan)
+        self.assertEqual(f["steps"], ["1_block", "2_multi_block_place", "3_pour_aware_clear", "4_in_block_route",
+                                      "5_cross_block_stitch", "6_refill", "7_judge"])
+        self.assertEqual(f["per_block"][0]["gate"], "in_block_C1_zero")
+        self.assertIn("pour", f["per_block"][0]["route_mode"])
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
