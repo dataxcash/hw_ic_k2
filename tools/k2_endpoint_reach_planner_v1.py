@@ -68,7 +68,7 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
     `blockers`=[{"net","bbox"}]，`lane_seg`=((x0,y0),(x1,y1))；`direction`=让位法向（±y）。"""
     (ax, ay), (bx, by) = lane_seg
     out = []
-    for o in blockers:
+    for _i, o in enumerate(blockers):
         gap = _seg_gap(o["bbox"], (ax, ay), (bx, by))
         need = clearance + min(o["bbox"][3] - o["bbox"][1], o["bbox"][2] - o["bbox"][0]) / 2.0
         move = max(0.0, round(need - gap, 4))
@@ -77,9 +77,9 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
         d = "+y" if (cyt - seg_y) >= 0 else "-y"                 # each blocker yields AWAY from the lane (deterministic)
         if direction < 0:
             d = "-y" if d == "+y" else "+y"
-        out.append({"net": o["net"], "gap_mm": round(gap, 4), "need_mm": round(need, 4),
+        out.append({"idx": _i, "net": o["net"], "gap_mm": round(gap, 4), "need_mm": round(need, 4),
                     "move_mm": move, "dir": d})
-    out.sort(key=lambda z: (z["move_mm"], z["net"]))           # the FEWEST-to-move yields FIRST (deterministic)
+    out.sort(key=lambda z: (z["move_mm"], z["net"], z["idx"]))  # the FEWEST-to-move yields FIRST (deterministic)
     for i, z in enumerate(out):
         z["yield_order"] = i
     return out
@@ -87,12 +87,9 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
 
 def apply_yields(blockers, seq):
     """**确定性**：按让位序列把堵点包围盒沿其 `dir` 平移 `move_mm` ⇒ 返回**平移后**的包围盒列表（几何对象）。"""
-    bynet = {o["net"]: o for o in blockers}
     out = []
     for y in seq:
-        o = bynet.get(y["net"])
-        if o is None:
-            continue
+        o = blockers[y["idx"]]                       # BY INDEX (same-net blockers must ALL move) - the R1186 bug
         b = list(o["bbox"]); m = y["move_mm"] * (1.0 if y["dir"] == "+y" else -1.0)
         b[1] = round(b[1] + m, 4); b[3] = round(b[3] + m, 4)
         out.append(b)
