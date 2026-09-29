@@ -1084,7 +1084,21 @@
    }
   },
   "note": "line 4's slot stubs were replaced by the drafted route (the draft starts from those endpoints).",
-  "group_ordering": "FIXED: the pair is drafted as a GROUP - I2C1_SDA was re-drafted ON the board that already carries the I2C1_SCL lane, so the two lanes no longer cross (the single tracks_crossing in R1328 was MY two lanes, not the maze)."
+  "group_ordering": "FIXED: the pair is drafted as a GROUP - I2C1_SDA was re-drafted ON the board that already carries the I2C1_SCL lane, so the two lanes no longer cross (the single tracks_crossing in R1328 was MY two lanes, not the maze).",
+  "determined_joint_added": {
+   "authority": "#K2-447 sec.2.3 (conditionally pre-authorised N=1; the read-only determination was completed in the two prior windows and BOTH ends are frozen constants => construction layer)",
+   "items": [
+    "F.Cu lane (50.9,67.455)->(50.9,62.505)",
+    "via F.Cu-B.Cu @(50.9,62.505)",
+    "B.Cu lane (50.9,62.505)->(49.35,62.505)"
+   ]
+  },
+  "determined_joint_ATTEMPT": {
+   "authority": "#K2-447 sec.2.3",
+   "result": "NOT LANDED - reverted",
+   "why": "both ends ARE frozen constants, but the connecting geometry produced NEW DRC classes (attempt 1 at x=50.90: shorting+2 tracks_crossing; attempt 2 at the SDA column x=50.30: 5 shorting + 1 tracks_crossing). A connection that cannot be made by a determined line is MISSING DRAWING (sec.16.2), not a construction-layer matter. The pre-authorised N=1 was therefore NOT run - running a known-broken drawing would burn the quota.",
+   "next": "draft the JOINT itself once (drafter, same-source) and freeze it, exactly as the pair lanes were done - then the N=1 precondition is met."
+  }
  },
  "R_g_buildability": {
   "value": "relocation_listed",
