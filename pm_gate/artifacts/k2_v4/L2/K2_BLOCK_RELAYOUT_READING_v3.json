@@ -1,0 +1,104 @@
+{
+ "artifact": "k2_block_relayout_reading_v3",
+ "mode": "content-aware row corridors, own-net EXCLUDED (self-block bug fixed)",
+ "rows": 6,
+ "corridors": [
+  {
+   "row": 0,
+   "nets": [
+    "P3V3",
+    "SWCLK_BOOT0"
+   ],
+   "n_points": 3,
+   "corridor": null,
+   "status": "UNPLACEABLE",
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "row": 1,
+   "nets": [
+    "SWCLK_BOOT0"
+   ],
+   "n_points": 2,
+   "corridor": null,
+   "status": "UNPLACEABLE",
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "row": 2,
+   "nets": [
+    "P3V3_AUX"
+   ],
+   "n_points": 1,
+   "corridor": [
+    29.450001,
+    53.250001000000005,
+    29.95,
+    53.75
+   ],
+   "status": "OK",
+   "conservation": {
+    "capacity_mm": 0.5,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "row": 3,
+   "nets": [
+    "P3V3_AUX"
+   ],
+   "n_points": 1,
+   "corridor": null,
+   "status": "UNPLACEABLE",
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "row": 4,
+   "nets": [
+    "I2C1_SDA",
+    "P3V3"
+   ],
+   "n_points": 2,
+   "corridor": null,
+   "status": "UNPLACEABLE",
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "row": 5,
+   "nets": [
+    "I2C1_SDA"
+   ],
+   "n_points": 1,
+   "corridor": [
+    51.1,
+    67.05500099999999,
+    51.9,
+    67.855001
+   ],
+   "status": "OK",
+   "conservation": {
+    "capacity_mm": 0.8,
+    "need_mm": 0.6,
+    "pass": true
+   }
+  }
+ ],
+ "OWNER-ITEMS": 0
+}
