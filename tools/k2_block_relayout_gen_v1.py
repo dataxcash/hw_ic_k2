@@ -50,6 +50,22 @@ def escape_into_corridor(points, corridor, pitch=0.25):
     return out
 
 
+def row_blockers(row, occupants_by_net, clearance=0.20):
+    """**确定性 · 零搜索**：某排被**哪些网**围死 —— 对排内每个端点，取"膨胀后 bbox 含该点"的网 ⇒ 并集（排序）。
+    这就是该排的**让位输入**（谁必须让）。`occupants_by_net`={net:[bbox,...]}。"""
+    own = {p[0] for p in row}
+    out = set()
+    for (net, px, py, _lay) in row:
+        for n, boxes in occupants_by_net.items():
+            if n in own:
+                continue
+            for bb in boxes:
+                if (bb[0] - clearance - 1e-9 <= px <= bb[2] + clearance + 1e-9
+                        and bb[1] - clearance - 1e-9 <= py <= bb[3] + clearance + 1e-9):
+                    out.add(n)
+    return sorted(out)
+
+
 def row_corridors(rows, occupants, clearance=0.20, pad=0.4):
     """**内容感知 · 确定性 · 零搜索**：每排的廊道 ＝ 含**该排全部端点**、且避开（占位者⊕净空）的**最大净空子矩**；
     取不到 ⇒ **UNPLACEABLE（具名）**（绝不硬塞）。取代等分切片（后者在真板 4/6 容量为 0）。"""

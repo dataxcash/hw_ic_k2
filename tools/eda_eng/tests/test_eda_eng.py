@@ -1374,6 +1374,17 @@ class T(unittest.TestCase):
         self.assertEqual(m.row_corridors(rows, wall, 0.20)[0]["status"], "UNPLACEABLE",
                          "a wall between the row's endpoints must be NAMED, not force-fitted")
 
+    def test_C421_row_blockers_names_who_boxes_the_row(self):
+        """#K2-421 sec.4: for an UNPLACEABLE row, NAME the nets boxing it in (the yield input). Deterministic."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        row = [("A", 0.0, 0.0, "F.Cu")]
+        occ = {"W1": [[-0.1, -0.1, 0.1, 0.1]], "W2": [[5.0, 5.0, 6.0, 6.0]]}
+        self.assertEqual(m.row_blockers(row, occ, 0.20), ["W1"], "only the net actually covering the point is named")
+        self.assertEqual(m.row_blockers([("W1", 0.0, 0.0, "F.Cu")], occ, 0.20), [], "a net's own copper never blocks it")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""
