@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_eda_eng_post_erase_u1_feasibility_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-404 sec.3 step 1-2 premise check: ERASE first, then evaluate placement on the cleared field.",
+ "method": "SUBPROCESS-ONLY (R964): (a) a one-off pcbnew subprocess deletes the J9/J6/J11 footprints from an l14 copy; (b) `eda_eng move-parts --rect R --moves \"\"' (post-erase cleared base) and `--moves \"U1:0:dy\"', each its own subprocess; (c) kicad-cli DRC on each; classes compared baseline-relatively. R=[22.95,32.95,51.5,78.0].",
+ "post_erase_cleared_base": {
+  "track_dangling": 13,
+  "track_not_centered_on_via": 15,
+  "isolated_copper": 4,
+  "missing_courtyard": 51,
+  "silk_edge_clearance": 2,
+  "silk_over_copper": 32,
+  "silk_overlap": 15,
+  "copper_sliver": 1,
+  "note": "erased 3 footprints (J11/J6/J9)"
+ },
+ "u1_post_erase": {
+  "dy_1.0": {
+   "new": {},
+   "ok": true
+  },
+  "dy_4.0": {
+   "new": {
+    "solder_mask_bridge": 4,
+    "shorting_items": 2,
+    "clearance": 1
+   },
+   "ok": false
+  }
+ },
+ "CONCLUSION": {
+  "verdict": "THE A-QUINTUPLE-PRIME PREMISE HOLDS: after the governance ERASE (J9/J6/J11), U1 HAS a legal downward step on the cleared field (+1.0mm: ZERO new violations).",
+  "resolves_R1090": "R1090's 'U1 cannot move' was an artefact of (i) the wrong base (old copper counted) and (ii) the un-erased connectors; on the corrected field+ERASE, U1 moves.",
+  "validated_principles": "#K2-404 'wipe FIRST then place' + #K2-403 'ERASE+ADD for connectors' are both borne out."
+ },
+ "next": "execute the full A-quintuple-prime sequence: ERASE (in-block copper + J9/J6/J11) -> PLACE all members on the cleared field (U1 from +1.0mm, the rest per the gate) -> wipe_resolve -> refill + M4 nine rows + the reasonableness binary row.",
+ "OWNER-ITEMS": 0
+}
