@@ -50,3 +50,25 @@ def joint(demands, span, gap=0.20):
             unsat.append(d["net"]); continue
         out[d["net"]] = (cur, cur + w); cur += w + gap
     return out, unsat
+
+
+def channels_from_pairs(pairs, rect, pitch=0.40, clearance=0.20):
+    """**入链用**（#K2-450 sec.2.4）：把各帧内网的端点对**一次性**排成**互不相交的 y-带**（`joint()`），
+    产出 `--channels` 串。每网通道 = 本网 x 跨度 × 分配到的 y 带。**排不下者具名返回**（不静默）。"""
+    per = {}
+    for pr in pairs:
+        n = pr["net"]
+        for p_ in (pr["p1"], pr["p2"]):
+            x = min(max(p_[0], rect[0]), rect[2]); y = min(max(p_[1], rect[1]), rect[3])
+            b = per.setdefault(n, [x, y, x, y])
+            b[0] = min(b[0], x); b[1] = min(b[1], y); b[2] = max(b[2], x); b[3] = max(b[3], y)
+    demands = []
+    for n, b in per.items():
+        h = max(b[3] - b[1], pitch)
+        demands.append({"net": n, "lo": 0.0, "hi": h, "min_w": h})
+    chans, unsat = joint(demands, (rect[1], rect[3]), gap=pitch)
+    parts = []
+    for n, (lo, hi) in sorted(chans.items()):
+        b = per[n]
+        parts.append("%s:%.4f,%.4f,%.4f,%.4f" % (n, b[0], lo, b[2], hi))
+    return ";".join(parts), unsat

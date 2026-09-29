@@ -1381,8 +1381,23 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
             import importlib.util as _iu
             _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
             ja_module = _iu.module_from_spec(_sp); _sp.loader.exec_module(ja_module)
-        ch = (ja_module.channels_arg_by_block(wiped, drc, list(rect))
-              or ja_module.channels_arg(wiped, drc, list(rect)))
+        # #K2-450 sec.2.4 (means change): prefer the ONE-SHOT JOINT allocation (disjoint y-bands) over the
+        # per-net sequential channel builders, which starve whichever net is served last.
+        ch = ""
+        try:
+            import importlib.util as _iu4
+            _sp4 = _iu4.spec_from_file_location("k2jca", os.path.join(ROOT, "tools", "k2_joint_channel_alloc_v1.py"))
+            _jca = _iu4.module_from_spec(_sp4); _sp4.loader.exec_module(_jca)
+            _sp5 = _iu4.spec_from_file_location("kd4", os.path.join(ROOT, "tools", "k2_deviation_gen_v1.py"))
+            _dev = _iu4.module_from_spec(_sp5); _sp5.loader.exec_module(_dev)
+            _pairs = _dev.pairs(json.load(open(drc, encoding="utf-8")))
+            _chj, _unsat = _jca.channels_from_pairs(_pairs, list(rect))
+            if _chj and not _unsat:
+                ch = _chj
+        except Exception:                                          # noqa: BLE001
+            ch = ""
+        ch = ch or (ja_module.channels_arg_by_block(wiped, drc, list(rect))
+                    or ja_module.channels_arg(wiped, drc, list(rect)))
     except Exception as _e:                                            # noqa: BLE001
         return {"ok": False, "stage": "channels_compute_failed", "err": type(_e).__name__, "args": [], "n_nets": 0}
     if not ch:

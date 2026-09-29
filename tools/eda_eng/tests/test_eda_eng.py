@@ -1413,6 +1413,21 @@ class T(unittest.TestCase):
         self.assertEqual(len(ch), 3)
         ch2, unsat2 = m.joint(demands, (0.0, 12.0), gap=0.20)      # a span too small => loud naming
         self.assertTrue(unsat2, "a span that cannot host everything must NAME the unsatisfied nets, not go silent")
+        # the wiring helper: the emitted --channels string must be DISJOINT in y (that is the whole point)
+        pairs = [{"net": "A", "p1": (30.0, 40.0), "p2": (50.0, 44.0)},
+                 {"net": "B", "p1": (31.0, 42.0), "p2": (49.0, 51.0)},
+                 {"net": "C", "p1": (33.0, 45.0), "p2": (48.0, 46.0)}]
+        s_, unsat_ = m.channels_from_pairs(pairs, [22.95, 32.95, 51.5, 78.0])
+        self.assertEqual(unsat_, [])
+        bands = {}
+        for part in s_.split(";"):
+            n, r4 = part.split(":"); v = [float(t) for t in r4.split(",")]
+            bands[n] = (v[1], v[3])
+        self.assertEqual(m.overlaps(bands, 0.20), [], "the wired channels must be disjoint")
+        # and the chain must PREFER this joint source
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        h = src[src.index("def channels_for_maze("):src.index("def wipe_resolve_chain(")]
+        self.assertIn("channels_from_pairs(", h, "the chain must prefer the one-shot joint allocation")
 
     def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
