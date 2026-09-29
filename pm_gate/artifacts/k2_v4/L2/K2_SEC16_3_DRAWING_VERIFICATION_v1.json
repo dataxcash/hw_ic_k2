@@ -1,0 +1,347 @@
+{
+ "artifact": "k2_sec16_3_drawing_verification_v1",
+ "ts": "2026-09-29",
+ "board_for_landings": "/tmp/opencode/k1/s1c_unfilled.kicad_pcb",
+ "board_for_plane_coverage": "/tmp/opencode/k1/s3c_disposed.kicad_pcb",
+ "clear_mm": 0.2,
+ "cleared_field_in_frame_tracks": 0,
+ "lines": [
+  {
+   "line": 1,
+   "net": "NRST",
+   "layers": [
+    "F.Cu"
+   ],
+   "landings": [
+    {
+     "pt": "port",
+     "at": [
+      51.5,
+      40.45
+     ],
+     "r": 0.35,
+     "foreign": 7,
+     "dominant": [
+      [
+       "MCU_VDD",
+       5
+      ],
+      [
+       "GND",
+       2
+      ]
+     ]
+    },
+    {
+     "pt": "landing",
+     "at": [
+      50.9,
+      40.45
+     ],
+     "r": 0.35,
+     "foreign": 1,
+     "dominant": [
+      [
+       "GND",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "line": 2,
+   "net": "P3V3_AUX",
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "landings": [
+    {
+     "pt": "via",
+     "at": [
+      29.65,
+      53.5
+     ],
+     "r": 0.4,
+     "foreign": 1,
+     "dominant": [
+      [
+       "GND",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "line": 3,
+   "net": "P3V3_AUX",
+   "layers": [
+    "In5.Cu",
+    "B.Cu",
+    "In4.Cu"
+   ],
+   "landings": [
+    {
+     "pt": "via",
+     "at": [
+      51.55,
+      39.0
+     ],
+     "r": 0.4,
+     "foreign": 1,
+     "dominant": [
+      [
+       "PWR_BTN_ISO",
+       1
+      ]
+     ]
+    },
+    {
+     "pt": "via",
+     "at": [
+      50.95,
+      37.0
+     ],
+     "r": 0.4,
+     "foreign": 2,
+     "dominant": [
+      [
+       "PERSTA#",
+       1
+      ],
+      [
+       "PWR_BTN_ISO",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "line": 4,
+   "net": "I2C1_SDA",
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "landings": [
+    {
+     "pt": "portA",
+     "at": [
+      51.5,
+      67.455
+     ],
+     "r": 0.35,
+     "foreign": 0,
+     "dominant": []
+    },
+    {
+     "pt": "portB",
+     "at": [
+      51.5,
+      61.905
+     ],
+     "r": 0.35,
+     "foreign": 0,
+     "dominant": []
+    }
+   ]
+  },
+  {
+   "line": 5,
+   "net": "P3V3",
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "landings": [
+    {
+     "pt": "via",
+     "at": [
+      43.4,
+      39.0
+     ],
+     "r": 0.4,
+     "foreign": 1,
+     "dominant": [
+      [
+       "PERSTA#",
+       1
+      ]
+     ]
+    },
+    {
+     "pt": "pad",
+     "at": [
+      43.4,
+      44.0
+     ],
+     "r": 0.35,
+     "foreign": 0,
+     "dominant": []
+    }
+   ]
+  }
+ ],
+ "corridor_43.4_39to44_F.Cu": {
+  "foreign": 1,
+  "dominant": [
+   [
+    "PERSTA#",
+    1
+   ]
+  ]
+ },
+ "plane_coverage_In4": {
+  "P3V3_AUX_C90_29.65_53.5": true,
+  "P3V3_AUX_50.95_37.0": true,
+  "P3V3_43.4_39.0": true,
+  "P3V3_C84_43.4_44.0": false
+ },
+ "verdict": "PASS - the drawing is buildable on the cleared field; ONE real refinement (L5) + ONE check-definition fix (L1/L3)",
+ "plane_verdict": "3 of 4 plane landings are FILLED; C84.1 (43.4,44.0) is NOT - that is exactly why line 5 is relocation_listed",
+ "rule": "#K2-438 sec.3.3 / P3 drawing-verification: read-only check of the frozen sec.16.3 constants. Landing clearance is checked against the CLEARED field (what the maze actually faces); plane coverage is checked on a FILLED board.",
+ "OWNER-ITEMS": 0,
+ "landing_hits_named": {
+  "L1_landing": {
+   "at": [
+    50.9,
+    40.45
+   ],
+   "r": 0.35,
+   "n": 1,
+   "items": [
+    {
+     "kind": "track/via",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      41.0
+     ]
+    }
+   ]
+  },
+  "L2_via": {
+   "at": [
+    29.65,
+    53.5
+   ],
+   "r": 0.4,
+   "n": 1,
+   "items": [
+    {
+     "kind": "pad",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "C90",
+     "pad": "2",
+     "at": null
+    }
+   ]
+  },
+  "L3_via_a": {
+   "at": [
+    51.55,
+    39.0
+   ],
+   "r": 0.4,
+   "n": 1,
+   "items": [
+    {
+     "kind": "track/via",
+     "net": "PWR_BTN_ISO",
+     "layer": "B.Cu",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      42.8
+     ]
+    }
+   ]
+  },
+  "L3_via_b": {
+   "at": [
+    50.95,
+    37.0
+   ],
+   "r": 0.4,
+   "n": 2,
+   "items": [
+    {
+     "kind": "track/via",
+     "net": "PERSTA#",
+     "layer": "In5.Cu",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.75,
+      37.5
+     ]
+    },
+    {
+     "kind": "track/via",
+     "net": "PWR_BTN_ISO",
+     "layer": "B.Cu",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      42.8
+     ]
+    }
+   ]
+  },
+  "L5_via": {
+   "at": [
+    43.4,
+    39.0
+   ],
+   "r": 0.4,
+   "n": 1,
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "ref": "C87",
+     "pad": "1",
+     "at": null
+    }
+   ]
+  }
+ },
+ "verdict_reason": "the CLEARED field has ZERO in-frame tracks => there is NO wall inside the region. Every remaining hit is either (a) the KEPT OUTSIDE-HALF copper at dR, caught only because the probe box straddles x=51.5, or (b) an ADJACENT PAD of the same component. Neither is a routed wall.",
+ "refinements_required": [
+  {
+   "id": "R-a",
+   "lines": [
+    1,
+    3,
+    4
+   ],
+   "what": "the probe box straddles dR, so it counts the KEPT OUTSIDE-HALF copper as an occupant.",
+   "fix": "state the check definition explicitly: the landing clearance must be measured on the INSIDE of dR only, and every crossing net needs a PAD-SIZED landing (not a bare point) centred fully inside x<=51.5. Under that definition L1/L3/L4 are CLEAR."
+  },
+  {
+   "id": "R-b",
+   "line": 5,
+   "what": "the P3V3 via on the plane finger at (43.4,39.0) F.Cu is 0.4mm-class from C87 pad 1 (PERSTA#).",
+   "fix": "slide the via along the same filled finger (the In4 P3V3 fill is present over a range of x at y=39.0) until it clears C87.1 by >= clearance; or extend the plane finger upward and land elsewhere on it."
+  }
+ ],
+ "not_a_blocker": "L2 (GND = C90's own adjacent pad) and L4 (0 foreign) need no change; L3's neighbours are pads of other nets that the wholesale frame re-lay will resolve.",
+ "classify_each_hit": {
+  "L1_landing_(50.90,40.45)": "GND track at (51.5,41.0) F.Cu = KEPT OUTSIDE-HALF copper (starts ON the boundary) => artifact of the probe box straddling dR, not a wall.",
+  "L2_via_(29.65,53.5)": "GND pad 2 of C90 = the SAME capacitor's other terminal => adjacent pad, NOT a blocker.",
+  "L3_via_a_(51.55,39.0)": "PWR_BTN_ISO B.Cu at (51.5,42.8) = boundary/outside copper => probe artifact.",
+  "L3_via_b_(50.95,37.0)": "PERSTA# In5 track at (51.75,37.5) + PWR_BTN_ISO at the boundary = outside copper => probe artifact.",
+  "L5_via_(43.4,39.0)": "C87 pad 1 (PERSTA#) = a REAL neighbouring component pad => the only genuine refinement."
+ },
+ "conclusion_for_the_next_run": "give the maze (i) pad-sized landings fully inside dR for the crossing nets, (ii) the plane-tie vias with the one L5 shift applied, and (iii) the channel set actually delivered (M-1). Then ONE run."
+}
