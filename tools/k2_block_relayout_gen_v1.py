@@ -50,6 +50,25 @@ def escape_into_corridor(points, corridor, pitch=0.25):
     return out
 
 
+def row_corridors(rows, occupants, clearance=0.20, pad=0.4):
+    """**内容感知 · 确定性 · 零搜索**：每排的廊道 ＝ 含**该排全部端点**、且避开（占位者⊕净空）的**最大净空子矩**；
+    取不到 ⇒ **UNPLACEABLE（具名）**（绝不硬塞）。取代等分切片（后者在真板 4/6 容量为 0）。"""
+    import importlib.util, os as _os
+    _sp = importlib.util.spec_from_file_location(
+        "k2rd", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "k2_corridor_redraw_v1.py"))
+    rd = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(rd)
+    out = []
+    for i, row in enumerate(rows):
+        xs = [p[1] for p in row]; ys = [p[2] for p in row]
+        box = (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
+        pts = [(p[1], p[2]) for p in row]
+        sub, _ = rd.clear_subrect_containing_pts(box, occupants, clearance, pts)
+        out.append({"row": i, "bbox": [round(v, 4) for v in box],
+                    "corridor": list(sub) if sub else None,
+                    "status": "OK" if sub else "UNPLACEABLE"})
+    return out
+
+
 def corridor_conservation(corridor, occupants, clearance=0.20, need_mm=0.60):
     """**逐廊道守恒机核（硬）**：`capacity` ＝ 该廊道**自身**的净空子矩窄边（**禁用域/块级空闲代替**）；
     返回 `{capacity_mm, need_mm, pass}`（capacity ≥ need ⇒ 该廊道承载力足）。确定性 · 零搜索。"""

@@ -1361,6 +1361,19 @@ class T(unittest.TestCase):
         blocked = m.corridor_conservation((0, 0, 4, 4), [[1.9, 0, 2.1, 4]], 0.20, 0.60)
         self.assertFalse(blocked["pass"], "a wall across the corridor must FAIL the per-corridor check")
 
+    def test_C421_row_corridors_are_content_aware_and_named(self):
+        """#K2-421 sec.4 (A): content-aware corridor allocation - each ROW gets the clear sub-rectangle containing
+        ALL its endpoints; a row split by a wall is NAMED UNPLACEABLE (never force-fitted). Deterministic."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        rows = [[("A", 0.0, 0.0, "F.Cu"), ("B", 1.0, 0.0, "F.Cu")]]
+        self.assertEqual(m.row_corridors(rows, [], 0.20)[0]["status"], "OK")
+        wall = [[0.45, -2.0, 0.55, 2.0]]
+        self.assertEqual(m.row_corridors(rows, wall, 0.20)[0]["status"], "UNPLACEABLE",
+                         "a wall between the row's endpoints must be NAMED, not force-fitted")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""
