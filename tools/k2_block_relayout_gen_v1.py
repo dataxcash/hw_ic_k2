@@ -172,13 +172,21 @@ def plan_from_board(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0
                 _s = 1.0 if _z["dir"] == "+y" else -1.0
                 _state[_z["net"]] = [[b[0], b[1] + _s * _z["move_mm"], b[2], b[3] + _s * _z["move_mm"]] for b in _state.get(_z["net"], [])]
         _occ2 = [bb for n, bbs in _state.items() if n not in own for bb in bbs]
-        sub2, _ = RD.clear_subrect_containing_pts(box, _occ2, clearance, [(p[1], p[2]) for p in rw])
-        cons2 = corridor_conservation(sub2, _occ2, clearance, need) if sub2 else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
+        # **廊道重画（有界 pad 阶梯 · 确定性 · 非搜索）**：先小盒，不过则按固定阶梯放大搜索盒
+        sub2, cons2, _pad = None, {"capacity_mm": 0.0, "need_mm": need, "pass": False}, pad
+        for _pd in (pad, pad * 2, pad * 4):
+            _box = (min(xs) - _pd, min(ys) - _pd, max(xs) + _pd, max(ys) + _pd)
+            _s, _ = RD.clear_subrect_containing_pts(_box, _occ2, clearance, [(p[1], p[2]) for p in rw])
+            _c = corridor_conservation(_s, _occ2, clearance, need) if _s else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
+            sub2, cons2, _pad = _s, _c, _pd
+            if _c["pass"]:
+                break
         esc = escape_into_corridor(rw, sub2 or sub) if (sub2 or sub) else []
         out.append({"row": i, "nets": sorted(own), "n_points": len(rw),
                     "corridor": list(sub) if sub else None, "conservation": cons,
                     "corridor_after_yield": list(sub2) if sub2 else None, "conservation_after_yield": cons2,
                     "status": ("OK" if (sub and cons["pass"]) else ("OK_BY_YIELD" if cons2["pass"] else "BLOCKED")),
+                    "pad_used": round(_pad, 3),
                     "relayout_request": req, "per_line": esc,
                     "buildability": "no_move" if (sub and cons["pass"]) else "relocation_listed"})
     rep = {"artifact": "k2_block_relayout_plan_v1", "board": board, "rect": list(rect), "rows": len(rows),

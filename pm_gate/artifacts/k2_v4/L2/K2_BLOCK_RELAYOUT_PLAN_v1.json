@@ -34,6 +34,7 @@
     "pass": true
    },
    "status": "OK_BY_YIELD",
+   "pad_used": 0.4,
    "relayout_request": [
     {
      "net": "PWR_BTN_OUT",
@@ -147,17 +148,18 @@
     "pass": false
    },
    "corridor_after_yield": [
-    28.950000000000003,
+    28.55,
     44.60000000000001,
     29.45,
-    45.199999999999996
+    45.415
    ],
    "conservation_after_yield": {
-    "capacity_mm": 0.5,
+    "capacity_mm": 0.815,
     "need_mm": 0.6,
-    "pass": false
+    "pass": true
    },
-   "status": "BLOCKED",
+   "status": "OK_BY_YIELD",
+   "pad_used": 0.8,
    "relayout_request": [
     {
      "net": "12V_IN",
@@ -175,12 +177,12 @@
       44.8
      ],
      "to": [
-      28.95,
+      28.55,
       44.8
      ],
      "via": {
       "at": [
-       28.95,
+       28.55,
        44.8
       ],
       "layers": [
@@ -216,6 +218,7 @@
     "pass": true
    },
    "status": "OK_BY_YIELD",
+   "pad_used": 0.4,
    "relayout_request": [
     {
      "net": "GND",
@@ -275,6 +278,7 @@
     "pass": true
    },
    "status": "OK_BY_YIELD",
+   "pad_used": 0.4,
    "relayout_request": [
     {
      "net": "I2C1_SCL",
@@ -382,6 +386,7 @@
     "pass": true
    },
    "status": "OK",
+   "pad_used": 0.4,
    "relayout_request": [],
    "per_line": [
     {
@@ -415,7 +420,7 @@
   "1_one_command_end_to_end": true,
   "2_per_line_geometry": 5,
   "3_conservation_pass": 1,
-  "3b_conservation_pass_after_yield": 4,
+  "3b_conservation_pass_after_yield": 5,
   "4_buildability": "relocation_listed",
   "n_rows": 5
  },
