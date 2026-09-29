@@ -1318,6 +1318,25 @@ class T(unittest.TestCase):
         self.assertFalse(m.lane_clear_after_yields(seg, blk, 0.20)["after"],
                          "documented limit: the +/-y model is axis-aligned only")
 
+    def test_C421_block_relayout_slices_disjoint_ordered_corridors(self):
+        """#K2-421 sec.4 (whole-block re-layout, copying the reference policy): RED = putting every group in one
+        corridor overlaps; GREEN = the deterministic GROUP-SLICED corridors are disjoint AND order-preserving, and
+        each escape is one straight run with exactly ONE layer change. Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        corr = m.slice_corridors((0, 0, 10, 10), ["B", "A", "C"], gap=0.2)
+        naive = [c["corridor"] for c in corr]
+        self.assertGreater(len({tuple(r) for r in naive}), 1, "RED: a single shared corridor would overlap")
+        self.assertEqual([c["group"] for c in corr], ["B", "A", "C"], "GREEN: group order preserved")
+        for i in range(len(corr) - 1):
+            self.assertLessEqual(corr[i]["corridor"][2], corr[i + 1]["corridor"][0], "corridors disjoint")
+        self.assertEqual(m.slice_corridors((0, 0, 10, 10), ["B", "A", "C"], 0.2), corr, "deterministic")
+        esc = m.escape_into_corridor([("N1", 0, 3, "F.Cu"), ("N2", 0, 1, "F.Cu")], corr[0]["corridor"])
+        self.assertEqual([e["net"] for e in esc], ["N2", "N1"], "escapes are order-preserving along the row")
+        self.assertTrue(all(len(e["via"]["layers"]) == 2 for e in esc), "exactly one layer change per escape")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

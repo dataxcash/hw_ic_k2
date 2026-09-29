@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_sec16_3_block_relayout_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-421 sec.4: the whole-block re-layout capability (M-ENG-ROUTER-REROUTE), zero exam runs.",
+ "element1_death_cause": "the residual endpoints are pressed by other nets' FIXED copper; a per-cell 'nudge' cannot create space (self-refuted 0/5), so the whole BLOCK must be re-laid out.",
+ "element2_proven_facts": [
+  "R1172 certificate C1=5",
+  "A^6 FAIL C1=4/C2 new classes",
+  "R1178 rip sets 3-101 items => not targeted",
+  "R1188/R1190 the local +/-y yield is 0/5 and axis-aligned only (boundary pinned by R1192)"
+ ],
+ "element3_corrected_plan": {
+  "policy": "copy REF-CASE-LIBRARY A1 (TI DS320PR1601 EVM + SNLU300): group fanout / long straight runs / exactly ONE layer change per escape / corridors allocated per group",
+  "determinism": "corridors are an ORDER-PRESERVING EQUAL SLICE of the block (disjoint, no search); escapes are row-ordered (no search)",
+  "generator": "tools/k2_block_relayout_gen_v1.py",
+  "per_line_fields": [
+   "group",
+   "corridor rect",
+   "from",
+   "to",
+   "via hole-pair"
+  ],
+  "conservation": "TBD - to be filled from the real board once the block groups are fixed (no domain-level substitution)"
+ },
+ "element4_buildability": "relocation_listed",
+ "owner_items": 0,
+ "OWNER-ITEMS": 0
+}
