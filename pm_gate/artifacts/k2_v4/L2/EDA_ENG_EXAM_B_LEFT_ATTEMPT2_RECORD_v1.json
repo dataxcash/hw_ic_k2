@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_exam_b_left_attempt2_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-433 sec.2.1 (the authorised SECOND run of the owner's full-clear-redraw means; the LAST run of this means) + sec.2.2.",
+ "run": {
+  "chain": "wipe_resolve with the three port fixes WIRED (order + FINE_STEP + --port-refs J13 + channels_arg channels; K2_NO_YIELD=1)",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 7,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "residual_named": [
+  "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]",
+  "走线 [P3V3_AUX] (In5.Cu), 长度: 0.2000 mm",
+  "J13 的PTH 焊盘 1 [SWDIO]",
+  "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+  "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+  "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm",
+  "F.Cu 上 C84 的焊盘 1 [P3V3]"
+ ],
+ "old_or_new_cause": "OLD CAUSE, SAME CLASS: the three port fixes (connector pads as fixed ports / their chain wiring / the single-source reach-inclusive channels) did NOT move C1 - it is 7 again, the same value and the same port/policy class. So the failures classify as the SAME port/policy cause, not a new one.",
+ "means_end": "#K2-433 sec.2.2: this was the LAST run of the owner's clear-all-redraw means; C1>0 => per sec.17.4 a MEANS CHANGE (not the goal) is mandatory.",
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
