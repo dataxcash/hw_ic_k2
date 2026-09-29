@@ -1251,6 +1251,14 @@ class T(unittest.TestCase):
         self.assertIn("GAP_NETS", src)
         self.assertIn('"--order-list", _prio', seg)
 
+    def test_C417_ripup_plan_exposes_the_rip_set_and_route_request(self):
+        """#K2-416 sec.5.1(ii) (reported in R1174): the new-means plan must name the RIP SET and the bounded
+        ROUTE REQUEST per residual - and its own weak spot (the after-rip check removes ALL occupants)."""
+        src = open(os.path.join("tools", "k2_ripup_reroute_gen_v1.py"), encoding="utf-8").read()
+        self.assertIn('"rip_set"', src); self.assertIn('"route_request"', src)
+        self.assertIn('"after_rip_clear"', src)
+        self.assertIn("clear_subrect_containing_pts(rect, []", src, "the after-rip check is knowingly the ALL-removed case")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

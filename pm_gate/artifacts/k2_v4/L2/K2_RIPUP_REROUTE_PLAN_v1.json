@@ -1,0 +1,3959 @@
+{
+ "artifact": "k2_ripup_reroute_plan_v1",
+ "ts": "2026-09-29",
+ "board": "/tmp/opencode/a5s2/s3c_disposed.kicad_pcb",
+ "authority": "#K2-416 sec.5.1(ii) new means (reported in R1174): targeted single-net rip-up + re-route.",
+ "bound_rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "clearance_mm": 0.2,
+ "corridor_margin_mm": 0.4,
+ "items": [
+  {
+   "net": "P3V3_AUX",
+   "from_desc": "走线 [P3V3_AUX] (In5.Cu), 长度: 0.7071 mm",
+   "to_desc": "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]",
+   "corridor_rect": [
+    29.25,
+    53.1,
+    35.15,
+    56.175
+   ],
+   "layers": [
+    "In5.Cu",
+    "F.Cu"
+   ],
+   "route_request": {
+    "net": "P3V3_AUX",
+    "p1_in_domain": [
+     34.75,
+     55.775
+    ],
+    "p2_in_domain": [
+     29.65,
+     53.5
+    ],
+    "layers": [
+     "In5.Cu",
+     "F.Cu"
+    ],
+    "bound_rect": [
+     29.25,
+     53.1,
+     35.15,
+     56.175
+    ],
+    "goal": "maze-first inside the corridor; then re-route the ripped net(s)"
+   },
+   "rip_set": [
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.05,
+      54.2,
+      33.25,
+      54.5
+     ],
+     "at": [
+      33.15,
+      54.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.75,
+      53.15,
+      32.95,
+      53.35
+     ],
+     "at": [
+      31.85,
+      53.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      53.15,
+      32.9375,
+      53.35
+     ],
+     "at": [
+      31.837,
+      53.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.85,
+      52.9,
+      33.35,
+      53.4
+     ],
+     "at": [
+      32.95,
+      53.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.05,
+      54.9,
+      33.35,
+      55.2
+     ],
+     "at": [
+      33.25,
+      55.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.75,
+      53.15,
+      33.15,
+      53.55
+     ],
+     "at": [
+      32.85,
+      53.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.05,
+      54.3,
+      33.35,
+      54.6
+     ],
+     "at": [
+      33.15,
+      54.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.75,
+      53.2,
+      33.05,
+      53.4
+     ],
+     "at": [
+      30.85,
+      53.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.25,
+      53.3,
+      30.55,
+      53.6
+     ],
+     "at": [
+      30.35,
+      53.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.75,
+      53.2,
+      30.95,
+      53.5
+     ],
+     "at": [
+      30.85,
+      53.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.75,
+      53.2,
+      30.95,
+      53.5
+     ],
+     "at": [
+      30.85,
+      53.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.8375,
+      51.35,
+      33.0375,
+      53.15
+     ],
+     "at": [
+      32.938,
+      53.05
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.25,
+      53.4,
+      30.75,
+      53.6
+     ],
+     "at": [
+      30.35,
+      53.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.05,
+      55.0,
+      33.25,
+      55.3
+     ],
+     "at": [
+      33.15,
+      55.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.75,
+      53.2,
+      32.95,
+      53.4
+     ],
+     "at": [
+      30.85,
+      53.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.85,
+      55.1,
+      33.25,
+      55.5
+     ],
+     "at": [
+      33.15,
+      55.2
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.35,
+      53.3,
+      30.95,
+      53.5
+     ],
+     "at": [
+      30.45,
+      53.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.55,
+      53.3,
+      30.85,
+      53.6
+     ],
+     "at": [
+      30.65,
+      53.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.15,
+      54.4,
+      33.35,
+      55.1
+     ],
+     "at": [
+      33.25,
+      54.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.65,
+      53.3,
+      30.95,
+      53.5
+     ],
+     "at": [
+      30.75,
+      53.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.7375,
+      53.05,
+      32.9375,
+      53.35
+     ],
+     "at": [
+      32.837,
+      53.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.85,
+      53.3,
+      33.05,
+      54.2
+     ],
+     "at": [
+      32.95,
+      53.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.75,
+      53.2,
+      33.05,
+      53.5
+     ],
+     "at": [
+      32.85,
+      53.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.85,
+      54.0,
+      33.25,
+      54.4
+     ],
+     "at": [
+      32.95,
+      54.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.7375,
+      52.95,
+      33.0375,
+      53.25
+     ],
+     "at": [
+      32.837,
+      53.15
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.875,
+      53.275,
+      33.225,
+      53.625
+     ],
+     "at": [
+      33.05,
+      53.45
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.775,
+      55.225,
+      33.125,
+      55.575
+     ],
+     "at": [
+      32.95,
+      55.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.075,
+      52.825,
+      33.425,
+      53.175
+     ],
+     "at": [
+      33.25,
+      53.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.175,
+      53.375,
+      30.525,
+      53.725
+     ],
+     "at": [
+      30.35,
+      53.55
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.45,
+      53.35,
+      33.15,
+      53.55
+     ],
+     "at": [
+      33.05,
+      53.45
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.55,
+      52.8,
+      31.85,
+      53.1
+     ],
+     "at": [
+      31.75,
+      53.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.35,
+      53.35,
+      30.65,
+      53.65
+     ],
+     "at": [
+      30.55,
+      53.45
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.05,
+      52.7,
+      31.45,
+      52.9
+     ],
+     "at": [
+      31.35,
+      52.8
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.65,
+      52.9,
+      33.35,
+      53.1
+     ],
+     "at": [
+      33.25,
+      53.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.95,
+      52.6,
+      31.25,
+      52.9
+     ],
+     "at": [
+      31.15,
+      52.8
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.35,
+      52.8,
+      31.75,
+      53.0
+     ],
+     "at": [
+      31.65,
+      52.9
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.25,
+      52.7,
+      31.55,
+      53.0
+     ],
+     "at": [
+      31.45,
+      52.9
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "In5.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.25,
+      53.45,
+      30.55,
+      53.65
+     ],
+     "at": [
+      30.45,
+      53.55
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.95,
+      53.05,
+      29.15,
+      53.95
+     ],
+     "at": [
+      29.05,
+      53.85
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.95,
+      52.95,
+      29.25,
+      53.25
+     ],
+     "at": [
+      29.05,
+      53.15
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.05,
+      53.85,
+      29.25,
+      54.15
+     ],
+     "at": [
+      29.15,
+      54.05
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.05,
+      52.85,
+      29.25,
+      53.15
+     ],
+     "at": [
+      29.15,
+      53.05
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.05,
+      53.95,
+      30.15,
+      55.05
+     ],
+     "at": [
+      30.05,
+      54.95
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.55,
+      52.65,
+      30.95,
+      53.05
+     ],
+     "at": [
+      30.65,
+      52.95
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.95,
+      53.75,
+      29.25,
+      54.05
+     ],
+     "at": [
+      29.15,
+      53.95
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.95,
+      54.85,
+      30.15,
+      58.65
+     ],
+     "at": [
+      30.05,
+      58.55
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.05,
+      52.85,
+      30.75,
+      53.05
+     ],
+     "at": [
+      29.15,
+      52.95
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.85,
+      54.6,
+      31.15,
+      54.9
+     ],
+     "at": [
+      30.95,
+      54.7
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      54.65,
+      32.8375,
+      54.85
+     ],
+     "at": [
+      32.737,
+      54.75
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.75,
+      54.6,
+      31.05,
+      54.8
+     ],
+     "at": [
+      30.85,
+      54.7
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.95,
+      54.7,
+      31.95,
+      54.9
+     ],
+     "at": [
+      31.05,
+      54.8
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.5625,
+      54.575,
+      32.9125,
+      54.925
+     ],
+     "at": [
+      32.737,
+      54.75
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.675,
+      54.525,
+      31.025,
+      54.875
+     ],
+     "at": [
+      30.85,
+      54.7
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      55.15,
+      31.9375,
+      55.85
+     ],
+     "at": [
+      31.837,
+      55.25
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      55.2,
+      31.9375,
+      55.5
+     ],
+     "at": [
+      31.837,
+      55.4
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.6625,
+      55.225,
+      32.0125,
+      55.575
+     ],
+     "at": [
+      31.837,
+      55.4
+     ]
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.15,
+      56.1,
+      33.35,
+      57.3
+     ],
+     "at": [
+      33.25,
+      57.2
+     ]
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.075,
+      56.025,
+      33.425,
+      56.375
+     ],
+     "at": [
+      33.25,
+      56.2
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      52.6,
+      32.575,
+      52.9
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      53.1,
+      32.575,
+      53.4
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      53.6,
+      32.575,
+      53.9
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      54.1,
+      32.575,
+      54.4
+     ],
+     "at": null
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      54.6,
+      32.575,
+      54.9
+     ],
+     "at": null
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      55.1,
+      32.575,
+      55.4
+     ],
+     "at": null
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      55.6,
+      32.575,
+      55.9
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      33.2,
+      50.2,
+      38.8,
+      55.8
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      30.15,
+      53.25,
+      30.55,
+      53.75
+     ],
+     "at": null
+    }
+   ],
+   "n_rip": 67,
+   "rip_nets": [
+    "",
+    "GND",
+    "MCU_VDD",
+    "NRST",
+    "PERSTA#",
+    "PWR_BTN_OUT"
+   ],
+   "after_rip_clear": true,
+   "witness_now": false
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "from_desc": "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+   "to_desc": "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+   "corridor_rect": [
+    28.81,
+    46.14,
+    40.5625,
+    50.65
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "route_request": {
+    "net": "SWCLK_BOOT0",
+    "p1_in_domain": [
+     29.21,
+     46.54
+    ],
+    "p2_in_domain": [
+     40.1625,
+     50.25
+    ],
+    "layers": [
+     "F.Cu"
+    ],
+    "bound_rect": [
+     28.81,
+     46.14,
+     40.5625,
+     50.65
+    ],
+    "goal": "maze-first inside the corridor; then re-route the ripped net(s)"
+   },
+   "rip_set": [
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.0375,
+      49.7375,
+      35.3375,
+      50.0375
+     ],
+     "at": [
+      35.138,
+      49.938
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.15,
+      46.6,
+      30.45,
+      46.9
+     ],
+     "at": [
+      30.25,
+      46.8
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      50.6375,
+      32.9375,
+      50.8375
+     ],
+     "at": [
+      31.837,
+      50.737
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.25,
+      46.0,
+      30.45,
+      46.8
+     ],
+     "at": [
+      30.35,
+      46.7
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.15,
+      45.9,
+      30.45,
+      46.2
+     ],
+     "at": [
+      30.35,
+      46.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.65,
+      47.4,
+      29.95,
+      47.6
+     ],
+     "at": [
+      29.75,
+      47.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.2375,
+      50.1375,
+      34.1375,
+      50.3375
+     ],
+     "at": [
+      33.337,
+      50.237
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      27.45,
+      46.4,
+      28.65,
+      47.6
+     ],
+     "at": [
+      27.55,
+      46.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      36.1,
+      48.8375,
+      36.4,
+      49.1375
+     ],
+     "at": [
+      36.2,
+      49.038
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.65,
+      47.5,
+      29.75,
+      47.7
+     ],
+     "at": [
+      28.75,
+      47.6
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.9375,
+      49.8375,
+      34.4375,
+      50.3375
+     ],
+     "at": [
+      34.038,
+      50.237
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      34.2375,
+      49.8375,
+      35.2375,
+      50.0375
+     ],
+     "at": [
+      34.337,
+      49.938
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.1375,
+      48.7375,
+      35.3375,
+      49.9375
+     ],
+     "at": [
+      35.237,
+      49.837
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.7375,
+      50.65,
+      31.9375,
+      51.35
+     ],
+     "at": [
+      31.837,
+      51.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.7375,
+      50.1375,
+      33.4375,
+      50.8375
+     ],
+     "at": [
+      32.837,
+      50.737
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.9,
+      49.4375,
+      36.2,
+      49.7375
+     ],
+     "at": [
+      36.0,
+      49.638
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      36.2,
+      48.7375,
+      36.4,
+      49.0375
+     ],
+     "at": [
+      36.3,
+      48.938
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.9,
+      49.5375,
+      36.1,
+      53.1375
+     ],
+     "at": [
+      36.0,
+      53.038
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      36.0,
+      49.1375,
+      36.3,
+      49.4375
+     ],
+     "at": [
+      36.1,
+      49.337
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.45,
+      47.4,
+      28.75,
+      47.6
+     ],
+     "at": [
+      28.55,
+      47.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.15,
+      46.7,
+      30.35,
+      47.2
+     ],
+     "at": [
+      30.25,
+      47.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      36.0,
+      49.2375,
+      36.2,
+      49.6375
+     ],
+     "at": [
+      36.1,
+      49.538
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.75,
+      47.0,
+      30.35,
+      47.6
+     ],
+     "at": [
+      29.85,
+      47.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      29.55,
+      47.4,
+      29.85,
+      47.7
+     ],
+     "at": [
+      29.65,
+      47.6
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      28.55,
+      47.4,
+      28.85,
+      47.7
+     ],
+     "at": [
+      28.65,
+      47.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.15,
+      45.7,
+      30.35,
+      46.1
+     ],
+     "at": [
+      30.25,
+      46.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      36.1,
+      48.9375,
+      36.3,
+      49.3375
+     ],
+     "at": [
+      36.2,
+      49.237
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.15,
+      48.7375,
+      35.85,
+      48.9375
+     ],
+     "at": [
+      35.25,
+      48.837
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      35.65,
+      48.7375,
+      36.35,
+      48.9375
+     ],
+     "at": [
+      36.25,
+      48.837
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      24.75,
+      46.64,
+      30.95,
+      52.84
+     ],
+     "at": [
+      30.85,
+      52.74
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.7375,
+      49.65,
+      30.9375,
+      49.95
+     ],
+     "at": [
+      30.837,
+      49.85
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.7375,
+      42.05,
+      38.5375,
+      49.85
+     ],
+     "at": [
+      30.837,
+      49.75
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.6375,
+      49.85,
+      30.8375,
+      52.65
+     ],
+     "at": [
+      30.738,
+      52.55
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      30.6375,
+      49.75,
+      30.9375,
+      50.05
+     ],
+     "at": [
+      30.738,
+      49.95
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.1375,
+      49.65,
+      42.1375,
+      49.85
+     ],
+     "at": [
+      42.038,
+      49.75
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.0625,
+      49.575,
+      39.4125,
+      49.925
+     ],
+     "at": [
+      39.237,
+      49.75
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.7375,
+      46.8,
+      33.0375,
+      47.0
+     ],
+     "at": [
+      32.938,
+      46.9
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.8375,
+      44.4,
+      35.4375,
+      47.0
+     ],
+     "at": [
+      35.337,
+      44.5
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.6625,
+      46.725,
+      33.0125,
+      47.075
+     ],
+     "at": [
+      32.837,
+      46.9
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      31.65,
+      46.44,
+      32.45,
+      46.64
+     ],
+     "at": [
+      31.75,
+      46.54
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.15,
+      50.64,
+      40.25,
+      50.84
+     ],
+     "at": [
+      39.25,
+      50.74
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.35,
+      46.34,
+      32.65,
+      46.54
+     ],
+     "at": [
+      32.45,
+      46.44
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.45,
+      46.24,
+      32.75,
+      46.54
+     ],
+     "at": [
+      32.55,
+      46.44
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.25,
+      46.34,
+      32.55,
+      46.64
+     ],
+     "at": [
+      32.35,
+      46.54
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.475,
+      46.165,
+      32.825,
+      46.515
+     ],
+     "at": [
+      32.65,
+      46.34
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.075,
+      50.565,
+      39.425,
+      50.915
+     ],
+     "at": [
+      39.25,
+      50.74
+     ]
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.65,
+      48.7375,
+      33.85,
+      49.8375
+     ],
+     "at": [
+      33.75,
+      48.837
+     ]
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.575,
+      49.5625,
+      33.925,
+      49.9125
+     ],
+     "at": [
+      33.75,
+      49.737
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.95,
+      48.7375,
+      33.25,
+      49.0375
+     ],
+     "at": [
+      33.05,
+      48.938
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.65,
+      48.8375,
+      32.95,
+      49.1375
+     ],
+     "at": [
+      32.75,
+      49.038
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.15,
+      49.0375,
+      32.55,
+      49.2375
+     ],
+     "at": [
+      32.25,
+      49.138
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      33.05,
+      48.7375,
+      33.35,
+      48.9375
+     ],
+     "at": [
+      33.15,
+      48.837
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.75,
+      48.8375,
+      33.15,
+      49.0375
+     ],
+     "at": [
+      32.85,
+      48.938
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.45,
+      48.9375,
+      32.85,
+      49.1375
+     ],
+     "at": [
+      32.55,
+      49.038
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.35,
+      48.9375,
+      32.65,
+      49.2375
+     ],
+     "at": [
+      32.45,
+      49.138
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      32.075,
+      48.9625,
+      32.425,
+      49.3125
+     ],
+     "at": [
+      32.25,
+      49.138
+     ]
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      50.1,
+      32.575,
+      50.4
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.1,
+      50.6,
+      32.575,
+      50.9
+     ],
+     "at": null
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      39.425,
+      50.6,
+      40.9,
+      50.9
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      38.6,
+      48.1,
+      38.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      38.1,
+      48.1,
+      38.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      37.6,
+      48.1,
+      37.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      37.1,
+      48.1,
+      37.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      36.6,
+      48.1,
+      36.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      36.1,
+      48.1,
+      36.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      35.6,
+      48.1,
+      35.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      35.1,
+      48.1,
+      35.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      34.6,
+      48.1,
+      34.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      34.1,
+      48.1,
+      34.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      33.6,
+      48.1,
+      33.9,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      33.1,
+      48.1,
+      33.4,
+      49.575
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      33.2,
+      50.2,
+      38.8,
+      55.8
+     ],
+     "at": null
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      31.0,
+      45.79,
+      32.5,
+      47.29
+     ],
+     "at": null
+    }
+   ],
+   "n_rip": 73,
+   "rip_nets": [
+    "",
+    "GND",
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "MCU_VDD",
+    "NRST",
+    "PERSTA#",
+    "SWDIO"
+   ],
+   "after_rip_clear": true,
+   "witness_now": false
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "from_desc": "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+   "to_desc": "F.Cu 上 R28 的焊盘 1 [SWCLK_BOOT0]",
+   "corridor_rect": [
+    39.7625,
+    44.6,
+    50.45,
+    50.65
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "route_request": {
+    "net": "SWCLK_BOOT0",
+    "p1_in_domain": [
+     40.1625,
+     50.25
+    ],
+    "p2_in_domain": [
+     50.05,
+     45.0
+    ],
+    "layers": [
+     "F.Cu"
+    ],
+    "bound_rect": [
+     39.7625,
+     44.6,
+     50.45,
+     50.65
+    ],
+    "goal": "maze-first inside the corridor; then re-route the ripped net(s)"
+   },
+   "rip_set": [
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.9375,
+      40.25,
+      51.5375,
+      49.85
+     ],
+     "at": [
+      51.438,
+      40.35
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.1375,
+      49.65,
+      42.1375,
+      49.85
+     ],
+     "at": [
+      42.038,
+      49.75
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      39.15,
+      50.64,
+      40.25,
+      50.84
+     ],
+     "at": [
+      39.25,
+      50.74
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.25,
+      50.3375,
+      51.55,
+      50.5375
+     ],
+     "at": [
+      51.45,
+      50.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.175,
+      50.2625,
+      41.525,
+      50.6125
+     ],
+     "at": [
+      41.35,
+      50.438
+     ]
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      47.125,
+      50.825,
+      47.475,
+      51.175
+     ],
+     "at": [
+      47.3,
+      51.0
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      39.425,
+      50.6,
+      40.9,
+      50.9
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      50.65,
+      44.65,
+      51.25,
+      45.35
+     ],
+     "at": null
+    },
+    {
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      43.0,
+      43.55,
+      43.8,
+      44.45
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      44.2,
+      43.55,
+      45.0,
+      44.45
+     ],
+     "at": null
+    }
+   ],
+   "n_rip": 10,
+   "rip_nets": [
+    "GND",
+    "I2C1_SDA",
+    "NRST",
+    "P3V3",
+    "PWR_BTN_ISO",
+    "SWDIO"
+   ],
+   "after_rip_clear": true,
+   "witness_now": false
+  },
+  {
+   "net": "I2C1_SDA",
+   "from_desc": "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm",
+   "to_desc": "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+   "corridor_rect": [
+    51.1,
+    61.505,
+    51.5,
+    67.855
+   ],
+   "layers": [
+    "B.Cu",
+    "F.Cu"
+   ],
+   "route_request": {
+    "net": "I2C1_SDA",
+    "p1_in_domain": [
+     51.5,
+     61.905
+    ],
+    "p2_in_domain": [
+     51.5,
+     67.455
+    ],
+    "layers": [
+     "B.Cu",
+     "F.Cu"
+    ],
+    "bound_rect": [
+     51.1,
+     61.505,
+     51.5,
+     67.855
+    ],
+    "goal": "maze-first inside the corridor; then re-route the ripped net(s)"
+   },
+   "rip_set": [
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.7,
+      66.4,
+      54.9,
+      66.6
+     ],
+     "at": [
+      51.8,
+      66.5
+     ]
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      47.15,
+      61.935,
+      51.55,
+      66.335
+     ],
+     "at": [
+      51.45,
+      66.235
+     ]
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.4,
+      66.085,
+      51.915,
+      66.6
+     ],
+     "at": [
+      51.5,
+      66.185
+     ]
+    }
+   ],
+   "n_rip": 3,
+   "rip_nets": [
+    "I2C1_SCL"
+   ],
+   "after_rip_clear": true,
+   "witness_now": false
+  },
+  {
+   "net": "P3V3",
+   "from_desc": "F.Cu 上 C84 的焊盘 1 [P3V3]",
+   "to_desc": "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+   "corridor_rect": [
+    43.0,
+    43.6,
+    51.5,
+    61.0
+   ],
+   "layers": [
+    "F.Cu"
+   ],
+   "route_request": {
+    "net": "P3V3",
+    "p1_in_domain": [
+     43.4,
+     44.0
+    ],
+    "p2_in_domain": [
+     51.5,
+     60.6
+    ],
+    "layers": [
+     "F.Cu"
+    ],
+    "bound_rect": [
+     43.0,
+     43.6,
+     51.5,
+     61.0
+    ],
+    "goal": "maze-first inside the corridor; then re-route the ripped net(s)"
+   },
+   "rip_set": [
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.5625,
+      55.65,
+      42.9625,
+      56.05
+     ],
+     "at": [
+      42.663,
+      55.75
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.9625,
+      56.45,
+      43.1625,
+      56.85
+     ],
+     "at": [
+      43.062,
+      56.55
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.6,
+      55.0,
+      45.9,
+      55.2
+     ],
+     "at": [
+      45.7,
+      55.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.05,
+      57.0,
+      43.25,
+      57.4
+     ],
+     "at": [
+      43.15,
+      57.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.3,
+      55.1,
+      45.7,
+      55.3
+     ],
+     "at": [
+      45.4,
+      55.2
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.85,
+      57.6,
+      43.05,
+      58.0
+     ],
+     "at": [
+      42.95,
+      57.9
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.25,
+      60.765,
+      44.55,
+      61.065
+     ],
+     "at": [
+      44.45,
+      60.865
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.7625,
+      56.05,
+      43.0625,
+      56.35
+     ],
+     "at": [
+      42.862,
+      56.15
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.75,
+      60.265,
+      46.05,
+      60.565
+     ],
+     "at": [
+      45.95,
+      60.365
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.9625,
+      56.65,
+      43.2625,
+      56.95
+     ],
+     "at": [
+      43.062,
+      56.75
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.75,
+      57.8,
+      43.05,
+      58.1
+     ],
+     "at": [
+      42.85,
+      58.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.55,
+      60.365,
+      45.95,
+      60.565
+     ],
+     "at": [
+      45.85,
+      60.465
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.7625,
+      55.85,
+      42.9625,
+      56.25
+     ],
+     "at": [
+      42.862,
+      55.95
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.85,
+      57.5,
+      43.15,
+      57.8
+     ],
+     "at": [
+      42.95,
+      57.7
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.95,
+      60.565,
+      45.35,
+      60.765
+     ],
+     "at": [
+      45.25,
+      60.665
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.8625,
+      56.35,
+      43.1625,
+      56.65
+     ],
+     "at": [
+      42.962,
+      56.45
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.0,
+      55.2,
+      45.4,
+      55.4
+     ],
+     "at": [
+      45.1,
+      55.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.95,
+      61.165,
+      43.25,
+      61.465
+     ],
+     "at": [
+      43.15,
+      61.265
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.95,
+      57.2,
+      43.25,
+      57.5
+     ],
+     "at": [
+      43.05,
+      57.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.65,
+      58.2,
+      42.85,
+      58.5
+     ],
+     "at": [
+      42.75,
+      58.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.95,
+      60.865,
+      44.25,
+      61.165
+     ],
+     "at": [
+      44.15,
+      60.965
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.25,
+      61.065,
+      43.55,
+      61.365
+     ],
+     "at": [
+      43.45,
+      61.165
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.55,
+      40.3,
+      44.75,
+      44.1
+     ],
+     "at": [
+      44.65,
+      44.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.5,
+      55.4,
+      44.8,
+      55.6
+     ],
+     "at": [
+      44.6,
+      55.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.35,
+      61.065,
+      43.85,
+      61.265
+     ],
+     "at": [
+      43.75,
+      61.165
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.1,
+      55.4,
+      44.7,
+      57.0
+     ],
+     "at": [
+      43.2,
+      56.9
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.05,
+      56.9,
+      43.35,
+      57.2
+     ],
+     "at": [
+      43.15,
+      57.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.75,
+      57.9,
+      42.95,
+      58.3
+     ],
+     "at": [
+      42.85,
+      58.2
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.25,
+      60.465,
+      45.65,
+      60.665
+     ],
+     "at": [
+      45.55,
+      60.565
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.9,
+      55.2,
+      45.2,
+      55.5
+     ],
+     "at": [
+      45.0,
+      55.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.75,
+      60.965,
+      44.15,
+      61.165
+     ],
+     "at": [
+      44.05,
+      61.065
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      50.85,
+      42.3,
+      51.05,
+      45.1
+     ],
+     "at": [
+      50.95,
+      45.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.0625,
+      56.75,
+      43.2625,
+      57.05
+     ],
+     "at": [
+      43.163,
+      56.85
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.2,
+      55.1,
+      45.5,
+      55.4
+     ],
+     "at": [
+      45.3,
+      55.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.65,
+      60.965,
+      43.95,
+      61.265
+     ],
+     "at": [
+      43.85,
+      61.065
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.8625,
+      56.15,
+      43.0625,
+      56.55
+     ],
+     "at": [
+      42.962,
+      56.25
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.6,
+      55.3,
+      44.9,
+      55.6
+     ],
+     "at": [
+      44.7,
+      55.5
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.15,
+      60.465,
+      45.45,
+      60.765
+     ],
+     "at": [
+      45.35,
+      60.565
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.65,
+      58.1,
+      42.95,
+      58.4
+     ],
+     "at": [
+      42.75,
+      58.3
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.85,
+      60.565,
+      45.15,
+      60.865
+     ],
+     "at": [
+      45.05,
+      60.665
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.05,
+      61.165,
+      43.45,
+      61.365
+     ],
+     "at": [
+      43.35,
+      61.265
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.95,
+      58.3,
+      42.85,
+      59.2
+     ],
+     "at": [
+      42.05,
+      59.1
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.05,
+      60.865,
+      44.45,
+      61.065
+     ],
+     "at": [
+      44.35,
+      60.965
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.5,
+      43.9,
+      47.1,
+      44.1
+     ],
+     "at": [
+      44.6,
+      44.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.65,
+      60.665,
+      45.05,
+      60.865
+     ],
+     "at": [
+      44.95,
+      60.765
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.55,
+      60.665,
+      44.85,
+      60.965
+     ],
+     "at": [
+      44.75,
+      60.765
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.95,
+      57.3,
+      43.15,
+      57.7
+     ],
+     "at": [
+      43.05,
+      57.6
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.5,
+      55.0,
+      45.8,
+      55.3
+     ],
+     "at": [
+      45.6,
+      55.2
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.35,
+      60.765,
+      44.75,
+      60.965
+     ],
+     "at": [
+      44.65,
+      60.865
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.45,
+      60.365,
+      45.75,
+      60.665
+     ],
+     "at": [
+      45.65,
+      60.465
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.15,
+      56.8,
+      43.35,
+      57.1
+     ],
+     "at": [
+      43.25,
+      57.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.7,
+      55.3,
+      45.1,
+      55.5
+     ],
+     "at": [
+      44.8,
+      55.4
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      46.825,
+      43.825,
+      47.175,
+      44.175
+     ],
+     "at": [
+      47.0,
+      44.0
+     ]
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      50.825,
+      44.825,
+      51.175,
+      45.175
+     ],
+     "at": [
+      51.0,
+      45.0
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.85,
+      59.895,
+      43.15,
+      60.195
+     ],
+     "at": [
+      42.95,
+      60.095
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.05,
+      59.195,
+      45.35,
+      59.495
+     ],
+     "at": [
+      45.15,
+      59.395
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.55,
+      59.395,
+      44.95,
+      59.595
+     ],
+     "at": [
+      44.65,
+      59.495
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.25,
+      59.795,
+      43.65,
+      59.995
+     ],
+     "at": [
+      43.35,
+      59.895
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.15,
+      59.795,
+      43.45,
+      60.095
+     ],
+     "at": [
+      43.25,
+      59.995
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.55,
+      59.995,
+      42.85,
+      60.295
+     ],
+     "at": [
+      42.65,
+      60.195
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.45,
+      59.095,
+      45.85,
+      59.295
+     ],
+     "at": [
+      45.55,
+      59.195
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.45,
+      59.395,
+      44.75,
+      59.695
+     ],
+     "at": [
+      44.55,
+      59.595
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.15,
+      59.195,
+      45.55,
+      59.395
+     ],
+     "at": [
+      45.25,
+      59.295
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.75,
+      59.595,
+      44.05,
+      59.895
+     ],
+     "at": [
+      43.85,
+      59.795
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.35,
+      59.095,
+      45.65,
+      59.395
+     ],
+     "at": [
+      45.45,
+      59.295
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.65,
+      59.995,
+      43.05,
+      60.195
+     ],
+     "at": [
+      42.75,
+      60.095
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.65,
+      58.995,
+      45.95,
+      59.295
+     ],
+     "at": [
+      45.75,
+      59.195
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.55,
+      59.695,
+      43.95,
+      59.895
+     ],
+     "at": [
+      43.65,
+      59.795
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.45,
+      59.695,
+      43.75,
+      59.995
+     ],
+     "at": [
+      43.55,
+      59.895
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      45.75,
+      58.995,
+      46.05,
+      59.195
+     ],
+     "at": [
+      45.85,
+      59.095
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.85,
+      59.595,
+      44.25,
+      59.795
+     ],
+     "at": [
+      43.95,
+      59.695
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      42.95,
+      59.895,
+      43.35,
+      60.095
+     ],
+     "at": [
+      43.05,
+      59.995
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.05,
+      59.495,
+      44.35,
+      59.795
+     ],
+     "at": [
+      44.15,
+      59.695
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.75,
+      59.295,
+      45.05,
+      59.595
+     ],
+     "at": [
+      44.85,
+      59.495
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.15,
+      59.495,
+      44.65,
+      59.695
+     ],
+     "at": [
+      44.25,
+      59.595
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.85,
+      59.295,
+      45.25,
+      59.495
+     ],
+     "at": [
+      44.95,
+      59.395
+     ]
+    },
+    {
+     "net": "NRST",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.9375,
+      40.25,
+      51.5375,
+      49.85
+     ],
+     "at": [
+      51.438,
+      40.35
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.65,
+      56.1,
+      46.35,
+      56.3
+     ],
+     "at": [
+      46.25,
+      56.2
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      46.45,
+      56.4,
+      51.55,
+      56.6
+     ],
+     "at": [
+      51.45,
+      56.5
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.4,
+      56.5,
+      60.9,
+      56.7
+     ],
+     "at": [
+      51.5,
+      56.6
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      46.15,
+      56.1,
+      46.65,
+      56.6
+     ],
+     "at": [
+      46.55,
+      56.5
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      44.575,
+      56.025,
+      44.925,
+      56.375
+     ],
+     "at": [
+      44.75,
+      56.2
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.4,
+      50.3375,
+      52.8,
+      51.7375
+     ],
+     "at": [
+      51.5,
+      50.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.4,
+      50.3375,
+      51.6,
+      51.5375
+     ],
+     "at": [
+      51.5,
+      51.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      41.25,
+      50.3375,
+      51.55,
+      50.5375
+     ],
+     "at": [
+      51.45,
+      50.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.4,
+      50.3375,
+      51.6,
+      51.0375
+     ],
+     "at": [
+      51.5,
+      50.938
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.325,
+      51.2625,
+      51.675,
+      51.6125
+     ],
+     "at": [
+      51.5,
+      51.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.325,
+      50.2625,
+      51.675,
+      50.6125
+     ],
+     "at": [
+      51.5,
+      50.438
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      51.325,
+      50.7625,
+      51.675,
+      51.1125
+     ],
+     "at": [
+      51.5,
+      50.938
+     ]
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      43.1,
+      50.9,
+      47.4,
+      55.2
+     ],
+     "at": [
+      43.2,
+      55.1
+     ]
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "layer": "F.Cu",
+     "kind": "track/via",
+     "bbox": [
+      47.125,
+      50.825,
+      47.475,
+      51.175
+     ],
+     "at": [
+      47.3,
+      51.0
+     ]
+    },
+    {
+     "net": "I2C1_SCL",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      45.65,
+      61.185,
+      46.25,
+      62.085
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      45.65,
+      59.915,
+      46.25,
+      60.815
+     ],
+     "at": null
+    },
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      45.65,
+      58.645,
+      46.25,
+      59.545
+     ],
+     "at": null
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      42.95,
+      54.75,
+      43.45,
+      55.45
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      42.95,
+      56.55,
+      43.45,
+      57.25
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      45.55,
+      54.75,
+      46.05,
+      55.45
+     ],
+     "at": null
+    },
+    {
+     "net": "PWR_CTRL_OUT",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      45.55,
+      56.55,
+      46.05,
+      57.25
+     ],
+     "at": null
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      49.75,
+      44.65,
+      50.35,
+      45.35
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      50.65,
+      44.65,
+      51.25,
+      45.35
+     ],
+     "at": null
+    },
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "kind": "pad",
+     "bbox": [
+      44.2,
+      43.55,
+      45.0,
+      44.45
+     ],
+     "at": null
+    }
+   ],
+   "n_rip": 101,
+   "rip_nets": [
+    "GND",
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "I2C2_SCL",
+    "MCU_VDD",
+    "NRST",
+    "PWR_BTN_ISO",
+    "PWR_CTRL_OUT",
+    "SWCLK_BOOT0"
+   ],
+   "after_rip_clear": true,
+   "witness_now": false
+  }
+ ],
+ "OWNER-ITEMS": 0,
+ "summary": {
+  "n": 5,
+  "n_rip_total": 254,
+  "all_clear_after_rip": true
+ },
+ "finding": "the rip sets are NOT narrow: 3..101 items spanning 5..9 nets per residual (e.g. P3V3 needs 101 items over GND/I2C1_SCL/I2C1_SDA/I2C2_SCL/MCU_VDD/NRST/PWR_BTN_ISO/PWR_CTRL_OUT/SWCLK_BOOT0). So a 'targeted single-net rip-up' is NOT targeted here - it degenerates into a block-wide re-layout, which is the wipe+order already tried. => the proposed new means adds NO new capability.",
+ "weak_check": "`after_rip_clear` removes ALL occupants (not just the rip set) => it is trivially true and is NOT evidence; reported honestly.",
+ "consequence": "after A^6 (FAIL), the deviation channel (5/5 local infeasible, R1174) and this rip-up means (degenerate), ALL engineering-layer means are exhausted => the certificate stands and the residual requires an OWNER-level decision (accept a bounded deviation / partial form, or change the requirement)."
+}
