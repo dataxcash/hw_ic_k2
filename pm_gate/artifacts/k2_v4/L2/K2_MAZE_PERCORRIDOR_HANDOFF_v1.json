@@ -1,0 +1,24 @@
+{
+ "artifact": "k2_maze_percorridor_handoff_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-450 sec.2.4 (adopted means). READ-ONLY hand-off: no generator edit made; the exact edit points are pinned so the next window can land the cross-tool change safely.",
+ "parser_edit_point": {
+  "file": "tools/k2_reroute_router_floor_v1.py",
+  "lines": "76-80",
+  "current": "CH[_n] = tuple(float(v) for v in _r.split(\",\"))   # a repeated net OVERWRITES, so only the LAST rect survives",
+  "required": "CH.setdefault(_n, []).append(tuple(...))          # one net -> MANY rects (one per corridor); mr._CHANNELS = CH then maps net -> [rect,...]"
+ },
+ "consumer_edit_point": {
+  "file": "tools/k2_reroute_router_floor_v1.py",
+  "lines": "236-240",
+  "current": "_CH = getattr(mr, \"_CHANNELS\", {}); ... _c = _CH[net]   # a single rect per net",
+  "required": "treat _CH[net] as a LIST: when a candidate point/segment lies in corridor k, it may only use the rect belonging to corridor k (i.e. the slot whose y-band contains that point's y); so the constraint becomes '(net, corridor) -> slot' instead of 'net -> rect'."
+ },
+ "regression_to_add": [
+  "a repeated-net channel string must parse into net -> [rect,...] with ALL rects kept (RED: today the last one wins);",
+  "in solve, a point in corridor k must be rejected when it lies outside that net's k-th slot (GREEN), while the same point is accepted when inside it."
+ ],
+ "why_this_is_the_whole_remaining_risk": "everything else of the means is already landed and green (R1406 loud source; R1408 design + named interface change; R1410 corridors()+channels_by_corridor() with RED->GREEN; R1412 channels_string_corridor() allowing repeated nets and refusing partial allocations). Only the maze's parse+consume halves remain, and they are two localised edits.",
+ "expected_effect": "with (net,corridor)->slot enforced, no net can take another's slot in any corridor, which removes the starvation that produced the residual rotation.",
+ "OWNER-ITEMS": 0
+}
