@@ -1,0 +1,25 @@
+{
+ "artifact": "k2_exam_b_left_k14_per_block_gate_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-436 sec.2.2: the per-block named attribution owed after the authorised run (C1=5>0).",
+ "run": "R1286 GRADED FAIL run 1/1 C1=5 (down from 7)",
+ "per_block_C1_gate": {
+  "stage": "per_block_C1_gate",
+  "per_block": {
+   "BUS": 1,
+   "CONTROL": 1,
+   "POWER": 2
+  },
+  "pass": false,
+  "rule": "#K2-434 K-4: block-internal C1 must reach zero FIRST (failures localise to a block)"
+ },
+ "extraction": "recovered from the raw verdict artifact (my first extraction failed on the chain shape).",
+ "residual_named": [
+  "P3V3_AUX",
+  "SWDIO@J13.1",
+  "SWCLK_BOOT0@J13.2<->U1.36",
+  "I2C1_SDA",
+  "P3V3"
+ ],
+ "OWNER-ITEMS": 0
+}
