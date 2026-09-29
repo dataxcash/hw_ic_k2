@@ -1580,5 +1580,21 @@
    },
    "note": "this converts the earlier claim ('the bridge shorts the HS via and my own tie via') into a RESOLVED defect: the fault was the bridge's y, not the mechanism."
   }
+ },
+ "I2C1_SDA_joint_localisation_R1374": {
+  "measured_on_the_R1372_judged_board": {
+   "present": [
+    "F.Cu port stub (51.5,67.455)->(50.9,67.455) [cluster size 4 = an ISOLATED fragment]",
+    "B.Cu ladder end (49.35,62.505) (pre-existing)"
+   ],
+   "ABSENT": [
+    "the joint's F.Cu lane at x=50.30: endpoints (50.30,67.455) and (50.30,62.505) are NOT on the board"
+   ],
+   "reading": "the joint's new copper was REMOVED by the chain's isolated-copper disposal - the SAME mechanism that removed the R-g bridge ZONE (M-ENG-ORPHAN-BRIDGE-DISPOSAL). The joint was anchored only to a 0.6mm stub whose cluster has no pad, so after routing/refill it is an orphan island and is disposed."
+  },
+  "contrast": "P3V3's added items ARE on the board (via @(36.7,34.6), bridge 15.7mm, D2 tie 6.166mm) because they are anchored through the pad tie - which is why P3V3 CLOSED.",
+  "gap_upgraded": "M-ENG-ORPHAN-BRIDGE-DISPOSAL: observation -> CONFIRMED GAP (second instance). Every added drawing piece must be PAD-ANCHORED (i.e. its cluster must contain a pad) or it will be disposed.",
+  "fix_direction": "re-draw the SDA joint so its lane terminates on a pad of the net (e.g. E2's or U1's I2C1_SDA pad) rather than on a bare stub end - i.e. the same 'anchor' rule that made the bridge work.",
+  "PWR_BTN_OUT": "not localised yet (the probe window found no items; the residual is U1 pad 13 <-> an In2 track of 2.4042mm). NOTE: it appeared only after my added In4 copper; must be localised before any further run."
  }
 }
