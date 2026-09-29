@@ -1292,6 +1292,20 @@ class T(unittest.TestCase):
         self.assertLess(ys[0]["move_mm"], ys[1]["move_mm"])
         self.assertEqual(m.yield_sequence(seg, blk, 0.20), ys, "deterministic")
 
+    def test_C419_yield_sequence_makes_the_lane_clear(self):
+        """#K2-419 sec.5 direction A (machine-checkable improvement): RED = the lane is blocked; GREEN = after the
+        deterministic yield sequence the lane IS clear. Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_endpoint_reach_planner_v1", os.path.join("tools", "k2_endpoint_reach_planner_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        seg = ((0.0, 0.0), (1.0, 0.0))
+        blk = [{"net": "A", "bbox": [0.2, 0.10, 0.8, 0.14]}, {"net": "B", "bbox": [0.2, 0.20, 0.8, 0.24]}]
+        r = m.lane_clear_after_yields(seg, blk, 0.20)
+        self.assertFalse(r["before"], "RED: the lane starts blocked")
+        self.assertTrue(r["after"], "GREEN: the deterministic yields make the lane clear")
+        self.assertEqual(r, m.lane_clear_after_yields(seg, blk, 0.20), "deterministic")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

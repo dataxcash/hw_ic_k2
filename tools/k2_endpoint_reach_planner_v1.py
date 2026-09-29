@@ -80,6 +80,28 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
     return out
 
 
+def apply_yields(blockers, seq):
+    """**确定性**：按让位序列把堵点包围盒沿其 `dir` 平移 `move_mm` ⇒ 返回**平移后**的包围盒列表（几何对象）。"""
+    bynet = {o["net"]: o for o in blockers}
+    out = []
+    for y in seq:
+        o = bynet.get(y["net"])
+        if o is None:
+            continue
+        b = list(o["bbox"]); m = y["move_mm"] * (1.0 if y["dir"] == "+y" else -1.0)
+        b[1] = round(b[1] + m, 4); b[3] = round(b[3] + m, 4)
+        out.append(b)
+    return out
+
+
+def lane_clear_after_yields(lane_seg, blockers, clearance=0.20):
+    """**可机核提升**：`(before, after)` —— 让位前该道是否净、按让位序列平移后是否净。确定性 · 零搜索。"""
+    before = all(_seg_gap(o["bbox"], *lane_seg) > clearance + 1e-9 for o in blockers)
+    seq = yield_sequence(lane_seg, blockers, clearance)
+    after = all(_seg_gap(b, *lane_seg) > clearance + 1e-9 for b in apply_yields(blockers, seq))
+    return {"before": before, "after": after, "yields": seq}
+
+
 def check(board, lanes, geoms, clearance=0.20):
     """板件净空机核（保守）。返回逐道具名堵点。"""
     import pcbnew as P
