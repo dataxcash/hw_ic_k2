@@ -20,46 +20,49 @@ def _ovl_x(a, b):
     return not (a[2] <= b[0] or b[2] <= a[0])
 
 
-def clear_subrect_containing(rect, obstacles, clearance, point):
-    """**纯函数 · 确定性 · 零搜索**。返回 `(subrect | None, blockers)`：
-    - `subrect` = `rect` 内**含 `point`**、且与全部 `obstacles⊕clearance` 不相交的**最大**轴对齐子矩（唯一）；
-    - 缩不出 ⇒ `(None, blockers)`，`blockers` = **其（膨胀）矩形含 `point` 的占位者**（= 必须让路的清单）。
-    """
+def clear_subrect_containing_pts(rect, obstacles, clearance, pts):
+    """**纯函数 · 确定性 · 零搜索**（多点版）。返回 `(subrect | None, blockers)`：
+    `subrect` = `rect` 内**同时含全部 `pts`**、且与 `obstacles⊕clearance` 不相交的**最大**轴对齐子矩（唯一）；
+    缩不出 ⇒ `(None, blockers)`，`blockers` = **膨胀后含 pts 中点的占位者**（= 必须让路的清单）。
+    候选边 = 走廊四边 ∪ 膨胀占位者四边；枚举含全部 pts 的 x 带，取带内**同时含全部 pts** 的最大 y 区间。"""
     x0, y0, x1, y1 = [float(v) for v in rect]
-    px, py = float(point[0]), float(point[1])
+    P = [(float(a), float(b)) for a, b in pts]
+    py_lo, py_hi = min(p[1] for p in P), max(p[1] for p in P)
     infl = [_inflate([float(v) for v in o], clearance) for o in obstacles]
-    cand_x, cand_y = {x0, x1}, {y0, y1}
+    cand_x = {x0, x1}
     for o in infl:
         for v in (o[0], o[2]):
             if x0 <= v <= x1:
                 cand_x.add(v)
-        for v in (o[1], o[3]):
-            if y0 <= v <= y1:
-                cand_y.add(v)
-    cand_x, cand_y = sorted(cand_x), sorted(cand_y)
-    cands = []
+    cand_x = sorted(cand_x)
+    best = None
     for i, xl in enumerate(cand_x):
-        if xl > px + 1e-12:
-            continue
         for xr in cand_x[i + 1:]:
-            if xr < px - 1e-12:
-                continue
+            if any(not (xl - 1e-9 <= p[0] <= xr + 1e-9) for p in P):
+                continue                                   # the band must contain every point's x
             band = (xl, y0, xr, y1)
             blk = [o for o in infl if _ovl_x(o, band)]
-            if any(o[1] <= py <= o[3] for o in blk):        # the endpoint itself is inside an inflated occupant
+            if any(not (o[3] < py_lo - 1e-9 or o[1] > py_hi + 1e-9) for o in blk):
+                continue                                   # a blocker sits inside [py_lo, py_hi] for this band
+            below = [o[3] for o in blk if o[3] <= py_lo + 1e-9]
+            above = [o[1] for o in blk if o[1] >= py_hi - 1e-9]
+            yl, yh = max([y0] + below), min([y1] + above)
+            if yh - yl <= 1e-12 or yl > py_lo + 1e-9 or yh < py_hi - 1e-9:
                 continue
-            below = [o[3] for o in blk if o[3] <= py]
-            above = [o[1] for o in blk if o[1] >= py]
-            yl = max([y0] + below)
-            yh = min([y1] + above)
-            if yh - yl <= 1e-12 or not (yl - 1e-9 <= py <= yh + 1e-9):
-                continue
-            cands.append((xl, yl, xr, yh))
-    if not cands:
-        blockers = [o for o in infl if o[0] - 1e-9 <= px <= o[2] + 1e-9 and o[1] - 1e-9 <= py <= o[3] + 1e-9]
+            cand = (xl, yl, xr, yh)
+            area = (xr - xl) * (yh - yl)
+            if best is None or area > best[0] + 1e-12 or (abs(area - best[0]) <= 1e-12 and cand < best[1]):
+                best = (area, cand)
+    if best is None:
+        mx = sum(p[0] for p in P) / len(P); my = sum(p[1] for p in P) / len(P)
+        blockers = [o for o in infl if o[0] - 1e-9 <= mx <= o[2] + 1e-9 and o[1] - 1e-9 <= my <= o[3] + 1e-9]
         return None, blockers
-    cands.sort(key=lambda r: (-(r[2] - r[0]) * (r[3] - r[1]), r[0], r[1], r[2], r[3]))
-    return cands[0], []
+    return best[1], []
+
+
+def clear_subrect_containing(rect, obstacles, clearance, point):
+    """单点版（= `clear_subrect_containing_pts` 的 1 元素特例；API 不变）。"""
+    return clear_subrect_containing_pts(rect, obstacles, clearance, [point])
 
 
 def redraw_corridors(gaps, occupants_by_gap, clearance, point_of):

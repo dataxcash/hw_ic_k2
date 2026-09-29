@@ -47,6 +47,35 @@ def rect_gap(a, b):
     return (dx * dx + dy * dy) ** 0.5
 
 
+def occupant_rects(b, layers, net, clearance):
+    """**只读取数**：板上（层∈layers）**异网**铜的包围盒 ＋ 是否与 corridor 相交由调用方用 `rect_gap` 判。
+    返回 `[{"kind","net","layer","bbox","at"/"ref"/"pad"}...]`（确定性顺序：先 track/via 后 pad）。"""
+    import pcbnew as P
+    out = []
+    for t in b.GetTracks():
+        ln = b.GetLayerName(t.GetLayer())
+        if ln not in layers or t.GetNetname() == net:
+            continue
+        bb = t.GetBoundingBox()
+        out.append({"kind": "track/via", "net": t.GetNetname(), "layer": ln,
+                    "bbox": [P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()), P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())],
+                    "at": [round(P.ToMM(t.GetStart().x), 3), round(P.ToMM(t.GetStart().y), 3)]})
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            if pd.GetNetname() == net:
+                continue
+            for lay in pd.GetLayerSet().Seq():
+                ln = b.GetLayerName(lay)
+                if ln not in layers:
+                    continue
+                bb = pd.GetBoundingBox()
+                out.append({"kind": "pad", "net": pd.GetNetname(), "layer": ln,
+                            "bbox": [P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()), P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())],
+                            "ref": fp.GetReference(), "pad": pd.GetNumber()})
+                break
+    return out
+
+
 def audit(board_path, plan_path):
     import pcbnew as P
     plan = json.load(open(plan_path, encoding="utf-8"))
@@ -56,30 +85,10 @@ def audit(board_path, plan_path):
            "clear_mm": CLEAR, "corridors": [], "OWNER-ITEMS": 0}
     for gi, g in enumerate(gaps):
         layers, rect = parse_corridor(g.get("corridor"))
-        occ = []
-        for t in b.GetTracks():
-            ln = b.GetLayerName(t.GetLayer())
-            if ln not in layers or t.GetNetname() == g["net"]:
-                continue
-            bb = t.GetBoundingBox()
-            tb = (P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()), P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom()))
-            if rect_gap(rect, tb) <= CLEAR + 1e-9:
-                occ.append({"kind": "track/via", "net": t.GetNetname(), "layer": ln,
-                            "at": [round(P.ToMM(t.GetStart().x), 3), round(P.ToMM(t.GetStart().y), 3)]})
-        for fp in b.GetFootprints():
-            for pd in fp.Pads():
-                if pd.GetNetname() == g["net"]:
-                    continue
-                for lay in pd.GetLayerSet().Seq():
-                    ln = b.GetLayerName(lay)
-                    if ln not in layers:
-                        continue
-                    bb = pd.GetBoundingBox()
-                    pb = (P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()), P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom()))
-                    if rect_gap(rect, pb) <= CLEAR + 1e-9:
-                        occ.append({"kind": "pad", "net": pd.GetNetname(), "layer": ln,
-                                    "ref": fp.GetReference(), "pad": pd.GetNumber()})
-                    break
+        occ = [o for o in occupant_rects(b, layers, g["net"], CLEAR)
+               if rect_gap(rect, o["bbox"]) <= CLEAR + 1e-9]
+        for o in occ:
+            o.pop("bbox", None)
         out["corridors"].append({
             "gap": gi, "net": g["net"], "layers": layers, "rect": [round(v, 3) for v in rect],
             "verdict": "OCCUPIED" if occ else "CLEAR",

@@ -1,0 +1,259 @@
+{
+ "artifact": "k2_sec16_3_element3_concrete_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-413 sec.5: B1 deterministic redraw + PER-CORRIDOR conservation machine check (block-level free-area substitution FORBIDDEN).",
+ "generator": "tools/k2_corridor_element3_gen_v1.py",
+ "board": "<read-only: the A^5 authorised run's pre-stitch intermediate board>",
+ "clearance_mm": 0.2,
+ "method": "per gap: clamp the DRC pair into the v1 corridor; the LARGEST clear axis-aligned sub-rectangle containing BOTH endpoints is the straight-channel witness; `capacity_mm` = its narrow dimension; `need_mm` = this net's track width + 2*clearance. The local clear width at EACH endpoint is also reported.",
+ "verdict": {
+  "per_corridor_conservation": "FAIL",
+  "n_pass": 0,
+  "n_total": 8
+ },
+ "gaps": [
+  {
+   "net": "MCU_VDD",
+   "layers": [
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    29.2,
+    44.9,
+    31.9,
+    52.8
+   ],
+   "in_domain_p1": [
+    31.8375,
+    52.75
+   ],
+   "in_domain_p2": [
+    29.25,
+    44.9
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.2,
+   "cap_at_p2_mm": 0.0,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 45,
+   "blockers_named": [
+    "12V_IN"
+   ]
+  },
+  {
+   "net": "NRST",
+   "layers": [
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    27.5,
+    40.4,
+    31.9,
+    54.8
+   ],
+   "in_domain_p1": [
+    31.9,
+    40.450001
+   ],
+   "in_domain_p2": [
+    31.8375,
+    54.75
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.35,
+   "cap_at_p2_mm": 0.2,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 137,
+   "blockers_named": []
+  },
+  {
+   "net": "NRST",
+   "layers": [
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    27.5,
+    51.9,
+    31.9,
+    54.8
+   ],
+   "in_domain_p1": [
+    27.55,
+    51.9
+   ],
+   "in_domain_p2": [
+    31.8375,
+    54.75
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.45,
+   "cap_at_p2_mm": 0.2,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 34,
+   "blockers_named": []
+  },
+  {
+   "net": "PERSTA#",
+   "layers": [
+    "In5.Cu",
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    50.0,
+    37.5,
+    51.6,
+    39.0
+   ],
+   "in_domain_p1": [
+    51.6,
+    37.5
+   ],
+   "in_domain_p2": [
+    50.05,
+    39.0
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.0,
+   "cap_at_p2_mm": 0.0,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 31,
+   "blockers_named": [
+    "P3V3_AUX",
+    "PWR_BTN_OUT"
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "layers": [
+    "F.Cu",
+    "In5.Cu"
+   ],
+   "v1_corridor_rect": [
+    51.1,
+    38.3,
+    51.6,
+    38.8
+   ],
+   "in_domain_p1": [
+    51.15,
+    38.3
+   ],
+   "in_domain_p2": [
+    51.55,
+    38.8
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.2,
+   "cap_at_p2_mm": 0.35,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 1,
+   "blockers_named": []
+  },
+  {
+   "net": "I2C1_SCL",
+   "layers": [
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    33.7,
+    48.8,
+    45.9,
+    61.6
+   ],
+   "in_domain_p1": [
+    33.75,
+    48.8375
+   ],
+   "in_domain_p2": [
+    45.9,
+    61.6
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.2,
+   "cap_at_p2_mm": 0.435,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 200,
+   "blockers_named": []
+  },
+  {
+   "net": "I2C1_SDA",
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "v1_corridor_rect": [
+    51.5,
+    61.9,
+    52.2,
+    67.5
+   ],
+   "in_domain_p1": [
+    52.2,
+    61.905
+   ],
+   "in_domain_p2": [
+    51.500001,
+    67.455001
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.45,
+   "cap_at_p2_mm": 0.7,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 6,
+   "blockers_named": []
+  },
+  {
+   "net": "P3V3",
+   "layers": [
+    "F.Cu"
+   ],
+   "v1_corridor_rect": [
+    43.4,
+    44.0,
+    51.5,
+    60.6
+   ],
+   "in_domain_p1": [
+    51.5,
+    60.6
+   ],
+   "in_domain_p2": [
+    43.4,
+    44.0
+   ],
+   "concrete_corridor": null,
+   "capacity_mm": null,
+   "cap_at_p1_mm": 3.7,
+   "cap_at_p2_mm": 0.6,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "n_occupants": 92,
+   "blockers_named": []
+  }
+ ],
+ "conclusion": "B1 (LOCAL deterministic redraw inside the v1 corridors) yields NO usable corridor for ANY of the eight gaps: at least one end of every gap has a local clear width below `need`, and NO single clear rectangle spans both ends. So B1-as-specified is conservation-INFEASIBLE - per corridor, NOT block-level. Exits: (B2) relocate the named occupants, or a global router (a search, needs its own authorisation).",
+ "not_claimed": "only the STRAIGHT-channel witness is checked; a bent channel is NOT excluded. This certifies 'B1-local-redraw infeasible', not physical impossibility.",
+ "OWNER-ITEMS": 0
+}

@@ -1191,6 +1191,23 @@ class T(unittest.TestCase):
         self.assertIsNone(sub3, "a boxed endpoint must be reported, not invented")
         self.assertEqual(len(blk3), 1, "the item blocking the endpoint must be NAMED")
 
+    def test_C413_per_corridor_no_common_channel_is_reported(self):
+        """#K2-413 sec.5.3 (per-corridor conservation): two points separated by a full wall have NO common clear
+        rectangle => the corridor CANNOT carry them; the per-corridor check must report that, never fall back to a
+        block-level free-area claim. Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_corridor_redraw_v1", os.path.join("tools", "k2_corridor_redraw_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        rect, wall = (0, 0, 10, 10), [[4, 0, 5, 10]]              # a full-height wall splits the corridor
+        self.assertIsNone(m.clear_subrect_containing_pts(rect, wall, 0.0, [(2, 5), (8, 5)])[0],
+                          "points on opposite sides of a full wall cannot share a clear rectangle")
+        sub, _ = m.clear_subrect_containing_pts(rect, wall, 0.0, [(6, 3), (8, 7)])
+        self.assertIsNotNone(sub, "same side => a common clear rectangle exists")
+        self.assertTrue(sub[0] <= 6 and sub[1] <= 3 and sub[2] >= 8 and sub[3] >= 7, "it must contain BOTH points")
+        self.assertEqual(m.clear_subrect_containing_pts(rect, wall, 0.0, [(2, 5), (8, 5)]),
+                         m.clear_subrect_containing_pts(rect, wall, 0.0, [(2, 5), (8, 5)]), "deterministic")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
