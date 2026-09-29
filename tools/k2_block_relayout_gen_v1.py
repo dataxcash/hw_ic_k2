@@ -162,10 +162,21 @@ def plan_from_board(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0
         box = (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
         sub, _ = RD.clear_subrect_containing_pts(box, occ, clearance, [(p[1], p[2]) for p in rw])
         cons = corridor_conservation(sub, occ, clearance, need) if sub else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
-        req = row_relayout_request(rw, {n: byn[n] for n in byn if n not in own}, clearance)
-        esc = escape_into_corridor(rw, sub) if sub else []
+        _obn = {n: byn[n] for n in byn if n not in own}
+        req = row_relayout_request(rw, _obn, clearance)
+        # **内容感知分配版**：先应用本排的确定性让位，再重建廊道（若由不通转通 ⇒ 记 OK_BY_YIELD）
+        _mv = {}
+        for _z in req:
+            _s = 1.0 if _z["dir"] == "+y" else -1.0
+            _mv[_z["net"]] = [[b[0], b[1] + _s * _z["move_mm"], b[2], b[3] + _s * _z["move_mm"]] for b in _obn.get(_z["net"], [])]
+        _occ2 = [bb for n, bbs in {**_obn, **_mv}.items() if n not in own for bb in bbs]
+        sub2, _ = RD.clear_subrect_containing_pts(box, _occ2, clearance, [(p[1], p[2]) for p in rw])
+        cons2 = corridor_conservation(sub2, _occ2, clearance, need) if sub2 else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
+        esc = escape_into_corridor(rw, sub2 or sub) if (sub2 or sub) else []
         out.append({"row": i, "nets": sorted(own), "n_points": len(rw),
                     "corridor": list(sub) if sub else None, "conservation": cons,
+                    "corridor_after_yield": list(sub2) if sub2 else None, "conservation_after_yield": cons2,
+                    "status": ("OK" if (sub and cons["pass"]) else ("OK_BY_YIELD" if cons2["pass"] else "BLOCKED")),
                     "relayout_request": req, "per_line": esc,
                     "buildability": "no_move" if (sub and cons["pass"]) else "relocation_listed"})
     rep = {"artifact": "k2_block_relayout_plan_v1", "board": board, "rect": list(rect), "rows": len(rows),
@@ -173,6 +184,7 @@ def plan_from_board(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0
            "closing": {"1_one_command_end_to_end": True,
                        "2_per_line_geometry": sum(1 for o in out if o["per_line"]),
                        "3_conservation_pass": sum(1 for o in out if o["conservation"]["pass"]),
+                       "3b_conservation_pass_after_yield": sum(1 for o in out if o["conservation_after_yield"]["pass"]),
                        "4_buildability": "no_move" if all(o["buildability"] == "no_move" for o in out) else "relocation_listed",
                        "n_rows": len(rows)}, "OWNER-ITEMS": 0}
     return rep

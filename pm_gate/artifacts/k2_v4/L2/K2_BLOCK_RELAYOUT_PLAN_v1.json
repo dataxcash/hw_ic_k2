@@ -22,6 +22,13 @@
     "need_mm": 0.6,
     "pass": false
    },
+   "corridor_after_yield": null,
+   "conservation_after_yield": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "status": "BLOCKED",
    "relayout_request": [
     {
      "net": "MCU_VDD",
@@ -57,6 +64,13 @@
     "need_mm": 0.6,
     "pass": false
    },
+   "corridor_after_yield": null,
+   "conservation_after_yield": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "status": "BLOCKED",
    "relayout_request": [
     {
      "net": "P3V3_AUX",
@@ -85,6 +99,18 @@
     "need_mm": 0.6,
     "pass": false
    },
+   "corridor_after_yield": [
+    29.450001,
+    53.250001000000005,
+    29.95,
+    53.75
+   ],
+   "conservation_after_yield": {
+    "capacity_mm": 0.5,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "status": "BLOCKED",
    "relayout_request": [],
    "per_line": [
     {
@@ -124,6 +150,13 @@
     "need_mm": 0.6,
     "pass": false
    },
+   "corridor_after_yield": null,
+   "conservation_after_yield": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "status": "BLOCKED",
    "relayout_request": [
     {
      "net": "GND",
@@ -148,6 +181,18 @@
     "need_mm": 0.6,
     "pass": false
    },
+   "corridor_after_yield": [
+    51.1,
+    60.2,
+    51.9,
+    61.935
+   ],
+   "conservation_after_yield": {
+    "capacity_mm": 0.8,
+    "need_mm": 0.6,
+    "pass": true
+   },
+   "status": "OK_BY_YIELD",
    "relayout_request": [
     {
      "net": "I2C1_SCL",
@@ -156,7 +201,52 @@
      "yield_order": 0
     }
    ],
-   "per_line": [],
+   "per_line": [
+    {
+     "net": "P3V3",
+     "order": 0,
+     "from": [
+      51.5,
+      60.6
+     ],
+     "to": [
+      51.1,
+      60.475
+     ],
+     "via": {
+      "at": [
+       51.1,
+       60.475
+      ],
+      "layers": [
+       "F.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "I2C1_SDA",
+     "order": 1,
+     "from": [
+      51.5,
+      61.905
+     ],
+     "to": [
+      51.1,
+      61.935
+     ],
+     "via": {
+      "at": [
+       51.1,
+       61.935
+      ],
+      "layers": [
+       "B.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
    "buildability": "relocation_listed"
   },
   {
@@ -176,6 +266,18 @@
     "need_mm": 0.6,
     "pass": true
    },
+   "corridor_after_yield": [
+    51.1,
+    67.05500099999999,
+    51.9,
+    67.855001
+   ],
+   "conservation_after_yield": {
+    "capacity_mm": 0.8,
+    "need_mm": 0.6,
+    "pass": true
+   },
+   "status": "OK",
    "relayout_request": [],
    "per_line": [
     {
@@ -207,8 +309,9 @@
  "policy": "REF-CASE-LIBRARY A1: group fanout / straight runs / one layer change per escape",
  "closing": {
   "1_one_command_end_to_end": true,
-  "2_per_line_geometry": 2,
+  "2_per_line_geometry": 3,
   "3_conservation_pass": 1,
+  "3b_conservation_pass_after_yield": 2,
   "4_buildability": "relocation_listed",
   "n_rows": 6
  },
