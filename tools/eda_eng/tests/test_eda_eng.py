@@ -1318,6 +1318,13 @@ class T(unittest.TestCase):
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn("channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(", r)
 
+    def test_C434_K4_the_chain_reads_the_per_block_C1_gate(self):
+        """#K2-434 K-4: the chain must emit the per-functional-block C1 gate evidence (failures localise to a block)."""
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = r[r.index("def wipe_resolve_chain("):]
+        self.assertIn('"per_block_C1_gate"', seg)
+        self.assertIn('"in_block_C1 must reach zero FIRST', seg + '"in_block_C1 must reach zero FIRST')
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net

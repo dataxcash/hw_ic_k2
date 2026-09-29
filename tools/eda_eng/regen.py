@@ -1687,6 +1687,27 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                                      "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
     v = _vf.judge(final, dj, B0, ref_drc, extra=extra, required_rows=_vf.LOCKED_EXAM_ROWS)
     d = _vf.class_delta(dj, ref_drc)
+    # ── #K2-434 K-4 闸证据：**逐功能块 C1**（块内先归零；失败可定位到块）────────────────────────
+    try:
+        import importlib.util as _iu3, re as _re3
+        _sp3 = _iu3.spec_from_file_location("kfb3", os.path.join(ROOT, "tools", "k2_functional_block_v1.py"))
+        _fb3 = _iu3.module_from_spec(_sp3); _sp3.loader.exec_module(_fb3)
+        _uu = json.load(open(dj, encoding="utf-8")).get("unconnected_items") or []
+        _nets3 = set()
+        for _it3 in _uu:
+            for _i3 in (_it3.get("items") or []):
+                _m3 = _re3.search(r"\[([^\]]+)\]", _i3.get("description") or "")
+                if _m3:
+                    _nets3.add(_m3.group(1))
+        _pb3 = {}
+        for _n3 in sorted(_nets3):
+            _f3 = _fb3.family_of([_n3])
+            _pb3[_f3] = _pb3.get(_f3, 0) + 1
+        chain.append({"stage": "per_block_C1_gate", "per_block": _pb3, "pass": not _nets3,
+                      "rule": "#K2-434 K-4: block-internal C1 must reach zero FIRST (failures localise to a block)"})
+    except Exception as _e3:                                          # noqa: BLE001
+        chain.append({"stage": "per_block_C1_gate", "err": type(_e3).__name__})
+
     chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": d["total_delta"],
                           "C8": not _inside})
     return {"state": "GRADED", "chain": chain, "method": "wipe_resolve", "wipe": {
