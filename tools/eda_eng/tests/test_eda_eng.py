@@ -1242,6 +1242,13 @@ class T(unittest.TestCase):
                       "B1: the pour-reflowable filter must sit in the maze obstacle context")
         self.assertIn('ap.add_argument("--reflowable"', src)
 
+    def test_C429_the_channel_constraint_is_wired_into_the_maze_bound_rect(self):
+        """#K2-429 sec.3.2: the produced per-net channel must become a HARD input to the maze - wired into the
+        maze's EXISTING bound-rect vehicle per edge, not a post-hoc filter."""
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn('ap.add_argument("--channels"', src)
+        self.assertIn("mr.WALL_RECT = CH[net]", src, "the per-net channel must set the maze's bound rect per edge")
+
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
         inside the frame), so the sound lever is ORDER - the eight objective nets must be routed first."""

@@ -1,0 +1,26 @@
+{
+ "artifact": "k2_sec16_3_channel_to_chain_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3.3: the sec.16.3 four-element plan for the channel-to-chain wiring.",
+ "element1_death_cause": "the maze re-solves every edge with ONE global frame, so the nets COMPETE for the same space; the per-net channel produced by the planner is never handed to the search => the plan is green but the board is not.",
+ "element2_proven_facts": [
+  "R1224 (authorised N=1 over the R1222 plan): C1=5, C2 clean => plan-green does NOT imply board-green",
+  "R1232/R1234: content-aware allocation per NET = 2/5; R1236 (per ROW) = 5/5 conservation",
+  "R1188/R1190: the maze's bound rect is passed INTO the search loop (C35) - the existing hard-constraint vehicle"
+ ],
+ "element3_corrected_plan": {
+  "principle": "hand the produced per-net channel to the maze's EXISTING bound-rect input, per edge (hard constraint), so the maze routes INSIDE the channel and cannot compete.",
+  "determinism": "channel lookup by net name; no search, no tuning",
+  "per_line_fields": [
+   "net",
+   "channel rect (layer/slot/corridor)",
+   "entry",
+   "exit",
+   "via hole-pair"
+  ],
+  "conservation": "per-channel (this channel's own clear width vs the net's need); domain-level FORBIDDEN",
+  "buildability": "relocation_listed"
+ },
+ "element4_buildability": "relocation_listed",
+ "OWNER-ITEMS": 0
+}

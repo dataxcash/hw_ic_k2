@@ -35,6 +35,9 @@ def main():
                          "gate is unchanged. '' = disable.")
     ap.add_argument("--coarse-step", dest="coarse_step", default="fine",
                     help="B2 (#K2-414 sec.2.2): 'fine' = use the in-register FINE_STEP (0.10); or a number.")
+    ap.add_argument("--channels", default="",
+                    help="#K2-429 (A): per-net HARD channel constraints 'net:x0,y0,x1,y1;...' - each edge is routed with "
+                         "mr.WALL_RECT set to that net's channel (the maze's EXISTING bound-rect vehicle)")
     ap.add_argument("--order-list", dest="order_list", default=None,
                     help="#K2-415 lever 'order': a file with one net name per line (priority order, first = first)")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"],
@@ -65,6 +68,12 @@ def main():
     # 把「跨框另猜目标」改成「接回该网在 ∂R 的端口」——同网铜在框外继续，故接到端口即恢复连通。
     # **不改迷宫本体**：运行期在 wrapper 内给 `mr.solve_edge` 打补丁（与 `cv._req`/`WALL_RECT` 同法）。
     _set_step(a.coarse_step)
+    # ── #K2-429 §三.2 **通道分配入链（硬约束）**：逐网把通道喂给迷宫的既有 bound-rect 车辆 ─────────────
+    CH = {}
+    for _it in [x for x in (a.channels or "").split(";") if x.strip()]:
+        _n, _r = _it.split(":", 1)
+        CH[_n] = tuple(float(v) for v in _r.split(","))
+    _GLOBAL_WALL = mr.WALL_RECT
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
@@ -188,10 +197,14 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     REC = []
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+        _saved = mr.WALL_RECT
+        if net in CH:                                     # HARD: this edge may only use its own channel
+            mr.WALL_RECT = CH[net]
         # ── #K2-414 §二.2 **B2**：考试迷宫改用在册 `FINE_STEP`(0.10)（粗栅格剪掉的格在细栅格本就可通行）──
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
         sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
+        mr.WALL_RECT = _saved
         if sol is not None:
             return sol, why
         rec = {"net": net, "why": why, "pa": [round(pa[0], 3), round(pa[1], 3)], "la": mr.LNAME[la],
@@ -219,6 +232,7 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                     return s2, "ok-port-start"
         rec["endpoint_own_cell_hits"] = OWN_CELL["hits"] - h0
         REC.append(rec)
+        mr.WALL_RECT = _saved
         return sol, why
 
     mr.solve_edge = solve

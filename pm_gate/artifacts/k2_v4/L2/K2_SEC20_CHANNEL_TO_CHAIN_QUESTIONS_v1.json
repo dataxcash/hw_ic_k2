@@ -1,0 +1,17 @@
+{
+ "artifact": "k2_sec20_channel_to_chain_questions_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3.1 (HARD first action): the sec.20 three questions must be answered in full BEFORE any code.",
+ "Q1_same_kind_product": "YES. Every commercial router takes the CHANNEL/TRACK ASSIGNMENT as a HARD INPUT and routes inside it; it never lets nets re-solve freely and compete. Same-chip reference: TI DS320PR1601 EVM layer drawings + SNLU300.",
+ "Q2_copyable_artifact": [
+  "REF-CASE-LIBRARY A1 (TI DS320PR1601 + SNLU300): 'assign the channels first, then route inside them'",
+  "in-repo: the maze's own C35 WALL_RECT mechanism (a bound rect passed INTO the search loop, never patched afterwards) - i.e. the hard-constraint vehicle ALREADY EXISTS",
+  "in-repo: k2_block_relayout_gen.plan_from_board (the per-row channel producer)"
+ ],
+ "Q3_difference_list": [
+  "the maze currently takes ONE global WALL_RECT; nothing feeds a PER-NET channel into it",
+  "=> copy the reference discipline and wire the produced per-net channel into the maze's EXISTING bound-rect input, per edge."
+ ],
+ "consequence": "the wiring below is 'what to copy, how to apply'; implementation is this window's asset.",
+ "OWNER-ITEMS": 0
+}
