@@ -1627,5 +1627,20 @@
   },
   "rule": "M-ENG-ORPHAN-BRIDGE-DISPOSAL (confirmed, 2nd instance): every added drawing piece's cluster MUST contain a pad.",
   "SDA_fix_landed": "one B.Cu segment (48.15,62.905)->(45.95,62.905) reaching the E2.5 pad"
+ },
+ "prereq_R1380": {
+  "1_anchor_audit": {
+   "tool": "tools/k2_anchor_audit_v1.py (built this window, with regression test_C449)",
+   "first_run": "96 added -> 75 flagged padless",
+   "DEFECT_IN_THE_GATE": "the criterion is PER-PIECE ('does this piece's endpoint touch a pad or an existing route endpoint?'), which over-flags: most added pieces are mid-lane segments whose endpoints touch OTHER ADDED pieces. The correct semantics is CLUSTER-based: a piece is anchored iff its CONNECTED CLUSTER contains a pad. The gate must be fixed (union-find over coincident endpoints, vias joining their layer pair) before it can be used as a judge.",
+   "status": "BLOCKING - fix + re-run required before the N=1"
+  },
+  "2_PWR_BTN_OUT_DETERMINATION": {
+   "verdict": "DETERMINED: caused by MY drawing piece",
+   "evidence": "my added P3V3_AUX via In5-In4 @(51.5,38.75) sits 0.05mm from PWR_BTN_OUT's dR crossing stub start (51.5,38.7): |dy| = 0.05mm << the 0.20mm clearance.",
+   "reading": "the via occupies that port, so the net's in-frame route is starved (it had NO in-frame copper on the judged board). This is a DRAWING-SIDE obligation per #K2-449 sec.2.5(2).",
+   "fix": "move that tie via (via-aware) so it clears PWR_BTN_OUT's port by >= clearance; re-check with the (fixed) anchor gate + DRC."
+  },
+  "N1_status": "NOT RUN - the two prerequisites are not yet complete (fail-closed per #K2-449 sec.2.5)."
  }
 }

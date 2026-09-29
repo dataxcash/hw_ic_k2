@@ -1395,6 +1395,23 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
+        """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
+        or to existing copper, otherwise the chain's isolated-copper disposal removes it (proved twice: the R-g zone
+        and the I2C1_SDA joint). RED = a pad-less piece is flagged; GREEN = a pad-touching piece passes."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2aa", os.path.join("tools", "k2_anchor_audit_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        pads = [[45.90, 62.85, 46.00, 62.95]]
+        routes = [{"layer": "B.Cu", "a": (49.15, 62.505), "b": (49.35, 62.505)}]
+        anchored = {"kind": "track", "layer": "B.Cu", "a": [48.15, 62.905], "b": [45.95, 62.905]}
+        orphan = {"kind": "track", "layer": "F.Cu", "a": [50.30, 67.455], "b": [50.30, 62.505]}
+        self.assertEqual(m.audit([anchored], pads, routes), {"ok": True, "padless": [], "n_added": 1})
+        bad = m.audit([anchored, orphan], pads, routes)
+        self.assertFalse(bad["ok"]); self.assertEqual(bad["padless"], [orphan])
+        via_ok = {"kind": "via", "at": [45.95, 62.905]}
+        self.assertTrue(m.audit([via_ok], pads, routes)["ok"])
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
