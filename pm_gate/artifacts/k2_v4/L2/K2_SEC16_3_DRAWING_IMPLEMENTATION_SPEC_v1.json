@@ -1398,6 +1398,36 @@
    "width": 0.25,
    "allow_outside_dR": true,
    "why": "R-g mechanism D corrected (#K2-447 sec.2.3 / the convergence order): the first bridge sat at y=39.0 and shorted the HS blind via @(58.0,39.3) and my own P3V3_AUX tie via @(51.5,38.75). This y was chosen by a VIA-AWARE free-slot scan of the full span 42.8..58.5 (an earlier scan filtered tracks by a single GetLayer() and so missed vias)."
+  },
+  {
+   "n": 5,
+   "kind": "via",
+   "net": "P3V3",
+   "at": [
+    36.7,
+    34.6
+   ],
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "why": "#K2-447 sec.2.3 construction-layer completion: tie D2 pad 1 to the frozen bridge"
+  },
+  {
+   "n": 5,
+   "kind": "track",
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "a": [
+    36.7,
+    34.6
+   ],
+   "b": [
+    42.8,
+    35.5
+   ],
+   "width": 0.25,
+   "why": "determined tie from D2.1 to the frozen bridge line (both ends frozen)"
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
