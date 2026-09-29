@@ -1264,6 +1264,21 @@ class T(unittest.TestCase):
         seg = r[r.index("def wipe_resolve_chain("):]
         self.assertIn('"unfill"', seg); self.assertIn("pour_aware_unfill", seg)
 
+    def test_C434_K2_functional_blocks_are_deterministic_and_name_boundaries(self):
+        """#K2-434 K-2 RED->GREEN: one undivided blob hides all functions; the deterministic functional grouping
+        separates POWER/CONTROL/BUS/HS and NAMES the boundary ports (nets crossing blocks)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_functional_block_v1", os.path.join("tools", "k2_functional_block_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        netof = {"U1": ["MCU_VDD", "NRST"], "C85": ["MCU_VDD", "I2C1_SDA"], "E2": ["I2C1_SDA"], "D1": ["PCIE_DN0_P"]}
+        blk = m.functional_blocks(["U1", "C85", "E2", "D1"], netof)
+        self.assertEqual(sorted(blk), ["BUS", "HS", "POWER"], "GREEN: families separated (no single blob)")
+        self.assertEqual(blk["POWER"]["members"], ["C85", "U1"], "grouped by function, sorted")
+        self.assertEqual(m.functional_blocks(["U1", "C85", "E2", "D1"], netof), blk, "deterministic")
+        bp = m.boundary_ports(blk, netof)
+        self.assertIn("I2C1_SDA", bp["POWER"], "a net crossing blocks is a NAMED boundary port")
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
