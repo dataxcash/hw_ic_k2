@@ -10,7 +10,7 @@ The in-register asset is NOT modified - the patch is applied at import time in t
 Usage: k2_reroute_router_floor_v1.py --in <board> --drc <drc.json> --out <board> --ledger <json>
         [--margin 3.0] [--floor 0.20] [--only-net NET] [--dry-run]
 """
-import argparse, importlib.util, os, sys
+import argparse, importlib.util, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MROUTE = os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py")
@@ -42,14 +42,25 @@ def main():
     # 迷宫在界内找不到属于该岛的格。处置：把**框切残段端口**（∂R 上、同网的 track 端点）当**目标**，
     # 把「跨框另猜目标」改成「接回该网在 ∂R 的端口」——同网铜在框外继续，故接到端口即恢复连通。
     # **不改迷宫本体**：运行期在 wrapper 内给 `mr.solve_edge` 打补丁（与 `cv._req`/`WALL_RECT` 同法）。
+    recs = []
     if mr.WALL_RECT:
-        _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
+        recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
     s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, "dist_asc", None)
+    # #K2-394 §二.1：**端口可达性预检**并列盘（不可达者**具名**；不改变路由结果）
+    if recs:
+        pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,
+               "n_failed_edges": len(recs),
+               "unreachable": [r for r in recs if not r["reachable_port"]],
+               "reachable_via_port": [r for r in recs if r["reachable_port"]],
+               "rule": "#K2-394 sec.2.1: before routing, name every endpoint that cannot reach any same-net frame port "
+                       "(reachable => the port retry routes it; unreachable => named for the change-set / expansion decision)."}
+        json.dump(pre, open(a.ledger + ".precheck.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json_dumps(s))
     return 0
 
 
 def _install_port_aware_goals(mr, wall, tol=0.02):
+    """返回**端口可达性预检记录**（#K2-394 §二.1）：每条失败边记录 端口是否可达 / 试了几个端口。"""
     """把 `solve_edge` 包一层：正常失败且原因为 no-free-start/goal-node 时，改用**同网 ∂R 端口**
     （作为目标或起点）重试一次。确定性（端口按 (layer,x,y,uuid) 排序）；不搜索、不调参。"""
     orig = mr.solve_edge
@@ -82,21 +93,37 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
 
     mr.snap_node = snap
 
+    REC = []
+
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
         sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
-        if sol is not None or why not in ("no-free-start-node", "no-free-goal-node"):
+        if sol is not None:
             return sol, why
-        for (pl, px, py, tpu) in _ports(ctx, net):
-            cport = find("t:" + tpu)
-            s2, _ = orig(ctx, find, compa, cport, net, la, pa, pl, (px, py), margin, coarse_step)
-            if s2 is not None:
-                return s2, "ok-port-goal"
-            s2, _ = orig(ctx, find, cport, compb, net, pl, (px, py), lb, pb, margin, coarse_step)
-            if s2 is not None:
-                return s2, "ok-port-start"
+        rec = {"net": net, "why": why, "pa": [round(pa[0], 3), round(pa[1], 3)], "la": mr.LNAME[la],
+               "pb": [round(pb[0], 3), round(pb[1], 3)], "lb": mr.LNAME[lb],
+               "ports_available": len(_ports(ctx, net)), "ports_tried": 0, "reachable_port": False, "via": None}
+        if why in ("no-free-start-node", "no-free-goal-node"):
+            rec["tries"] = []
+            for (pl, px, py, tpu) in _ports(ctx, net):
+                rec["ports_tried"] += 1
+                cport = find("t:" + tpu)
+                s2, w2 = orig(ctx, find, compa, cport, net, la, pa, pl, (px, py), margin, coarse_step)
+                rec["tries"].append({"port": [px, py, pl], "dir": "goal", "why": w2})
+                if s2 is not None:
+                    rec.update({"reachable_port": True, "via": [px, py, pl]})
+                    REC.append(rec)
+                    return s2, "ok-port-goal"
+                s2, w3 = orig(ctx, find, cport, compb, net, pl, (px, py), lb, pb, margin, coarse_step)
+                rec["tries"].append({"port": [px, py, pl], "dir": "start", "why": w3})
+                if s2 is not None:
+                    rec.update({"reachable_port": True, "via": [px, py, pl]})
+                    REC.append(rec)
+                    return s2, "ok-port-start"
+        REC.append(rec)
         return sol, why
 
     mr.solve_edge = solve
+    return REC
 
 
 def json_dumps(o):

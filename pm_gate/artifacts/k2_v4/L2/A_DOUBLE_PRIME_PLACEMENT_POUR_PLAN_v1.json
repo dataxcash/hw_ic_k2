@@ -126,5 +126,20 @@
    "3. for a net with NO frame port (P3V3): the connection must be re-derived inside the frame (a different, named sub-case)."
   ],
   "authority": "sec.16.3 planning artifact to be produced BEFORE any further run; NOT authorised in this window."
+ },
+ "edge_iv_status": {
+  "authority": "#K2-394 sec.2 (approved zero-exam-run window with hard semantic constraints).",
+  "item_1_port_reachability_precheck": {
+   "status": "IMPLEMENTED",
+   "where": "tools/k2_reroute_router_floor_v1.py (_install_port_aware_goals now RETURNS the pre-check records; main dumps <ledger>.precheck.json)",
+   "measurement": "21 failed edges -> 14 reachable via a same-net frame port, 7 UNREACHABLE (named, with sub-reasons) on the A-triple-prime wiped board",
+   "test": "test_C394_port_reachability_precheck_names_unreachable_endpoints"
+  },
+  "item_2_3_feasibility": {
+   "status": "BLOCKED_CHANGE_SET_LOCALLY - needs a decision",
+   "evidence": "for the 7 unreachable edges the sub-reasons are: (a) the OTHER endpoint cannot snap (no-free-start/goal-node) - an inside pad/remnant buried by the post-move congestion; and (b) the port cell, even when snap-relaxed, is rejected by the coarse A* as start-blocked. No FOREIGN copper of a change-set net lies within 0.6 mm of these endpoints (measured), so 'opening a port by consuming change-set copper' does not apply.",
+   "consequence": "per #K2-394 sec.2.2 reaching these endpoints needs either (i) A*-level acceptance of a congested port cell plus congestion relief, or (ii) MEMBER-SET EXPANSION (new neighbours join -> block boundary redrawn -> the C7 mutual-exclusion re-check -> C6 restated as 'new frame outside diff = 0'), or (iii) micro-adjusting the member part that owns the buried endpoint (#K2-394 sec.2.3). All three are planning-layer operations beyond this window's edge-iv item 1.",
+   "request": "authorise the member-set-expansion / placement-micro-adjust window (zero exam runs) before any further run."
+  }
  }
 }

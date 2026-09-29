@@ -834,6 +834,7 @@ class T(unittest.TestCase):
 
         class MR:
             LAYERS = ["F.Cu", "In5.Cu"]
+            LNAME = {"F.Cu": "F.Cu", "In5.Cu": "In5.Cu"}
 
             def __init__(self):
                 self.calls = []
@@ -866,6 +867,39 @@ class T(unittest.TestCase):
         self.assertIn("_install_port_aware_goals", src)
         self.assertIn("if mr.WALL_RECT:", src)
         self.assertIn("mr.snap_node = snap", src)
+
+    def test_C394_port_reachability_precheck_names_unreachable_endpoints(self):
+        """#K2-394 §二.1：**端口可达性预检** —— 每条失败边记录「端口是否可达」，不可达者**具名**。
+        桩对象 · 确定性（不跑迷宫、不碰板）。"""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_reroute_router_floor_v1", os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        w = importlib.util.module_from_spec(spec); spec.loader.exec_module(w)
+
+        class MR:
+            LAYERS = ["F.Cu", "In5.Cu"]
+            LNAME = {"F.Cu": "F.Cu", "In5.Cu": "In5.Cu"}
+
+            def __init__(self):
+                self.snap_node = lambda *a, **k: None
+
+            def solve_edge(self, ctx, find, compa, compb, net, la, pa, lb, pb, margin, cs):
+                if net == "OK" and compb == "PORT" and pb == (51.5, 37.5):
+                    return {"legs": [], "vias": []}, "ok"
+                return None, "no-free-start-node"
+
+        mr = MR()
+        ctx = type("C", (), {"tracks": [{"net": "OK", "layer": "In5.Cu", "x1": 51.5, "y1": 37.5,
+                                         "x2": 55.0, "y2": 37.5, "uuid": "u1"}]})()
+        find = lambda k: "PORT" if k == "t:u1" else "OTHER"          # noqa: E731
+        recs = w._install_port_aware_goals(mr, (22.95, 32.95, 51.50, 66.50))
+        mr.solve_edge(ctx, find, "A", "B", "OK", "F.Cu", (10.0, 10.0), "F.Cu", (20.0, 20.0), 3.0, 0.25)
+        self.assertTrue(recs[-1]["reachable_port"], "a reachable port must be recorded as such")
+        self.assertEqual(recs[-1]["ports_available"], 1)
+        mr.solve_edge(ctx, find, "A", "B", "NOPE", "F.Cu", (10.0, 10.0), "F.Cu", (20.0, 20.0), 3.0, 0.25)
+        self.assertFalse(recs[-1]["reachable_port"], "a net with no port must be NAMED unreachable")
+        self.assertEqual(recs[-1]["net"], "NOPE")
+        self.assertEqual(recs[-1]["ports_available"], 0)
 
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""

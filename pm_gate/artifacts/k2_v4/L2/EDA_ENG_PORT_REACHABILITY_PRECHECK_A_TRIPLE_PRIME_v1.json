@@ -1,0 +1,927 @@
+{
+ "artifact": "eda_eng_port_reachability_precheck",
+ "board": "/tmp/opencode/aprime_triple_final/s1_wiped.kicad_pcb",
+ "bound_rect": "22.95,32.95,51.50,66.50",
+ "n_failed_edges": 21,
+ "unreachable": [
+  {
+   "net": "NRST",
+   "why": "no-free-goal-node",
+   "pa": [
+    29.55,
+    49.9
+   ],
+   "la": "F.Cu",
+   "pb": [
+    31.837,
+    53.75
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      40.45,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-path-coarse(exhausted-54185)"
+    },
+    {
+     "port": [
+      51.5,
+      40.45,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    }
+   ]
+  },
+  {
+   "net": "PERSTA#",
+   "why": "no-free-start-node",
+   "pa": [
+    55.95,
+    38.9
+   ],
+   "la": "In5.Cu",
+   "pb": [
+    50.05,
+    37.0
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      37.5,
+      12
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      37.5,
+      12
+     ],
+     "dir": "start",
+     "why": "no-path-coarse(start-blocked)"
+    }
+   ]
+  },
+  {
+   "net": "GND",
+   "why": "no-free-start-node",
+   "pa": [
+    54.1,
+    63.95
+   ],
+   "la": "F.Cu",
+   "pb": [
+    48.05,
+    66.5
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      41.0,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      41.0,
+      0
+     ],
+     "dir": "start",
+     "why": "no-path-coarse(start-blocked)"
+    }
+   ]
+  },
+  {
+   "net": "MCU_VDD",
+   "why": "no-free-start-node",
+   "pa": [
+    31.837,
+    51.75
+   ],
+   "la": "F.Cu",
+   "pb": [
+    34.05,
+    58.5
+   ],
+   "lb": "F.Cu",
+   "ports_available": 3,
+   "ports_tried": 3,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      39.8,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      39.8,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      55.95,
+      66.5,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      55.95,
+      66.5,
+      0
+     ],
+     "dir": "start",
+     "why": "no-path-coarse(start-blocked)"
+    },
+    {
+     "port": [
+      56.725,
+      66.5,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      56.725,
+      66.5,
+      0
+     ],
+     "dir": "start",
+     "why": "no-path-coarse(start-blocked)"
+    }
+   ]
+  },
+  {
+   "net": "NRST",
+   "why": "no-free-start-node",
+   "pa": [
+    53.05,
+    41.0
+   ],
+   "la": "F.Cu",
+   "pb": [
+    31.837,
+    53.75
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      40.45,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      40.45,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    }
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "why": "no-free-start-node",
+   "pa": [
+    56.4,
+    44.0
+   ],
+   "la": "In5.Cu",
+   "pb": [
+    34.25,
+    56.163
+   ],
+   "lb": "F.Cu",
+   "ports_available": 4,
+   "ports_tried": 4,
+   "reachable_port": false,
+   "via": null,
+   "tries": [
+    {
+     "port": [
+      51.5,
+      36.9,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      36.9,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      38.75,
+      12
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      38.75,
+      12
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    }
+   ]
+  },
+  {
+   "net": "P3V3",
+   "why": "no-free-start-node",
+   "pa": [
+    90.65,
+    59.0
+   ],
+   "la": "F.Cu",
+   "pb": [
+    47.4,
+    44.0
+   ],
+   "lb": "F.Cu",
+   "ports_available": 0,
+   "ports_tried": 0,
+   "reachable_port": false,
+   "via": null,
+   "tries": []
+  }
+ ],
+ "reachable_via_port": [
+  {
+   "net": "P3V3_AUX",
+   "why": "no-free-start-node",
+   "pa": [
+    34.25,
+    56.163
+   ],
+   "la": "F.Cu",
+   "pb": [
+    29.65,
+    53.0
+   ],
+   "lb": "F.Cu",
+   "ports_available": 2,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    37.0,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "why": "no-free-start-node",
+   "pa": [
+    51.853,
+    61.553
+   ],
+   "la": "B.Cu",
+   "pb": [
+    55.05,
+    67.5
+   ],
+   "lb": "F.Cu",
+   "ports_available": 4,
+   "ports_tried": 2,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    50.4375,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      50.4375,
+      0
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "why": "no-free-goal-node",
+   "pa": [
+    51.725,
+    37.0
+   ],
+   "la": "F.Cu",
+   "pb": [
+    56.4,
+    44.0
+   ],
+   "lb": "In5.Cu",
+   "ports_available": 2,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    37.0,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      37.0,
+      0
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "MCU_VDD",
+   "why": "no-free-start-node",
+   "pa": [
+    53.95,
+    41.0
+   ],
+   "la": "F.Cu",
+   "pb": [
+    44.0,
+    40.05
+   ],
+   "lb": "F.Cu",
+   "ports_available": 3,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    39.8,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      39.8,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      39.8,
+      0
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C2_SDA",
+   "why": "no-free-start-node",
+   "pa": [
+    38.25,
+    56.163
+   ],
+   "la": "F.Cu",
+   "pb": [
+    46.625,
+    69.5
+   ],
+   "lb": "In2.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    38.25,
+    66.5,
+    6
+   ],
+   "tries": [
+    {
+     "port": [
+      38.25,
+      66.5,
+      6
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "MCU_VDD",
+   "why": "no-free-goal-node",
+   "pa": [
+    44.0,
+    40.05
+   ],
+   "la": "F.Cu",
+   "pb": [
+    31.837,
+    51.75
+   ],
+   "lb": "F.Cu",
+   "ports_available": 4,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    39.8,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      39.8,
+      0
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SCL",
+   "why": "no-free-start-node",
+   "pa": [
+    33.75,
+    47.837
+   ],
+   "la": "F.Cu",
+   "pb": [
+    46.95,
+    61.635
+   ],
+   "lb": "F.Cu",
+   "ports_available": 7,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    66.185,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      66.185,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      66.185,
+      0
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "PWR_BTN_ISO",
+   "why": "no-free-start-node",
+   "pa": [
+    53.95,
+    37.0
+   ],
+   "la": "F.Cu",
+   "pb": [
+    47.2,
+    55.1
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    42.8,
+    2
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      42.8,
+      2
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      42.8,
+      2
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C2_SDA",
+   "why": "no-free-goal-node",
+   "pa": [
+    26.67,
+    65.38
+   ],
+   "la": "F.Cu",
+   "pb": [
+    46.625,
+    69.5
+   ],
+   "lb": "In2.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    38.25,
+    66.5,
+    6
+   ],
+   "tries": [
+    {
+     "port": [
+      38.25,
+      66.5,
+      6
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "PWR_BTN_OUT",
+   "why": "no-free-start-node",
+   "pa": [
+    33.25,
+    56.163
+   ],
+   "la": "F.Cu",
+   "pb": [
+    53.125,
+    37.0
+   ],
+   "lb": "In2.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    38.7,
+    6
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      38.7,
+      6
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C2_SCL",
+   "why": "no-free-start-node",
+   "pa": [
+    37.75,
+    56.163
+   ],
+   "la": "F.Cu",
+   "pb": [
+    82.91,
+    51.19
+   ],
+   "lb": "F.Cu",
+   "ports_available": 1,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    56.6,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      56.6,
+      0
+     ],
+     "dir": "goal",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "why": "no-free-start-node",
+   "pa": [
+    135.0,
+    56.1
+   ],
+   "la": "F.Cu",
+   "pb": [
+    51.853,
+    61.553
+   ],
+   "lb": "B.Cu",
+   "ports_available": 6,
+   "ports_tried": 2,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    50.4375,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      50.4375,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      50.4375,
+      0
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SCL",
+   "why": "no-free-start-node",
+   "pa": [
+    132.65,
+    56.1
+   ],
+   "la": "F.Cu",
+   "pb": [
+    46.95,
+    61.635
+   ],
+   "lb": "F.Cu",
+   "ports_available": 8,
+   "ports_tried": 1,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    66.185,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      51.5,
+      66.185,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      66.185,
+      0
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "why": "no-free-start-node",
+   "pa": [
+    135.0,
+    56.1
+   ],
+   "la": "F.Cu",
+   "pb": [
+    33.25,
+    47.837
+   ],
+   "lb": "F.Cu",
+   "ports_available": 12,
+   "ports_tried": 2,
+   "reachable_port": true,
+   "via": [
+    51.5,
+    50.4375,
+    0
+   ],
+   "tries": [
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      50.545,
+      66.5,
+      0
+     ],
+     "dir": "start",
+     "why": "no-free-goal-node"
+    },
+    {
+     "port": [
+      51.5,
+      50.4375,
+      0
+     ],
+     "dir": "goal",
+     "why": "no-free-start-node"
+    },
+    {
+     "port": [
+      51.5,
+      50.4375,
+      0
+     ],
+     "dir": "start",
+     "why": "ok"
+    }
+   ]
+  }
+ ],
+ "rule": "#K2-394 sec.2.1: before routing, name every endpoint that cannot reach any same-net frame port (reachable => the port retry routes it; unreachable => named for the change-set / expansion decision).",
+ "ts": "2026-09-29",
+ "authority": "#K2-394 sec.2.1: the port-reachability PRE-CHECK (item 1 of EDGE IV).",
+ "source_of_truth": "a dry-run of the floor router on the A-triple-prime wiped board with the same parameters",
+ "reading": {
+  "failed_edges": 21,
+  "reachable_via_port": 14,
+  "unreachable": 7,
+  "conclusion": "item 1 works: 14 of the 21 endpoints DO reach a same-net frame port (the port edge routes them) and the 7 that do not are NAMED with their sub-reasons."
+ }
+}
