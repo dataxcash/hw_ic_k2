@@ -1278,6 +1278,20 @@ class T(unittest.TestCase):
         self.assertEqual(g["n_via"], 1, "exactly ONE layer change per lane (reference policy)")
         self.assertIsNone(m.lane_geometry(lanes[0], 1.2, None)["via"], "no layer change => no via")
 
+    def test_C419_yield_sequence_is_deterministic_and_ordered(self):
+        """#K2-419 sec.5 direction A: the deterministic YIELD SEQUENCE - per blocker, how far to move and in what
+        order (fewest-to-move first). Pure, deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_endpoint_reach_planner_v1", os.path.join("tools", "k2_endpoint_reach_planner_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        seg = ((0.0, 0.0), (1.0, 0.0))
+        blk = [{"net": "FAR", "bbox": [0.2, 0.6, 0.8, 0.65]}, {"net": "NEAR", "bbox": [0.2, 0.28, 0.8, 0.32]}]
+        ys = m.yield_sequence(seg, blk, 0.20)
+        self.assertEqual([y["net"] for y in ys], ["FAR", "NEAR"], "fewest-to-move yields FIRST")
+        self.assertLess(ys[0]["move_mm"], ys[1]["move_mm"])
+        self.assertEqual(m.yield_sequence(seg, blk, 0.20), ys, "deterministic")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

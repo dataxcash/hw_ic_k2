@@ -62,6 +62,24 @@ def _seg_gap(rect, a, b):
     return g
 
 
+def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
+    """**确定性 · 零搜索**：把一条道的堵点接成**让位序列** —— 每个堵点给出
+    `move_mm = (clearance + half_extent) − gap`（≥0，即"要挪多远"），按 `(move_mm, net)` 升序即为**让位先后**。
+    `blockers`=[{"net","bbox"}]，`lane_seg`=((x0,y0),(x1,y1))；`direction`=让位法向（±y）。"""
+    (ax, ay), (bx, by) = lane_seg
+    out = []
+    for o in blockers:
+        gap = _seg_gap(o["bbox"], (ax, ay), (bx, by))
+        need = clearance + min(o["bbox"][3] - o["bbox"][1], o["bbox"][2] - o["bbox"][0]) / 2.0
+        move = max(0.0, round(need - gap, 4))
+        out.append({"net": o["net"], "gap_mm": round(gap, 4), "need_mm": round(need, 4),
+                    "move_mm": move, "dir": ("+y" if direction >= 0 else "-y")})
+    out.sort(key=lambda z: (z["move_mm"], z["net"]))           # the FEWEST-to-move yields FIRST (deterministic)
+    for i, z in enumerate(out):
+        z["yield_order"] = i
+    return out
+
+
 def check(board, lanes, geoms, clearance=0.20):
     """板件净空机核（保守）。返回逐道具名堵点。"""
     import pcbnew as P
