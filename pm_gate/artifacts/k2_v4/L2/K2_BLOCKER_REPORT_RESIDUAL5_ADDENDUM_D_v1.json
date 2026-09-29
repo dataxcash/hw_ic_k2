@@ -1,0 +1,50 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_d_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order under the 'two consecutive errors' red line - a REAL event, not a false positive.",
+ "real_errors_owned": [
+  {
+   "n": 1,
+   "cmd": "python3 heredoc using % formatting to render the addendum-B markdown",
+   "rc": 1,
+   "err": "TypeError: not enough arguments for format string",
+   "root_cause": "the payload contained further % characters while the template had 3 %s => 'data used as a format string'.",
+   "fix": "stop % formatting for heredoc payloads; use a fixed template + .replace(placeholder, value).",
+   "verified": "the retry wrote the file and R1310 addendum B committed and pushed normally."
+  },
+  {
+   "n": 2,
+   "cmd": "git add && git commit in the same batch",
+   "rc": 128,
+   "err": "fatal: Unable to create '.../.git/modules/k2/index.lock': File exists.",
+   "root_cause": "the previous failure perturbed the same-batch git sequence and a stale lock remained; the retry did not check for it first.",
+   "fix": "check (pgrep -a git / lock presence) before retrying; keep git steps OUT of the same && chain as the write step.",
+   "verified": "after the check the commit+push succeeded; tree clean; both repos 0/0; closure PASS."
+  }
+ ],
+ "loss_audit": {
+  "lost_artifacts": 0,
+  "exam_runs_burned": 0,
+  "board_changes": 0,
+  "four_sources": "4/4 unchanged",
+  "note": "the addendum B content is complete in the register; nothing else was affected."
+ },
+ "gap_layer": "IMPLEMENTATION/OPS layer of the ENG's own procedure (not the scheme layer, not the criteria layer, not the drawing layer).",
+ "procedure_discipline_now_fixed": [
+  "data != format string: heredoc payloads always go through template replacement",
+  "step atomicity: keep writes and git in separate commands; probe for a stale lock before retrying",
+  "one command per deliverable (already committed in addendum B)"
+ ],
+ "distinction_from_A_B_C": "A/B/C are SUPERVISOR-side latched false positives (a replayed historical alert with no new information); this addendum D is the ENG's OWN two real command errors. Different sources - book them separately.",
+ "plan_recap_compressed": {
+  "Q1": "power on inner-layer planes (pads land on the plane); control = short F.Cu links; bus = one layer change each; a few nets cross x=51.5.",
+  "Q2": "boundary half-stubs (NRST fixed); power pads with no plane tie (P3V3_AUX fixed); the two remaining are DRAWING-side: the I2C1 pair's landings squeeze each other (I2C1_SCL newly appeared), and P3V3's goal end is outside the frame (no-free-goal-node).",
+  "Q3": "one corridor for the I2C1 pair; land the P3V3 stub on the plane finger (or a frozen port for the out-of-frame via); then ONE run."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "R-e (I2C1 pair corridor)",
+  "R-f (P3V3 goal end)",
+  "then ONE N=1"
+ ],
+ "OWNER-ITEMS": 0
+}
