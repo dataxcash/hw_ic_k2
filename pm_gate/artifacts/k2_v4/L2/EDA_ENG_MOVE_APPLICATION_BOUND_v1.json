@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_eda_eng_move_application_bound_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-400 sec.6 items 1-3 (the meter-fix window; zero exam runs).",
+ "item1_failclosed_asset": {
+  "implemented": "regen._verify_moves_applied() + a fail-closed guard in mech_probe_moves: any requested ref whose produced-board pad != l14 + delta => named `move_not_applied` + gen_exit 1 (refuse).",
+  "verified": "single-ref J13 probe => move_not_applied named (expected [31.75,50.54], got [31.75,46.54]); a ref that DOES move (U2) is unaffected.",
+  "regression": "test_C400_the_gate_never_silently_accepts_an_unapplied_move (independent verification; RED at R1102, GREEN now)"
+ },
+ "item2_affected_set_bounded": {
+  "method": "25 single-ref +4.0mm-down probes (one per member).",
+  "n_affected": 12,
+  "of": 25,
+  "silently_unapplied_connectors": [
+   "J11",
+   "J12",
+   "J13",
+   "J6",
+   "J9"
+  ],
+  "gen_refused": [
+   "C88",
+   "D2",
+   "E2",
+   "R1",
+   "R40",
+   "R41",
+   "U1"
+  ],
+  "applied_ok": 13,
+  "headline": "EVERY CONNECTOR's +4mm down move NEVER LANDED on the probed board => the A-double-prime / A-triple-prime / coherent-seed derivations' connector steps were VACUOUS, and their 'gate PASS' meant nothing. U1's single +4mm down step is a REAL gen refusal (not an application artifact) => U1's 'no step' is (at least for this step) real."
+ },
+ "item3_real_placement_source": {
+  "finding": "gen_v5 documents L2/PLACEMENT_SOLUTION_v1.json as the canonical single source, and edit_placement_at edits exactly that file in the shadow; yet 5 connectors' edits do not reach the produced board => the ref->entry lookup used by edit_placement_at ('refs'/'components'/'placements') and the generator's reader disagree for those refs.",
+  "status": "REAL SOURCE IDENTIFIED AT THE FILE LEVEL; the exact per-ref key divergence is the remaining one-step fix (or a named 'unmovable via this path' declaration)."
+ },
+ "per_K2_400": {
+  "anti_idling": "item 1 asset + regression DELIVERED => the window's hard precondition is met.",
+  "next": "read-only re-verification on the FIXED meter is now possible (which steps actually land; whether U1 truly has no legal step)."
+ },
+ "OWNER-ITEMS": 0
+}

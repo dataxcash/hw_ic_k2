@@ -969,6 +969,37 @@ class T(unittest.TestCase):
         self.assertIn('p.add_argument("--scenario"', cli)
         self.assertIn('a.scenario or os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json")', cli)
 
+    def test_C400_the_gate_never_silently_accepts_an_unapplied_move(self):
+        """#K2-400 §六.①（量具修复 · 关账判据）：量具**不得**对「位移未落板」的板出读数 ——
+        要么位移**真落板**，要么**具名 fail-closed**（`move_not_applied`）。
+        RED 基线 ＝ R1102（单件探针 J13 未动却返回"干净"读数）；GREEN ＝ 具名拦下。"""
+        try:
+            import pcbnew  # noqa: F401
+        except Exception:                                              # noqa: BLE001
+            self.skipTest("pcbnew unavailable")
+        import pcbnew as P, tempfile
+        w = tempfile.mkdtemp(prefix="k2c400_")
+        base = regen.mech_probe_moves([], w, "base", return_board=True).get("board")
+        mv = regen.mech_probe_moves([("J13", 0.0, 4.0)], w, "j13", return_board=True)
+
+        def j13y(bp):
+            if not bp:
+                return None
+            b = P.LoadBoard(bp)
+            for fp in b.GetFootprints():
+                if fp.GetReference() != "J13":
+                    continue
+                for pd in fp.Pads():
+                    if pd.GetNumber() == "2":
+                        return P.ToMM(pd.GetPosition().y)
+            return None
+        y0, y1 = j13y(base), j13y(mv.get("board"))
+        landed = (y0 is not None and y1 is not None and abs(y1 - (y0 + 4.0)) < 1e-3)
+        if not landed:
+            na = mv.get("move_not_applied")
+            self.assertTrue(na, "an UNLANDED requested move must be NAMED (move_not_applied), never silently accepted")
+            self.assertIn("J13", [x["ref"] for x in na])
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

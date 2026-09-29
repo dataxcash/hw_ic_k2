@@ -276,6 +276,40 @@ def mech_probe(refs, delta_mm, work, tag):
     return {"gen_exit": rc, "mechanical_violations": bad}
 
 
+def _verify_moves_applied(board_path, moves, tol=1e-3):
+    """**#K2-400 §六.①（量具修复）**：逐 ref 核「产出板上该 ref 的焊盘坐标 == l14 同焊盘 + Δ」。
+    基座机证（R1098）：闸基线 GEN 板与 l14 在所有成员焊盘上一致 ⇒ 以 **l14+Δ** 为基准可靠。
+    返回**未落板**清单（具名）；基准/产出不可读时返回空（不误报）。"""
+    import pcbnew as P
+
+    def pads(bp):
+        b = P.LoadBoard(bp); out = {}
+        for fp in b.GetFootprints():
+            for pd in fp.Pads():
+                q = pd.GetPosition()
+                out.setdefault(fp.GetReference(), {})[pd.GetNumber()] = (P.ToMM(q.x), P.ToMM(q.y))
+        return out
+
+    try:
+        got = pads(board_path)
+        ref = pads(os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb"))
+    except Exception:                                              # noqa: BLE001
+        return []
+    bad = []
+    for (r, dx, dy) in moves:
+        g, l = got.get(r), ref.get(r)
+        if not g or not l:
+            continue
+        common = sorted(set(g) & set(l))
+        if not common:
+            continue
+        n = common[0]
+        if abs(g[n][0] - (l[n][0] + dx)) > tol or abs(g[n][1] - (l[n][1] + dy)) > tol:
+            bad.append({"ref": r, "pad": n, "expected": [round(l[n][0] + dx, 4), round(l[n][1] + dy, 4)],
+                        "got": [round(g[n][0], 4), round(g[n][1], 4)]})
+    return bad
+
+
 def mech_probe_moves(moves, work, tag, return_board=False):
     """机械探针（gen -> crtyd -> DRC）**逐件位移**版（#K2-372 §二.1：目标相对位**逐件**由闸出）。
     moves = [(ref, dx, dy), ...]；返回 {gen_exit, mechanical_violations, [board]}。"""
@@ -323,6 +357,14 @@ def mech_probe_moves(moves, work, tag, return_board=False):
     if dam:
         bad["solder_mask_bridge"] = bad.get("solder_mask_bridge", 0) + len(dam)
     bad["mask_dam_mm"] = clear                                     # 记录所用在册规则值（可核查）
+    # #K2-400 §六.①（量具修复）：**逐 ref 核位移是否真落板** —— 未落板即具名 fail-closed，
+    # 禁止把"空/未落板"读数当"干净"（R1102 缺陷：J13 未动却出"干净"读数）。
+    _not_applied = _verify_moves_applied(pk, moves)
+    if _not_applied:
+        return {"gen_exit": 1, "mechanical_violations": {"move_not_applied": len(_not_applied)},
+                "gen_failed": True, "move_not_applied": _not_applied,
+                "rule": "#K2-400 sec.6.1: a requested move absent from the produced board makes any gate reading vacuous - "
+                        "FAIL-CLOSED, named per ref."}
     out = {"gen_exit": rc, "mechanical_violations": bad}
     if return_board:
         out["board"] = gpcb
