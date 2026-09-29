@@ -1,0 +1,81 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_re_rf_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-441 sec.2.4: the ONE authorised N=1 after R-e/R-f land.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2t"
+ },
+ "nine_rows": {
+  "C1": 3,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "C3_pass": true,
+  "C4_pass": true,
+  "C5_pass": true,
+  "rows_present": 9
+ },
+ "means_applied": {
+  "port_plane_stitch": {
+   "n_added": 9,
+   "n_refused": 0
+  },
+  "channels_computed": {
+   "n_nets": 19
+  }
+ },
+ "RESULT_HONEST": "C1 3 -> 3 : the means made NO movement this window (R1308 was 4 -> 3; this window is flat). Reported as a DECISIVE NEGATIVE RESULT, not as progress.",
+ "per_block_named_attribution": [
+  {
+   "block": "BUS",
+   "net": "I2C1_SCL",
+   "drc_items": [
+    "F.Cu 上 U1 的焊盘 47 [I2C1_SCL]",
+    "走线 [I2C1_SCL] (F.Cu), 长度: 0.7071 mm"
+   ],
+   "maze_reason": "no-path-coarse(exhausted-1)",
+   "same_as_R1308": true,
+   "reading": "R-e gave I2C1_SCL its own landing at its dR crossing (51.5,66.185) and the maze STILL exhausts its coarse search (no-path-coarse(exhausted-1)) => the pair's problem is NOT the landing: the drawing under-specified the in-frame LANE (sec.16.3 asks for layer/slot/via/corridor per line - a landing alone is not a lane)."
+  },
+  {
+   "block": "BUS",
+   "net": "I2C1_SDA",
+   "drc_items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.1414 mm"
+   ],
+   "maze_reason": "(added in pass 2; a further pair remains)",
+   "same_as_R1308": true,
+   "reading": "the pair's other slot; same class."
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3",
+   "drc_items": [
+    "走线 [P3V3] (F.Cu), 长度: 0.1000 mm",
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]"
+   ],
+   "maze_reason": "no-free-goal-node",
+   "same_as_R1308": true,
+   "reading": "R-f as ruled is satisfied by measurement (C84.1 is in a single cluster that INCLUDES the In4 P3V3 finger zone), so the stub is not the break: the finger island does not merge with the main P3V3 plane that carries the goal. no-free-GOAL-node."
+  }
+ ],
+ "why_flat": [
+  "R-e's landing did not help I2C1_SCL => the missing landing was NOT the cause; the in-frame LANE is unspecified.",
+  "R-f as ruled is already satisfied by measurement => the P3V3 break is the PLANE-ISLAND MERGE, unreachable inside dR."
+ ],
+ "next_requires_a_drawing_decision": [
+  "R-g: merge the In4 P3V3 finger island with the main P3V3 plane (zone priority/outline) - a ZONE change => sec.16.2 scheme layer.",
+  "R-h: line 4 must be drawn as a full deterministic LANE (per-net polyline with layer plan, slots, via pair) inside the pair corridor, not just landings - exactly what sec.16.3 'per-line determinate' asks."
+ ],
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
