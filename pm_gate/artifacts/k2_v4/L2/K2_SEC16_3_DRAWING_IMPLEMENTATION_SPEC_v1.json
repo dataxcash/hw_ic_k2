@@ -1428,6 +1428,22 @@
    ],
    "width": 0.25,
    "why": "determined tie from D2.1 to the frozen bridge line (both ends frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.15,
+    62.905
+   ],
+   "b": [
+    45.95,
+    62.905
+   ],
+   "width": 0.2,
+   "why": "R1376 determined fix: reach the E2.5 PAD (45.95,62.905) from the B.Cu ladder's west end (48.15,62.905) - same y, 2.2mm; this makes the cluster PAD-ANCHORED so the chain's isolated-copper disposal cannot remove it (the previous joint was disposed for lacking a pad)."
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
@@ -1609,6 +1625,7 @@
    "why": "the ladder and the F.Cu stub are BOTH pad-less islands; my lane joined them into a bigger island that still contains NO pad => the chain's isolated-copper disposal removed it. Anchor rule confirmed again.",
    "DETERMINED_FIX": "extend the B.Cu ladder's WEST end (48.15,62.905) to the E2.5 PAD at (45.95,62.905) - same y, 2.2mm apart => one B.Cu segment reaches a PAD => pad-anchored => it cannot be disposed."
   },
-  "rule": "M-ENG-ORPHAN-BRIDGE-DISPOSAL (confirmed, 2nd instance): every added drawing piece's cluster MUST contain a pad."
+  "rule": "M-ENG-ORPHAN-BRIDGE-DISPOSAL (confirmed, 2nd instance): every added drawing piece's cluster MUST contain a pad.",
+  "SDA_fix_landed": "one B.Cu segment (48.15,62.905)->(45.95,62.905) reaching the E2.5 pad"
  }
 }
