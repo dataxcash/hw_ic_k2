@@ -1,0 +1,20 @@
+{
+ "artifact": "k2_channel_to_chain_dryrun_v3",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3.2: the channeled dry run after applying the R1242 fix direction (deterministic widen).",
+ "fix": "the channel is widened by a FIXED margin (mr._CH_MARGIN=0.5) so the net's reachable own-copper cell is not cut off by the wall; deterministic, not a tuned search.",
+ "reading": {
+  "added": 3,
+  "blocked": 2,
+  "segs": 71,
+  "vias": 5,
+  "len": 28.1391,
+  "reasons": {
+   "no-free-start-node": 1,
+   "no-path-coarse(exhausted-1)": 1
+  }
+ },
+ "trend": "channeled maze: 2/5 (R1240) -> 3/5 (R1244) with the widen. Remaining: no-free-start-node 1 + exhausted 1.",
+ "next": "element-3 per-line geometry; then a ruled N=1 application (no self-run).",
+ "OWNER-ITEMS": 0
+}
