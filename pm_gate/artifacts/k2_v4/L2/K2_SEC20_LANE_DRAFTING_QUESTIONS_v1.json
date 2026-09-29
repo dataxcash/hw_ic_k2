@@ -1,0 +1,23 @@
+{
+ "artifact": "k2_sec20_lane_drafting_questions_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-443 sec.2.3 (§20 hard trigger): before reporting any 'infeasible', answer the product-first three questions.",
+ "subject": "the R-h lane problem: getting a determined in-frame lane for the I2C1 pair (avoiding the E2/U1 pad field).",
+ "q1_same_class_product": {
+  "answer": "YES - in-register.",
+  "a_same_chip": "TI DS320PR1601 EVM (REF-CASE-LIBRARY sec.A1: datasheet SNLS683 + programming guide SNLA425, both machine-fetched HTTP 200; local copies /tmp/opencode/sup746_anchor/) and the same-chip open dual-card (sec.A: PEX88096 AIC + GPU baseboard).",
+  "b_class": "a retimer/redriver card's MCU-side housekeeping fanout (I2C pair + reset) - REF-CASE-LIBRARY sec.A1 SNLA425 sec.1.1 (the vendor's recommended grouped channel fanout) and sec.C (Opsero OP103 open schematic)."
+ },
+ "q2_copyable_products": [
+  "REF-CASE-LIBRARY sec.A1(2) SNLA425 sec.1.1 - the vendor's GROUPED fanout policy (group the pair, long runs straight, ONE layer change for the group).",
+  "REF-CASE-LIBRARY sec.A1 - the in-register layout figures for the EVM (REF-DS320PR1601EVM-Fig4-1/4-2, S273/S301_layout-*.png) as the drawing pattern.",
+  "in-repo: tools/k2_endpoint_reach_planner_v1.py (deterministic order-preserving lanes) and the in-register router's own drafted route (R1326/R1328) which IS the copyable lane."
+ ],
+ "q3_difference_list": [
+  "ours: the region was WIPED and must be re-routed inside a bounded frame with the outside copper frozen; the EVM's is a fresh layout.",
+  "ours: the pair must reach U1 (a big MCU) through a dense pad field; the copied paradigm (one group corridor, one shared layer change) DIRECTLY applies - the missing piece was the pad-avoiding path, which is exactly what 'draft once then freeze' supplies.",
+  "NOT copyable: coordinate equalities (prohibited by #K2-283 sec.2.3); copy the STRUCTURE (group -> corridor -> chip), not the numbers."
+ ],
+ "effect": "the copied paradigm is what R1326 already did (draft once, freeze); this answers the sec.20 gate and closes the 'self-invented algorithm' objection.",
+ "OWNER-ITEMS": 0
+}

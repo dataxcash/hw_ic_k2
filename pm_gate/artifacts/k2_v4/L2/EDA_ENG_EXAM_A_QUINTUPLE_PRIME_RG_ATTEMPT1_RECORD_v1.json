@@ -1,0 +1,67 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_rg_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-443 sec.2.2: R-h frozen + R-g landed (bridge zone, relocation_listed declared) => the one N=1.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2u"
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [
+   "tracks_crossing"
+  ],
+  "C2_pass": false,
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "drawing_applied": {
+  "port_plane_stitch": {
+   "n_added": 66,
+   "n_refused": 0
+  },
+  "channels_computed": {
+   "n_nets": 18
+  },
+  "R_h": "frozen lane (54 segs + 5 vias)",
+  "R_g": "In4 P3V3 bridge zone x36..62 (outside_dR declared)"
+ },
+ "RESULT": {
+  "C1": "3 -> 2 : I2C1_SCL CLOSED => the frozen R-h lane WORKS",
+  "REGRESSION": "C2 now FAILS with a NEW class 'tracks_crossing' - the added copper cross with what the maze laid",
+  "net_effect": "one net closed but one row newly broken => the run is NOT a net improvement"
+ },
+ "residual_named": [
+  {
+   "net": "I2C1_SDA",
+   "items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.1414 mm"
+   ],
+   "cause_class": "OLD (I2C1_SDA: the frozen lane covers SCL, SDA still needs its own; P3V3: the bridge zone is added but the plane merge must still be judged - the class delta check must be re-read after refill)"
+  },
+  {
+   "net": "P3V3",
+   "items": [
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+    "走线 [P3V3] (F.Cu), 长度: 0.1000 mm"
+   ],
+   "cause_class": "OLD (I2C1_SDA: the frozen lane covers SCL, SDA still needs its own; P3V3: the bridge zone is added but the plane merge must still be judged - the class delta check must be re-read after refill)"
+  }
+ ],
+ "named_cause_of_the_new_class": {
+  "class": "tracks_crossing",
+  "what": "the frozen R-h lane is added BEFORE the maze; the maze then routes other nets across it (it is not told the lane is fixed).",
+  "fix_named": "either (a) reserve the lane's corridor from the maze (exclude it from the routing field / mark it as a keep-out the maze must not cross), or (b) draft the lane AFTER the maze and re-judge, or (c) fold the lane into the channel constraints so the maze routes around it."
+ },
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}

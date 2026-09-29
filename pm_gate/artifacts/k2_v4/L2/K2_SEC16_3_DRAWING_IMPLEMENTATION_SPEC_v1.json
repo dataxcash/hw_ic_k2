@@ -976,6 +976,20 @@
     "In4.Cu"
    ],
    "why": "R-f (as ruled: the stub lands on the plane finger - MEASURED SATISFIED): C84.1 is now in a single cluster of 88 P3V3 items that INCLUDES one ZONE = the In4 P3V3 finger (prio 100, bbox x 34.27-58.42, y 34.02-40.25, filled at (42.8,39.0)). The remaining break is NOT the stub: the finger island does not merge with the MAIN P3V3 plane (prio 0, bbox x>=57.95, which carries the out-of-frame blind via at (81,60.6)) - KiCad connectivity confirms they are separate items."
+  },
+  {
+   "n": "R-g",
+   "kind": "zone",
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "rect": [
+    36.0,
+    38.4,
+    62.0,
+    40.2
+   ],
+   "priority": 0,
+   "why": "R-g (mechanism B, chosen by ENG under #K2-442 sec.2.6 / #K2-443 sec.2.2): the In4 P3V3 finger (prio 100, x 34.27-58.42) and the main P3V3 plane (prio 0, x>=57.95) are SEPARATE fill items; this bridge zone spans both with the main plane's priority so the fills merge. OUTSIDE-dR DECLARATION (required by #K2-443 sec.2.2): the bridge reaches x=62.0, i.e. it alters copper OUTSIDE dR (the criteria stay frozen, so the legacy C6 predicate cannot see it)."
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
@@ -1052,5 +1066,15 @@
    }
   },
   "note": "line 4's slot stubs were replaced by the drafted route (the draft starts from those endpoints)."
+ },
+ "R_g_buildability": {
+  "value": "relocation_listed",
+  "moved": [
+   "adds an In4 P3V3 zone bridging x 36.0..62.0 (the part x>51.5 is outside dR)"
+  ],
+  "why": "the merge region is outside dR; no in-frame mechanism exists (proved in R1318/R1322)",
+  "authority": "#K2-443 sec.2.2 (explicit relocation_listed declaration is the required and sufficient means)",
+  "conservation": "the bridge adds plane AREA on the SAME net (P3V3/In4): capacity grows, demand unchanged => capacity >= demand",
+  "legacy_C6": "expected diff=0 (the predicate reads segments+vias only); the zone delta is reported by the ENG's own zone-aware check"
  }
 }

@@ -44,6 +44,10 @@ def validate(spec, rect):
         if L.get("kind") == "via":
             if not _in([float(v) for v in L["at"]]):
                 out.append(dict(it, why="via outside dR", at=L["at"]))
+        elif L.get("kind") == "zone":
+            r = [float(v) for v in L["rect"]]
+            if not (r[0] < r[2] and r[1] < r[3]):
+                out.append(dict(it, why="degenerate zone rect", at=L["rect"]))
         elif L.get("kind") == "lane":
             for pt in (L.get("poly") or []):
                 if not _in([float(v) for v in pt]):
@@ -93,6 +97,21 @@ def stitch(board, rect, spec, out):
             vi.SetLayerPair(layers[la], layers[lb]); vi.SetNetCode(code)
             b.Add(vi)
             report["added"].append(dict(item, at=at, layers=L["layers"], via_type=vt, size=float(L.get("size", 0.45))))
+        elif kind == "zone":
+            layer = L["layer"]
+            if layer not in layers:
+                report["refused"].append(dict(item, why="unknown layer", layer=layer))
+                continue
+            r4 = [float(v) for v in L["rect"]]
+            z = P.ZONE(b); z.SetNetCode(code); z.SetLayer(layers[layer])
+            o = z.Outline(); o.NewOutline()
+            for (x, y) in ((r4[0], r4[1]), (r4[2], r4[1]), (r4[2], r4[3]), (r4[0], r4[3])):
+                o.Append(P.VECTOR2I(P.FromMM(x), P.FromMM(y)))
+            z.SetAssignedPriority(int(L.get("priority", 0)))
+            b.Add(z)
+            inside = (r4[0] >= x0 - 1e-6 and r4[2] <= x1 + 1e-6 and r4[1] >= y0 - 1e-6 and r4[3] <= y1 + 1e-6)
+            report["added"].append(dict(item, layer=layer, rect=r4, priority=int(L.get("priority", 0)),
+                                        outside_dR=(not inside)))
         elif kind == "lane":
             layer = L["layer"]
             if layer not in layers:
