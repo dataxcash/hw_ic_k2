@@ -1,0 +1,16 @@
+{
+ "artifact": "k2_joint_alloc_formulation_diagnosis_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-450 sec.2.4 (the adopted means) + R1402's self-disclosure that the means did not execute. Read-only diagnosis; zero exam runs.",
+ "observed": "R1402's chain recorded channels_computed n_nets=18 while the joint builder should emit the in-frame net count (~14) => the fallback ran.",
+ "measured": "on the same board's DRC pairs: channels_from_pairs() emitted 5 nets with 13 UNSAT (GPIO_LED, I2C1_SDA, I2C2_SDA, MCU_VDD, NRST, P3V3, ...).",
+ "root_cause": "MY FORMULATION IS INFEAISBLE BY CONSTRUCTION: packing whole NETS into single y-bands needs sum(max(net y-extent, pitch)+pitch) = 239.92 mm, but the corridor's y-span is only 45.05 mm => 13 of 18 nets cannot be placed and the builder correctly returned them as unsatisfied (hence the fallback).",
+ "correct_formulation": "the joint allocation must be PER-CORRIDOR / PER-SEGMENT: subdivide the frame into corridors and, for each corridor, pack only the nets that CROSS it (a net crosses a corridor over a short span, so its slot there is short). Packing a whole net's global extent as one band can never fit and is not what the finished-product paradigm (grouped fan-out / shared corridor) does either.",
+ "secondary_defect_owned": "the fallback is SILENT in the chain: channels_for_maze falls back when the joint result is empty or leaves nets unsatisfied, and the chain records only channels_computed{n_nets}. The chain must record source=joint|fallback and NAME the unsatisfied nets, so a non-executed means can never be mistaken for a tested one (the same class of defect as the R1286 'channel never wired' incident).",
+ "next": [
+  "(a) make the joint path's non-execution LOUD (record source + unsat names in the chain);",
+  "(b) re-formulate as per-corridor/per-segment slot packing and verify it emits ALL in-frame nets with zero unsat;",
+  "(c) then the authorised N=1 (hard gate C1<2)."
+ ],
+ "OWNER-ITEMS": 0
+}
