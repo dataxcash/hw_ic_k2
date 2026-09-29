@@ -1,0 +1,27 @@
+{
+ "artifact": "k2_sec16_3_joint_allocation_plan_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-450 sec.2.5: before the authorised N=1 the ENG must file the sec.16.3 four-element artifact and answer the sec.13 sentence.",
+ "element1_one_line_death_cause": "the engine allocates channels PER NET IN SEQUENCE, so each net takes its own span and the spans overlap; whoever is served last finds no slot and is starved - which is exactly the observed residual rotation (P3V3 closed -> PWR_BTN_OUT broke -> I2C2_SCL broke).",
+ "element2_proven_facts": [
+  "R1394 conservation count: frame 1286.2 mm^2, pitch 0.40 mm, 4 signal layers => CAPACITY = 12862 track-mm (geometric upper bound) vs DEMAND = 257.3 track-mm (sum of 14 in-frame nets' MST lower bounds) => a ~50x margin => the frame is NOT area-limited.",
+  "Therefore R1392's (B) infeasibility certificate is VOID (refuted by #K2-450 sec.2.2) and (A) feasibility holds at both levels: the drawing applies 98/0 with a clean DRC, and the demand is affordable.",
+  "Residual rotation over three runs: R1362 {I2C1_SDA, P3V3} -> R1372 {I2C1_SDA, PWR_BTN_OUT} -> R1392 {I2C1_SDA, I2C2_SCL}; each targeted fix closed its net (P3V3 by the bridge+D2 tie; PWR_BTN_OUT by freeing its dR port) and another net broke => the allocator, not the geometry, is binding.",
+  "The drawing is complete and anchored: 98 pieces, anchor audit ok=True padless=0, stitched-field DRC {unconnected_items: 343} with zero shorts/crossings/clearance.",
+  "The kernel of the new means exists and is regression-proven (test_C450): sequential() overlaps and starves; joint() packs disjointly and serves all; a too-small span is named."
+ ],
+ "element3_corrected_complete_plan": {
+  "status": "DRAWING determinate; the JOINT ALLOCATION is specified but NOT YET WIRED (honest: wiring is the remaining generator change).",
+  "per_line_drawing": "the 98 frozen pieces already on the board: NRST dR port; P3V3_AUX plane ties (C90.1, B.Cu fragment incl. the R1.2 pad anchor, In5 fragment); I2C1 group corridor (SCL lane; SDA lane + joint + the E2.5 pad-anchored segment); P3V3 (anchored In4 bridge at y=35.5, declared outside_dR) + the D2.1 tie. Each piece is a frozen constant (layer + endpoints), i.e. determinate.",
+  "joint_allocation_to_be_wired": "replace the maze's per-net sequential assignment with ONE pass that (a) collects the in-frame nets' required spans along the corridor axis, (b) packs them disjointly with the pitch (0.20 width + 0.20 clearance = 0.40 mm) via k2_joint_channel_alloc_v1.joint(), (c) hands the whole channel map to the maze in ONE batch (the maze then routes INSIDE its own corridor, and cannot take a slot that another net holds).",
+  "per_corridor_conservation": "CAPACITY per corridor axis = (corridor length / pitch); DEMAND = the number of nets that must cross it. For the frame as a whole: capacity 12862 mm vs demand 257 mm (50x). Per-corridor numbers must be read from the actual channel map once wired (NOT domain-level padding).",
+  "buildability_answer_sec13": "Can a construction crew wire straight from this drawing? YES for the drawing itself - every piece is a frozen constant and the anchor audit is green. The OUTSTANDING question is not 'can it be drawn' but 'is the allocation computed jointly': with the joint allocation wired, each net owns a corridor and the crew (the maze) merely follows it; without it, the maze competes and starves someone.",
+  "explicit_honesty": "element 3 is therefore NOT yet fully closed: the drawing half is determinate; the allocation half is specified + kernel-proven but NOT wired."
+ },
+ "element4_buildability": {
+  "value": "relocation_listed",
+  "detail": "the only outside-dR item is the P3V3 bridge (declared, with conservation): same-net plane addition => capacity grows, demand unchanged. Everything else is no_move."
+ },
+ "blocking_item": "WIRING the joint allocator into the chain (a generator change) remains. Per #K2-450 sec.2.5 the N=1 must not be run before it, so the run stays deferred.",
+ "OWNER-ITEMS": 0
+}
