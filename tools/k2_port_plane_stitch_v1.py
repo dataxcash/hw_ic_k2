@@ -41,6 +41,8 @@ def validate(spec, rect):
     out = []
     for i, L in enumerate(spec.get("lines") or []):
         it = {"line": L.get("n", i + 1), "kind": L.get("kind"), "net": L.get("net")}
+        if L.get("allow_outside_dR"):
+            continue                                                   # #K2-442 sec.2.7: an EXPLICIT declaration may cross dR
         if L.get("kind") == "via":
             if not _in([float(v) for v in L["at"]]):
                 out.append(dict(it, why="via outside dR", at=L["at"]))
@@ -134,18 +136,24 @@ def stitch(board, rect, spec, out):
                 continue
             a = [float(v) for v in (L["near"] if kind == "port_stub" else L["a"])]
             c = [float(v) for v in (L["far"] if kind == "port_stub" else L["b"])]
-            for p in (a, c):
-                if not (x0 - 1e-6 <= p[0] <= x1 + 1e-6 and y0 - 1e-6 <= p[1] <= y1 + 1e-6):
-                    report["refused"].append(dict(item, why="endpoint outside dR", at=p))
-                    break
-            else:
+            if not L.get("allow_outside_dR"):                          # #K2-442 sec.2.7 explicit declaration
+                for p in (a, c):
+                    if not (x0 - 1e-6 <= p[0] <= x1 + 1e-6 and y0 - 1e-6 <= p[1] <= y1 + 1e-6):
+                        report["refused"].append(dict(item, why="endpoint outside dR", at=p))
+                        break
+                else:
+                    pass
+                if report["refused"] and report["refused"][-1].get("line") == item.get("line"):
+                    continue
+            if True:
                 w = float(L.get("width") or _default_width(b, net, layer, P))
                 tr = P.PCB_TRACK(b)
                 tr.SetStart(P.VECTOR2I(P.FromMM(a[0]), P.FromMM(a[1])))
                 tr.SetEnd(P.VECTOR2I(P.FromMM(c[0]), P.FromMM(c[1])))
                 tr.SetWidth(P.FromMM(w)); tr.SetLayer(layers[layer]); tr.SetNetCode(code)
                 b.Add(tr)
-                report["added"].append(dict(item, a=a, b=c, layer=layer, width_mm=w))
+                outside = not (x0 - 1e-6 <= a[0] <= x1 + 1e-6 and x0 - 1e-6 <= c[0] <= x1 + 1e-6)
+                report["added"].append(dict(item, a=a, b=c, layer=layer, width_mm=w, outside_dR=outside))
     P.SaveBoard(out, b)
     report["n_added"] = len(report["added"]); report["n_refused"] = len(report["refused"])
     return report

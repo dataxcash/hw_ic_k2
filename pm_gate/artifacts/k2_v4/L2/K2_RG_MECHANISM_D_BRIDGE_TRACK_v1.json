@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_rg_mechanism_d_bridge_track_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-442 sec.2.6 (the R-g mechanism is the ENG's to choose) + #K2-443 sec.2.2 (an outside-copper change is legal when explicitly declared).",
+ "why_B_failed": "read on the R1332 judged board: the bridge ZONE is not on the final board - the chain's isolated-copper disposal removed it (after refill its fill touches no pad => orphan island).",
+ "mechanism_D": {
+  "what": "replace the bridge zone with an In4 P3V3 TRACK (42.8,39.0) -> (58.5,39.0), width 0.25",
+  "why_it_cannot_be_disposed": "it starts at the EXISTING F.Cu-In4 via at (42.8,39.0), which already ties to C84.1's pad cluster => the track is anchored, not an orphan",
+  "why_it_bridges": "its far end (58.5) lies inside the main P3V3 plane (x>=57.95) on the SAME layer and net, so the filler welds them => the finger island and the main plane become one",
+  "corridor_measurement": "In4 y=39.0, x 42.8..58.5: ZERO foreign tracks, ZERO foreign pads (only zones, which will clear around it)"
+ },
+ "declaration": {
+  "buildability": "relocation_listed",
+  "moved": [
+   "an In4 P3V3 track whose x>51.5 part lies OUTSIDE dR",
+   "the In4 MCU_VDD / P3V3_AUX fills clear around it (in- and out-of-frame)"
+  ],
+  "explicitly_recorded": "the stitcher now honours allow_outside_dR and RECORDS outside_dR on the added item (no silent crossing)"
+ },
+ "verification": {
+  "apply": "67 added / 0 refused (the bridge is the 67th)",
+  "outside_dR recorded": "P3V3 @ (42.8,39.0)",
+  "C6_legacy": "diff = 1, equal = False => the legacy predicate NOW SEES the added outside segment (declared, not hidden)",
+  "C6_zone_aware": "the chain now uses the zone-aware row (#K2-444 sec.2.4, R1336)"
+ },
+ "note_for_the_next_run": "with the zone-aware C6 row in place AND this declared outside-copper change, the C6 row is expected to FAIL by design; that is the working of the sec.2.7 'declare, do not hide' policy, not a surprise.",
+ "OWNER-ITEMS": 0
+}

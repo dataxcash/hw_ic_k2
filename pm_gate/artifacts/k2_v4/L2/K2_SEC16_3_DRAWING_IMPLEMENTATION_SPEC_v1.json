@@ -994,17 +994,20 @@
   },
   {
    "n": "R-g",
-   "kind": "zone",
+   "kind": "track",
    "net": "P3V3",
    "layer": "In4.Cu",
-   "rect": [
-    36.0,
-    38.4,
-    62.0,
-    40.2
+   "a": [
+    42.8,
+    39.0
    ],
-   "priority": 0,
-   "why": "R-g (mechanism B, chosen by ENG under #K2-442 sec.2.6 / #K2-443 sec.2.2): the In4 P3V3 finger (prio 100, x 34.27-58.42) and the main P3V3 plane (prio 0, x>=57.95) are SEPARATE fill items; this bridge zone spans both with the main plane's priority so the fills merge. OUTSIDE-dR DECLARATION (required by #K2-443 sec.2.2): the bridge reaches x=62.0, i.e. it alters copper OUTSIDE dR (the criteria stay frozen, so the legacy C6 predicate cannot see it)."
+   "b": [
+    58.5,
+    39.0
+   ],
+   "width": 0.25,
+   "why": "R-g mechanism D (ENG-chosen, #K2-442 sec.2.6): the bridge-ZONE (mechanism B) was REMOVED by the chain's isolated-copper disposal (read on the R1332 judged board: the zone list holds only the originals). An In4 P3V3 TRACK instead - it is anchored (it starts at the existing F.Cu-In4 via at (42.8,39.0), which ties to C84.1) so it cannot be an orphan, and it bridges the finger island to the main plane at x>=57.95 galvanically. Measured: the In4 corridor y=39.0, x 42.8..58.5 has ZERO foreign tracks and ZERO foreign pads.",
+   "allow_outside_dR": true
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
@@ -1086,11 +1089,12 @@
  "R_g_buildability": {
   "value": "relocation_listed",
   "moved": [
-   "adds an In4 P3V3 zone bridging x 36.0..62.0 (the part x>51.5 is outside dR)"
+   "adds an In4 P3V3 track x 42.8..58.5 (the part x>51.5 is outside dR); it also clears the In4 MCU_VDD/P3V3_AUX fills around it"
   ],
-  "why": "the merge region is outside dR; no in-frame mechanism exists (proved in R1318/R1322)",
-  "authority": "#K2-443 sec.2.2 (explicit relocation_listed declaration is the required and sufficient means)",
-  "conservation": "the bridge adds plane AREA on the SAME net (P3V3/In4): capacity grows, demand unchanged => capacity >= demand",
-  "legacy_C6": "expected diff=0 (the predicate reads segments+vias only); the zone delta is reported by the ENG's own zone-aware check"
+  "why": "the finger/main merge region is outside dR; no in-frame mechanism exists",
+  "authority": "#K2-443 sec.2.2 / #K2-444 sec.2.3-2.6 (explain what moved, where, under which authority)",
+  "conservation": "same-net plane addition: capacity grows, demand unchanged => capacity >= demand",
+  "legacy_C6": "expected diff=0 (the predicate reads segments+vias; the added track is INSIDE?? no - it extends to x=58.5, so the legacy C6 WILL see its outside part as new segment geometry) => expect legacy C6 to show the added outside segment",
+  "note": "this is the first item that changes OUTSIDE SEGMENT/VAIA geometry, so the legacy C6 row is expected to move (unlike the zone-only changes)."
  }
 }
