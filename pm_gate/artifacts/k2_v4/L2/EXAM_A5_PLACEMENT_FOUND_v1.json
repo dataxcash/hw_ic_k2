@@ -1,0 +1,102 @@
+{
+ "artifact": "k2_exam_a5_placement_found_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-404 sec.3 steps 1-2 (ERASE then PLACE on the cleared field).",
+ "method": "subprocess-only: erase J9/J6/J11 from an l14 copy; ; kicad-cli DRC; classes baseline-relative (post-erase cleared base).",
+ "ERASE": [
+  "J9",
+  "J6",
+  "J11"
+ ],
+ "PLACEMENT_MAP": {
+  "U1": [
+   0,
+   1.0
+  ],
+  "U2": [
+   0,
+   4.0
+  ],
+  "U4": [
+   0,
+   4.0
+  ],
+  "U5": [
+   0,
+   4.0
+  ],
+  "C73": [
+   0,
+   4.0
+  ],
+  "C84": [
+   0,
+   4.0
+  ],
+  "C85": [
+   0,
+   4.0
+  ],
+  "C86": [
+   0,
+   4.0
+  ],
+  "C87": [
+   0,
+   4.0
+  ],
+  "C88": [
+   0,
+   3.5
+  ],
+  "C90": [
+   0,
+   0.5
+  ],
+  "D1": [
+   0,
+   4.0
+  ],
+  "E2": [
+   0,
+   1.0
+  ],
+  "L1": [
+   0,
+   4.0
+  ],
+  "R1": [
+   0,
+   2.0
+  ],
+  "R21": [
+   0,
+   4.0
+  ],
+  "R28": [
+   0,
+   4.0
+  ],
+  "R40": [
+   0,
+   3.0
+  ],
+  "R41": [
+   0,
+   4.0
+  ]
+ },
+ "adjustment": "R1 stepped back from 2.5 to 2.0 mm (its pad 2 [P3V3_AUX] was clashing with an outside frame-edge MCU_VDD track at (51.6,39.8)); with R1+2.0 the map has ZERO new violations.",
+ "result": {
+  "new_violations": {},
+  "ok": true
+ },
+ "reading": "THE A-QUINTUPLE-PRIME PLACEMENT EXISTS AND IS GATE-CLEAN on the erased+cleared field: ERASE J9/J6/J11, then the 19-part map above (incl. U1 +1.0mm). This is the first CORRECTLY-MEASURED legal placement of the round.",
+ "witness_board": {
+  "path": "/tmp/opencode/A5_WITNESS_PLACED_v1.kicad_pcb",
+  "sha256_16": "a07c52c37dcc933d",
+  "note": "derived artefact kept in /tmp (the repo guard forbids committing a .kicad_pcb without a SPEC change); reproducible from the map + the ERASE list by the subprocess recipe."
+ },
+ "next": "step 3-4: wipe_resolve on this placement -> refill -> M4 nine rows + the reasonableness binary row (requires the supervisor's N=1 authorisation).",
+ "OWNER-ITEMS": 0
+}
