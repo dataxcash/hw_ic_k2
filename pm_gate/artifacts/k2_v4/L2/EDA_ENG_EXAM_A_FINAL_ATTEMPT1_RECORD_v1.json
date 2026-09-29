@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_exam_a_final_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-417 sec.2 (the FINAL authorised run: the four blocking nets net-level in the change set) + sec.3 ABSOLUTE STOP.",
+ "run": {
+  "chain": "wipe_resolve (as-is: order + FINE_STEP + the endpoint_yield_sequence stage; the channel wiring is opt-in)",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 7,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "note_the_four_nets": "the wipe (move_parts) deletes EVERY net's copper intersecting the frame, so the four blocking nets were ALREADY in the change set; no new code was required to 'net-level merge' them.",
+ "attribution_of_C1_7": "C1=7 is ABOVE the clean floor 5 (R1224). The in-chain endpoint_yield_sequence stage (the blanket copper translate) is the known degrader (R1194: 5->7). So this run's 7 is NOT a new floor - the clean certificate value remains 5. Reported as-is; per #K2-417 sec.3 no further run may be made.",
+ "branch": "#K2-417 sec.2.3: C1>0 => a true deviation at the certificate's end state => the DECISION PACKAGE goes to the owner (requirements level).",
+ "owner_package": [
+  "#K2-417's final run FAILED (C1=7; clean floor 5)",
+  "certificate R1256: the residual 2 need the occupying copper MOVED (domain change); all drawing-layer levers excluded (width/ladder/reach/full-frame)",
+  "options:(1) accept a BOUNDED DEVIATION (the residual 2 left unrouted, named) for exam A; (2) change the requirement (L1: topology/interface/signal-flow/ball-map); (3) accept the partial-evacuation form"
+ ],
+ "zero": {
+  "board_changes": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
