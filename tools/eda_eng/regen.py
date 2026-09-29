@@ -1293,7 +1293,7 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
 # **exam A″（#K2-379 owner 简化令）**：局部清空 + 全流程重解（弃一切"保留手术"）
 # 单一谓词：与 R 相交的铜**全删**（不分类）→ 块内 N 网用**在册标准流程**在 域=R 内重解 → 复敷铜 → C1–C7
 # ─────────────────────────────────────────────────────────────────────────────
-def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
+def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
     B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
@@ -1324,6 +1324,13 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
                   "--moves", mv_arg, "--out", wiped)
     if rc != 0 or not mp:
         return {"state": "W1_WIPE_FAILED", "chain": chain, "exit": rc}
+    # #K2-406 / #K2-404 §三①：**板级 ERASE**（治理令指向的 footprint）——清空之后、重解之前
+    if erase_refs:
+        erased = os.path.join(work, "s1b_erased.kicad_pcb")
+        rc_e, er = _cli("erase-refs", "--board", wiped, "--refs", ",".join(erase_refs), "--out", erased)
+        if rc_e == 0 and os.path.isfile(erased):
+            wiped = erased
+        chain.append({"stage": "erase_refs", "exit": rc_e, "refs": list(erase_refs), "result": er})
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
     d0 = os.path.join(work, "s1_wiped_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])

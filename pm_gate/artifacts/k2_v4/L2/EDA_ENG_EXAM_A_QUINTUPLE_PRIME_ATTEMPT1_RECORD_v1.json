@@ -1,0 +1,130 @@
+{
+ "artifact": "k2_exam_a_quintuple_prime_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-406 sec.2: the authorised A-quintuple-prime full-chain run (run 1/1).",
+ "entry": {
+  "command": ".tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json --work /tmp/opencode/aprime_a5_final",
+  "run_count": "1/1",
+  "gate": "PASS",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "final_board": "/tmp/opencode/aprime_a5_final/s3c_disposed.kicad_pcb",
+  "final_board_sha256_16": "a3222bc72fc77a9d"
+ },
+ "nine_rows": {
+  "C1": {
+   "unconnected": 8
+  },
+  "C2": {
+   "total": 123,
+   "ref_total": 148,
+   "new_classes": []
+  },
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": {
+   "diff": 0,
+   "pass": true
+  },
+  "C7": {
+   "diff": 0,
+   "pass": true
+  },
+  "C8": {
+   "violations": [],
+   "pass": true
+  },
+  "C9": {
+   "after": "4b77cd3814ae21d6",
+   "pass": true
+  },
+  "rows_present": 9
+ },
+ "capability_evidence": {
+  "erase_refs": {
+   "cmd": "eda_eng move-parts --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --rect 22.95,32.95,51.5,78.0 --moves C73:0.0:4.0,C84:0.0:4.0,C85:0.0:4.0,C86:0.0:4.0,C87:0.0:4.0,C88:0.0:3.5,C90:0.0:0.5,D1:0.0:4.0,E2:0.0:1.0,L1:0.0:4.0,R1:0.0:2.0,R21:0.0:4.0,R28:0.0:4.0,R40:0.0:3.0,R41:0.0:4.0,U1:0.0:1.0,U2:0.0:4.0,U4:0.0:4.0,U5:0.0:4.0 --out /tmp/opencode/aprime_a5_final/s1_wiped.kicad_pcb",
+   "exit": 0
+  },
+  "isolated_copper_disposed": [
+   {
+    "stage": "isolated_copper_disposed",
+    "exit": 0,
+    "n_disposed": 2,
+    "detail": {
+     "artifact": "eda_eng_dispose_isolated_copper",
+     "board": "/tmp/opencode/aprime_a5_final/s3b_fixed.kicad_pcb",
+     "out": "/tmp/opencode/aprime_a5_final/s3c_disposed.kicad_pcb",
+     "disposed": [
+      {
+       "uuid": "a4658ccd-d454-5604-b7c2-5a604a515872",
+       "net": "12V_IN"
+      },
+      {
+       "uuid": "f5d5cd09-5ba7-576d-917d-ead37e11410e",
+       "net": "12V_IN"
+      }
+     ],
+     "n_disposed": 2,
+     "unresolved": [],
+     "rule": "#K2-390 sec.7 step 1: dispose of the DRC-named orphan zone fill deterministically (zone UUID -> UnFill), refill only the rest; one pass, no search."
+    }
+   }
+  ],
+  "landing_precondition": [
+   {
+    "stage": "landing_precondition_no_isolated_copper",
+    "n": 0,
+    "pass": true
+   }
+  ],
+  "final_drc": {
+   "solder_mask_bridge": 0,
+   "isolated_copper": 0
+  }
+ },
+ "attribution": {
+  "only_failing_row": "C1 = 8 unconnected (a NEW residual after the correctly-measured A^5: ERASE + cleared-field placement + real moves)",
+  "note": "the A^5 basis is now CORRECT (no vacuous moves; ERASE real); the residual is genuine and must be attributed before any further step.",
+  "required": "FAIL => stop + attribute, no self-rerun (#K2-406 sec.2)."
+ },
+ "OWNER-ITEMS": 0,
+ "reasonableness_row": {
+  "artifact": "k2_layout_reasonableness_v1",
+  "board": "/tmp/opencode/aprime_a5_final/s3c_disposed.kicad_pcb",
+  "baseline": "/home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb",
+  "rows": {
+   "R6_no_overlap": {
+    "machine": "courtyards_overlap <= baseline",
+    "base": 0,
+    "now": 0,
+    "pass": true
+   },
+   "R4_hole_edge": {
+    "machine": "hole_clearance+edge_clearance+pth_inside_courtyard <= baseline",
+    "base": 0,
+    "now": 0,
+    "pass": true
+   },
+   "R3_density_balance": {
+    "machine": "max quadrant area% <= baseline + 0.02",
+    "base": 46.81,
+    "now": 44.86,
+    "quadrants": {
+     "NE": 31.99,
+     "NW": 44.86,
+     "SE": 10.78,
+     "SW": 12.36
+    },
+    "pass": true
+   }
+  },
+  "render_rows": {
+   "R1_flow_correspondence": "RENDER_REQUIRED",
+   "R2_hs_ls_partition": "RENDER_REQUIRED",
+   "R5_no_reverse_detour": "RENDER_REQUIRED"
+  },
+  "verdict": "PASS",
+  "rule": "#K2-403 sec.2.B: a standing binary gate - machine-computable rows are computed now; visual rows are explicitly RENDER_REQUIRED (dual-track), never a bare claim."
+ }
+}

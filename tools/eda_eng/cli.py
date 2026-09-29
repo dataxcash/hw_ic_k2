@@ -53,6 +53,8 @@ def main(argv=None):
                         "wipe_resolve -> A_double_prime_placement_pour)")
     p.add_argument("--from-placed", default=None,
                    help="c17v1: read the per-part map back from this (gate-validated) board - step-1 alignment")
+    p.add_argument("--erase-refs", dest="erase_refs", default=None,
+                   help="#K2-406: board-level ERASE refs (comma-separated) applied after the wipe, before the re-solve")
     p.add_argument("--scenario", default=None,
                    help="#K2-398: the exam scenario artifact for the wipe_resolve chain (default: the A-double-prime "
                         "scenario L2/EXAM_A_PRIME_SCENARIO_v1.json)")
@@ -142,6 +144,9 @@ def main(argv=None):
     p.add_argument("--mask-clear-mm", dest="mask_clear_mm", type=float, default=None,
                    help="#K2-385(b): refuse a plan whose copper would bridge the mask to a FOREIGN pad")
     p.add_argument("--out"); p.add_argument("--json-out")
+    p = sub.add_parser("erase-refs", help="#K2-406: board-level ERASE - delete the named footprints (subprocess)")
+    p.add_argument("--board", required=True); p.add_argument("--refs", required=True); p.add_argument("--out", required=True)
+    p.add_argument("--json-out")
     p = sub.add_parser("dispose-islands", help="#K2-390: deterministically dispose of the DRC-named orphan zone fills (zone UUID -> UnFill + refill the rest)")
     p.add_argument("--board", required=True); p.add_argument("--drc", required=True)
     p.add_argument("--out", required=True); p.add_argument("--json-out")
@@ -186,7 +191,9 @@ def main(argv=None):
                         return _emit({"artifact": "eda_eng_exam", "state": "MISSING_REFS", "missing": miss}, None, 2)
                 else:
                     mvv = [(m["ref"], m["delta_mm"][0], m["delta_mm"][1]) for m in aps["witness"]["moves"]]
-                rp = regen_mod.wipe_resolve_chain(rect, mvv, W, members)
+                rp = regen_mod.wipe_resolve_chain(rect, mvv, W, members,
+                                              erase_refs=([x.strip() for x in a.erase_refs.split(",") if x.strip()]
+                                                          if a.erase_refs else None))
                 out = {"artifact": "eda_eng_exam", "exam": a.which, "chain": "wipe_resolve",
                        "entry": "eda_eng exam A --run --chain wipe_resolve", "run_count": "1/1",
                        "gate": gate,
@@ -392,6 +399,16 @@ def main(argv=None):
         plan = json.load(open(a.plan, encoding="utf-8"))
         r = ripup_mod.execute(a.board, plan, a.out, dry=a.dry_run)
         return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
+
+    if a.cmd == "erase-refs":
+        import pcbnew as _P
+        bb = _P.LoadBoard(a.board); want = {x.strip() for x in a.refs.split(",") if x.strip()}
+        gone = []
+        for fp in list(bb.GetFootprints()):
+            if fp.GetReference() in want:
+                gone.append(fp.GetReference()); bb.Remove(fp)
+        _P.SaveBoard(a.out, bb)
+        return _emit({"artifact": "eda_eng_erase_refs", "erased": sorted(gone), "out": a.out}, a.json_out, 0)
 
     if a.cmd == "dispose-islands":
         drc = json.load(open(a.drc, encoding="utf-8"))
