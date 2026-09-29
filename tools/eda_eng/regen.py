@@ -388,6 +388,26 @@ def member_expansion(board, rect, members, buried_points, radius=1.0, margin=0.5
                     "re-checked; C6 is from here on 'diff = 0 OUTSIDE THE NEW FRAME'; NO second expansion."}
 
 
+def coherent_seed_order(board, members, core):
+    """**#K2-399 §二 序步 2：连贯种子次序**（确定性）——**先让位件**（非 core：连接器/外围，焊盘面积降序），
+    **后 core 簇**（面积降序）。理由（R1094）：逐件推导把簇首件排第 1、他人未动 ⇒ 出不了整簇解；
+    先让外圈件就位（形成让位/空带），再在**同一 accepted 集**上求簇件的步。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    area = {}
+    for fp in b.GetFootprints():
+        ar = 0.0
+        for pd in fp.Pads():
+            bx = pd.GetBoundingBox()
+            ar += max(0.0, (P.ToMM(bx.GetRight()) - P.ToMM(bx.GetX())) *
+                             (P.ToMM(bx.GetBottom()) - P.ToMM(bx.GetY())))
+        area[fp.GetReference()] = ar
+    cset = set(core)
+    yielders = sorted([r for r in members if r not in cset], key=lambda r: (-area.get(r, 0.0), r))
+    cores = sorted([r for r in members if r in cset], key=lambda r: (-area.get(r, 0.0), r))
+    return yielders + cores
+
+
 def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board=False,
                     direction=(1, 1)):
     """**A′（#K2-372 §二.1）目标相对位由闸逐件出**：N5 方向（SE，`(k*0.5, k*0.5)` 格点）· 逐件降序最大步

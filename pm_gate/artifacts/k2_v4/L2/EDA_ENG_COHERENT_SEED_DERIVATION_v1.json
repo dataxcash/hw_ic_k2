@@ -1,0 +1,37 @@
+{
+ "artifact": "k2_eda_eng_coherent_seed_derivation_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-399 sec.2 step 2: the coherent-seed (joint) per-part derivation on the PINNED base.",
+ "implementation": "regen.coherent_seed_order(board, members, core): yielders first (non-core, pad-area desc), then the core (area desc); passed via rearrange_probe(order=..., direction=(0,1), rect=[22.95,32.95,51.5,78.0]).",
+ "result": {
+  "n_moved": 23,
+  "n_members": 25,
+  "probes": 58,
+  "note": "UP from 22/25: the CORE (U2/U4/U5) now takes a coherent +4.0mm DOWN step together with the yielders.",
+  "core_moves": {
+   "U2": [
+    0,
+    4.0
+   ],
+   "U4": [
+    0,
+    4.0
+   ],
+   "U5": [
+    0,
+    4.0
+   ]
+  },
+  "no_step": [
+   "D2",
+   "U1"
+  ]
+ },
+ "outcome": "U1 STILL has no admissible step => the directive's premise (U1 moves down) is still not met.",
+ "open_why_U1": "not yet diagnosed in this window (candidate causes: a real gate finding for U1's own down step given the moved neighbours, or the M-ENG-MOVE-APPLICATION-PARTIAL effect on U1's placement-source edit).",
+ "per_K2_399": {
+  "rule": "this sub-family is the LAST of the round; a further FAIL => sec.17.4 change the MEANS (toward the sec.20 product-first route) or sec.15.3.",
+  "reading": "the coherent-seed sub-family IMPROVED the map (22->23, core moves) but did NOT achieve the goal (U1) => the sub-family did not pass."
+ },
+ "OWNER-ITEMS": 0
+}
