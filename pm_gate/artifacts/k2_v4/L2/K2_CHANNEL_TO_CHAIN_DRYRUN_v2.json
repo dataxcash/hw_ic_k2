@@ -1,0 +1,21 @@
+{
+ "artifact": "k2_channel_to_chain_dryrun_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3.2: the corrected channel dry run (after the CH-scope fix).",
+ "fix": "CH was a LOCAL of main(), invisible to solve() (defined in the MODULE-LEVEL _install_port_aware_goals) => the map now lives on mr (mr._CHANNELS), the wrapper's established pattern.",
+ "reading": {
+  "added": 2,
+  "blocked": 3,
+  "segs": 66,
+  "vias": 2,
+  "len": 25.3563,
+  "reasons": {
+   "no-free-start-node": 1,
+   "no-path-coarse(exhausted-1)": 1,
+   "no-path-coarse(exhausted-27)": 1
+  }
+ },
+ "finding": "with the per-net channels as HARD constraints the maze routes 2/5 (added 2, blocked 3: no-free-start-node 1, exhausted 2). So the channel hard-constraint ALONE does not close the residual either - the channels confine the search but some endpoints still have no legal start/path inside their channel.",
+ "next": "element-3 per-line geometry + a ruled N=1 application (no self-run).",
+ "OWNER-ITEMS": 0
+}

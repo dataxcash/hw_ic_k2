@@ -74,6 +74,7 @@ def main():
         _n, _r = _it.split(":", 1)
         CH[_n] = tuple(float(v) for v in _r.split(","))
     _GLOBAL_WALL = mr.WALL_RECT
+    mr._CHANNELS = CH                                 # the channel map must live on `mr` (see solve)
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
@@ -198,8 +199,9 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
         _saved = mr.WALL_RECT
-        if net in CH:                                     # HARD: this edge may only use its own channel
-            mr.WALL_RECT = CH[net]
+        _CH = getattr(mr, "_CHANNELS", {})                # NOTE: `CH` lives on `mr` because solve is defined in a
+        if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
+            mr.WALL_RECT = _CH[net]                       # HARD: this edge may only use its own channel
         # ── #K2-414 §二.2 **B2**：考试迷宫改用在册 `FINE_STEP`(0.10)（粗栅格剪掉的格在细栅格本就可通行）──
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
