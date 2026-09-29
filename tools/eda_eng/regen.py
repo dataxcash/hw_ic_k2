@@ -1410,7 +1410,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         import importlib.util as _iu
         _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
         _ja = _iu.module_from_spec(_sp); _sp.loader.exec_module(_ja)
-        _ch = _ja.channels_arg(wiped, d0, list(rect))
+        _ch = _ja.channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(wiped, d0, list(rect))
         if _ch:
             _charg = ["--channels", _ch]
     except Exception as _e:                                            # noqa: BLE001

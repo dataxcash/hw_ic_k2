@@ -125,6 +125,43 @@ def channels_arg(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0.4,
     return ";".join(parts)
 
 
+def channels_arg_by_block(board, drc, rect, clearance=0.20):
+    """**K-2＋K-3 接链用**（#K2-434 · 确定性 · 零搜索）：把 `--channels` 由**功能分块＋多块协同计划**产出 ——
+    每网按其**功能族的目标框**（K-3 计划）作通道（再与其本网端点框并集）。失败退回 `channels_arg()`。"""
+    import importlib.util as _iu, os as _os, json as _j
+    _R = _os.path.dirname(_os.path.abspath(__file__))
+    def _m(n, f):
+        sp = _iu.spec_from_file_location(n, _os.path.join(_R, f)); m = _iu.module_from_spec(sp); sp.loader.exec_module(m); return m
+    FB, DEV = _m("kfb2", "k2_functional_block_v1.py"), _m("kd3", "k2_deviation_gen_v1.py")
+    eps = []
+    for pr in DEV.pairs(_j.load(open(drc, encoding="utf-8"))):
+        for p_ in (pr["p1"], pr["p2"]):
+            c = DEV._clamp(p_, rect); eps.append((pr["net"], c[0], c[1]))
+    nets = {e[0] for e in eps}
+    netof = {n: [n] for n in nets}                       # a net is its own "member" for the family table
+    blocks = FB.functional_blocks(sorted(nets), netof)
+    sizes = {}
+    for fam, b in blocks.items():
+        xs = [e[1] for e in eps if e[0] in b["nets"]]; ys = [e[2] for e in eps if e[0] in b["nets"]]
+        if xs:
+            sizes[fam] = (max(xs) - min(xs) + 1.0, max(ys) - min(ys) + 1.0)
+    plan = FB.multi_block_plan(blocks, sizes, rect)
+    if plan["verdict"] != "FEASIBLE":
+        return ""
+    tgt = {p_["block"]: p_["target"] for p_ in plan["plan"]}
+    parts = []
+    for n in sorted(nets):
+        f = FB.family_of([n])
+        if f not in tgt:
+            continue
+        t = tgt[f]
+        xs = [e[1] for e in eps if e[0] == n]; ys = [e[2] for e in eps if e[0] == n]
+        c = (min(t[0], min(xs) - clearance), min(t[1], min(ys) - clearance),
+             max(t[2], max(xs) + clearance), max(t[3], max(ys) + clearance))
+        parts.append("%s:%s" % (n, ",".join("%.4f" % v for v in c)))
+    return ";".join(parts)
+
+
 def artifact_hash16(rep):
     return hashlib.sha256(json.dumps(rep, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 

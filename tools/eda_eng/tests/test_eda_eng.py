@@ -1310,6 +1310,14 @@ class T(unittest.TestCase):
         self.assertEqual(f["per_block"][0]["gate"], "in_block_C1_zero")
         self.assertIn("pour", f["per_block"][0]["route_mode"])
 
+    def test_C434_the_chain_prefers_the_functional_block_channels(self):
+        """#K2-434 sec.2.3 wiring: the chain must consume the K-2/K-3 derived channels first, falling back to the
+        row-grouped ones. Static (the runners are board-dependent)."""
+        j = open(os.path.join("tools", "k2_joint_alloc_v1.py"), encoding="utf-8").read()
+        self.assertIn("def channels_arg_by_block(", j)
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn("channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(", r)
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
