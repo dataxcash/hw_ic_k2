@@ -49,5 +49,7 @@
   "status"
  ],
  "rule": "per-channel conservation (this channel's own clear narrow dimension vs the net's need); domain-level substitution FORBIDDEN.",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "INVALID_READING": "the 0/5 result is INVALID: the caller passed ALL copper as obstacles (own net included) => each net's own copper self-blocked it (the R1206-fix family bug). The allocator must be fed per-net occupant sets. This reading is recorded as VOID and is NOT evidence.",
+ "fix_required": "content_aware_joint_allocation must take occupants PER NET (exclude the net's own copper) before any real reading."
 }
