@@ -1,0 +1,40 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_b_v1",
+ "ts": "2026-09-30",
+ "authority": "third stop order (same family; new token) - comply, name the object, file the addendum. Return to Plan.",
+ "object_named": {
+  "token": "k2r",
+  "what": "the WORK DIRECTORY of the R1302 authorised N=1 (a one-shot dir under /tmp/opencode); later READ-ONLY evidence commands restated the same path string, which the scanner counted."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_window": 0,
+  "param_or_tool_edits": 0,
+  "reruns": 0,
+  "previous_window_fact": "R1308 consumed EXACTLY the one authorised N=1 (quota exhausted); no same-parameter rerun.",
+  "key_evidence": "the count is CUMULATIVE on historical evidence with no ack/TTL/window => it re-fires every turn. This is the THIRD instance of the same family (m1m2 -> m1m2 -> this token)."
+ },
+ "supervisor_module_defect": {
+  "id": "M-SUP-SAME-SIGNATURE-REFIRE-GATE",
+  "recurrence": "+1 (3rd instance)",
+  "root_cause": "the signature does not separate 'path constant' from 'action pattern', and has no ack/TTL/window.",
+  "fix": "signature = action pattern (same-parameter run count, command-sequence fingerprint) EXCLUDING work-dir / output path constants; plus (signature + window + ack) dedupe; fold path constants into the in-register FP family."
+ },
+ "ENG_side_mitigation": {
+  "what": "command consolidation - one command per deliverable; do not restate the same path across commands.",
+  "scope_warning": "this only reduces PATH-CONSTANT noise. The REAL red lines are unchanged: a second run with the same parameters, or 'change a parameter/tool -> rerun', remain violations. Consolidation must never be used to hide a real loop."
+ },
+ "plan_recap": {
+  "Q1": "power rides inner-layer planes (a pad only needs to land on its plane); control = short F.Cu links; bus (I2C1/I2C2/UART) = one layer change each; a few nets cross the boundary at x=51.5.",
+  "Q2": "the boundary half-stubs (fixed for NRST by the port landing); power pads with no plane tie (fixed for P3V3_AUX by the plane vias); the TWO that remain are DRAWING-side: (a) the I2C1 pair's two independent single-net landings at one corner squeeze each other (I2C1_SCL newly appeared); (b) P3V3's GOAL end is outside the frame (no-free-goal-node) - its start was fixed.",
+  "Q3": "draw the I2C1 pair as ONE corridor (width >= 2 nets + clearance, two landings at the net pitch, one shared layer change); land the P3V3 stub directly on the plane finger (or declare the out-of-frame blind via a frozen PORT); then ONE run."
+ },
+ "gap_layer": "SCHEME (drawing) layer: R-e (I2C1 group corridor), R-f (P3V3 goal end). Not a construction-layer search.",
+ "one_implementation_list_TO_BE_APPROVED": [
+  "R-e: line 4 becomes an I2C1 pair corridor (frozen constants)",
+  "R-f: line 5 goal end (stub onto the plane finger, or the out-of-frame blind via as a frozen port)",
+  "then ONE N=1 (nine rows + non-empty channels + per-line attribution)"
+ ],
+ "this_window_result": "stop + report only: zero exam runs, zero artifacts produced beyond this report, zero board change.",
+ "OWNER-ITEMS": 0
+}
