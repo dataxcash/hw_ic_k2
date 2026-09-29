@@ -999,15 +999,15 @@
    "layer": "In4.Cu",
    "a": [
     42.8,
-    39.0
+    35.5
    ],
    "b": [
     58.5,
-    39.0
+    35.5
    ],
    "width": 0.25,
-   "why": "R-g mechanism D (ENG-chosen, #K2-442 sec.2.6): the bridge-ZONE (mechanism B) was REMOVED by the chain's isolated-copper disposal (read on the R1332 judged board: the zone list holds only the originals). An In4 P3V3 TRACK instead - it is anchored (it starts at the existing F.Cu-In4 via at (42.8,39.0), which ties to C84.1) so it cannot be an orphan, and it bridges the finger island to the main plane at x>=57.95 galvanically. Measured: the In4 corridor y=39.0, x 42.8..58.5 has ZERO foreign tracks and ZERO foreign pads.",
-   "allow_outside_dR": true
+   "allow_outside_dR": true,
+   "why": "R-g mechanism D corrected (#K2-447 sec.2.3 / the convergence order): the first bridge sat at y=39.0 and shorted the HS blind via @(58.0,39.3) and my own P3V3_AUX tie via @(51.5,38.75). This y was chosen by a VIA-AWARE free-slot scan of the full span 42.8..58.5 (an earlier scan filtered tracks by a single GetLayer() and so missed vias)."
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
@@ -1137,6 +1137,21 @@
    "b": "then run a DRC on the stitched field BEFORE claiming any state is clean,",
    "c": "the pre-authorised N=1 stays UNCONSUMED until then."
   },
-  "rule_added": "a clearance check must enumerate ALL layers a via covers (not GetLayer()), and no 'verified state' may be claimed without a DRC on the built field."
+  "rule_added": "a clearance check must enumerate ALL layers a via covers (not GetLayer()), and no 'verified state' may be claimed without a DRC on the built field.",
+  "FIXED_R1360": {
+   "binary": "(A) FEASIBILITY WITNESS at the drawing level",
+   "evidence": {
+    "free_slot_scan": "via-aware scan (all layers of every via) over the full span x 42.8..58.5 found free y slots; the bridge was re-placed at y=35.5",
+    "apply": "67 added / 0 refused",
+    "drc_on_the_stitched_field": {
+     "unconnected_items": 345,
+     "shorting_items": 0,
+     "tracks_crossing": 0,
+     "clearance": 0
+    },
+    "reading": "the frozen drawing (ports + plane ties + group lanes + the corrected bridge) introduces ZERO new DRC classes => the drawing is FEASIBLE; the 345 unconnected items are the expected pre-routing state of the cleared field."
+   },
+   "note": "this converts the earlier claim ('the bridge shorts the HS via and my own tie via') into a RESOLVED defect: the fault was the bridge's y, not the mechanism."
+  }
  }
 }
