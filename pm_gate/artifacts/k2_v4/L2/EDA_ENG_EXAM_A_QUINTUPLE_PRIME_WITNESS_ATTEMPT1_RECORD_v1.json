@@ -1,0 +1,65 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_witness_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-447 sec.2.3 pre-authorised N=1 (its precondition was met by R1360's drawing-level feasibility witness).",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2w"
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": 892,
+  "C6_pass": false,
+  "C7": 0,
+  "C7_pass": true,
+  "C8": [],
+  "C9": true,
+  "rows_present": 9
+ },
+ "drawing_applied": {
+  "port_plane_stitch": {
+   "n_added": 67,
+   "n_refused": 0
+  },
+  "channels_computed": {
+   "n_nets": 18
+  },
+  "R_g_bridge": "In4 P3V3 y=35.5 (via-aware free slot), outside-dR declared",
+  "R_h": "group-ordered frozen lanes"
+ },
+ "BINARY_OUTCOME": {
+  "C2": "PASS - the drawing is DRC-CLEAN on the real run (no new classes) => the R1360 witness holds end to end.",
+  "C7": "PASS (diff=0) - the corrected bridge no longer touches the HS fan-out.",
+  "C6": "FAIL diff=892 - this is the zone-aware row implemented under #K2-444 sec.2.4; per #K2-446 sec.2.2 it is an ENG self-check/DECLARATION row, not a gate, and it shows exactly the declared outside copper change (the R-g bridge's outside part + the outside fills). Expected and declared, not hidden.",
+  "C1": "2 -> 2 (flat): the two remaining residuals are I2C1_SDA (the joint draft was NOT frozen - it was reverted in R1354/R1356 pending a clean re-freeze) and P3V3 (the bridge exists but D2 pad 1 is still unconnected to it)."
+ },
+ "residual_named": [
+  {
+   "net": "I2C1_SDA",
+   "items": [
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.2000 mm",
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm"
+   ]
+  },
+  {
+   "net": "P3V3",
+   "items": [
+    "走线 [P3V3] (In4.Cu), 长度: 15.7000 mm",
+    "F.Cu 上 D2 的焊盘 1 [P3V3]"
+   ]
+  }
+ ],
+ "verdict_summary": "strictly better than R1328 (C2 clean, C7 clean) but C1 did not drop => NOT a net improvement by #K2-444 sec.2.4; reported as such.",
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
