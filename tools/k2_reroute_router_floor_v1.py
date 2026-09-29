@@ -52,6 +52,10 @@ def main():
     if recs:
         pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,
                "n_failed_edges": len(recs),
+               "endpoint_own_cell_hits": getattr(mr, "_endpoint_own_cell_hits", {}).get("hits", 0),
+               "endpoint_own_cell_rule": "#K2-412 sec.4.3 (D1): the endpoint-own-cell snap relaxation "
+                                         "(bounded, C35-held, seg_exact/via_exact still gate) fires when the plain "
+                                         "snap prunes a cell that lies on the net's OWN copper.",
                "unreachable": [r for r in recs if not r["reachable_port"]],
                "reachable_via_port": [r for r in recs if r["reachable_port"]],
                "rule": "#K2-394 sec.2.1: before routing, name every endpoint that cannot reach any same-net frame port "
@@ -63,21 +67,54 @@ def main():
 
 def _install_port_aware_goals(mr, wall, tol=0.02):
     """返回**端口可达性预检记录**（#K2-394 §二.1）：每条失败边记录 端口是否可达 / 试了几个端口。"""
-    """把 `solve_edge` 包一层：正常失败且原因为 no-free-start/goal-node 时，改用**同网 ∂R 端口**
-    （作为目标或起点）重试一次。确定性（端口按 (layer,x,y,uuid) 排序）；不搜索、不调参。"""
+    """把 `solve_edge` 包一层：正常失败且原因为 no-free-start/goal-node 时，(i) 改用**同网 ∂R 端口**
+    （作为目标或起点）重试一次；(ii) **端点自身格松弛**（#K2-412 §四.3 · 承 #K2-411 §二 D1）。
+    确定性（端口按 (layer,x,y,uuid) 排序 · 自身格按 (半径, di, dj)）；不搜索、不调参。"""
     orig = mr.solve_edge
     orig_snap = mr.snap_node
     PORT_PTS = set()
+    OWN_CELL = {"hits": 0}                 # #K2-412 §四.3：端点自身格松弛开火次数（写入 precheck 并列盘）
+    mr._endpoint_own_cell_hits = OWN_CELL  # 只读读数口（module/桩实例皆可设属性）
 
-    def snap(grid, ctx2, find, comp, net, layer, x, y, maxr=4):
-        r = orig_snap(grid, ctx2, find, comp, net, layer, x, y, maxr)
+    def _own_copper_cell(grid, ctxi, find, comp, net, layer, x, y, maxr):
+        """#K2-412 §四.3（D1「端点自身格」）：返回**最近的、格点仍落在本网自己铜上**的格 ——
+        只对**端点格**忽略剪枝掩码（端点按构造就在本网铜上 ⇒ 其自身格按定义是合法起/止；异网障碍只是
+        **保守地**把该格点剪掉了）。**C35 框在此处显式重加**（绝不因松绑而把起点放到框外）。
+        确定性：限定 (2*maxr+1)^2 格，按 (半径, di, dj) 取最小；零参数搜索。
+        放行闸 seg_exact/via_exact 与终检 DRC 一概不变 —— 本函数只让迷宫**能起步**。"""
+        ci, cj = grid.cell(x, y)
+        for r in range(maxr + 1):
+            for di in range(-r, r + 1):
+                for dj in range(-r, r + 1):
+                    if max(abs(di), abs(dj)) != r:
+                        continue
+                    i, j = ci + di, cj + dj
+                    if not grid.inside(i, j):
+                        continue
+                    px, py = grid.pt(i, j)
+                    if wall and not (wall[0] - 1e-9 <= px <= wall[2] + 1e-9
+                                     and wall[1] - 1e-9 <= py <= wall[3] + 1e-9):
+                        continue                       # C35：域外格一律不可选（松绑不越框）
+                    if mr.node_in_island(ctxi, find, comp, net, layer, px, py):
+                        return (i, j)
+        return None
+
+    def snap(grid, ctxi, find, comp, net, layer, x, y, maxr=4):
+        r = orig_snap(grid, ctxi, find, comp, net, layer, x, y, maxr)
         if r is not None:
             return r
-        # 端口点：允许**落在端口**（该格可能因邻近异网铜被剪枝）；**最终仍由放行闸 seg_exact/via_exact 判定**。
+        # ① 端口点：允许**落在端口**（该格可能因邻近异网铜被剪枝）；**最终仍由放行闸 seg_exact/via_exact 判定**。
         if (round(x, 3), round(y, 3)) in PORT_PTS:
             i, j = grid.cell(x, y)
             if grid.inside(i, j):
                 return i, j
+        # ② #K2-412 §四.3（D1）：端点**就在本网铜上** ⇒ 其自身格按定义合法起/止。只松绑**该格**的剪枝掩码，
+        #    C35 框仍守（见 _own_copper_cell），放行闸/终检不改 —— 让迷宫**能起步**，非放水。
+        if mr.node_in_island(ctxi, find, comp, net, layer, x, y):
+            cell = _own_copper_cell(grid, ctxi, find, comp, net, layer, x, y, maxr)
+            if cell is not None:
+                OWN_CELL["hits"] += 1
+                return cell
         return None
 
     def _ports(ctx, net):
@@ -98,12 +135,14 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     REC = []
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+        h0 = OWN_CELL["hits"]
         sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
         if sol is not None:
             return sol, why
         rec = {"net": net, "why": why, "pa": [round(pa[0], 3), round(pa[1], 3)], "la": mr.LNAME[la],
                "pb": [round(pb[0], 3), round(pb[1], 3)], "lb": mr.LNAME[lb],
-               "ports_available": len(_ports(ctx, net)), "ports_tried": 0, "reachable_port": False, "via": None}
+               "ports_available": len(_ports(ctx, net)), "ports_tried": 0, "reachable_port": False, "via": None,
+               "endpoint_own_cell_hits": OWN_CELL["hits"] - h0}
         if why in ("no-free-start-node", "no-free-goal-node"):
             rec["tries"] = []
             for (pl, px, py, tpu) in _ports(ctx, net):
@@ -112,15 +151,18 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                 s2, w2 = orig(ctx, find, compa, cport, net, la, pa, pl, (px, py), margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "goal", "why": w2})
                 if s2 is not None:
-                    rec.update({"reachable_port": True, "via": [px, py, pl]})
+                    rec.update({"reachable_port": True, "via": [px, py, pl],
+                                "endpoint_own_cell_hits": OWN_CELL["hits"] - h0})
                     REC.append(rec)
                     return s2, "ok-port-goal"
                 s2, w3 = orig(ctx, find, cport, compb, net, pl, (px, py), lb, pb, margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "start", "why": w3})
                 if s2 is not None:
-                    rec.update({"reachable_port": True, "via": [px, py, pl]})
+                    rec.update({"reachable_port": True, "via": [px, py, pl],
+                                "endpoint_own_cell_hits": OWN_CELL["hits"] - h0})
                     REC.append(rec)
                     return s2, "ok-port-start"
+        rec["endpoint_own_cell_hits"] = OWN_CELL["hits"] - h0
         REC.append(rec)
         return sol, why
 

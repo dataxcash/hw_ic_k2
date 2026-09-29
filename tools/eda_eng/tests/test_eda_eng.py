@@ -1078,6 +1078,66 @@ class T(unittest.TestCase):
         self.assertIn("endpoint_stitch_dropped_named", seg)
         self.assertNotIn('_cli("route", "--apply-batch", sf2', seg, "no direct-L apply path may remain")
 
+    def test_C412_endpoint_own_cell_relaxation_unblocks_a_boxed_in_endpoint(self):
+        """#K2-412 sec.4.3 (carrying #K2-411 sec.2 **D1**): the ENDPOINT-OWN-CELL semantics -- every maze edge
+        endpoint LIES ON the net's own copper (the anchors are pad/via/track centres of the SAME island), so its
+        OWN cell is by definition a legal start/goal; the plain snap prunes that cell whenever a foreign obstacle
+        sits within (clearance + half-width + margin) of it => the named `no-free-start/goal-node` (R1150: 8/8).
+        This gate relaxes the snap ONLY onto the endpoint's OWN copper cell: the C35 domain wall still holds (the
+        start cell may never be placed outside the declared domain) and seg_exact/via_exact + the final DRC are
+        UNCHANGED -- it only lets the maze START. RED before the fix (snap returns None for the boxed-in endpoint),
+        GREEN after (it returns the net's own copper cell). Deterministic stub, no maze run, no board touched."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_reroute_router_floor_v1", os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        w = importlib.util.module_from_spec(spec); spec.loader.exec_module(w)
+
+        OWN = (5.0, 5.0)                     # the net's own copper (pad/via/track) anchor of THIS island
+
+        class Grid:
+            step, x0, y0, nx, ny = 0.10, 0.0, 0.0, 200, 200
+
+            def cell(self, x, y):
+                return int(round((x - self.x0) / self.step)), int(round((y - self.y0) / self.step))
+
+            def pt(self, i, j):
+                return self.x0 + i * self.step, self.y0 + j * self.step
+
+            def inside(self, i, j):
+                return 0 <= i < self.nx and 0 <= j < self.ny
+
+        def make_mr():
+            class MR:
+                LAYERS = ["F.Cu", "In5.Cu"]
+                LNAME = {"F.Cu": "F.Cu", "In5.Cu": "In5.Cu"}
+                WALL_RECT = None
+
+                def __init__(self):
+                    self.snap_node = lambda *a, **k: None         # plain snap finds nothing (the cell is pruned)
+                    self.solve_edge = lambda *a, **k: (None, "no-free-start-node")
+
+                @staticmethod
+                def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
+                    return net == "N1" and abs(x - OWN[0]) <= tol and abs(y - OWN[1]) <= tol
+            return MR()
+
+        find = lambda k: "ISLAND"                              # noqa: E731
+        grid = Grid()
+        mr = make_mr()
+        w._install_port_aware_goals(mr, (0.0, 0.0, 8.0, 8.0))
+        cell = mr.snap_node(grid, None, find, "ISLAND", "N1", "F.Cu", OWN[0], OWN[1])
+        self.assertIsNotNone(cell, "RED before the fix: the endpoint's OWN copper cell was pruned => snap None")
+        px, py = grid.pt(cell[0], cell[1])
+        self.assertLessEqual(abs(px - OWN[0]) + abs(py - OWN[1]), 0.11,
+                             "the snapped cell must lie ON the net's own copper (never a foreign cell)")
+        # negative control (a): a point NOT on this net's own copper is never relaxed (bounded, no blanket door)
+        self.assertIsNone(mr.snap_node(grid, None, find, "ISLAND", "N1", "F.Cu", 7.0, 7.0))
+        # negative control (b): C35 -- the relaxation NEVER places the start cell outside the declared domain
+        mr2 = make_mr()
+        w._install_port_aware_goals(mr2, (0.0, 0.0, 4.0, 8.0))     # the wall's right edge = 4.0 (< OWN.x)
+        self.assertIsNone(mr2.snap_node(grid, None, find, "ISLAND", "N1", "F.Cu", OWN[0], OWN[1]),
+                          "C35: the endpoint-own-cell relaxation must never start outside the declared domain")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

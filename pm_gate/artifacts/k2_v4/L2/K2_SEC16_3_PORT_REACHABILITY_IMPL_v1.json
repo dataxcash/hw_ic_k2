@@ -1,0 +1,40 @@
+{
+ "artifact": "k2_sec16_3_port_reachability_impl_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-412 sec.4.3: the deterministic implementation + same-class regression (RED then GREEN) that pins 'port reachability' as a regression-testable semantic. Carries #K2-411 sec.2 D1; #K2-412 sec.5: the means switch = drawing-layer port reachability / in-domain re-route.",
+ "what_changed": {
+  "file": "tools/k2_reroute_router_floor_v1.py",
+  "locus": "_install_port_aware_goals :: snap() + new _own_copper_cell()",
+  "change": "the snap relaxation is extended from PORT points to the ENDPOINT-OWN-CELL (D1): when the plain snap (which demands a FREE, in-island cell) prunes the endpoint cell, the wrapper now returns the nearest cell whose grid point still lies on the net's OWN copper -- evaluated IGNORING the prune mask for that cell ONLY.",
+  "readout": "the per-edge precheck now records endpoint_own_cell_hits (how often D1 fired) and the artifact carries the D1 rule verbatim."
+ },
+ "why_this_is_the_observed_wall": {
+  "symptom": "R1150: the maze refuses all eight endpoints with no-free-start/goal-node; the eight are DROP-NAMED and C1 stays 8 (C2 clean).",
+  "mechanism": "every maze edge endpoint lies ON the net's own copper (the anchors are pad/via/track centres of the SAME island), so its own cell is by definition a legal start/goal; the plain snap prunes that cell whenever a foreign obstacle sits within (clearance + half-width + margin) of the cell point. That is exactly the 'the drawing never defines a reachable in-domain path' root cause recorded in R1154.",
+  "corroboration": "the saved pass-2 ledger (attempt4 work dir) names the four still-blocked edges as no-free-start-node x3 / no-free-goal-node x1."
+ },
+ "determinism": "bounded to (2*maxr+1)^2 cells, ordered by (radius, di, dj); maxr = 4 (coarse) / 6 (fine); NO random, NO parameter sweep, NO iterative search, NO board change.",
+ "safety_guards_unchanged": [
+  "C35: the relaxation re-imposes the domain wall EXPLICITLY -- a start/goal cell may never be outside the declared bound-rect, even though the prune mask is ignored for that one cell.",
+  "every emitted leg is still adjudicated by seg_exact / via_exact (same clearance model; this wrapper already raises the floor to 0.20 mm).",
+  "the FINAL DRC still adjudicates; DROP-NAMED (#K2-411 sec.2) is preserved -- a gap the maze still cannot route stays NAMED, never a silent direct stitch.",
+  "not a criteria change: no rule, SPEC, manifest or frozen source is touched."
+ ],
+ "red_green": {
+  "test": "test_eda_eng.T.test_C412_endpoint_own_cell_relaxation_unblocks_a_boxed_in_endpoint",
+  "red": "before the fix: mr.snap_node(...) over a pruned-but-own-copper endpoint returned None (AssertionError: unexpectedly None).",
+  "green": "after the fix: it returns the net's own copper cell; the two negative controls hold -- a foreign point is never relaxed, and a cell outside the C35 wall is never returned.",
+  "readings": {"selftest_tests": 99, "selftest_failures": 0, "selftest_errors": 0, "selftest_verdict": "PASS"}
+ },
+ "layout_reasonableness_row": {
+  "board": "/tmp/opencode/aprime_a5_final_v4/s3c_disposed.kicad_pcb",
+  "verdict": "PASS",
+  "R3_density_max_pct": 44.86, "R3_base_pct": 46.81,
+  "R4_hole_edge": 0, "R6_no_overlap": 0,
+  "R1_R2_R5": "RENDER_REQUIRED"
+ },
+ "zero": {"exam_runs": 0, "board_changes": 0, "frozen_four": "4/4"},
+ "not_yet_measured": "C1 is NOT re-measured in this window (no N=1 quota is pre-authorized by #K2-412 sec.4). This window delivers ONLY the deterministic enabler + its regression + the standing reasonableness row.",
+ "next": "request N=1 (the A^5 re-run with the endpoint-own-cell relaxation active) per #K2-412 sec.4.4; any gap the maze still refuses stays DROP-NAMED and routes to the deviation channel.",
+ "OWNER-ITEMS": 0
+}
