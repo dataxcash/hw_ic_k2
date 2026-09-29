@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_exam_b_left_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-431 sec.2 (the owner's order: the left band is FULLY cleared and all in-region nets re-routed) - ONE bounded execution.",
+ "protocol_executed": [
+  "ERASE: the wipe is net-agnostic => ALL copper intersecting [22.95,32.95,51.5,78.0] is deleted (no kept copper) + J9/J6/J11 erased",
+  "PLACE: the members placed per the witness (U1 moved as in the A^5 map)",
+  "ROUTE: the plain chain (the degrader yield stage DISABLED via K2_NO_YIELD) with order + FINE_STEP",
+  "JUDGE: nine rows + digest"
+ ],
+ "nine_rows": {
+  "C1": 7,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "residual_named": [
+  "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]",
+  "走线 [P3V3_AUX] (In5.Cu), 长度: 0.2000 mm",
+  "J13 的PTH 焊盘 1 [SWDIO]",
+  "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+  "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+  "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+  "F.Cu 上 C84 的焊盘 1 [P3V3]"
+ ],
+ "attribution": "per #K2-431 sec.2.6: FAIL => stop + named attribution; inside the region there are NO walls now, so the residual comes from PORTS/POLICY (one-by-one fixable).",
+ "note": "C1=7, above the clean floor 5 (R1224): even with the yield stage disabled the run gives 7, so the residual is not solely the yield stage. Reported as-is.",
+ "stop": "per #K2-431 sec.3 the real board stays FROZEN; no landing.",
+ "OWNER-ITEMS": 0
+}

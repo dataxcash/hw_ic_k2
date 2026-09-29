@@ -1455,7 +1455,9 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     _ybud = os.path.join(work, "s2y_before_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", _ybud, resolved])
     yield_plans, yield_miss = [], []
-    if os.path.isfile(_ybud) and os.path.isfile(resolved):
+    if os.environ.get("K2_NO_YIELD"):                      # #K2-431: the owner's clear-all protocol = the PLAIN chain
+        pass                                               # (ERASE -> PLACE -> ROUTE -> JUDGE); the yield stage
+    elif os.path.isfile(_ybud) and os.path.isfile(resolved):  # is disabled here (it is a known degrader, R1194)
         import pcbnew as _PY
         try:
             _rt2 = __import__("importlib").util
