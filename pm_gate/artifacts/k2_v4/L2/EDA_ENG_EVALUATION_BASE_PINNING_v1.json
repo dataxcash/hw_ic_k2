@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_eda_eng_evaluation_base_pinning_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-399 sec.2 step 1 (HARD PRECONDITION): declare AND machine-verify 'the board the placement gate probes' == 'the board the exam chain runs on'.",
+ "declaration": {
+  "gate_probes": "regen.mech_probe_moves -> builds a shadow of the repo and runs gen_v5 -> the produced board <gw>/mq_<tag>/placed.kicad_pcb (a GEN board).",
+  "chain_runs": "regen.wipe_resolve_chain -> B0 = hw/k2_v4_8L.l14.kicad_pcb (the l14 board).",
+  "verdict": "BY CONSTRUCTION THEY ARE DIFFERENT FILES; the question is whether their LAYOUTS agree."
+ },
+ "machine_check": {
+  "method": "mech_probe_moves([], work, 'base', return_board=True) -> the gate's base gen board; compare every MEMBER pad position against l14 (read-only pcbnew).",
+  "result": {
+   "member_pads_compared": 118,
+   "positions_differing": 0,
+   "examples_identical": {
+    "C88.1": [
+     29.05,
+     41.5
+    ],
+    "J13.2": [
+     29.21,
+     46.54
+    ]
+   }
+  },
+  "conclusion": "AT THE BASE the two boards AGREE on every member pad (118/118 identical) => the evaluation base is CONSISTENT at the base; a move admissible/inadmissible on one is evaluated against the SAME geometry."
+ },
+ "correction_of_my_own_prior_overclaim": {
+  "prior_claim": "R1096 said the rigid-move gen failure exposed 'a REAL copper overlap in the generator's OWN layout' and blamed a gen-vs-l14 divergence.",
+  "correction": "the base layouts are identical (118/118). The gen failure's own message shows C88.1 at the MOVED position but J13.2 at its UNMOVED position, i.e. the rigid move was applied to PART of the entry set - so the overlap is an artefact of an INCOMPLETE application of the move, NOT of a base divergence.",
+  "status": "UNRESOLVED - named below."
+ },
+ "unresolved_named": {
+  "id": "M-ENG-MOVE-APPLICATION-PARTIAL",
+  "what": "in the rigid probe (one delta, all 25 refs) the generator ended up with some refs moved and others not (evidence: the S1 PAD_OVERLAP message pairs a moved C88.1 with an unmoved J13.2); edit_placement_at edited pm_gate/project.yaml (58 lines) but the generator's effective placement for J13 did not change.",
+  "needed": "a machine check that AFTER edit_placement_at every requested ref's placement actually changed in the placement source (a per-ref verification), before the gate trusts a 'partial' move."
+ },
+ "gen_failed_base_invariant": {
+  "rule": "an EMPTY violations reading is NEVER a clean reading: mech_probe_moves already NAMES its failure with gen_failed/gen_exit, and rearrange_probe requires gen_exit == 0 (guard test_C398_*). This is now a BASE INVARIANT for every gate consumer.",
+  "status": "asset on file (R1096), regression pending a gate-probe receipt."
+ },
+ "OWNER-ITEMS": 0
+}
