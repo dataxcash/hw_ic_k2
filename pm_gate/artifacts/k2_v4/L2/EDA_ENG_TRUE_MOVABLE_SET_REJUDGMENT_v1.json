@@ -1,0 +1,104 @@
+{
+ "artifact": "k2_eda_eng_true_movable_set_rejudgment_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-400 sec.6.3: AFTER the meter fix, the read-only re-verification (which steps truly land; whether U1's 'no step' is real).",
+ "method": "regen.rearrange_probe(l14, [22.95,32.95,51.5,78.0], 25 members, coherent_seed_order, direction=(0,1)) with the FIXED meter (unapplied moves are now refused, not silently accepted). 93 probes.",
+ "true_map": {
+  "n_moved": 18,
+  "n_members": 25,
+  "moved": {
+   "E2": [
+    0,
+    1.0
+   ],
+   "L1": [
+    0,
+    4.0
+   ],
+   "C84": [
+    0,
+    4.0
+   ],
+   "C73": [
+    0,
+    4.0
+   ],
+   "C88": [
+    0,
+    3.5
+   ],
+   "R1": [
+    0,
+    2.5
+   ],
+   "R28": [
+    0,
+    4.0
+   ],
+   "C86": [
+    0,
+    4.0
+   ],
+   "D1": [
+    0,
+    4.0
+   ],
+   "R21": [
+    0,
+    4.0
+   ],
+   "R40": [
+    0,
+    3.0
+   ],
+   "R41": [
+    0,
+    4.0
+   ],
+   "C90": [
+    0,
+    0.5
+   ],
+   "C85": [
+    0,
+    4.0
+   ],
+   "C87": [
+    0,
+    4.0
+   ],
+   "U2": [
+    0,
+    4.0
+   ],
+   "U5": [
+    0,
+    4.0
+   ],
+   "U4": [
+    0,
+    4.0
+   ]
+  },
+  "no_step": [
+   "J11",
+   "J13",
+   "J9",
+   "D2",
+   "J12",
+   "J6",
+   "U1"
+  ]
+ },
+ "rejudgment": {
+  "connectors": "the five connectors are now CORRECTLY REFUSED (their +N down moves never land - the downstream coordinate override, filed as 'not movable via the current edit path'). NOTE: the earlier 22/23-of-25 readings were VACUOUS and are superseded.",
+  "U1": "U1's 'no step' is REAL and CONFIRMED on the fixed meter (not a meter artefact): single-ref +4mm down is a genuine gen_v5 refusal, and no lattice step is admitted. The cluster CORE that DOES move is U2/U4/U5 (+4.0 down).",
+  "vacuous_reading_correction": "the true movable count is 18/25 (not 22 or 23)."
+ },
+ "per_K2_400_sec6_3_branch": {
+  "reading": "(a) U1 has no legal step => a sec.16.3 planning artifact is the required next filing.",
+  "if_proven_mechanically_illegal": "the directive 'U1 moves' is unreachable on the current edit path (its moves are gen-refused; the connectors are override-frozen) => the supervisor carries the certificate to OWNER (frozen-set) only if the exam scenario itself is proven mechanically illegal.",
+  "not_yet_proven": "this window establishes U1 immovability WITHIN the current gate+gen+edit path; it does NOT yet prove that NO admissible placement exists (e.g. the override fix or a different edit path could change U1's feasibility)."
+ },
+ "OWNER-ITEMS": 0
+}
