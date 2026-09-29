@@ -1451,6 +1451,59 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # ②″ **端口可达性感知缝合段（#K2-408 §四.2 · 2c_endpoint_stitch）**：照抄在册 C17 v1 的 islands→stitch 语义 ——
     # 对 DRC 仍报的**同网成对端点**，逐对落一条**确定性 L 型 stitch**（跨层一个过孔）；**零搜索/零试参**；
     # 越界或不合规者由 `apply-batch --bound-rect` 与后续 DRC **具名**（绝不静默丢）。
+    # ②‴ **#K2-420 让位阶段**：对 DRC 残差逐条算**确定性让位序**，并**平移被点名的他网铜段**（最小动词），再重解一趟。
+    _ybud = os.path.join(work, "s2y_before_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", _ybud, resolved])
+    yield_plans, yield_miss = [], []
+    if os.path.isfile(_ybud) and os.path.isfile(resolved):
+        import pcbnew as _PY
+        try:
+            _rt2 = __import__("importlib").util
+            _sp = _rt2.spec_from_file_location("k2yl", os.path.join(ROOT, "tools", "k2_move_copper_v1.py"))
+            _pl = _rt2.spec_from_file_location("k2ep", os.path.join(ROOT, "tools", "k2_endpoint_reach_planner_v1.py"))
+            _au = _rt2.spec_from_file_location("k2au", os.path.join(ROOT, "tools", "k2_corridor_occupancy_audit_v1.py"))
+            _md = _rt2.module_from_spec(_sp); _sp.loader.exec_module(_md)
+            _ep = _rt2.module_from_spec(_pl); _pl.loader.exec_module(_ep)
+            _au = _rt2.module_from_spec(_au); _au.loader.exec_module(_au)
+            _bd = _PY.LoadBoard(resolved)
+            _dj = json.load(open(_ybud, encoding="utf-8"))
+            for _it in (_dj.get("unconnected_items") or []):
+                _its = _it.get("items") or []
+                if len(_its) < 2:
+                    continue
+                _d0v, _d1v = _its[0].get("description", ""), _its[1].get("description", "")
+                import re as _re
+                _m0, _m1 = _re.search(r"\[([^\]]+)\]", _d0v), _re.search(r"\[([^\]]+)\]", _d1v)
+                if not _m0 or not _m1 or _m0.group(1) != _m1.group(1):
+                    continue
+                _net = _m0.group(1)
+                _p0 = (_its[0]["pos"]["x"], _its[0]["pos"]["y"]); _p1 = (_its[1]["pos"]["x"], _its[1]["pos"]["y"])
+                _ly = sorted({_ep._layers(_d0v)[0], _ep._layers(_d1v)[0]})
+                _occ = [_au.occupant_rects(_bd, _ly, _net, 0.20)]
+                _occ = [o for o in _occ[0] if _ep._seg_gap(o["bbox"], _p0, _p1) <= 0.60]
+                _seq = _ep.yield_sequence((_p0, _p1), [{"net": o["net"], "bbox": o["bbox"]} for o in _occ], 0.20)
+                for _y, _o in zip(_seq, _occ):
+                    if _y["move_mm"] > 0:
+                        _sgn = _y["move_mm"] * (1.0 if _y["dir"] == "+y" else -1.0)
+                        yield_plans.append("%s:%s:%s:0:%s" % (_o["net"], _o["at"][0], _o["at"][1], round(_sgn, 4)))
+            if yield_plans:
+                _yout = os.path.join(work, "s2y_yielded.kicad_pcb")
+                rc_y, yr = _cli("move-copper", "--board", resolved, "--moves", ",".join(yield_plans), "--out", _yout)
+                if rc_y == 0 and os.path.isfile(_yout):
+                    _d3 = os.path.join(work, "s2y_drc.json")
+                    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", _d3, _yout])
+                    _r3 = os.path.join(work, "s2y_resolved.kicad_pcb")
+                    _l3 = os.path.join(work, "s2y_ledger.json")
+                    _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", _yout,
+                          "--drc", _d3, "--out", _r3, "--ledger", _l3, "--margin", "3.0", "--floor", "0.20",
+                          "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
+                    if os.path.isfile(_r3):
+                        resolved = _r3
+        except Exception as _e:                                        # noqa: BLE001
+            yield_miss.append(str(type(_e).__name__))
+    chain.append({"stage": "endpoint_yield_sequence", "plans": len(yield_plans), "applied_to": resolved,
+                  "errors": yield_miss})
+
     d2c = os.path.join(work, "s2c_before_stitch_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d2c, resolved])
     st_plans, st_out = [], None

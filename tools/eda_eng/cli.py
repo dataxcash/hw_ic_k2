@@ -123,6 +123,9 @@ def main(argv=None):
     p.add_argument("--keep-nets", dest="keep_nets", default=None)
     p.add_argument("--out", required=True)
     p.add_argument("--json-out")
+    p = sub.add_parser("move-copper", help="(subprocess only) #K2-420: translate named copper segments for the yield sequence")
+    p.add_argument("--board", required=True); p.add_argument("--moves", required=True)
+    p.add_argument("--out", required=True); p.add_argument("--json-out")
     p = sub.add_parser("bound-outside", help="(subprocess only) C35: restore the outside-frame copper to the base geometry")
     p.add_argument("--base", required=True); p.add_argument("--in", dest="inp", required=True)
     p.add_argument("--rect", required=True); p.add_argument("--out", required=True)
@@ -370,6 +373,13 @@ def main(argv=None):
                 moves.append((r, float(dx), float(dy)))
         r = regen_mod.relocate_relative_chain(rect, moves, a.work, members, pitch=a.pitch)
         return _emit(r, a.json_out, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
+
+    if a.cmd == "move-copper":
+        import subprocess as _sp, sys as _sy
+        r = _sp.run([_sy.executable, os.path.join(ROOT, "tools", "k2_move_copper_v1.py"),
+                     "--board", a.board, "--moves", a.moves, "--out", a.out], capture_output=True, text=True)
+        sys.stdout.write(r.stdout)
+        return r.returncode
 
     if a.cmd == "move-parts":
         rect = [float(v) for v in a.rect.split(",")]
