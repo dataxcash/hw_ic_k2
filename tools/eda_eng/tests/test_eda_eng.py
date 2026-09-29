@@ -1070,6 +1070,14 @@ class T(unittest.TestCase):
         inb, exc = regen.partition_stitch_plans(cl, [22.95, 32.95, 51.5, 78.0])
         self.assertEqual(len(inb), 1); self.assertEqual(exc, [])
 
+    def test_C411_stitch_is_maze_first_and_refusals_are_dropped_named(self):
+        """#K2-411 §二：**迷宫优先 ＋ 拒即具名** —— 链内**不得**落未经验证的直线 stitch；
+        本阶段出现的计划即"迷宫未接通者" ⇒ 一律 **DROP-NAMED**（R1146 实测直线 L 破 C2）。"""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        self.assertIn("endpoint_stitch_dropped_named", seg)
+        self.assertNotIn('_cli("route", "--apply-batch", sf2', seg, "no direct-L apply path may remain")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

@@ -1462,14 +1462,11 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
         inb, exc = partition_stitch_plans(st_plans, rect)
         chain.append({"stage": "endpoint_stitch_partitioned", "in_bound": len(inb), "excluded": len(exc),
                       "excluded_named": [e["net"] for e in exc]})
-        if inb:
-            sf2 = os.path.join(work, "s2c_stitch_inb.json")
-            json.dump(inb, open(sf2, "w", encoding="utf-8"), ensure_ascii=False)
-            stitched = os.path.join(work, "s2c_stitched.kicad_pcb")
-            rc_s, st_out = _cli("route", "--apply-batch", sf2, "--board", resolved, "--out", stitched,
-                                "--bound-rect", ",".join(str(x) for x in rect))
-            if rc_s == 0 and os.path.isfile(stitched):
-                resolved = stitched
+        # #K2-411 §二：**迷宫优先 ＋ 拒即具名（DROP-NAMED）· 禁一切直线蛮干**。
+        # 本阶段出现的计划，即迷宫在该端点**未能接通**者（否则不会仍在 DRC 名单上）⇒ **一律 DROP-NAMED**，
+        # **不落任何未经验证的直线 stitch**（R1146 实测：直线 L 绕过迷宫横穿异网铜 ⇒ C2 破）。
+        chain.append({"stage": "endpoint_stitch_dropped_named", "dropped": len(inb),
+                      "dropped_named": [{"net": pl.get("net"), "reason": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"} for pl in inb]})
     chain.append({"stage": "endpoint_stitch_applied", "exit": (st_out or {}).get("status") if isinstance(st_out, dict) else st_out})
 
     # ③ refill（块内 zone 重跑 filler）= apply-batch 空计划（其内建 ZONE_FILLER）
