@@ -1251,6 +1251,21 @@ class T(unittest.TestCase):
         self.assertIn("GAP_NETS", src)
         self.assertIn('"--order-list", _prio', seg)
 
+    def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
+        """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
+        Deterministic; the board pass is a read-only run, no exam, no board change."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_deviation_gen_v1", os.path.join("tools", "k2_deviation_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        self.assertEqual(m._layers("走线 [N] (In5.Cu), 长度: 0.7 mm"), ["In5.Cu"])
+        self.assertEqual(m._layers("F.Cu - In4.Cu 上的盲孔 [N]")[:2], ["F.Cu", "In4.Cu"])
+        self.assertEqual(m._clamp((-5.0, 99.0), (0.0, 0.0, 10.0, 10.0)), (0.0, 10.0))
+        pr = m.pairs({"unconnected_items": [{"items": [
+            {"description": "走线 [A] (F.Cu)", "pos": {"x": 1.0, "y": 2.0}},
+            {"description": "走线 [A] (B.Cu)", "pos": {"x": 3.0, "y": 4.0}}]}]})
+        self.assertEqual(pr[0]["net"], "A"); self.assertEqual(pr[0]["layers"], ["F.Cu", "B.Cu"])
+
     def test_C415_the_wrapper_actually_exposes_the_order_lever(self):
         """#K2-415 sec.2.2: the chain wires `--order list --order-list <file>`, so the WRAPPER must accept `list`
         AND forward the list to the in-register maze (both were missing => the authorised run burned on rc=2)."""

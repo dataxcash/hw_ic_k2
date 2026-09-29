@@ -1,0 +1,24 @@
+{
+ "artifact": "k2_sec17_4_new_means_report_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-416 sec.5.1(ii) + #K2-412 sec.17.4: a NEW MEANS must be reported to the supervisor BEFORE implementation, with the sec.20 three questions.",
+ "trigger": "the deviation-channel machine check says a straight/local-offset deviation is INFEASIBLE for all five residuals => a bent re-route (a router step) is required.",
+ "proposed_new_means": {
+  "name": "TARGETED SINGLE-NET RIP-UP + RE-ROUTE (bounded)",
+  "what": "for each residual: freeze the rest of the board, RIP the named blocking segment(s) inside the residual's corridor, route the residual with the in-register maze (bounded to the corridor, FINE_STEP), then RE-ROUTE the ripped net(s) around it; the final DRC + the landing no-isolated-copper gate still adjudicate.",
+  "why_principled": "the residual wall is a routing-COMPETITION/order artefact (the blockers are copper the maze itself laid), so NEGOTIATED rip-up - not more space - is the matching remedy; the supervisor's own #K2-416 note pinned the cause as 'order and yielding'.",
+  "determinism": "bounded to the named blocker(s) and the corridor; one rip/re-route pass per residual (no parameter search, no iteration)."
+ },
+ "sec20_three_questions": {
+  "Q1_same_kind_product": "YES - 'rip-up and reroute' (R&R) is the standard negotiated-congestion method in every commercial router; the same-chip TI DS320PR1601 EVM drawings (registered, read-only) remain the board-level reference.",
+  "Q2_copyable_artifact": "YES, IN-REPO - tools/k2_reroute_affected_v2.py (C17 v1: rip -> islands -> stitch -> snap -> repair -> normalise) is the registered rip-up pipeline; eda_eng/ripup.py carries the engine-side rip; the maze (k2_p4_mroute_v1.py) is the router.",
+  "Q3_difference_list": "our pass must be BOUNDED (one net + its corridor), SINGLE-PASS (no global reshuffle / no iteration), and must keep C2 clean (no new classes) with the landing gate intact; the vendor/C17 pipelines reshuffle globally."
+ },
+ "status": "REPORT ONLY - not implemented, per the ruling. Awaiting the supervisor's go/no-go.",
+ "zero": {
+  "exam_runs": 0,
+  "board_changes": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}

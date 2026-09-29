@@ -1,0 +1,301 @@
+{
+ "artifact": "k2_deviation_channel_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-416 sec.5: the deviation-channel window for the five named residuals of the #K2-415 run (zero exam runs).",
+ "generator": "tools/k2_deviation_gen_v1.py",
+ "bound_rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "clearance_mm": 0.2,
+ "rule": "PER-CORRIDOR conservation: capacity (the witnessed clear sub-rectangle's narrow dimension) >= need (this net's track width + 2*clearance). Block/domain-level free-area substitution is FORBIDDEN.",
+ "verdict": {
+  "straight_or_local_offset_deviation": "INFEASIBLE for 5/5",
+  "why": "for every residual the pair-derived corridor admits NO clear sub-rectangle containing both ends, and it STILL admits none after the named endpoint blockers are removed => the interior of the corridor is congested too, so no straight channel or local offset works.",
+  "measure": "bounded_deviation_mm (need - the boxed end's local clear width) = 0.60 mm for all five (the local clear width at the boxed end is 0.00 mm).",
+  "means": "therefore the deviation must be a BENT RE-ROUTE = a routing step (a NEW MEANS) which per #K2-416 sec.5.1(ii)/#K2-412 sec.17.4 MUST be reported BEFORE implementation."
+ },
+ "items": [
+  {
+   "net": "P3V3_AUX",
+   "from_desc": "走线 [P3V3_AUX] (In5.Cu), 长度: 0.7071 mm",
+   "to_desc": "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]",
+   "geometry": {
+    "layers": [
+     "In5.Cu",
+     "F.Cu"
+    ],
+    "slot": [
+     "In5.Cu",
+     "F.Cu"
+    ],
+    "corridor_rect": [
+     29.25,
+     53.1,
+     35.15,
+     56.175
+    ],
+    "p1_in_domain": [
+     34.75,
+     55.775
+    ],
+    "p2_in_domain": [
+     29.65,
+     53.5
+    ],
+    "polyline": [
+     [
+      34.75,
+      55.775
+     ],
+     [
+      29.65,
+      53.5
+     ]
+    ],
+    "via_hole_pair": {
+     "at": [
+      29.65,
+      53.5
+     ],
+     "layers": [
+      "In5.Cu",
+      "F.Cu"
+     ]
+    },
+    "valid_after_yield": false
+   },
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.0,
+   "cap_at_p2_mm": 0.5,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "bounded_deviation_mm": 0.6,
+   "blockers_named": [
+    "GND"
+   ],
+   "witness_after_yield": false,
+   "buildability": "relocation_listed"
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "from_desc": "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+   "to_desc": "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+   "geometry": {
+    "layers": [
+     "F.Cu"
+    ],
+    "slot": [
+     "F.Cu"
+    ],
+    "corridor_rect": [
+     28.81,
+     46.14,
+     40.5625,
+     50.65
+    ],
+    "p1_in_domain": [
+     29.21,
+     46.54
+    ],
+    "p2_in_domain": [
+     40.1625,
+     50.25
+    ],
+    "polyline": [
+     [
+      29.21,
+      46.54
+     ],
+     [
+      40.1625,
+      50.25
+     ]
+    ],
+    "via_hole_pair": null,
+    "valid_after_yield": false
+   },
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.0,
+   "cap_at_p2_mm": 0.24,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "bounded_deviation_mm": 0.6,
+   "blockers_named": [
+    "MCU_VDD"
+   ],
+   "witness_after_yield": false,
+   "buildability": "relocation_listed"
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "from_desc": "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+   "to_desc": "F.Cu 上 R28 的焊盘 1 [SWCLK_BOOT0]",
+   "geometry": {
+    "layers": [
+     "F.Cu"
+    ],
+    "slot": [
+     "F.Cu"
+    ],
+    "corridor_rect": [
+     39.7625,
+     44.6,
+     50.45,
+     50.65
+    ],
+    "p1_in_domain": [
+     40.1625,
+     50.25
+    ],
+    "p2_in_domain": [
+     50.05,
+     45.0
+    ],
+    "polyline": [
+     [
+      40.1625,
+      50.25
+     ],
+     [
+      50.05,
+      45.0
+     ]
+    ],
+    "via_hole_pair": null,
+    "valid_after_yield": false
+   },
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.35,
+   "cap_at_p2_mm": 0.0,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "bounded_deviation_mm": 0.6,
+   "blockers_named": [
+    "NRST"
+   ],
+   "witness_after_yield": false,
+   "buildability": "relocation_listed"
+  },
+  {
+   "net": "I2C1_SDA",
+   "from_desc": "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm",
+   "to_desc": "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+   "geometry": {
+    "layers": [
+     "B.Cu",
+     "F.Cu"
+    ],
+    "slot": [
+     "B.Cu",
+     "F.Cu"
+    ],
+    "corridor_rect": [
+     51.1,
+     61.505,
+     51.5,
+     67.855
+    ],
+    "p1_in_domain": [
+     51.5,
+     61.905
+    ],
+    "p2_in_domain": [
+     51.5,
+     67.455
+    ],
+    "polyline": [
+     [
+      51.5,
+      61.905
+     ],
+     [
+      51.5,
+      67.455
+     ]
+    ],
+    "via_hole_pair": {
+     "at": [
+      51.5,
+      67.455
+     ],
+     "layers": [
+      "B.Cu",
+      "F.Cu"
+     ]
+    },
+    "valid_after_yield": false
+   },
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.0,
+   "cap_at_p2_mm": 0.4,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "bounded_deviation_mm": 0.6,
+   "blockers_named": [
+    "I2C1_SCL"
+   ],
+   "witness_after_yield": false,
+   "buildability": "relocation_listed"
+  },
+  {
+   "net": "P3V3",
+   "from_desc": "F.Cu 上 C84 的焊盘 1 [P3V3]",
+   "to_desc": "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+   "geometry": {
+    "layers": [
+     "F.Cu"
+    ],
+    "slot": [
+     "F.Cu"
+    ],
+    "corridor_rect": [
+     43.0,
+     43.6,
+     51.5,
+     61.0
+    ],
+    "p1_in_domain": [
+     43.4,
+     44.0
+    ],
+    "p2_in_domain": [
+     51.5,
+     60.6
+    ],
+    "polyline": [
+     [
+      43.4,
+      44.0
+     ],
+     [
+      51.5,
+      60.6
+     ]
+    ],
+    "via_hole_pair": null,
+    "valid_after_yield": false
+   },
+   "capacity_mm": null,
+   "cap_at_p1_mm": 0.0,
+   "cap_at_p2_mm": 4.1,
+   "need_mm": 0.6,
+   "track_w_mm": 0.2,
+   "status": "NO_COMMON_CHANNEL",
+   "bounded_deviation_mm": 0.6,
+   "blockers_named": [
+    "NRST"
+   ],
+   "witness_after_yield": false,
+   "buildability": "relocation_listed"
+  }
+ ],
+ "buildability": "relocation_listed",
+ "OWNER-ITEMS": 0
+}
