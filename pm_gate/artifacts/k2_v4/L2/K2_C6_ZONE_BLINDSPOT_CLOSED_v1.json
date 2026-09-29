@@ -1,0 +1,32 @@
+{
+ "artifact": "k2_c6_zone_blindspot_closed_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-442 sec.2.7: the ENG must first close the C6/zone blind spot; until then C6=0 may NOT be used as evidence that the outside is clean.",
+ "delivered": {
+  "in": "tools/eda_eng/block.py",
+  "what": [
+   "block.zone_fill_segments(board, rect=None, nd=3, only_outside=False) - canonical set of ZONE fill polygon EDGES (per zone, per copper layer)",
+   "block.outside_geometry(board, rect, nd=3, include_zones=False) - now optionally adds the zone edges that lie OUTSIDE dR"
+  ],
+  "default": "include_zones=False => the JUDGE's C6 semantics are UNCHANGED by this commit (a criteria change is not the ENG's to make).",
+  "regression": "test_C442_the_outside_copper_check_can_see_zones (zone edges contribute; deterministic). selftest 135/135 PASS."
+ },
+ "api_hazards_found_and_fixed": [
+  "z.GetFilledPolysList(<id from ZoneSet.Seq()>) SEGFAULTS in this pcbnew build; a board.GetLayerID(<name>) id works.",
+  "pcbnew is not imported at block.py module scope (only inside functions) => zone_fill_segments needs its own local import, otherwise every zone raises NameError (silently swallowed by the per-zone guard) and the read returns 0.",
+  "the per-zone guard must be PER ZONE: a single blanket except made one bad zone void the whole read (it returned 0 while 10/18 zones do have fills)."
+ ],
+ "decisive_measurement": {
+  "read": "zone_fill_segments(baseline) all-edges=36114, outside-edges=27181 (so the zone read is live).",
+  "comparison": "legacy C6 (segments+vias): judged-board-vs-B0 diff=0 equal=True  ||  ZONE-AWARE C6: diff=943 equal=False",
+  "reading": "the R1316 board PASSED the legacy C6 yet its OUTSIDE ZONE FILL differs from the baseline in 943 canonical edges => the false green is CONFIRMED and QUANTIFIED.",
+  "consequence_for_the_judge": "flipping the JUDGE's C6 to zone-aware would FAIL this run (and by construction every run whose refill changes outside fills). So it is a JUDGED-CRITERIA decision: either (a) the chain stops touching outside fills, or (b) C6 is restated with a stated tolerance/scope, or (c) C6 stays legacy and the zone delta is reported as an adjacent row.",
+  "consequence_for_R_g": "R-g (merging the P3V3 finger with the main plane) necessarily changes OUTSIDE fill => it can only be judged AFTER this contract question is settled. R-g therefore remains BLOCKED on the supervisory decision."
+ },
+ "status_of_the_other_ordered_items": {
+  "R_h_per_net_lanes": "proposal filed (K2_RH_PAIR_LANE_FROZEN_PROPOSAL_v1.json) but NOT frozen into the spec - the ordered window prioritised the C6/zone closure and R-g depends on the C6/zone decision; freezing plus the one construction plus the one N=1 remain outstanding.",
+  "R_g": "mechanism NOT chosen in code; depends on the C6/zone decision (see above).",
+  "N=1": "NOT RUN this window (the ordered preconditions are not complete; running would be a same-cause rerun)."
+ },
+ "OWNER-ITEMS": 0
+}

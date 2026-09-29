@@ -1395,6 +1395,18 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C442_the_outside_copper_check_can_see_zones(self):
+        """#K2-442 sec.2.7: 'outside copper unchanged' must include ZONE fills - the legacy predicate read segments
+        + vias only, which is a false-green blind spot. Zone edges must contribute, deterministically."""
+        b = os.path.join(ROOT, verify.BASELINE_BOARD)
+        rect = [22.95, 32.95, 51.5, 78.0]
+        legacy = block.outside_geometry(b, rect)
+        zone_edges = block.zone_fill_segments(b, rect, only_outside=True)
+        self.assertTrue(zone_edges, "zones must contribute to the outside-copper read")
+        zaware = block.outside_geometry(b, rect, include_zones=True)
+        self.assertNotEqual(dict(legacy), dict(zaware), "include_zones must add the zone edges")
+        self.assertEqual(dict(block.outside_geometry(b, rect, include_zones=True)), dict(zaware), "deterministic")
+
     def test_C440_channels_for_maze_fails_LOUD_on_empty_and_on_error(self):
         """#K2-440 sec.3.3 BEHAVIOUR regression (not a source-string proxy). RED was the R1286 run: an EMPTY channel
         set was silently swallowed and the maze ran with NO constraint. GREEN: drive the REAL code path with stub

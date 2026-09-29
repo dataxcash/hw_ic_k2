@@ -363,8 +363,49 @@ def move_block(board, rect, delta, out, refs=None):
 
 
 # ─────────────────────────────── 保真度（C6/C7） ───────────────────────────────
-def outside_geometry(board, rect, nd=3):
-    """铜（段+孔）在 rect **之外**的几何多重集（canonical）——C6「块外铜零改动」的读数。"""
+def zone_fill_segments(board, rect=None, nd=3, only_outside=False):
+    """**#K2-442 sec.2.7**：zone 填充多边形的**边**（canonical）—— 让「块外铜零改动」看得见 zone。
+    `only_outside` 时只计矩形**之外**的边（与 `outside_geometry` 同口径）。"""
+    import pcbnew as P
+    out = collections.Counter()
+    _b = board
+    if isinstance(_b, str):                                            # accepts a path (same call style as read_copper)
+        import pcbnew as _P
+        _b = _P.LoadBoard(_b)
+    if True:
+        for z in _b.Zones():
+          try:
+            net = z.GetNetname()
+            for lid in z.GetLayerSet().CuStack():
+                layer = _b.GetLayerName(lid)
+                if not layer.endswith(".Cu"):
+                    continue
+                lid = _b.GetLayerID(layer)             # #K2-442: GetFilledPolysList needs an id from GetLayerID,
+                poly = z.GetFilledPolysList(lid)       # NOT the enum out of GetLayerSet().Seq() (that one segfaults)
+                for i in range(poly.OutlineCount()):
+                    ch = poly.Outline(i)
+                    n = ch.PointCount()
+                    for j in range(n):
+                        p = ch.CPoint(j); q = ch.CPoint((j + 1) % n)
+                        a = (P.ToMM(p.x), P.ToMM(p.y)); b = (P.ToMM(q.x), P.ToMM(q.y))
+                        if (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 <= 1e-16:
+                            continue
+                        if only_outside:
+                            _, outs = clip_iu(a, b, rect)
+                            for (pp, qq) in outs:
+                                if (pp[0] - qq[0]) ** 2 + (pp[1] - qq[1]) ** 2 <= 1e-16:
+                                    continue
+                                out[(net, layer) + tuple(round(v, nd) for v in _canon(pp, qq))] += 1
+                        else:
+                            out[(net, layer) + tuple(round(v, nd) for v in _canon(a, b))] += 1
+          except Exception:                                            # noqa: BLE001
+            continue                                                   # per-zone: one bad zone must not void the rest
+    return out
+
+
+def outside_geometry(board, rect, nd=3, include_zones=False):
+    """铜（段+孔[+zone]）在 rect **之外**的几何多重集（canonical）——C6「块外铜零改动」的读数。
+    **#K2-442 sec.2.7**：`include_zones=True` 时把 zone 填充的界外边一并计入（补「只看段/孔」的假绿盲区）。"""
     c = read_copper(board)
     out = collections.Counter()
     for s in c["segments"]:
@@ -374,6 +415,8 @@ def outside_geometry(board, rect, nd=3):
                 continue
             k = (s["net"], s["layer"]) + tuple(round(v, nd) for v in _canon(p, q)) + (s["width"],)
             out[k] += 1
+    if include_zones:
+        out.update(zone_fill_segments(board, rect, nd, only_outside=True))
     for v in c["vias"]:
         if not pt_in(v["at"], rect):
             out[(v["net"], "VIA", round(v["at"][0], nd), round(v["at"][1], nd), v["drill"])] += 1
