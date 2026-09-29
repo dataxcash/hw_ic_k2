@@ -1,0 +1,48 @@
+{
+ "artifact": "k2_exam_a_quintuple_prime_attempt2_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-409 sec.2: the authorised A^5 RE-RUN (run 1/1) with the 2c_endpoint_stitch stage in the chain.",
+ "run": {
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json --work /tmp/opencode/aprime_a5_final_v2",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "gate": "PASS"
+ },
+ "nine_rows": {
+  "C1": 8,
+  "C2": {
+   "total": 122,
+   "ref": 148,
+   "new_classes": []
+  },
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": {
+   "diff": 0,
+   "pass": true
+  },
+  "C7": {
+   "diff": 0,
+   "pass": true
+  },
+  "C8": {
+   "violations": [],
+   "pass": true
+  },
+  "C9": "reported",
+  "rows_present": 9
+ },
+ "attribution": {
+  "stage_fired": "endpoint_stitch_planned n=8 (nets I2C1_SCL/I2C1_SDA/MCU_VDD/NRST/P3V3/P3V3_AUX/PERSTA#) - the new stage DOES fire deterministically.",
+  "but": "endpoint_stitch_applied exit = REFUSED_OUT_OF_BOUND: the apply path is ALL-OR-NOTHING - a single plan whose points lie OUTSIDE the bound rect (e.g. the P3V3 stitch at x=81.0, the I2C1_SDA stitch at x=52.205) voids the ENTIRE batch => ZERO stitches applied => C1 stays 8.",
+  "confirming_evidence": "the DRY validation (R1136) already listed plans with out-of-frame points (P3V3 [81.0,60.6]; I2C1_SDA [52.205,...]).",
+  "layer": "the STITCH-APPLY BOUNDARY layer (batch granularity), not the maze, not capacity, not the criteria.",
+  "deterministic_fix_one_step": "pre-filter the plans against the bound rect (pure geometry), apply ONLY the in-bound subset, and NAME the excluded ones (the stage's own contract: rejected stitches are NAMED, never silently dropped). Expected: the in-bound stitches close a subset of the 8 gaps."
+ },
+ "outcome_contract": {
+  "branch": "FAIL => stop + attribute, NO self-rerun (#K2-409 sec.2)."
+ },
+ "OWNER-ITEMS": 0
+}
