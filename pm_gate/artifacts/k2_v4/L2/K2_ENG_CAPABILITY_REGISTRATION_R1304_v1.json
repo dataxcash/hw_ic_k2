@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_eng_capability_registration_r1304_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-439 sec.2.4/sec.2.9/sec.3: the ENG-side evidence for the newly registered gap and the means corrections.",
+ "closing_evidence_offered": [
+  {
+   "id": "M-ENG-CHAIN-SILENT-SWALLOW",
+   "status": "CLOSING EVIDENCE OFFERED",
+   "criterion_1_loud_on_empty": "the chain now returns state W1B_CHANNELS_EMPTY with stage channels_compute_empty and W1B_CHANNELS_FAILED on an exception - it can no longer proceed on an empty channel set. Regression: test_C438_M1 asserts 'channels_compute_empty' is present (RED before, GREEN now).",
+   "criterion_2_regression_PASS": "131/131 PASS; test_C438_M1 (ordering + fail-loud) and test_C438_M2 (never-empty block channel source) RED->GREEN.",
+   "criterion_3_end_to_end_positive": "the authorised run's chain records channels_computed n_nets=19 with NO channels_compute_failed / channels_compute_empty stage, and ps(1) on the live maze shows the 19-entry --channels argument.",
+   "residual_caveat": "the empty-branch was NOT exercised end-to-end (channels were non-empty), so criterion 1 is proven by code + regression, not by an end-to-end empty case. Supervisor to rule on closure."
+  }
+ ],
+ "means_corrections_landed": [
+  {
+   "id": "M-1",
+   "in": "tools/eda_eng/regen.py",
+   "what": "channel computation moved after the wiped-DRC write; empty => loud"
+  },
+  {
+   "id": "M-2",
+   "in": "tools/k2_joint_alloc_v1.py",
+   "what": "never-empty block channel source; plane nets out of the pack; family frame optional"
+  }
+ ],
+ "effect_measured": {
+  "C1_before": 5,
+  "C1_after": 4,
+  "closed_item": "P3V3_AUX (In2.Cu <-> C90.1)",
+  "channel_count": 19,
+  "note": "the movement is attributable to M-1; M-2's own effect is bounded by the two remaining POWER residuals."
+ },
+ "new_signature_seen": {
+  "reason": "no-path-coarse(exhausted-13668)",
+  "reading": "the P3V3_AUX channel box itself now bounds the search (13668 nodes exhausted inside it) => the channel for that net is not reachable-endpoint-aware enough; that is a DRAWING matter (line 2+3 plane tie), not a solver-parameter matter."
+ },
+ "still_open_not_to_be_closed": [
+  "M-ENG-POUR-AWARE-CLEAR",
+  "M-ENG-FUNCTIONAL-BLOCK",
+  "M-ENG-MULTI-BLOCK-PLAN",
+  "M-ENG-PER-BLOCK-FLOW",
+  "M-ENG-PORT-REACHABILITY-DRAWING",
+  "M-ENG-CHANNEL-TO-CHAIN-WIRING",
+  "M-ENG-BLOCK-SIZE-SOURCE",
+  "M-ENG-PLANE-TIE-FOR-POWER-PADS",
+  "M-ENG-ROUTER-REROUTE",
+  "M-ENG-BLOCK-CONTENTION-NEGOTIATION",
+  "M-ENG-CONSERVATION-CORRIDOR-SPECIFIC",
+  "M-ENG-CHAIN-W2-RESOLVE"
+ ],
+ "zero_extra_runs": true,
+ "board_frozen": "l14/rev-61",
+ "OWNER-ITEMS": 0
+}
