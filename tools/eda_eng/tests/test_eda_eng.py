@@ -1253,6 +1253,17 @@ class T(unittest.TestCase):
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn('"--port-refs", PORT_REFS', r, "#K2-431 fix 1 must be WIRED into the chain's maze passes")
         self.assertIn('PORT_REFS = "J13"', r)
+    def test_C434_K1_pour_aware_clear_is_a_subprocess_verb_and_wired_into_the_chain(self):
+        """#K2-434 K-1: the cleared field must contain NO hidden pour => an unfill (zone) verb exists and the chain
+        calls it BEFORE routing (unfill -> route -> refill). Static; the verb is subprocess-only (mutation ban)."""
+        c = open(os.path.join("tools", "eda_eng", "cli.py"), encoding="utf-8").read()
+        self.assertIn('"unfill"', c)
+        u = open(os.path.join("tools", "k2_unfill_all_v1.py"), encoding="utf-8").read()
+        self.assertIn("UnFill()", u, "the verb must unfill the zones")
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = r[r.index("def wipe_resolve_chain("):]
+        self.assertIn('"unfill"', seg); self.assertIn("pour_aware_unfill", seg)
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net

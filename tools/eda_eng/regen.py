@@ -1427,6 +1427,12 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         if rc_e == 0 and os.path.isfile(erased):
             wiped = erased
         chain.append({"stage": "erase_refs", "exit": rc_e, "refs": list(erase_refs), "result": er})
+    # ── #K2-434 K-1：**铺铜纳清**（unfill → route → refill；清空场不得留隐藏铜皮/平面）──────────────
+    _unf = os.path.join(work, "s1c_unfilled.kicad_pcb")
+    rc_u, _ur = _cli("unfill", "--board", wiped, "--out", _unf)
+    if rc_u == 0 and os.path.isfile(_unf):
+        wiped = _unf
+    chain.append({"stage": "pour_aware_unfill", "exit": rc_u, "result": _ur})
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
     d0 = os.path.join(work, "s1_wiped_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])
