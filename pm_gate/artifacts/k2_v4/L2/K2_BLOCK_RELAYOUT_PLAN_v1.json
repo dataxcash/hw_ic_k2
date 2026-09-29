@@ -1,0 +1,216 @@
+{
+ "artifact": "k2_block_relayout_plan_v1",
+ "board": "/tmp/opencode/a5s2/s3c_disposed.kicad_pcb",
+ "rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "rows": 6,
+ "corridors": [
+  {
+   "row": 0,
+   "nets": [
+    "P3V3",
+    "SWCLK_BOOT0"
+   ],
+   "n_points": 3,
+   "corridor": null,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "relayout_request": [
+    {
+     "net": "MCU_VDD",
+     "move_mm": 0.2,
+     "dir": "+y",
+     "yield_order": 0
+    },
+    {
+     "net": "NRST",
+     "move_mm": 0.2,
+     "dir": "+y",
+     "yield_order": 1
+    },
+    {
+     "net": "P3V3_AUX",
+     "move_mm": 0.2,
+     "dir": "-y",
+     "yield_order": 2
+    }
+   ],
+   "per_line": [],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 1,
+   "nets": [
+    "SWCLK_BOOT0"
+   ],
+   "n_points": 2,
+   "corridor": null,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "relayout_request": [
+    {
+     "net": "P3V3_AUX",
+     "move_mm": 0.2,
+     "dir": "-y",
+     "yield_order": 0
+    }
+   ],
+   "per_line": [],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 2,
+   "nets": [
+    "P3V3_AUX"
+   ],
+   "n_points": 1,
+   "corridor": [
+    29.450001,
+    53.250001000000005,
+    29.95,
+    53.75
+   ],
+   "conservation": {
+    "capacity_mm": 0.5,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "relayout_request": [],
+   "per_line": [
+    {
+     "net": "P3V3_AUX",
+     "order": 0,
+     "from": [
+      29.65,
+      53.5
+     ],
+     "to": [
+      29.45,
+      53.5
+     ],
+     "via": {
+      "at": [
+       29.45,
+       53.5
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 3,
+   "nets": [
+    "P3V3_AUX"
+   ],
+   "n_points": 1,
+   "corridor": null,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "relayout_request": [
+    {
+     "net": "GND",
+     "move_mm": 0.2,
+     "dir": "-y",
+     "yield_order": 0
+    }
+   ],
+   "per_line": [],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 4,
+   "nets": [
+    "I2C1_SDA",
+    "P3V3"
+   ],
+   "n_points": 2,
+   "corridor": null,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "relayout_request": [
+    {
+     "net": "I2C1_SCL",
+     "move_mm": 0.2,
+     "dir": "+y",
+     "yield_order": 0
+    }
+   ],
+   "per_line": [],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 5,
+   "nets": [
+    "I2C1_SDA"
+   ],
+   "n_points": 1,
+   "corridor": [
+    51.1,
+    67.05500099999999,
+    51.9,
+    67.855001
+   ],
+   "conservation": {
+    "capacity_mm": 0.8,
+    "need_mm": 0.6,
+    "pass": true
+   },
+   "relayout_request": [],
+   "per_line": [
+    {
+     "net": "I2C1_SDA",
+     "order": 0,
+     "from": [
+      51.5,
+      67.455001
+     ],
+     "to": [
+      51.1,
+      67.455
+     ],
+     "via": {
+      "at": [
+       51.1,
+       67.455
+      ],
+      "layers": [
+       "B.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
+   "buildability": "no_move"
+  }
+ ],
+ "policy": "REF-CASE-LIBRARY A1: group fanout / straight runs / one layer change per escape",
+ "closing": {
+  "1_one_command_end_to_end": true,
+  "2_per_line_geometry": 2,
+  "3_conservation_pass": 1,
+  "4_buildability": "relocation_listed",
+  "n_rows": 6
+ },
+ "OWNER-ITEMS": 0
+}

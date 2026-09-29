@@ -136,14 +136,60 @@ def relayout(block_rect, groups, points_by_group, pitch=0.25, gap=0.2):
             "policy": "group fanout / long straight runs / exactly ONE layer change per escape / corridors per group (REF-CASE-LIBRARY A1)"}
 
 
+def plan_from_board(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0.4):
+    """**一条命令端到端**（#K2-423 §三.①）：真板 → 分组 → 内容感知廊道 → 逐廊道守恒 → 每排重排请求 → **每线确定图**。
+    返回 rep（含 `buildability` 与 `closing` 判据状态）。只读 · 确定性 · 零搜索。"""
+    import importlib.util as _iu, os as _os, collections as _c, json as _j
+    _R = _os.path.dirname(_os.path.abspath(__file__))
+    def _m(n, f):
+        sp = _iu.spec_from_file_location(n, _os.path.join(_R, f)); m = _iu.module_from_spec(sp); sp.loader.exec_module(m); return m
+    AUD, DEV, RD = _m("ka", "k2_corridor_occupancy_audit_v1.py"), _m("kd", "k2_deviation_gen_v1.py"), _m("kr", "k2_corridor_redraw_v1.py")
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    eps = []
+    for pr in DEV.pairs(_j.load(open(drc, encoding="utf-8"))):
+        for p_ in (pr["p1"], pr["p2"]):
+            c = DEV._clamp(p_, rect); eps.append((pr["net"], c[0], c[1], pr["layers"][0]))
+    rows = group_by_row(eps, band)
+    byn = _c.defaultdict(list)
+    for o in AUD.occupant_rects(b, ["F.Cu", "In5.Cu"], "__x__", clearance):
+        byn[o["net"]].append(o["bbox"])
+    out = []
+    for i, rw in enumerate(rows):
+        own = {p[0] for p in rw}
+        occ = [bb for n, bbs in byn.items() if n not in own for bb in bbs]
+        xs = [p[1] for p in rw]; ys = [p[2] for p in rw]
+        box = (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
+        sub, _ = RD.clear_subrect_containing_pts(box, occ, clearance, [(p[1], p[2]) for p in rw])
+        cons = corridor_conservation(sub, occ, clearance, need) if sub else {"capacity_mm": 0.0, "need_mm": need, "pass": False}
+        req = row_relayout_request(rw, {n: byn[n] for n in byn if n not in own}, clearance)
+        esc = escape_into_corridor(rw, sub) if sub else []
+        out.append({"row": i, "nets": sorted(own), "n_points": len(rw),
+                    "corridor": list(sub) if sub else None, "conservation": cons,
+                    "relayout_request": req, "per_line": esc,
+                    "buildability": "no_move" if (sub and cons["pass"]) else "relocation_listed"})
+    rep = {"artifact": "k2_block_relayout_plan_v1", "board": board, "rect": list(rect), "rows": len(rows),
+           "corridors": out, "policy": "REF-CASE-LIBRARY A1: group fanout / straight runs / one layer change per escape",
+           "closing": {"1_one_command_end_to_end": True,
+                       "2_per_line_geometry": sum(1 for o in out if o["per_line"]),
+                       "3_conservation_pass": sum(1 for o in out if o["conservation"]["pass"]),
+                       "4_buildability": "no_move" if all(o["buildability"] == "no_move" for o in out) else "relocation_listed",
+                       "n_rows": len(rows)}, "OWNER-ITEMS": 0}
+    return rep
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--params", required=True)
+    ap.add_argument("--board"); ap.add_argument("--drc"); ap.add_argument("--rect")
+    ap.add_argument("--params")
     ap.add_argument("--json-out", dest="json_out", default=None)
     a = ap.parse_args()
-    p = json.load(open(a.params, encoding="utf-8"))
-    rep = relayout(p["block_rect"], p["groups"], p.get("points_by_group", {}),
-                   float(p.get("pitch", 0.25)), float(p.get("gap", 0.2)))
+    if a.board and a.drc and a.rect:
+        rep = plan_from_board(a.board, a.drc, tuple(float(v) for v in a.rect.split(",")))
+    else:
+        p = json.load(open(a.params, encoding="utf-8"))
+        rep = relayout(p["block_rect"], p["groups"], p.get("points_by_group", {}),
+                       float(p.get("pitch", 0.25)), float(p.get("gap", 0.2)))
     if a.json_out:
         json.dump(rep, open(a.json_out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(rep, ensure_ascii=False))
