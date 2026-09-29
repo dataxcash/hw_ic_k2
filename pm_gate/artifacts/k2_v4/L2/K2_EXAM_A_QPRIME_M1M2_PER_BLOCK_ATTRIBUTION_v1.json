@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_exam_a_qprime_m1m2_per_block_attribution_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-439 sec.2.10 (per-block named attribution + new/old cause).",
+ "counts": {
+  "C1_items": 4,
+  "C1_distinct_nets": 4,
+  "per_block_items": {
+   "POWER": 2,
+   "CONTROL": 1,
+   "BUS": 1
+  }
+ },
+ "table": [
+  {
+   "block": "CONTROL",
+   "net": "NRST",
+   "drc_items": [
+    "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+    "F.Cu 上 U1 的焊盘 10 [NRST]"
+   ],
+   "maze_reason": "no-free-start-node",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 1
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3_AUX",
+   "drc_items": [
+    "走线 [P3V3_AUX] (In5.Cu), 长度: 0.7071 mm",
+    "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]"
+   ],
+   "maze_reason": "no-path-coarse(exhausted-13668)",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": "2+3 (C90.1 plane tie + the In5/B.Cu fragment ties)",
+   "note": "in R1286 the two P3V3_AUX items were (In2 <-> C90.1) and (In5 <-> B.Cu); the In2 item is now CLOSED and the remaining pair is (In5.Cu <-> C90.1) - same target pad, same missing plane tie."
+  },
+  {
+   "block": "BUS",
+   "net": "I2C1_SDA",
+   "drc_items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm"
+   ],
+   "maze_reason": "pass 2 ADDED a stitch for I2C1_SDA (via at 51.5,55.938) but a FURTHER pair of this net (F.Cu 51.5,67.455 <-> B.Cu 52.205,61.905) is still unconnected in the final DRC - i.e. not in the pass-2 blocked list, it is a residual PAIR of an already-stitched net",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 4
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3",
+   "drc_items": [
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+    "F.Cu 上 C84 的焊盘 1 [P3V3]"
+   ],
+   "maze_reason": "no-free-start-node",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 5
+  }
+ ],
+ "all_causes_OLD": true,
+ "comparison_to_R1286": {
+  "C1_prev": 5,
+  "C1_now": 4,
+  "closed": "P3V3_AUX (In2.Cu <-> C90.1)"
+ },
+ "consequence": "the four remaining residuals are EXACTLY the four drawing lines not yet implemented (1 NRST / 3 P3V3_AUX / 4 I2C1_SDA / 5 P3V3).",
+ "OWNER-ITEMS": 0
+}

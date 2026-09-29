@@ -155,27 +155,28 @@
       44.0,
       "F.Cu"
      ],
-     "frozen_stub": "F.Cu (43.4,44.0) -> (43.4,39.0)",
+     "frozen_stub": "F.Cu (43.4,44.0) -> (42.8,39.0)",
      "via_pair": [
       "F.Cu",
       "In4.Cu"
      ],
      "via_at": [
-      43.4,
+      42.8,
       39.0
      ],
-     "plane_verified": "In4 P3V3 zone FILLED at (43.4,39.0); NOT filled at (43.4,44.0)"
+     "plane_verified": "In4 P3V3 zone FILLED at (42.8,39.0) [re-checked]; NOT filled at (43.4,44.0)"
     },
     "conservation": "demand = 1 pad->plane connection over a 5.0mm stub + 1 via; supply = the in-frame P3V3 In4 finger at (43.4,39.0) => 1 >= 1.",
-    "buildability": "relocation_listed",
-    "relocation_named": "the 5.0mm F.Cu stub crosses the C87 / PERSTA# territory on the CURRENT judged board (audit: 8 occupants, dominant PERSTA# 7, MCU_VDD 1). Under a wholesale frame re-lay it needs no relocation of foreign copper, but if the frame is NOT re-laid the alternative is to EXTEND the In4 P3V3 zone finger to cover y <= 44.2 near x = 43.4 (a zone-shape change)."
+    "buildability": "no_move",
+    "relocation_named": null,
+    "R_b_applied": "#K2-439 sec.3.2: the via moved from (43.4,39.0) to (42.8,39.0) along the SAME filled In4 P3V3 finger, because the old point sat 0.4mm-class from C87 pad 1 (PERSTA#). Deterministic scan: 71 points on the finger were FILLED, 14 fully clear, nearest to x=43.4 is x=42.8. After the move the via and the whole F.Cu stub are CLEAR of foreign copper."
    }
   ],
   "what_is_determined": "every port coordinate, every via pair and every plane landing above is a FROZEN constant read off the judged board; the maze has zero runtime freedom on them.",
   "what_is_NOT_determined": "the exact in-frame polyline for lines 1 and 4 (the maze resolves it inside the given corridor) - this is BY DESIGN (the drawing fixes the channel/port, the maze obeys)."
  },
- "element4_buildability": "relocation_listed",
- "element4_note": "4 of 5 lines are no_move; line 5 (P3V3) is relocation_listed as stated.",
+ "element4_buildability": "no_move",
+ "element4_note": "#K2-439 sec.3.2 (R-b folded in): after sliding the line-5 via to (42.8,39.0) on the same filled In4 finger, ALL FIVE lines are no_move - no foreign copper has to be relocated.",
  "layer_gate": "per #K2-438 sec.2.5 this is a SCHEME-LAYER edit (ports / planes / channels), NOT construction-layer search: no parameter sweep, no probe, no extra run is required to make the drawing definite.",
  "informational_corridor_readings": {
   "note": "read on the JUDGED board; these are the maze's OWN re-laid copper, not a pre-existing wall - informational, not a blocker (the frame is cleared wholesale each run).",
@@ -219,5 +220,6 @@
  },
  "OWNER-ITEMS": 0,
  "see_also": "K2_M1_M2_MEANS_REPAIR_PROPOSED_v1.json - the exact, verified, NOT-APPLIED repair for means corrections M-1/M-2 plus the corrected K-2/K-3 form (a disjoint rectangle packing is impossible: the three block extents mutually overlap and their area sum 1430.1 > the frame 1286.2).",
- "verification": "K2_SEC16_3_DRAWING_VERIFICATION_v1.json - READ-ONLY machine check: the cleared field has ZERO in-frame tracks; every landing is either an outside-half boundary artifact or an adjacent pad; the only real refinement is L5's via must clear C87 pad 1 (PERSTA#) by sliding along the same filled In4 finger. Line 5 stays relocation_listed."
+ "verification": "K2_SEC16_3_DRAWING_VERIFICATION_v1.json - READ-ONLY machine check: the cleared field has ZERO in-frame tracks; every landing is either an outside-half boundary artifact or an adjacent pad; the only real refinement is L5's via must clear C87 pad 1 (PERSTA#) by sliding along the same filled In4 finger. Line 5 stays relocation_listed. | v2 re-check: K2_SEC16_3_DRAWING_VERIFICATION_v2.json (PASS).",
+ "run_outcome_R1302": "the authorised N=1 with M-1/M-2 landed: C1 5 -> 4 (GRADED FAIL, run 1/1, nine rows). The four remaining residuals are EXACTLY the four drawing lines NOT yet implemented (1 NRST / 2+3 P3V3_AUX / 4 I2C1_SDA / 5 P3V3). The channel hand-off is now evidenced non-empty (channels_computed n_nets=19). Next means = implement this drawing."
 }

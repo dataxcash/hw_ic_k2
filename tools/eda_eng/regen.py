@@ -1404,17 +1404,6 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # ① wipe（与 R 相交的铜全删）＋ 逐件位移 —— `move_parts` 即此语义（删到 ∂R，框外半段留作固定端口）
     mv_arg = ",".join("%s:%s:%s" % (r_, float(dx), float(dy)) for (r_, dx, dy) in moves)
     wiped = os.path.join(work, "s1_wiped.kicad_pcb")
-    # #K2-431 §二.6 fix 2/3: the per-net reach-inclusive FROZEN channels (single source) are handed to the maze
-    _charg = []
-    try:
-        import importlib.util as _iu
-        _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
-        _ja = _iu.module_from_spec(_sp); _sp.loader.exec_module(_ja)
-        _ch = _ja.channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(wiped, d0, list(rect))
-        if _ch:
-            _charg = ["--channels", _ch]
-    except Exception as _e:                                            # noqa: BLE001
-        chain.append({"stage": "channels_compute_failed", "err": type(_e).__name__})
     _keep = ["--keep-nets", ",".join(keep_nets)] if keep_nets else []
     rc, mp = _cli("move-parts", "--board", B0, "--rect", ",".join(str(x) for x in rect),
                   "--moves", mv_arg, "--out", wiped, *_keep)
@@ -1436,6 +1425,23 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
     d0 = os.path.join(work, "s1_wiped_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])
+    # #K2-431 sec.2.6 fix 2/3 / #K2-438 M-1: the per-net reach-inclusive FROZEN channels (single source) are
+    # handed to the maze. MUST be computed AFTER d0 exists (the previous placement read d0 before assignment =>
+    # UnboundLocalError, swallowed => an EMPTY --channels, i.e. a no-channel run). Empty result is FAIL-LOUD.
+    _charg = []
+    try:
+        import importlib.util as _iu
+        _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
+        _ja = _iu.module_from_spec(_sp); _sp.loader.exec_module(_ja)
+        _ch = _ja.channels_arg_by_block(wiped, d0, list(rect)) or _ja.channels_arg(wiped, d0, list(rect))
+        if not _ch:
+            chain.append({"stage": "channels_compute_empty", "err": "no channels from either source"})
+            return {"state": "W1B_CHANNELS_EMPTY", "chain": chain}
+        _charg = ["--channels", _ch]
+        chain.append({"stage": "channels_computed", "n_nets": len([x for x in _ch.split(";") if x.strip()])})
+    except Exception as _e:                                            # noqa: BLE001
+        chain.append({"stage": "channels_compute_failed", "err": type(_e).__name__})
+        return {"state": "W1B_CHANNELS_FAILED", "chain": chain}
     resolved = os.path.join(work, "s2_resolved.kicad_pcb")
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,

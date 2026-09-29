@@ -1365,6 +1365,28 @@ class T(unittest.TestCase):
             m.residual_table({"unconnected_items": [{"items": [{"description": "no net tag"}]}]})
 
 
+    def test_C438_M1_the_chain_hands_the_channels_to_the_maze_after_the_drc_exists(self):
+        """#K2-438 M-1 RED->GREEN: today the channel computation reads `d0` before it is assigned, the exception is
+        swallowed and the maze receives an EMPTY --channels (a no-channel run). GREEN: the computation sits AFTER
+        the wiped DRC is written, and an empty result is FAIL-LOUD, never swallowed."""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        i_d0 = seg.index('d0 = os.path.join(work, "s1_wiped_drc.json")')
+        i_ch = seg.index("channels_arg_by_block(")
+        self.assertLess(i_d0, i_ch, "the channel computation must come AFTER d0 exists")
+        self.assertIn("channels_compute_empty", seg, "an empty channel set must be FAIL-LOUD, not swallowed")
+
+    def test_C438_M2_the_block_channel_source_never_returns_empty(self):
+        """#K2-438 M-2 RED->GREEN: channels_arg_by_block returns '' on its own input (multi_block_plan INFEASIBLE
+        from endpoint-spread sizes) - which is what made K-2/K-3 a no-op. GREEN: it never returns '', the family
+        frame is OPTIONAL, and plane nets are kept out of the pack sizes."""
+        src = open(os.path.join("tools", "k2_joint_alloc_v1.py"), encoding="utf-8").read()
+        seg = src[src.index("def channels_arg_by_block("):]
+        seg = seg[:seg.index("\ndef ")]
+        self.assertNotIn('        return ""', seg, "an empty channel set must never be returned")
+        self.assertIn("_plane_nets(", seg)
+        self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
+
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
         inside the frame), so the sound lever is ORDER - the eight objective nets must be routed first."""

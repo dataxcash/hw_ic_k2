@@ -1,0 +1,92 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_m1m2_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-439 sec.2.10: the ONE authorised N=1, strictly bundled after M-1/M-2 landed.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "work_dir": "/tmp/opencode/k2r",
+  "judged_board": "/tmp/opencode/k2r/s3c_disposed.kicad_pcb",
+  "env": "K2_NO_YIELD=1",
+  "args": "--from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json"
+ },
+ "nine_rows": {
+  "C1": 4,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "C3_pass": true,
+  "C4_pass": true,
+  "C5_pass": true,
+  "rows_present": 9
+ },
+ "CHANNEL_NON_EMPTY_PROOF": {
+  "chain_stage": "channels_computed",
+  "n_nets": 19,
+  "fail_stages": [],
+  "maze_argv_evidence": "ps(1) on the live maze: --channels 12V_IN:...;FB_U2:...;GND:...;...;SW_U2:... (19 entries)",
+  "verdict": "CLOSED - the #K2-438 root cause (empty --channels) is gone; the maze ran WITH the frozen per-net channels."
+ },
+ "improvement": {
+  "C1_prev_R1286": 5,
+  "C1_now": 4,
+  "closed_item": "the second P3V3_AUX item (In2.Cu <-> C90.1) is GONE",
+  "attribution": "the movement is attributable to M-1 (the channel constraint actually reaching the maze)"
+ },
+ "per_block_named_attribution": [
+  {
+   "block": "CONTROL",
+   "net": "NRST",
+   "drc_items": [
+    "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+    "F.Cu 上 U1 的焊盘 10 [NRST]"
+   ],
+   "maze_reason": "no-free-start-node",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 1
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3_AUX",
+   "drc_items": [
+    "走线 [P3V3_AUX] (In5.Cu), 长度: 0.7071 mm",
+    "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]"
+   ],
+   "maze_reason": "no-path-coarse(exhausted-13668)",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": "2+3 (C90.1 plane tie + the In5/B.Cu fragment ties)",
+   "note": "in R1286 the two P3V3_AUX items were (In2 <-> C90.1) and (In5 <-> B.Cu); the In2 item is now CLOSED and the remaining pair is (In5.Cu <-> C90.1) - same target pad, same missing plane tie."
+  },
+  {
+   "block": "BUS",
+   "net": "I2C1_SDA",
+   "drc_items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm"
+   ],
+   "maze_reason": "pass 2 ADDED a stitch for I2C1_SDA (via at 51.5,55.938) but a FURTHER pair of this net (F.Cu 51.5,67.455 <-> B.Cu 52.205,61.905) is still unconnected in the final DRC - i.e. not in the pass-2 blocked list, it is a residual PAIR of an already-stitched net",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 4
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3",
+   "drc_items": [
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+    "F.Cu 上 C84 的焊盘 1 [P3V3]"
+   ],
+   "maze_reason": "no-free-start-node",
+   "cause_class": "OLD (port/policy: ∂R port landing or plane tie not yet implemented)",
+   "drawing_line": 5
+  }
+ ],
+ "branch": "#K2-439 sec.2.10: C1>0 => stop + per-block named attribution (new/old) + the non-empty channel proof. All FOUR residuals carry the SAME OLD port/policy cause => sec.17.4 forced means change + sec.16.2 back to the scheme layer. The next means is exactly the FIVE-LINE sec.16.3 drawing (port landings + plane-tie vias), which this window was NOT authorised to implement.",
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}

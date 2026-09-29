@@ -140,26 +140,53 @@ def channels_arg_by_block(board, drc, rect, clearance=0.20):
     nets = {e[0] for e in eps}
     netof = {n: [n] for n in nets}                       # a net is its own "member" for the family table
     blocks = FB.functional_blocks(sorted(nets), netof)
+    # #K2-438 M-2: a plane net (carried by an inner-layer zone) is NOT block-routed - keep it out of the pack
+    # sizes, otherwise GND alone spans the board and forces INFEASIBLE.
+    _plane = _plane_nets(board)
     sizes = {}
     for fam, b in blocks.items():
-        xs = [e[1] for e in eps if e[0] in b["nets"]]; ys = [e[2] for e in eps if e[0] in b["nets"]]
+        xs = [e[1] for e in eps if e[0] in b["nets"] and e[0] not in _plane]
+        ys = [e[2] for e in eps if e[0] in b["nets"] and e[0] not in _plane]
         if xs:
             sizes[fam] = (max(xs) - min(xs) + 1.0, max(ys) - min(ys) + 1.0)
     plan = FB.multi_block_plan(blocks, sizes, rect)
-    if plan["verdict"] != "FEASIBLE":
-        return ""
-    tgt = {p_["block"]: p_["target"] for p_ in plan["plan"]}
+    # #K2-438 M-2: a disjoint rectangle pack is IMPOSSIBLE on this frame (the family spans mutually overlap and
+    # their area sum exceeds the frame), so a FEASIBLE verdict must NOT be a precondition AND must NOT gate the
+    # output. The functional-block semantics live in the PER-NET family tag; the packer's target frame - WHEN it
+    # yields one - is merely unioned onto that net's own endpoint box. This function NEVER returns "" (returning
+    # "" is exactly what made K-2/K-3 a no-op).
+    tgt = {p_["block"]: p_["target"] for p_ in plan["plan"]} if plan["verdict"] == "FEASIBLE" else {}
     parts = []
     for n in sorted(nets):
-        f = FB.family_of([n])
-        if f not in tgt:
-            continue
-        t = tgt[f]
         xs = [e[1] for e in eps if e[0] == n]; ys = [e[2] for e in eps if e[0] == n]
-        c = (min(t[0], min(xs) - clearance), min(t[1], min(ys) - clearance),
-             max(t[2], max(xs) + clearance), max(t[3], max(ys) + clearance))
-        parts.append("%s:%s" % (n, ",".join("%.4f" % v for v in c)))
+        x0, y0 = min(xs) - clearance, min(ys) - clearance
+        x1, y1 = max(xs) + clearance, max(ys) + clearance
+        t = tgt.get(FB.family_of([n]))                     # OPTIONAL family frame (may be absent)
+        if t is not None and n not in _plane:
+            x0, y0 = min(t[0], x0), min(t[1], y0)
+            x1, y1 = max(t[2], x1), max(t[3], y1)
+        x0, y0 = max(rect[0], x0), max(rect[1], y0)        # keep the channel inside the frame
+        x1, y1 = min(rect[2], x1), min(rect[3], y1)
+        parts.append("%s:%s" % (n, ",".join("%.4f" % v for v in (x0, y0, x1, y1))))
     return ";".join(parts)
+
+
+def _plane_nets(board):
+    """**确定性**：板上「有内层 zone」的网（平面网/电源网）—— 它们由内层铺铜承载，**不参与**逐网通道打包。"""
+    out = set()
+    try:
+        import pcbnew as _P
+        _b = _P.LoadBoard(board)
+        for _z in _b.Zones():
+            _n = _z.GetNetname()
+            if not _n:
+                continue
+            for _l in _z.GetLayerSet().CuStack():
+                if _b.GetLayerName(_l) not in ("F.Cu", "B.Cu"):
+                    out.add(_n); break
+    except Exception:                                                  # noqa: BLE001
+        out = set()
+    return out
 
 
 def artifact_hash16(rep):

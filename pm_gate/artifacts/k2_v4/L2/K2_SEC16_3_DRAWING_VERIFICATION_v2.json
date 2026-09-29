@@ -1,0 +1,151 @@
+{
+ "artifact": "k2_sec16_3_drawing_verification_v2",
+ "authority": "#K2-439 sec.3.2: fold R-b into the drawing and re-run the drawing check.",
+ "board_for_landings": "/tmp/opencode/k1/s1c_unfilled.kicad_pcb",
+ "board_for_plane_coverage": "/tmp/opencode/k1/s3c_disposed.kicad_pcb",
+ "R_b_applied": {
+  "line": 5,
+  "old_via": [
+   43.4,
+   39.0
+  ],
+  "new_via": [
+   42.8,
+   39.0
+  ],
+  "stub": "F.Cu (43.4,44.0) -> (42.8,39.0)",
+  "why": "the old via sat 0.4mm-class from C87 pad 1 (PERSTA#); the new point is on the same filled In4 P3V3 finger and both the via and the whole stub are CLEAR of foreign copper on the cleared field",
+  "scan": "71 candidate points on the filled finger; 14 fully clear; nearest to the original x=43.4 is x=42.8"
+ },
+ "recheck": {
+  "L1_landing": {
+   "at": [
+    50.9,
+    40.45
+   ],
+   "in_frame_probe": true,
+   "foreign": [
+    {
+     "kind": "track/via",
+     "net": "GND",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      41.0
+     ]
+    }
+   ]
+  },
+  "L2_via": {
+   "at": [
+    29.65,
+    53.5
+   ],
+   "in_frame_probe": true,
+   "foreign": [
+    {
+     "kind": "pad",
+     "net": "GND",
+     "ref": "C90",
+     "pad": "2",
+     "at": null
+    }
+   ]
+  },
+  "L3_via_a": {
+   "at": [
+    51.55,
+    39.0
+   ],
+   "in_frame_probe": true,
+   "foreign": [
+    {
+     "kind": "track/via",
+     "net": "PWR_BTN_ISO",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      42.8
+     ]
+    }
+   ]
+  },
+  "L3_via_b": {
+   "at": [
+    50.95,
+    37.0
+   ],
+   "in_frame_probe": true,
+   "foreign": [
+    {
+     "kind": "track/via",
+     "net": "PERSTA#",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.75,
+      37.5
+     ]
+    },
+    {
+     "kind": "track/via",
+     "net": "PWR_BTN_ISO",
+     "ref": null,
+     "pad": null,
+     "at": [
+      51.5,
+      42.8
+     ]
+    }
+   ]
+  },
+  "L5_via_Rb": {
+   "at": [
+    42.8,
+    39.0
+   ],
+   "in_frame_probe": true,
+   "foreign": []
+  }
+ },
+ "L5_detail": {
+  "L5_via_Rb": {
+   "at": [
+    42.8,
+    39.0
+   ],
+   "F.Cu_foreign": [],
+   "In4_P3V3_filled": true,
+   "stub_clear_of_foreign": true,
+   "stub_blocks": []
+  }
+ },
+ "verdict": "PASS (re-checked after R-b)",
+ "OWNER-ITEMS": 0,
+ "verdict_reason": "decisive fact: the CLEARED field has ZERO in-frame tracks => no wall exists inside the region. Every remaining non-empty hit is either the KEPT OUTSIDE-HALF copper that runs along/outside dR (probe boxes can still reach it) or the SAME component's adjacent pad. After R-b, line 5 is completely clear (F.Cu foreign = [], whole stub clear, In4 plane FILLED at the new via).",
+ "classify": {
+  "L1_landing_(50.90,40.45)": [
+   "outside-half GND track at (51.5,41.0) F.Cu",
+   "NOT a wall"
+  ],
+  "L2_via_(29.65,53.5)": [
+   "C90 pad 2 = the SAME capacitor's other terminal",
+   "NOT a blocker"
+  ],
+  "L3_via_a_(51.55,39.0)": [
+   "outside-half PWR_BTN_ISO track on the boundary",
+   "NOT a wall"
+  ],
+  "L3_via_b_(50.95,37.0)": [
+   "outside/on-boundary PERSTA# track at (51.75,37.5) + PWR_BTN_ISO on the boundary",
+   "NOT a wall"
+  ],
+  "L5_via_(42.8,39.0)_after_R_b": [
+   "NONE",
+   "CLEAR - via + whole F.Cu stub clear, In4 P3V3 plane FILLED at the via"
+  ]
+ },
+ "in_frame_wall_count": 0
+}
