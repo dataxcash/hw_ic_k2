@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_sec16_3_drawing_layer_port_reachability_plan_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-412 sec.4.1 (the sec.16.3 four-element planning artifact) CORRECTED by the R1160 hard reading. This v2 supersedes v1's element 3 (the per-gap corridors), which R1160 proved unusable on the real board.",
+ "supersedes": "k2_sec16_3_drawing_layer_port_reachability_plan_v1 (R1154)",
+ "one_line_death_cause": "the v1 corridors were drawn on a FREE board; audited against the real post-wipe field, ALL EIGHT are OCCUPIED by foreign copper (dominant GND) => v1's element 3 is NOT buildable as drawn; a redraw AROUND the surviving copper (or a relocation of the named occupants) is required.",
+ "proven_facts": [
+  "R1150 (the authorised run): only C1=8 fails; C2 PASSES; nine rows present; the eight gaps are the formal drop list.",
+  "R1146: a straight-L stitch cuts foreign copper (253 / 4 new classes) => FORBIDDEN.",
+  "R1148: DROP-NAMED; no unvalidated stitch is emitted.",
+  "R1156/R1158: the endpoint/port block is a PREDICATE cascade (snap -> astar `start-blocked` -> coarse-grid prune), and D1 alone does not close it.",
+  "R1160 (read-only audit of the eight v1 corridors against the pre-stitch board): 8/8 OCCUPIED, 0 clear; per-corridor true counts: MCU_VDD 45 / NRST 137 / NRST 34 / PERSTA# 31 / P3V3_AUX 1 / I2C1_SCL 200 / I2C1_SDA 6 / P3V3 92; dominant occupant net GND (it stands in 4 corridors: MCU_VDD / NRST x2 / I2C1_SCL / P3V3)."
+ ],
+ "corrected_complete_plan": {
+  "element_1_death_cause": "see one_line_death_cause: the drawing assumed a free board; the real field is occupied.",
+  "element_2_proven_facts": "see proven_facts.",
+  "element_3_corrected_construction": {
+   "per_gap": [
+    {"net": "MCU_VDD", "gap": "U1.6 <-> In5 track (29.25,44.9)", "v1_corridor": "F.Cu (29.2-31.9, 44.9-52.8)", "v1_verdict": "OCCUPIED", "n_occupants": 45, "dominant": ["GND", "12V_IN", "SWCLK_BOOT0"], "required_action": "relocate/redraw"},
+    {"net": "NRST", "gap": "C73.1 <-> U1.10", "v1_corridor": "F.Cu (27.5-31.9, 40.4-54.8)", "v1_verdict": "OCCUPIED", "n_occupants": 137, "dominant": ["GND"], "required_action": "relocate/redraw"},
+    {"net": "NRST", "gap": "F.Cu track (51.5,40.45) <-> U1.10", "v1_corridor": "F.Cu (27.5-31.9, 51.9-54.8)", "v1_verdict": "OCCUPIED", "n_occupants": 34, "dominant": ["GND", "MCU_VDD", "P3V3_AUX"], "required_action": "relocate/redraw"},
+    {"net": "PERSTA#", "gap": "In5 track 0.25 (51.5,37.5) <-> R1.1", "v1_corridor": "In5+F.Cu (50.0-51.6, 37.5-39.0)", "v1_verdict": "OCCUPIED", "n_occupants": 31, "dominant": ["P3V3_AUX", "PWR_BTN_OUT"], "required_action": "relocate/redraw"},
+    {"net": "P3V3_AUX", "gap": "F.Cu track 0.2 <-> In5 track 0.0707", "v1_corridor": "F.Cu+In5 (51.1-51.6, 38.3-38.8)", "v1_verdict": "OCCUPIED", "n_occupants": 1, "dominant": ["PWR_BTN_OUT"], "required_action": "nudge PWR_BTN_OUT (single-item corridor)"},
+    {"net": "I2C1_SCL", "gap": "U1.47 <-> E2.6", "v1_corridor": "F.Cu (33.7-45.9, 48.8-61.6)", "v1_verdict": "OCCUPIED", "n_occupants": 200, "dominant": ["GND"], "required_action": "relocate/redraw"},
+    {"net": "I2C1_SDA", "gap": "B.Cu track 0.705 <-> F.Cu track 0.0636", "v1_corridor": "F.Cu+B.Cu (51.5-52.2, 61.9-67.5)", "v1_verdict": "OCCUPIED", "n_occupants": 6, "dominant": ["I2C1_SCL"], "required_action": "nudge I2C1_SCL (single-net corridor)"},
+    {"net": "P3V3", "gap": "blind via F.Cu-In4 (81.0,60.6) <-> C84.1", "v1_corridor": "F.Cu (43.4-51.5, 44.0-60.6)", "v1_verdict": "OCCUPIED", "n_occupants": 92, "dominant": ["GND"], "required_action": "relocate/redraw"}
+   ],
+   "global_coordination": "GND alone stands in four of the eight corridors => a redraw must be COORDINATED, not per-net: ONE GND re-route/relocation can clear several corridors at once. Two corridors are single-item single-net (P3V3_AUX <- PWR_BTN_OUT; I2C1_SDA <- I2C1_SCL) and are cheap nudges.",
+   "redraw_rule_deterministic_zero_search": "re-derive each corridor as the maximal clear axis-aligned sub-rectangle of `v1_corridor minus the union of inflated occupied AABBs` that contains the gap's in-domain endpoint. If that sub-rectangle is EMPTY, the endpoint is BOXED and the minimal-neighbourhood occupants ARE the relocation list. No search, no parameter tuning - it is a rectangle-difference computation.",
+   "conservation_accounting": "all relocations are local to the block; the dominant occupant is GND, which is re-pourable/re-routable inside the block; the block is 93.5% free (L2/C1_CAPACITY_READING_v1.json) => capacity >= need for the redraw."
+  },
+  "element_4_buildability": "relocation_listed",
+  "note": "v2 does NOT claim a specific geometry is buildable; it names the required relocations and gives the deterministic redraw rule. Executing it still needs its own one-off N=1 to close C1."
+ },
+ "sec20_three_questions": "carried from v1 (same-kind product = TI DS320PR1601 EVM drawings + REF-SNLU300; copyables = that ledger entry + the C17 v1 pipeline + the dR-port semantics; difference list = the vendor assumes a free board while our corridors must thread the surviving copper - which R1160 has now measured).",
+ "next": "implement the redraw rule (a pure rectangle-difference function + regression) -> apply with the R1160 occupants -> then the one-off N=1. Means-B choice (redraw vs relocate-first) and the N=1 are the supervisor's call (L2 per #K2-412 sec.4.4/16.4).",
+ "OWNER-ITEMS": 0
+}
