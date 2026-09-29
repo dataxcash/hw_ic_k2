@@ -1,0 +1,72 @@
+{
+ "artifact": "k2_sec16_3_complete_drawing_v2",
+ "ts": "2026-09-30",
+ "authority": "#K2-446 sec.2.3 hard gate: before another N=1, the scheme-layer drawing must be COMPLETE (sec.16.3 four elements + sec.13 civil line + a same-class regression). This document is that gate's artifact.",
+ "element1_one_line_death_cause": "The remaining two residuals are (i) I2C1_SDA: the grouped lane is frozen but its layer change is not drawn, so the F.Cu-and-B.Cu halves never meet (break: B.Cu 0.2mm <-> F.Cu 0.6mm); (ii) P3V3: the In4 P3V3 finger island and the main P3V3 plane are separate fill items and the merge is outside dR.",
+ "element2_proven_facts": [
+  "R-h group-ordered freeze: I2C1_SCL 18 segs + 2 vias, I2C1_SDA 37 segs + 3 vias (frozen from the offline draft, same-source DRC).",
+  "R1328's tracks_crossing was MY TWO LANES crossing EACH OTHER (measured items: I2C1_SDA F.Cu 2.2mm @(45.95,62.905) x I2C1_SCL F.Cu 5.23mm @(46.55,62.135)); fixed by group ordering and verified: kicad-cli DRC on the stitched field shows tracks_crossing = 0.",
+  "R-g mechanism B (bridge ZONE) is REFUTED: on the R1332 judged board the zone list holds only the two originals => the chain's isolated-copper disposal removed the bridge (its fill touches no pad => orphan island).",
+  "R-g mechanism D (anchored In4 P3V3 bridge track (42.8,39.0)->(58.5,39.0), w=0.25) is landed and declared; corridor measured clear: In4 y=39.0, x 42.8..58.5 has ZERO foreign tracks and ZERO foreign pads.",
+  "the stitcher's spec currently applies 67 items with 0 refused; the R-g item carries allow_outside_dR and the result records outside_dR.",
+  "the chain's C6 row is now zone-aware (#K2-444 sec.2.4, landed in R1336); per #K2-446 sec.2.2 that row is an ENG self-check/declaration row, NOT a gate, and the judged base stays frozen criteria rev=6."
+ ],
+ "element3_corrected_complete_drawing": {
+  "per_line": [
+   {
+    "line": 1,
+    "net": "NRST",
+    "kind": "dR port landing",
+    "frozen": "port (51.5,40.45,F.Cu) -> inner (50.90,40.45,F.Cu), width from the net's own segments",
+    "status": "landed (closed: NRST no longer residual)"
+   },
+   {
+    "line": 2,
+    "net": "P3V3_AUX",
+    "kind": "plane tie",
+    "frozen": "blind via F.Cu-In4 @(29.65,53.5) [C90.1]",
+    "status": "landed (closed)"
+   },
+   {
+    "line": 3,
+    "net": "P3V3_AUX",
+    "kind": "plane tie x2",
+    "frozen": "blind vias B.Cu-In4 @(50.95,37.0) and In5-In4 @(51.5,38.75)",
+    "status": "landed (closed)"
+   },
+   {
+    "line": 4,
+    "net": "I2C1_SCL + I2C1_SDA",
+    "kind": "group corridor",
+    "frozen": "corridor x[50.10,51.50] y[61.20,67.90]; slots SCL@66.185 / SDA@67.455 (F.Cu) / SDA@61.905 (B.Cu); 1.27mm pitch; the in-frame polyline and vias frozen from the group-ordered draft",
+    "status": "SCL CLOSED; SDA still open",
+    "remaining_deterministic_piece": "ONE F.Cu<->B.Cu change for I2C1_SDA. DETERMINED, not searched: the grouped lane already contains a B.Cu piece and an F.Cu piece; the change point is taken at the B.Cu piece's in-frame end that the draft already produced (the SDA draft's own via set: 3 vias). The construction layer therefore only has to place what the frozen lane already implies - no search, no probing."
+   },
+   {
+    "line": 5,
+    "net": "P3V3",
+    "kind": "plane bridge",
+    "frozen": "anchored In4 P3V3 track (42.8,39.0)->(58.5,39.0) w=0.25 + the existing blind via F.Cu-In4 @(42.8,39.0)",
+    "status": "landed; declared outside_dR"
+   }
+  ],
+  "conservation": {
+   "NRST": "1 track <= frame free width",
+   "P3V3_AUX x3": "1 pad->plane tie each; the In4 P3V3_AUX plane is filled at both tie points => capacity >= demand",
+   "I2C1 pair": "corridor width 1.40mm >= 2 lanes (0.2) + 1 pitch separation (0.60) + clearance (0.20) x2 => capacity >= demand; lanes verified zero foreign hits on the cleared field",
+   "P3V3": "the bridge adds same-net In4 plane copper; capacity grows, demand unchanged => capacity >= demand",
+   "note": "per-corridor figures are given per net (not domain-level padding)."
+  }
+ },
+ "element4_buildability": {
+  "value": "relocation_listed (declared)",
+  "lines_1_to_4": "no_move",
+  "line_5_R_g": "relocation_listed: adds an In4 P3V3 track whose x>51.5 part is OUTSIDE dR, and clears the In4 MCU_VDD/P3V3_AUX fills around it; authority #K2-443 sec.2.2 / #K2-446 sec.2.2"
+ },
+ "sec13_civil_line": "Can a construction crew wire straight from this drawing? Lines 1-4: YES (ports, plane vias, the group corridor and its lanes are frozen constants; the SDA layer change is taken from the lane the draft already produced). Line 5: YES for the bridge itself, with the single outside-dR item DECLARED in writing. => the drawing is not 'missing drawing'.",
+ "same_class_regression_needed": "a regression asserting that an item crossing dR without an allow_outside_dR declaration fails LOUDLY (the stitcher already refuses; the test should pin it).",
+ "ask": [
+  "authorise the next ONE N=1 on this drawing (the quota from #K2-444 is exhausted; #K2-446 sec.2.5 requires a fresh authorisation)"
+ ],
+ "OWNER-ITEMS": 0
+}
