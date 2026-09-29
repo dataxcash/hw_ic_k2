@@ -1337,6 +1337,18 @@ class T(unittest.TestCase):
         self.assertEqual([e["net"] for e in esc], ["N2", "N1"], "escapes are order-preserving along the row")
         self.assertTrue(all(len(e["via"]["layers"]) == 2 for e in esc), "exactly one layer change per escape")
 
+    def test_C421_row_grouping_is_deterministic_and_contiguous(self):
+        """#K2-421 sec.4 (the policy's FIRST element): group the endpoints into contiguous y-bands (rows) so each
+        group can be fanned out. Deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        pts = [("A", 0, 1.0, "F.Cu"), ("B", 0, 7.0, "F.Cu"), ("C", 0, 1.5, "F.Cu"), ("D", 0, 6.5, "F.Cu")]
+        g = m.group_by_row(pts, band=2.0)
+        self.assertEqual([[p[0] for p in row] for row in g], [["A", "C"], ["D", "B"]], "contiguous y-bands, row-ordered")
+        self.assertEqual(m.group_by_row(pts, 2.0), g, "deterministic")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

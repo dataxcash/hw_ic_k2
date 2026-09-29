@@ -9,6 +9,20 @@ from __future__ import annotations
 import argparse, json, os, sys
 
 
+def group_by_row(points, band=2.0):
+    """**确定性 · 零搜索**：把端点按**沿排坐标**聚成**连续 y 带**（相邻差 > band 即断带）⇒ 组＝可扇出的"一排"。
+    `points`=[(net,x,y,layer)...]；返回 `[[p,...],...]`（组内按 (y,x,net) 保序）。"""
+    pts = sorted(points, key=lambda p: (p[2], p[1], p[0]))
+    groups, cur = [], []
+    for p in pts:
+        if cur and (p[2] - cur[-1][2]) > band:
+            groups.append(cur); cur = []
+        cur.append(p)
+    if cur:
+        groups.append(cur)
+    return groups
+
+
 def slice_corridors(block_rect, groups, gap=0.2):
     """**确定性**：按**组序**把块沿 x **等分切廊道**（扣 gap）⇒ 廊道**两两不相交、按序覆盖全块**（样板政策）。"""
     x0, y0, x1, y1 = [float(v) for v in block_rect]
