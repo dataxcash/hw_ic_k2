@@ -1,0 +1,105 @@
+{
+ "artifact": "k2_sec16_3_drawing_layer_port_reachability_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-412 sec.4.1: the sec.16.3 planning-layer (DRAWING) regression artifact for the eight named gaps; #16.2/#13: the case returns to the drawing layer (the maze cannot connect these endpoints and a straight stitch breaks the board).",
+ "one_line_death_cause": "the eight gaps fail because the DRAWING never defines a reachable in-domain path from each member pad to its own net's remaining copper: after the wipe+ERASE the maze is given only the two raw endpoints, neither of which offers a free in-island cell, so no route exists to find.",
+ "proven_facts": [
+  "R1150 (the authorised re-run, run 1/1): only C1=8 fails; C2 PASSES (122 vs 148, new_classes=[]); C3-C9 + the reasonableness row PASS; nine rows present.",
+  "R1146: a straight-L stitch BYPASSES the maze and cuts across foreign copper (253 total, 4 new classes: clearance 24 / shorting 35 / mask 40 / crossings 25) => the direct stitch is FORBIDDEN.",
+  "R1148: the direct-L path is removed; every unconnected pair the maze could not route is DROP-NAMED => the eight are the formal capability-limit list.",
+  "the eight gaps by net: MCU_VDD (U1.6 F.Cu <-> In5 track), NRST x2 (C73.1 F.Cu <-> U1.10 F.Cu; F.Cu track 0.1414 <-> U1.10), PERSTA# (In5 track 0.25 <-> R1.1 F.Cu), P3V3_AUX (F.Cu track 0.2 <-> In5 track 0.0707), I2C1_SCL (U1.47 F.Cu <-> E2.6 F.Cu), I2C1_SDA (F.Cu track 0.0636 <-> B.Cu track 0.705), P3V3 (blind via F.Cu-In4.Cu <-> C84.1 F.Cu).",
+  "the port-aware goal patch is already active on this chain and does not close them => the missing piece is the DRAWING's in-domain reachable path, not another tool option."
+ ],
+ "corrected_complete_plan": {
+  "principle": "#K2-404: clear first, place on the cleared field, then draw a REACHABLE in-domain corridor per gap; the maze then only has to follow the drawing.",
+  "per_gap_drawing": [
+   {
+    "net": "MCU_VDD",
+    "from": "U1.6 (F.Cu)",
+    "to": "In5 track (x~29.25,y~44.9)",
+    "corridor": "F.Cu (29.2-31.9, 44.9-52.8)",
+    "layer_change": "ONE via F.Cu-In5 at the corridor's In5 end",
+    "slot": "In5 (signal)",
+    "rule": "corridor cleared of foreign copper within clearance"
+   },
+   {
+    "net": "NRST",
+    "from": "C73.1 (F.Cu)",
+    "to": "U1.10 (F.Cu)",
+    "corridor": "F.Cu (27.5-31.9, 40.4-54.8)",
+    "layer_change": "none",
+    "slot": "F.Cu"
+   },
+   {
+    "net": "NRST",
+    "from": "F.Cu track 0.1414",
+    "to": "U1.10 (F.Cu)",
+    "corridor": "F.Cu (27.5-31.9, 51.9-54.8)",
+    "layer_change": "none",
+    "slot": "F.Cu"
+   },
+   {
+    "net": "PERSTA#",
+    "from": "In5 track 0.25 (51.5,37.5 - the dR port)",
+    "to": "R1.1 (F.Cu)",
+    "corridor": "In5 + F.Cu (50.0-51.6, 37.5-39.0)",
+    "layer_change": "ONE via In5-F.Cu",
+    "slot": "In5/F.Cu"
+   },
+   {
+    "net": "P3V3_AUX",
+    "from": "F.Cu track 0.2",
+    "to": "In5 track 0.0707",
+    "corridor": "F.Cu + In5 (51.1-51.6, 38.3-38.8)",
+    "layer_change": "ONE via F.Cu-In5",
+    "slot": "F.Cu/In5"
+   },
+   {
+    "net": "I2C1_SCL",
+    "from": "U1.47 (F.Cu)",
+    "to": "E2.6 (F.Cu)",
+    "corridor": "F.Cu (33.7-45.9, 48.8-61.6)",
+    "layer_change": "none",
+    "slot": "F.Cu"
+   },
+   {
+    "net": "I2C1_SDA",
+    "from": "F.Cu track 0.0636",
+    "to": "B.Cu track 0.705",
+    "corridor": "F.Cu + B.Cu (51.5-52.2, 61.9-67.5)",
+    "layer_change": "ONE via F.Cu-B.Cu",
+    "slot": "F.Cu/B.Cu"
+   },
+   {
+    "net": "P3V3",
+    "from": "blind via F.Cu-In4.Cu (x~43.4,y~44.0)",
+    "to": "C84.1 (F.Cu)",
+    "corridor": "F.Cu (43.4-81.0 clipped to 51.5, 44.0-60.6)",
+    "layer_change": "none (the blind via already reaches F.Cu)",
+    "slot": "F.Cu"
+   }
+  ],
+  "conservation_accounting": {
+   "free_area": "93.5% of the block domain (L2/C1_CAPACITY_READING_v1.json)",
+   "corridors_total": "the eight corridors are narrow lanes inside the block; their union is a small fraction of the free area",
+   "conclusion": "capacity >= need for all eight; the wall was the DRAWING, not space"
+  },
+  "determinism": "every corridor is defined by the endpoint coordinates + the in-register layer stack; one via only where the two endpoint layers differ; NO search, NO parameter tuning.",
+  "acceptance": "the drawn corridors feed the maze (or the apply path) and the FINAL DRC adjudicates; any remaining failure stays NAMED."
+ },
+ "buildability": "relocation_listed",
+ "sec20_three_questions": {
+  "Q1_same_kind_product_exists": "YES - the same-chip TI DS320PR1601 EVM layer drawings + the programming guide REF-SNLU300 (registered in the supervisor's REF-CASE-LIBRARY, read-only for ENG) show how the vendor draws reachable corridors from the device pads to the fanout; in-repo: the C17 v1 islands+stitch pipeline and the block-chain dR-port semantics.",
+  "Q2_copyable_artifact": [
+   "supervision ledger REF-CASE-LIBRARY.md :: A1 entries (TI DS320PR1601 datasheet SNLS683 + SNLA425 programming guide) - the vendor's recommended layout/egress",
+   "tools/k2_reroute_affected_v2.py (C17 v1 clip->islands->stitch->snap->repair->normalise)",
+   "regen.block.move_parts ports (dR stubs as FIXED terminals)"
+  ],
+  "Q3_difference_list": [
+   "the vendor drawings assume a FREE board (no pre-existing copper to thread between); our corridors must be drawn AROUND the surviving in-frame copper of other nets.",
+   "nothing in-repo draws an in-domain REACHABLE corridor before routing - the chain hands the maze only the raw endpoints. => copy the vendor's 'egress first' discipline and the C17 v1 stitch stage, and ADD the per-gap corridor definition."
+  ],
+  "consequence": "the drawing artifact above is the 'what to copy, how to apply' comparison; implementation next."
+ },
+ "OWNER-ITEMS": 0
+}
