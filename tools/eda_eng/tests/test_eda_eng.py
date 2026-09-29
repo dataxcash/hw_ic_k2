@@ -1306,6 +1306,18 @@ class T(unittest.TestCase):
         self.assertTrue(r["after"], "GREEN: the deterministic yields make the lane clear")
         self.assertEqual(r, m.lane_clear_after_yields(seg, blk, 0.20), "deterministic")
 
+    def test_C419_yield_model_is_axis_aligned_only(self):
+        """#K2-419 sec.5 (honest boundary pinned): the +/-y yield model is AXIS-ALIGNED ONLY. A slanted lane must
+        stay reported as BLOCKED, so no future caller can mistake it for cleared. Deterministic."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_endpoint_reach_planner_v1", os.path.join("tools", "k2_endpoint_reach_planner_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        seg = ((0.0, 0.0), (1.0, 1.0))                       # slanted
+        blk = [{"net": "A", "bbox": [0.4, 0.55, 0.6, 0.65]}]
+        self.assertFalse(m.lane_clear_after_yields(seg, blk, 0.20)["after"],
+                         "documented limit: the +/-y model is axis-aligned only")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""
