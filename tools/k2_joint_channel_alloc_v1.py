@@ -72,3 +72,30 @@ def channels_from_pairs(pairs, rect, pitch=0.40, clearance=0.20):
         b = per[n]
         parts.append("%s:%.4f,%.4f,%.4f,%.4f" % (n, b[0], lo, b[2], hi))
     return ";".join(parts), unsat
+
+
+def corridors(rect, h=8.0):
+    """把框图 y 跨度切成高 `h` 的走廊（末条取余）。返回 `[(idx, y_lo, y_hi)]`。"""
+    out, y, i = [], rect[1], 0
+    while y < rect[3] - 1e-9:
+        hi = min(y + h, rect[3]); out.append((i, y, hi)); y = hi; i += 1
+    return out
+
+
+def channels_by_corridor(per, rect, h=8.0, pitch=0.40):
+    """**正确粒度**（#K2-450 sec.2.4 · R1408 设计）：**逐走廊**只排「y 区间与该走廊相交」的网，用 `joint()` 在**该走廊自己的
+    y 跨度**内排槽（每网槽高 = `pitch`）。返回 `(map, unsat)`：`map[net] = [(x0,y0,x1,y1), ...]`（每跨过的走廊一条），
+    `unsat[corridor_idx] = [net,...]`（**该走廊排不下者 · 响亮**）。确定性 · 零搜索。"""
+    chans, unsat = {}, {}
+    for idx, ylo, yhi in corridors(rect, h):
+        cross = {n: (0.0, pitch) for n, b in per.items() if b[1] < yhi - 1e-9 and b[3] > ylo + 1e-9}
+        if not cross:
+            continue
+        slots, bad = joint([{"net": n, "lo": 0.0, "hi": pitch, "min_w": pitch} for n in cross],
+                           (ylo - ylo, yhi - ylo), gap=0.0)
+        if bad:
+            unsat[idx] = sorted(bad)
+        for n, (s0, s1) in slots.items():
+            b = per[n]
+            chans.setdefault(n, []).append((b[0], ylo + s0, b[2], ylo + s1))
+    return chans, unsat

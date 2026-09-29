@@ -1428,6 +1428,25 @@ class T(unittest.TestCase):
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         h = src[src.index("def channels_for_maze("):src.index("def wipe_resolve_chain(")]
         self.assertIn("channels_from_pairs(", h, "the chain must prefer the one-shot joint allocation")
+        # R1408/R1410 correct GRANULARITY: per-corridor packing must place EVERY crossing net (zero unsat),
+        # whereas whole-net y-banding provably cannot (two independent refutations on the record).
+        rect2 = [22.95, 32.95, 51.5, 78.0]
+        per2 = {"MCU_VDD": (26.0, 34.0, 51.0, 70.0), "P3V3": (28.0, 34.0, 51.0, 64.0),
+                "GND": (26.0, 35.0, 51.0, 70.0), "NRST": (27.0, 40.0, 51.0, 55.0),
+                "I2C1_SCL": (33.0, 61.0, 46.0, 67.0), "I2C1_SDA": (33.0, 48.0, 51.0, 68.0),
+                "PERSTA#": (31.0, 37.0, 51.0, 56.0), "GPIO_LED": (33.0, 56.0, 45.0, 71.0)}
+        ch2, uns2 = m.channels_by_corridor(per2, rect2, h=8.0, pitch=0.40)
+        self.assertEqual(uns2, {}, "per-corridor packing must leave NO corridor unsatisfied")
+        self.assertEqual(sorted(ch2), sorted(per2), "every cross-region net must receive corridor slots")
+        for _n, _ps in ch2.items():
+            self.assertTrue(_ps, _n)
+            for (_x0, _y0, _x1, _y1) in _ps:
+                self.assertLess(_y0, _y1)
+                self.assertFalse(_y0 < rect2[1] - 1e-9 or _y1 > rect2[3] + 1e-9, "slots stay inside the frame")
+        dem2 = [{"net": _n, "lo": 0.0, "hi": max(_b[3] - _b[1], 0.40), "min_w": max(_b[3] - _b[1], 0.40)}
+                for _n, _b in per2.items()]
+        _, unsat_whole = m.joint(dem2, (rect2[1], rect2[3]), gap=0.40)
+        self.assertTrue(unsat_whole, "RED: whole-net y-banding must leave nets unsatisfied")
 
     def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
