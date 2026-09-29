@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_exam_b_left_k14_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-436 sec.2 (the authorised ONE N=1 verification run after the #K2-434 means change K-1..K-4).",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "exam A --run --chain wipe_resolve --from-placed <A^5 witness> --erase-refs J9,J6,J11 (K2_NO_YIELD=1)"
+ },
+ "nine_rows": {
+  "C1": 5,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "per_block_C1_gate": null,
+ "pour_aware_unfill": null,
+ "residual_named": [
+  "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+  "走线 [P3V3_AUX] (In2.Cu), 长度: 0.7071 mm",
+  "走线 [P3V3_AUX] (In5.Cu), 长度: 0.1414 mm",
+  "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm",
+  "F.Cu - In4.Cu 上的盲孔 [P3V3]"
+ ],
+ "reading": "C1 = 5, DOWN from 7 (the previous two runs) => the K-1..K-4 means MOVED it. It equals the clean floor (R1224). NOT closed.",
+ "branch": "#K2-436 sec.2.2: C1>0 => stop + per-block named attribution; the cause is the SAME port/policy class (old cause).",
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
