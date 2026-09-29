@@ -1,43 +1,19 @@
 {
  "artifact": "k2_block_relayout_plan_v1",
- "board": "/tmp/opencode/rlpIpj/s3c_disposed.kicad_pcb",
+ "board": "/tmp/opencode/aprime_a5_final_v3/s3c_disposed.kicad_pcb",
  "rect": [
   22.95,
   32.95,
   51.5,
   78.0
  ],
- "rows": 7,
+ "rows": 5,
  "corridors": [
   {
    "row": 0,
    "nets": [
-    "P3V3_AUX"
-   ],
-   "n_points": 2,
-   "corridor": null,
-   "conservation": {
-    "capacity_mm": 0.0,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "corridor_after_yield": null,
-   "conservation_after_yield": {
-    "capacity_mm": 0.0,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "status": "BLOCKED",
-   "relayout_request": [],
-   "per_line": [],
-   "buildability": "relocation_listed"
-  },
-  {
-   "row": 1,
-   "nets": [
-    "P3V3",
-    "SWCLK_BOOT0",
-    "SWDIO"
+    "P3V3_AUX",
+    "PERSTA#"
    ],
    "n_points": 4,
    "corridor": null,
@@ -46,37 +22,124 @@
     "need_mm": 0.6,
     "pass": false
    },
-   "corridor_after_yield": null,
+   "corridor_after_yield": [
+    49.65,
+    37.1,
+    51.9,
+    39.4
+   ],
    "conservation_after_yield": {
-    "capacity_mm": 0.0,
+    "capacity_mm": 2.25,
     "need_mm": 0.6,
-    "pass": false
+    "pass": true
    },
-   "status": "BLOCKED",
+   "status": "OK_BY_YIELD",
    "relayout_request": [
     {
-     "net": "MCU_VDD",
-     "move_mm": 3.71,
+     "net": "PWR_BTN_OUT",
+     "move_mm": 0.5,
      "dir": "+y",
      "yield_order": 0
-    },
-    {
-     "net": "NRST",
-     "move_mm": 5.15,
-     "dir": "+y",
-     "yield_order": 1
     }
    ],
-   "per_line": [],
+   "per_line": [
+    {
+     "net": "PERSTA#",
+     "order": 0,
+     "from": [
+      50.05,
+      37.5
+     ],
+     "to": [
+      49.65,
+      37.125
+     ],
+     "via": {
+      "at": [
+       49.65,
+       37.125
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "P3V3_AUX",
+     "order": 1,
+     "from": [
+      51.5,
+      38.3
+     ],
+     "to": [
+      49.65,
+      38.175
+     ],
+     "via": {
+      "at": [
+       49.65,
+       38.175
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "P3V3_AUX",
+     "order": 2,
+     "from": [
+      51.5,
+      38.8
+     ],
+     "to": [
+      49.65,
+      38.925
+     ],
+     "via": {
+      "at": [
+       49.65,
+       38.925
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "PERSTA#",
+     "order": 3,
+     "from": [
+      50.05,
+      39.0
+     ],
+     "to": [
+      49.65,
+      39.375
+     ],
+     "via": {
+      "at": [
+       49.65,
+       39.375
+      ],
+      "layers": [
+       "In5.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
    "buildability": "relocation_listed"
   },
   {
-   "row": 2,
+   "row": 1,
    "nets": [
-    "SWCLK_BOOT0",
-    "SWDIO"
+    "MCU_VDD"
    ],
-   "n_points": 3,
+   "n_points": 1,
    "corridor": null,
    "conservation": {
     "capacity_mm": 0.0,
@@ -84,91 +147,99 @@
     "pass": false
    },
    "corridor_after_yield": [
-    39.7625,
-    50.050001,
-    40.5625,
-    50.9
+    28.950000000000003,
+    44.60000000000001,
+    29.45,
+    45.199999999999996
    ],
    "conservation_after_yield": {
-    "capacity_mm": 0.8,
+    "capacity_mm": 0.5,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "status": "BLOCKED",
+   "relayout_request": [
+    {
+     "net": "12V_IN",
+     "move_mm": 0.55,
+     "dir": "-y",
+     "yield_order": 0
+    }
+   ],
+   "per_line": [
+    {
+     "net": "MCU_VDD",
+     "order": 0,
+     "from": [
+      29.35,
+      44.8
+     ],
+     "to": [
+      28.95,
+      44.8
+     ],
+     "via": {
+      "at": [
+       28.95,
+       44.8
+      ],
+      "layers": [
+       "F.Cu",
+       "In5.Cu"
+      ]
+     }
+    }
+   ],
+   "buildability": "relocation_listed"
+  },
+  {
+   "row": 2,
+   "nets": [
+    "MCU_VDD"
+   ],
+   "n_points": 1,
+   "corridor": null,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   },
+   "corridor_after_yield": [
+    28.950000000000003,
+    52.35,
+    29.75,
+    53.05
+   ],
+   "conservation_after_yield": {
+    "capacity_mm": 0.7,
     "need_mm": 0.6,
     "pass": true
    },
    "status": "OK_BY_YIELD",
    "relayout_request": [
     {
-     "net": "I2C1_SDA",
-     "move_mm": 0.8125,
+     "net": "GND",
+     "move_mm": 2.95,
      "dir": "+y",
      "yield_order": 0
-    },
-    {
-     "net": "I2C1_SCL",
-     "move_mm": 1.5125,
-     "dir": "+y",
-     "yield_order": 1
     }
    ],
    "per_line": [
     {
-     "net": "SWCLK_BOOT0",
+     "net": "MCU_VDD",
      "order": 0,
      "from": [
-      40.1625,
-      50.25
+      29.35,
+      52.75
      ],
      "to": [
-      39.7625,
-      50.05
+      28.95,
+      52.75
      ],
      "via": {
       "at": [
-       39.7625,
-       50.05
-      ],
-      "layers": [
-       "F.Cu",
-       "In5.Cu"
-      ]
-     }
-    },
-    {
-     "net": "SWCLK_BOOT0",
-     "order": 1,
-     "from": [
-      40.1625,
-      50.25
-     ],
-     "to": [
-      39.7625,
-      50.25
-     ],
-     "via": {
-      "at": [
-       39.7625,
-       50.25
-      ],
-      "layers": [
-       "F.Cu",
-       "In5.Cu"
-      ]
-     }
-    },
-    {
-     "net": "SWDIO",
-     "order": 2,
-     "from": [
-      40.1625,
-      50.75
-     ],
-     "to": [
-      39.7625,
-      50.9
-     ],
-     "via": {
-      "at": [
-       39.7625,
-       50.9
+       28.95,
+       52.75
       ],
       "layers": [
        "F.Cu",
@@ -182,130 +253,10 @@
   {
    "row": 3,
    "nets": [
-    "P3V3_AUX"
-   ],
-   "n_points": 1,
-   "corridor": [
-    29.450001,
-    53.250001000000005,
-    29.95,
-    53.75
-   ],
-   "conservation": {
-    "capacity_mm": 0.5,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "corridor_after_yield": [
-    29.450001,
-    53.250001000000005,
-    29.95,
-    53.75
-   ],
-   "conservation_after_yield": {
-    "capacity_mm": 0.5,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "status": "BLOCKED",
-   "relayout_request": [],
-   "per_line": [
-    {
-     "net": "P3V3_AUX",
-     "order": 0,
-     "from": [
-      29.65,
-      53.5
-     ],
-     "to": [
-      29.45,
-      53.5
-     ],
-     "via": {
-      "at": [
-       29.45,
-       53.5
-      ],
-      "layers": [
-       "F.Cu",
-       "In5.Cu"
-      ]
-     }
-    }
-   ],
-   "buildability": "relocation_listed"
-  },
-  {
-   "row": 4,
-   "nets": [
-    "P3V3_AUX"
-   ],
-   "n_points": 1,
-   "corridor": null,
-   "conservation": {
-    "capacity_mm": 0.0,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "corridor_after_yield": [
-    34.35,
-    55.300000000000004,
-    35.15,
-    55.775
-   ],
-   "conservation_after_yield": {
-    "capacity_mm": 0.475,
-    "need_mm": 0.6,
-    "pass": false
-   },
-   "status": "BLOCKED",
-   "relayout_request": [
-    {
-     "net": "GND",
-     "move_mm": 2.0,
-     "dir": "-y",
-     "yield_order": 0
-    },
-    {
-     "net": "I2C1_SCL",
-     "move_mm": 6.3375,
-     "dir": "+y",
-     "yield_order": 1
-    }
-   ],
-   "per_line": [
-    {
-     "net": "P3V3_AUX",
-     "order": 0,
-     "from": [
-      34.75,
-      55.7
-     ],
-     "to": [
-      34.35,
-      55.7
-     ],
-     "via": {
-      "at": [
-       34.35,
-       55.7
-      ],
-      "layers": [
-       "F.Cu",
-       "In5.Cu"
-      ]
-     }
-    }
-   ],
-   "buildability": "relocation_listed"
-  },
-  {
-   "row": 5,
-   "nets": [
     "I2C1_SDA",
     "P3V3"
    ],
-   "n_points": 2,
+   "n_points": 3,
    "corridor": null,
    "conservation": {
     "capacity_mm": 0.0,
@@ -342,12 +293,34 @@
      ],
      "to": [
       51.1,
-      60.475
+      60.35
      ],
      "via": {
       "at": [
        51.1,
-       60.475
+       60.35
+      ],
+      "layers": [
+       "F.Cu",
+       "In5.Cu"
+      ]
+     }
+    },
+    {
+     "net": "P3V3",
+     "order": 1,
+     "from": [
+      51.5,
+      60.6
+     ],
+     "to": [
+      51.1,
+      60.6
+     ],
+     "via": {
+      "at": [
+       51.1,
+       60.6
       ],
       "layers": [
        "F.Cu",
@@ -357,22 +330,22 @@
     },
     {
      "net": "I2C1_SDA",
-     "order": 1,
+     "order": 2,
      "from": [
       51.5,
       61.905
      ],
      "to": [
       51.1,
-      62.03
+      62.155
      ],
      "via": {
       "at": [
        51.1,
-       62.03
+       62.155
       ],
       "layers": [
-       "F.Cu",
+       "B.Cu",
        "In5.Cu"
       ]
      }
@@ -381,7 +354,7 @@
    "buildability": "relocation_listed"
   },
   {
-   "row": 6,
+   "row": 4,
    "nets": [
     "I2C1_SDA"
    ],
@@ -428,7 +401,7 @@
        67.455
       ],
       "layers": [
-       "F.Cu",
+       "B.Cu",
        "In5.Cu"
       ]
      }
@@ -442,9 +415,9 @@
   "1_one_command_end_to_end": true,
   "2_per_line_geometry": 5,
   "3_conservation_pass": 1,
-  "3b_conservation_pass_after_yield": 3,
+  "3b_conservation_pass_after_yield": 4,
   "4_buildability": "relocation_listed",
-  "n_rows": 7
+  "n_rows": 5
  },
  "OWNER-ITEMS": 0
 }
