@@ -1395,6 +1395,22 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C443_the_lane_drafter_fails_LOUD_on_an_empty_or_foreign_source_draft(self):
+        """#K2-443 sec.2.5 / #K2-446 sec.2.3(3): a draft that adds NOTHING must fail LOUDLY (an empty ledger was once
+        read as 'infeasible' when in fact the DRC came from a different board). The drafter self-runs the DRC on the
+        SAME board, so a foreign source is structurally impossible; this pins the empty-result verdict."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location(
+            "k2ld", os.path.join("tools", "k2_lane_draft_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        bad = m.draft_verdict({"added": [], "blocked": []})
+        self.assertFalse(bad["ok"]); self.assertIn("EMPTY DRAFT", bad["why"])
+        self.assertFalse(m.draft_verdict({"added": [], "blocked": [{"net": "X", "why": "no-path"}]})["ok"])
+        good = m.draft_verdict({"added": [{"net": "I2C1_SCL", "segs": 3}], "blocked": []})
+        self.assertTrue(good["ok"]); self.assertEqual(good["added"], 1)
+        src = open(os.path.join("tools", "k2_lane_draft_v1.py"), encoding="utf-8").read()
+        self.assertIn("same_source_drc", src, "the DRC must be produced by the drafter itself")
+
     def test_C442_out_of_dR_items_must_be_DECLARED_not_silently_accepted(self):
         """#K2-446 sec.2.3(3) same-class regression: anything leaving dR must EITHER be refused loudly OR carry an
         explicit allow_outside_dR declaration (sec.2.7 'declare, do not hide')."""
