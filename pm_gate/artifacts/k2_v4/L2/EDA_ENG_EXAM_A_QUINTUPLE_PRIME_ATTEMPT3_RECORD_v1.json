@@ -1,0 +1,85 @@
+{
+ "artifact": "k2_exam_a_quintuple_prime_attempt3_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-410 sec.4.2 segment 2 (the pre-authorised A^5 run 1/1, burned because the clamp made k = 8/8).",
+ "run": {
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json --work /tmp/opencode/aprime_a5_final_v3",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "gate": "PASS"
+ },
+ "stitch_stage_evidence": {
+  "endpoint_stitch_planned": {
+   "stage": "endpoint_stitch_planned",
+   "n": 8,
+   "nets": [
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "MCU_VDD",
+    "NRST",
+    "P3V3",
+    "P3V3_AUX",
+    "PERSTA#"
+   ]
+  },
+  "endpoint_stitch_clipped_to_port": {
+   "stage": "endpoint_stitch_clipped_to_port",
+   "clipped": [
+    "NRST",
+    "PERSTA#",
+    "P3V3_AUX",
+    "I2C1_SDA",
+    "P3V3"
+   ]
+  },
+  "endpoint_stitch_partitioned": {
+   "stage": "endpoint_stitch_partitioned",
+   "in_bound": 8,
+   "excluded": 0,
+   "excluded_named": []
+  },
+  "endpoint_stitch_applied": {
+   "stage": "endpoint_stitch_applied",
+   "exit": "APPLIED"
+  }
+ },
+ "nine_rows": {
+  "C1": 5,
+  "C1_pass": false,
+  "C2": {
+   "total": 253,
+   "ref": 148,
+   "new_classes": [
+    "clearance",
+    "shorting_items",
+    "solder_mask_bridge",
+    "tracks_crossing"
+   ],
+   "pass": false
+  },
+  "C6": {
+   "diff": 0,
+   "pass": true
+  },
+  "C7": {
+   "diff": 0,
+   "pass": true
+  },
+  "C8": {
+   "violations": [],
+   "pass": true
+  },
+  "rows_present": 9
+ },
+ "attribution": {
+  "good": "the clamp + partial-apply chain WORKED as designed: endpoint_stitch_clipped_to_port (5 nets), partitioned in_bound 8 / excluded 0, endpoint_stitch_applied = APPLIED => C1 IMPROVED 8 -> 5.",
+  "bad": "C2 NOW FAILS: total 253 vs 148 with FOUR new classes (clearance 24, shorting_items 35, solder_mask_bridge 40, tracks_crossing 25) - the crude L fallback BYPASSED the maze and cut straight across other nets' copper.",
+  "layer": "the STITCH QUALITY layer: a stitch must be maze-routed OR rejected unless DRC-clean; the direct-L fallback is unsafe by construction (it ignores obstacles).",
+  "deterministic_one_step_fix": "make the stitch MAZE-FIRST per gap and, for any gap the maze refuses, DROP it (named) rather than emitting a direct L - i.e. never emit an unvalidated stitch. Expected: C1 improves only where a maze route exists and C2 stays clean."
+ },
+ "outcome_contract": {
+  "branch": "FAIL (C1=5 AND C2 with 4 new classes) => stop + attribute, NO self-rerun (#K2-410 sec.4.2)."
+ },
+ "OWNER-ITEMS": 0
+}
