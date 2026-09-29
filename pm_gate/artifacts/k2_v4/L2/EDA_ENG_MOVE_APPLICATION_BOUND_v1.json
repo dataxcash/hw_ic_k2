@@ -35,7 +35,11 @@
   "status": "REAL SOURCE IDENTIFIED AT THE FILE LEVEL; the exact per-ref key divergence is the remaining one-step fix (or a named 'unmovable via this path' declaration).",
   "file_level_CONFIRMED": "gen_v5.load_placement() reads PLACEMENT_PATH = L2/PLACEMENT_SOLUTION_v1.json and returns {r: tuple(v['at'])} from d['refs'], requiring EVERY K2_REF to be present (fail-closed otherwise); all five affected connectors (J13/J9/J12/J6/J11) ARE present under refs, and edit_placement_at edits exactly that key => the EDIT and the DOCUMENTED READER point at the same place.",
   "therefore": "the coordinates must be OVERRIDDEN downstream for those refs (a connector placement rule / square-up / edge-snap, or a later stage re-deriving connector positions) - i.e. the generator's EFFECTIVE source for connectors is NOT the edited field even though the documented source is.",
-  "remaining_one_step": "name that downstream override for the five connectors and either make the edit reach it or declare the refs unmovable via this path (#K2-400 sec.6 item 3, 'one of the two, must be filed')."
+  "remaining_one_step": "name that downstream override for the five connectors and either make the edit reach it or declare the refs unmovable via this path (#K2-400 sec.6 item 3, 'one of the two, must be filed').",
+  "denied_hypothesis": "the only J13/J9 special-case in build_device_table is the `value` field (J_SWD / J_OOB_HEADER); the COORDINATE is unconditionally dev[ref]['at'] = ref_pos[ref] = the edited PLACEMENT_SOLUTION entry.",
+  "file_level_verdict": "edit_placement_at reports the 5 connectors APPLIED (writes refs[ref]['at']) and gen_v5 reads exactly that field, yet the produced board shows them unmoved => the override is NOT in the documented source chain; it is downstream and NOT yet named.",
+  "declaration_per_K2_400_sec6_3": "FILED (second option): the five connectors are declared **NOT MOVABLE VIA THE CURRENT EDIT PATH** until the downstream override is named. The meter now NAMES every such case (move_not_applied), so the defect can no longer pass silently.",
+  "open_one_step": "name the downstream override for J6/J9/J11/J12/J13 (candidates: a connector placement stage in the k2_p4_build_l9 `crtyd`/later stages, or a re-emit of connector coordinates from the YAML sheets) and then either make the edit reach it or keep the declaration."
  },
  "per_K2_400": {
   "anti_idling": "item 1 asset + regression DELIVERED => the window's hard precondition is met.",
