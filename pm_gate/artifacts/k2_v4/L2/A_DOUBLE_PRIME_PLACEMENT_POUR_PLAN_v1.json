@@ -97,5 +97,34 @@
    "test_C392_port_aware_goals_use_the_wall_ports",
    "test_C392_the_floor_wrapper_installs_port_goals_only_with_a_wall"
   ]
+ },
+ "a_triple_prime_attempt2_result": {
+  "authority": "#K2-393 sec.4 (the authorised final N=1 window after R1084).",
+  "verdict": "FAIL",
+  "run_count": "1/1",
+  "gate": "PASS",
+  "rows_present": 9,
+  "C1": "7 (R1082: 18 -> 7 after the port edge)",
+  "closed": [
+   "C2 (new_classes = [])",
+   "C6=0",
+   "C7=0",
+   "C8=0",
+   "C9",
+   "mask bridges 0",
+   "isolated copper 0"
+  ],
+  "named_residual_7": "NRST x2, PERSTA#, P3V3_AUX, I2C1_SCL, I2C1_SDA, P3V3 (see the attempt-2 record)",
+  "cause": "ENDPOINT CONGESTION / no-port nets (a NEW cause, different from the two closed)"
+ },
+ "edge_iv_proposed": {
+  "layer": "TOOL - port reachability / congestion at endpoints.",
+  "why": "the port edge closed 14/21 blocked edges; the remaining 7 fail because the endpoint GRID CELL is pruned (too close to foreign copper) and/or the net has no frame port (P3V3).",
+  "deterministic_path": [
+   "1. a PORT REACHABILITY PRE-CHECK on the placement/frame: for every net whose copper is cut at the frame, assert there is a port whose boundary cell is reachable (not congested) - fail-closed otherwise.",
+   "2. for a congested endpoint: deterministically OPEN a port (e.g. reserve a small keep-out-free channel to the nearest port on the same net) - additive, one pass, no search.",
+   "3. for a net with NO frame port (P3V3): the connection must be re-derived inside the frame (a different, named sub-case)."
+  ],
+  "authority": "sec.16.3 planning artifact to be produced BEFORE any further run; NOT authorised in this window."
  }
 }

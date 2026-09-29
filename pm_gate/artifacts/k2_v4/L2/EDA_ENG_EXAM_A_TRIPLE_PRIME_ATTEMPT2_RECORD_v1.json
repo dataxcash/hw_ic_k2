@@ -1,0 +1,166 @@
+{
+ "artifact": "k2_exam_a_triple_prime_attempt2_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-393 sec.4: the AUTHORISED final N=1 window (after R1084's port-aware goals).",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_triple_witness/placed.kicad_pcb --work /tmp/opencode/aprime_triple_final_v2",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "gate": {
+   "verdict": "PASS",
+   "capability": "A_double_prime_placement_pour"
+  },
+  "final_board": "/tmp/opencode/aprime_triple_final_v2/s3c_disposed.kicad_pcb",
+  "final_board_sha256_16": "eafdf07573367d79",
+  "wipe": {
+   "deleted_segments": 615,
+   "deleted_vias": 95,
+   "outside_halves_kept": 15,
+   "n_ports": 15
+  },
+  "witness_board": {
+   "path": "/tmp/opencode/aprime_triple_witness/placed.kicad_pcb",
+   "sha256_16": "32d3c644692c564d"
+  }
+ },
+ "the_nine_rows": {
+  "C1_unconnected": {
+   "value": 7,
+   "pass": false
+  },
+  "C2": {
+   "total": 133,
+   "ref_total": 148,
+   "new_classes": [],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pass": true
+  },
+  "C3": {
+   "pass": true,
+   "max_mm": 0.078764
+  },
+  "C4": {
+   "pass": true,
+   "count": 2989
+  },
+  "C5": {
+   "pass": true,
+   "element_set_diff": 1987
+  },
+  "C6": {
+   "pass": true,
+   "diff": 0
+  },
+  "C7": {
+   "pass": true,
+   "diff": 0
+  },
+  "C8": {
+   "pass": true,
+   "violations": []
+  },
+  "C9": {
+   "pass": true,
+   "after": "f80eed632d081115"
+  },
+  "rows_present": 9,
+  "geometry_class_delta": -15
+ },
+ "capability_evidence": {
+  "port_aware_goals_effect": "C1 18 (R1082) -> 7 (this run): the port edge closed 11 more gaps.",
+  "island_disposition": [
+   {
+    "stage": "isolated_copper_disposed",
+    "exit": 0,
+    "n_disposed": 2,
+    "detail": {
+     "artifact": "eda_eng_dispose_isolated_copper",
+     "board": "/tmp/opencode/aprime_triple_final_v2/s3b_fixed.kicad_pcb",
+     "out": "/tmp/opencode/aprime_triple_final_v2/s3c_disposed.kicad_pcb",
+     "disposed": [
+      {
+       "uuid": "a4658ccd-d454-5604-b7c2-5a604a515872",
+       "net": "12V_IN"
+      },
+      {
+       "uuid": "f5d5cd09-5ba7-576d-917d-ead37e11410e",
+       "net": "12V_IN"
+      }
+     ],
+     "n_disposed": 2,
+     "unresolved": [],
+     "rule": "#K2-390 sec.7 step 1: dispose of the DRC-named orphan zone fill deterministically (zone UUID -> UnFill), refill only the rest; one pass, no search."
+    }
+   }
+  ],
+  "landing_precondition": [
+   {
+    "stage": "landing_precondition_no_isolated_copper",
+    "n": 0,
+    "pass": true
+   }
+  ],
+  "final_drc": {
+   "solder_mask_bridge": 0,
+   "isolated_copper": 0,
+   "clearance": 0,
+   "shorting_items": 0
+  }
+ },
+ "named_residual_list": {
+  "count": 7,
+  "items": [
+   {
+    "n": 1,
+    "net": "NRST",
+    "pair": "C73.1 (F.Cu) <-> U1.10 (F.Cu)"
+   },
+   {
+    "n": 2,
+    "net": "NRST",
+    "pair": "track[F.Cu, 0.1414mm] <-> U1.10 (F.Cu)"
+   },
+   {
+    "n": 3,
+    "net": "PERSTA#",
+    "pair": "track[F.Cu, 1.9799mm] <-> track[In5.Cu, 0.2500mm]"
+   },
+   {
+    "n": 4,
+    "net": "P3V3_AUX",
+    "pair": "track[In2.Cu, 0.2000mm] <-> track[In5.Cu, 0.0707mm]"
+   },
+   {
+    "n": 5,
+    "net": "I2C1_SCL",
+    "pair": "U1.47 (F.Cu) <-> track[F.Cu, 0.8485mm]"
+   },
+   {
+    "n": 6,
+    "net": "I2C1_SDA",
+    "pair": "track[F.Cu, 1.4142mm] <-> track[F.Cu, 0.1414mm]"
+   },
+   {
+    "n": 7,
+    "net": "P3V3",
+    "pair": "C84.1 (F.Cu) <-> blind via F.Cu-In4.Cu [P3V3]"
+   }
+  ],
+  "router_reasons": {
+   "no-free-goal-node": 3,
+   "no-free-start-node": 2,
+   "note": "the 5 final-stage blocked edges; 2 of the 7 are pad-level remainders of the same islands"
+  },
+  "diagnosis": "ENDPOINT CONGESTION / no-port nets - a NEW cause, DIFFERENT from the two already closed (gate-clean layout: mask bridges gone; island disposition: isolated copper gone). The maze cannot snap a start/goal cell at these endpoints: the cells are pruned as too close to foreign copper, and P3V3 has no frame port at all."
+ },
+ "outcome_contract": {
+  "branch": "FAIL (C1 = 7 > 0)",
+  "required": "stop + back to the planning layer (#K2-393 sec.4); produce the named residual list (above); NO same-cause rerun; a further same-cause FAIL means sec.17.4 change-the-means + sec.15.3.",
+  "closed_by_this_window": "C2 (new_classes = []) + C6/C7/C8/C9 + the mask-bridge and isolated-copper classes"
+ },
+ "OWNER-ITEMS": 0
+}
