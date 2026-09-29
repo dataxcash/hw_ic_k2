@@ -1,0 +1,26 @@
+{
+ "artifact": "k2_channel_to_chain_residual_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3: name the residual 2 of the channeled dry run (R1244).",
+ "routed": [
+  "PERSTA#",
+  "P3V3_AUX",
+  "P3V3"
+ ],
+ "blocked": [
+  {
+   "net": "MCU_VDD",
+   "why": "no-path-coarse(exhausted-1)"
+  },
+  {
+   "net": "I2C1_SDA",
+   "why": "no-free-start-node"
+  }
+ ],
+ "reading": {
+  "added": 3,
+  "blocked": 2
+ },
+ "note": "the 2 residual nets are NAMED with their maze reasons; the next deterministic fix targets exactly these (start-reachability precheck + channel reallocation), still zero exam runs.",
+ "OWNER-ITEMS": 0
+}
