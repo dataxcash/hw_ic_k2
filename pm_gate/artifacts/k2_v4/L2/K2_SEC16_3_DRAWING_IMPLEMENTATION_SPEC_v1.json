@@ -1445,6 +1445,36 @@
    ],
    "width": 0.2,
    "why": "R1376 determined fix: reach the E2.5 PAD (45.95,62.905) from the B.Cu ladder's west end (48.15,62.905) - same y, 2.2mm; this makes the cluster PAD-ANCHORED so the chain's isolated-copper disposal cannot remove it (the previous joint was disposed for lacking a pad)."
+  },
+  {
+   "n": 3,
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    50.95,
+    39.0
+   ],
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "why": "R1388 anchor fix: R1.2 is a P3V3_AUX pad at exactly (50.95,39.0); this via sits inside that pad, so it is PAD-ANCHORED."
+  },
+  {
+   "n": 3,
+   "kind": "track",
+   "net": "P3V3_AUX",
+   "layer": "B.Cu",
+   "a": [
+    50.95,
+    37.0
+   ],
+   "b": [
+    50.95,
+    39.0
+   ],
+   "width": 0.2,
+   "why": "R1388 anchor fix: one determined B.Cu segment (same x, 2.0mm) joining the previously pad-less via at (50.95,37.0) to the pad-anchored via at R1.2 (50.95,39.0)."
   }
  ],
  "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
