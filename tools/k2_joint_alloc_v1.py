@@ -40,10 +40,19 @@ def content_aware_joint_allocation(nets_pts, block_rect, occupants, clearance=0.
         else:
             occ = occupants
         xs = [p[1] for p in row]; ys = [p[2] for p in row]
+        # **组合 R1210 让位（精确近边）**：先把覆盖本网端点的他网铜按确定性让位序平移，再重画（R1222 pad 阶梯）
+        _epl = _iu.spec_from_file_location("k2ep", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "k2_endpoint_reach_planner_v1.py"))
+        epl = _iu.module_from_spec(_epl); _epl.loader.exec_module(epl)
+        _pts = [(p[1], p[2]) for p in row]
+        _blk = [bb for bb in occ if any(bb[0] - clearance - 1e-9 <= x <= bb[2] + clearance + 1e-9
+                                        and bb[1] - clearance - 1e-9 <= y <= bb[3] + clearance + 1e-9 for (x, y) in _pts)]
+        _seq = epl.yield_sequence((min(_pts), max(_pts)), [{"net": "_%d" % i, "bbox": bb} for i, bb in enumerate(_blk)], clearance)
+        _moved = epl.apply_yields([{"net": "_%d" % i, "bbox": bb} for i, bb in enumerate(_blk)], _seq)
+        occ2 = [bb for bb in occ if bb not in _blk] + _moved
         sub = None
         for _pd in (pad, pad * 2, pad * 4):
             box = (min(xs) - _pd, min(ys) - _pd, max(xs) + _pd, max(ys) + _pd)
-            _s, _ = rd.clear_subrect_containing_pts(box, occ, clearance, [(p[1], p[2]) for p in row])
+            _s, _ = rd.clear_subrect_containing_pts(box, occ2, clearance, [(p[1], p[2]) for p in row])
             if _s:
                 sub = _s
                 if min(_s[2] - _s[0], _s[3] - _s[1]) >= need - 1e-9:

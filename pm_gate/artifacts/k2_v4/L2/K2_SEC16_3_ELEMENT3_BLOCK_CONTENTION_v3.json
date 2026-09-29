@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_sec16_3_element3_block_contention_v3",
+ "ts": "2026-09-29",
+ "authority": "#K2-427 sec.4: content-aware allocation composing the in-register yield (R1210) + corridor redraw (R1222).",
+ "channels": [
+  {
+   "net": "I2C1_SDA",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "MCU_VDD",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "P3V3",
+   "channel": [
+    51.1,
+    60.2,
+    51.9,
+    61.0
+   ],
+   "status": "OK",
+   "capacity_mm": 0.8,
+   "need_mm": 0.6
+  },
+  {
+   "net": "P3V3_AUX",
+   "channel": [
+    51.250001000000005,
+    38.000001000000005,
+    51.9,
+    39.199999999999996
+   ],
+   "status": "OK",
+   "capacity_mm": 0.65,
+   "need_mm": 0.6
+  },
+  {
+   "net": "PERSTA#",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  }
+ ],
+ "n_ok": 2,
+ "n": 5,
+ "OWNER-ITEMS": 0,
+ "finding": "composing the in-register yield (R1210) + corridor redraw (R1222) into the PER-NET allocator still gives 2/5: the 3 UNPLACEABLE nets' own-endpoint boxes are boxed. The reading that reached 5/5 (R1220/R1222) grouped the endpoints into ROWS and used the ROW box - i.e. the policy's 'group fanout' grouping, not per-net boxes.",
+ "next": "allocate by ROW (the reference's group fanout), not per net, and keep the per-channel conservation."
+}
