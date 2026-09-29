@@ -13,3 +13,4 @@
 | `l12_审查包_20260927/` | l12 | **作废** | 同上（l12 走线 100% 同 l10） |
 | `l13_审查包_20260928/` | l13 | 历史 | H3 左上角 ＋ J12 让位（#K2-340 验收） |
 | `l14_审查包_20260928/` | l14 | **作废** | **owner 视觉验收否决（#K2-343）**：「除 4 孔外问题全在」；被产品级重布局（#K2-343 §四 · W1–W4）取代 |
+- SUPERSEDED / VOID (#K2-433 sec.2.3): `OWNER_DECISION_PACKAGE_20260929.md` - written by an opencode (supervision/PM) session OUTSIDE its write domain; the owner's direct order #K2-431 already settled the direction, so its three options are VOID. NOT an ENG deliverable; never to be presented to the owner.
