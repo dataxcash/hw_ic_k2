@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_sec16_3_block_contention_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-425 sec.4.3: the sec.16.3 four-element plan for the block-contention capability.",
+ "element1_death_cause": "the block's nets each re-solve independently, so they COMPETE for the same space; the winner is decided by routing order, not by need (measured: C1 stays 5 whatever the corridors look like).",
+ "element2_proven_facts": [
+  "R1224 (authorised N=1): C1=5, C2 clean, nine rows; identical to the no-yield baseline",
+  "R1222: planning-layer corridors are 5/5 conservation-PASS yet the board still shows C1=5 => the residual is BLOCK-level contention",
+  "R1208: the per-row blockers are named (MCU_VDD/NRST/P3V3_AUX/GND/I2C1_SCL)"
+ ],
+ "element3_corrected_plan": {
+  "principle": "ONE coordinated deterministic allocation: assign each block net a disjoint channel FIRST (order by a fixed rule), then route inside it - no competition.",
+  "determinism": "order-preserving disjoint channel assignment (no search); one pass",
+  "per_line_fields": [
+   "net",
+   "channel rect",
+   "entry point",
+   "exit point",
+   "layer",
+   "via hole-pair"
+  ],
+  "conservation": "per-channel (NOT block-level): each channel's own clear width vs its net's need",
+  "buildability": "relocation_listed"
+ },
+ "element4_buildability": "relocation_listed",
+ "Zero": "no exam runs this window",
+ "OWNER-ITEMS": 0
+}

@@ -1400,6 +1400,24 @@ class T(unittest.TestCase):
         self.assertTrue(all(z["move_mm"] >= 0 for z in r))
         self.assertEqual(m.row_relayout_request(row, occ, 0.20), r, "deterministic")
 
+    def test_C425_joint_channel_assignment_is_disjoint_and_ordered(self):
+        """#K2-425 sec.4.2: the coordinated single-pass allocation. RED = letting the nets share one channel
+        overlaps; GREEN = joint_channel_assignment gives each net a DISJOINT, order-preserving channel (no
+        competition), with a deterministic artifact hash. Deterministic, zero search."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_joint_alloc_v1", os.path.join("tools", "k2_joint_alloc_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        nets = ["MCU_VDD", "NRST", "P3V3"]
+        ch = m.joint_channel_assignment(nets, (0, 0, 10, 10), 0.6, 0.2)
+        naive = [ch[0]["channel"]] * len(nets)
+        self.assertEqual(len({tuple(r) for r in naive}), 1, "RED: one shared channel would overlap")
+        self.assertEqual([c["net"] for c in ch], nets, "GREEN: net order preserved")
+        for i in range(len(ch) - 1):
+            self.assertLessEqual(ch[i]["channel"][2], ch[i + 1]["channel"][0], "channels disjoint")
+        self.assertEqual(m.joint_channel_assignment(nets, (0, 0, 10, 10), 0.6, 0.2), ch, "deterministic")
+        self.assertEqual(m.artifact_hash16(ch), m.artifact_hash16(ch), "stable artifact hash")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

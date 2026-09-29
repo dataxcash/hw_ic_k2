@@ -1,0 +1,18 @@
+{
+ "artifact": "k2_sec20_product_questions_block_contention_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-425 sec.4.1 (HARD first action): the sec.20 product three questions must be answered in full BEFORE any code.",
+ "Q1_same_kind_product": "YES. Every commercial PCB router resolves net-vs-net contention by a COORDINATED single allocation (channel/trunk assignment + negotiated rip-up), never by letting each net re-solve independently and compete. Same-chip reference: TI DS320PR1601 (PCIe switch) EVM layer drawings + SNLU300 programming guide.",
+ "Q2_copyable_artifact": [
+  "supervision ledger REF-CASE-LIBRARY A1: TI DS320PR1601 datasheet SNLS683 + SNLA425/SNLU300 (the vendor layout policy)",
+  "in-repo product structure R633 (the registered whole-block allocation example)",
+  "in-repo C17 v1 rip-up pipeline (tools/k2_reroute_affected_v2.py) as the re-solve half"
+ ],
+ "Q3_difference_list": [
+  "the vendor drawings assume a free board; our block already carries other nets' fixed copper (measured: row blockers MCU_VDD/NRST/P3V3_AUX/GND/I2C1_SCL)",
+  "nothing in-repo does a COORDINATED single-pass allocation for the block - the chain lets each net re-solve and compete (the measured root cause of C1=5)",
+  "=> copy the vendor's 'assign the channels first, then route inside them' discipline and add the deterministic coordinated assignment."
+ ],
+ "consequence": "the asset below (a deterministic coordinated allocator) is the 'what to copy, how to apply' outcome; implementation next.",
+ "OWNER-ITEMS": 0
+}
