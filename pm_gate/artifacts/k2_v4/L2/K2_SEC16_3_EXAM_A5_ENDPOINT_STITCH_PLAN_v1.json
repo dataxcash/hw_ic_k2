@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_sec16_3_exam_a5_endpoint_stitch_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-408 sec.4.1: the sec.16.3 planning-layer regression artifact for the A^5 endpoint/port residual (four elements, missing one = fail-closed).",
+ "one_line_death_cause": "A^5 fails on C1=8 ALONE because, after the wipe+ERASE+cleared-field placement, EIGHT member-pad<->own-net-copper endpoint pairs have a short gap that the in-register maze never stitches: the maze only routes between a pair when BOTH endpoint cells snap into their net's island, and post-ERASE those eight cells do not - nobody on the chain treats them as 'must-stitch' ports.",
+ "proven_facts": [
+  "the A^5 run was the FIRST on a correct basis (no vacuous moves - the meter now refuses unapplied moves; real ERASE of J9/J6/J11; placement evaluated on the cleared field): C1 = 8, C2 = 123 vs 148 with new_classes = [], C3/C4/C5 pass, C6 = 0, C7 = 0, C8 = 0, C9 reported, reasonableness row PASS (densest quadrant 46.81 -> 44.86).",
+  "baseline pinned (machine-read): the registered A-triple-prime verdict reads C1 = 18; against its per-item set, 3 of the 8 carry over and 5 are NEW/changed (MCU_VDD U1.6<->In5 track; PERSTA# In5 track<->R1.1; P3V3_AUX F.Cu<->In5 track; I2C1_SDA F.Cu<->B.Cu track; P3V3 blind via<->C84.1).",
+  "all eight are NEAREST-NEIGHBOUR endpoint pairs (pad<->pad / pad<->track / track<->track / via<->pad) between an IN-BLOCK member and its own net's copper - not capacity, not the criteria.",
+  "the same endpoint/port class has capped C1 across four generations: 22 (A') -> 24 (A'') -> 18 (A''') -> 8 (A^5).",
+  "the in-register copyable exists: tools/k2_reroute_affected_v2.py (C17 v1) clip -> islands -> MST stitch -> snap -> bounded repair -> normalise; plus the block chain's 'dR ports = FIXED terminals' semantics.",
+  "the meter fix (R1104) and the island disposition (R1082) are in place, so any new residual is attributable."
+ ],
+ "corrected_complete_plan": {
+  "principle": "#K2-404: wipe FIRST, place on the cleared field, THEN stitch - copy the C17 v1 islands->stitch section onto the wipe_resolve chain (additive; zero search; zero parameter tuning).",
+  "stage": "2c_endpoint_stitch (new, additive, AFTER the second maze pass and BEFORE the refill)",
+  "per_line_method": "for each remaining unconnected pair (a,b) of the same net, take the endpoint points+layers from the DRC; route a DETERMINISTIC stitch with the SAME in-domain maze (k2_p4_mroute_v1.maze_route, the same --bound-rect wall) from a to b; if the maze refuses (the very failure we are fixing), fall back to ONE deterministic L/45-degree 2-segment stitch on a's layer, then let the final DRC gate accept or reject it (a rejected stitch is NAMED, never silently dropped).",
+  "layers_slots_holes_corridors_rule": "every emitted stitch is a normal track polyline on the endpoint's layer with the in-register width; no new vias unless the two endpoints are on different layers, in which case exactly one via at the corner (layer pair = the maze's TRANS set).",
+  "conservation_accounting": {
+   "diameter": "the eight gaps are all micro (0.06-2.0 mm as reported)",
+   "free_space": "the A^5 capacity reading stands: 93.5% free domain area (L2/C1_CAPACITY_READING_v1.json) => space >= need",
+   "maze_domain": "the block frame + the fixed dR ports (the C35 wall)",
+   "conclusion": "capacity >= need for all eight; the wall is the maze's endpoint snap, not space."
+  },
+  "no_taxonomy": "no keep/分类/变形/包络补丁 (#K2-379 已封)"
+ },
+ "buildability": "relocation_listed",
+ "regression_required": "a same-kind regression (RED first, then GREEN): a named endpoint that the maze refuses must be STITCHED by the new stage and the resulting board must show it connected (C1 decremented for that net).",
+ "OWNER-ITEMS": 0
+}
