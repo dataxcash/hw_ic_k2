@@ -1,0 +1,111 @@
+{
+ "artifact": "k2_block_relayout_reading_v1",
+ "board_rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "rows": 6,
+ "corridors": [
+  {
+   "group": "R0",
+   "corridor": [
+    22.95,
+    32.95,
+    27.5417,
+    78.0
+   ],
+   "n_points": 3,
+   "n_escapes": 3,
+   "conservation": {
+    "capacity_mm": 4.5917,
+    "need_mm": 0.6,
+    "pass": true
+   }
+  },
+  {
+   "group": "R1",
+   "corridor": [
+    27.7417,
+    32.95,
+    32.3333,
+    78.0
+   ],
+   "n_points": 2,
+   "n_escapes": 2,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "group": "R2",
+   "corridor": [
+    32.5333,
+    32.95,
+    37.125,
+    78.0
+   ],
+   "n_points": 1,
+   "n_escapes": 1,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "group": "R3",
+   "corridor": [
+    37.325,
+    32.95,
+    41.9167,
+    78.0
+   ],
+   "n_points": 1,
+   "n_escapes": 1,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "group": "R4",
+   "corridor": [
+    42.1167,
+    32.95,
+    46.7083,
+    78.0
+   ],
+   "n_points": 2,
+   "n_escapes": 2,
+   "conservation": {
+    "capacity_mm": 0.0,
+    "need_mm": 0.6,
+    "pass": false
+   }
+  },
+  {
+   "group": "R5",
+   "corridor": [
+    46.9083,
+    32.95,
+    51.5,
+    78.0
+   ],
+   "n_points": 1,
+   "n_escapes": 1,
+   "conservation": {
+    "capacity_mm": 4.2917,
+    "need_mm": 0.6,
+    "pass": true
+   }
+  }
+ ],
+ "OWNER-ITEMS": 0,
+ "finding": "the POLICY's equal-slice corridor allocation FAILS the per-corridor conservation on the real block: 2/6 groups PASS, 4/6 FAIL (capacity 0.0). So the corridor allocation must be CONTENT-AWARE (allocate around the surviving copper), not an equal slice - a further deterministic step, still zero search.",
+ "next": "content-aware corridor allocation (deterministic, zero search) OR a fresh ruling; no exam runs."
+}
