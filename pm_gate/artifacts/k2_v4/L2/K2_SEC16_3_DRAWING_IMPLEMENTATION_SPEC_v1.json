@@ -1596,5 +1596,19 @@
   "gap_upgraded": "M-ENG-ORPHAN-BRIDGE-DISPOSAL: observation -> CONFIRMED GAP (second instance). Every added drawing piece must be PAD-ANCHORED (i.e. its cluster must contain a pad) or it will be disposed.",
   "fix_direction": "re-draw the SDA joint so its lane terminates on a pad of the net (e.g. E2's or U1's I2C1_SDA pad) rather than on a bare stub end - i.e. the same 'anchor' rule that made the bridge work.",
   "PWR_BTN_OUT": "not localised yet (the probe window found no items; the residual is U1 pad 13 <-> an In2 track of 2.4042mm). NOTE: it appeared only after my added In4 copper; must be localised before any further run."
+ },
+ "R1376_two_localisations": {
+  "PWR_BTN_OUT": {
+   "full_inventory": "U1.13 pad (33.25,57.163) + OUTSIDE items only: R3.1 pad & F.Cu via @(53.05,37.0), In2 (53.2,37.0)->(53.05,37.0), In2 (51.5,38.7)->(53.2,37.0)",
+   "reading": "this net has NO in-frame copper at all - the maze used to lay it and now does not. Its dR crossing stub starts at (51.5,38.7) on In2.",
+   "suspect": "the added In4 bridge corridor (x 42.8..58.5 at y=35.5) and/or the D2 tie may occupy the corridor the maze needs; must be checked (read-only) before concluding."
+  },
+  "I2C1_SDA": {
+   "present": "the B.Cu ladder (e.g. (49.15,62.505)->(49.35,62.505)) AND the F.Cu 0.6mm stub, as TWO separate items",
+   "absent": "my joint's new lane (x=50.30) and its via",
+   "why": "the ladder and the F.Cu stub are BOTH pad-less islands; my lane joined them into a bigger island that still contains NO pad => the chain's isolated-copper disposal removed it. Anchor rule confirmed again.",
+   "DETERMINED_FIX": "extend the B.Cu ladder's WEST end (48.15,62.905) to the E2.5 PAD at (45.95,62.905) - same y, 2.2mm apart => one B.Cu segment reaches a PAD => pad-anchored => it cannot be disposed."
+  },
+  "rule": "M-ENG-ORPHAN-BRIDGE-DISPOSAL (confirmed, 2nd instance): every added drawing piece's cluster MUST contain a pad."
  }
 }
