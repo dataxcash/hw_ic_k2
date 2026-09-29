@@ -726,6 +726,79 @@ class T(unittest.TestCase):
         r3 = verify.judge(REF, REF_DRC, REF, REF_DRC)   # legacy call unchanged
         self.assertNotIn("rows_completeness", r3)
 
+    def test_C389_mask_opening_gap_is_pure_and_correct(self):
+        """#K2-389 §二.1：阻焊开窗间隙是**纯函数**（相接/重叠 => 0）。
+        这是「放置闸 mask-dam 约束」的最小可测内核（不依赖 pcbnew）。"""
+        self.assertEqual(route.mask_opening_gap([0, 0, 1, 1], [2, 0, 3, 1]), 1.0)      # side by side
+        self.assertEqual(route.mask_opening_gap([0, 0, 1, 1], [1, 0, 2, 1]), 0.0)      # touching => bridge
+        self.assertEqual(route.mask_opening_gap([0, 0, 1, 1], [0.5, 0.5, 1.5, 1.5]), 0.0)  # overlapping
+        self.assertAlmostEqual(route.mask_opening_gap([0, 0, 1, 1], [2, 2, 3, 3]), 2 ** 0.5, places=9)
+
+    def test_C389_the_placement_gate_consumes_the_mask_dam_rule(self):
+        """#K2-389 §二.1：放置闸（`mech_probe`／`mech_probe_moves`）必须**消费在册 mask-dam 规则**，
+        且必须用**类黑名单**（原 4 类白名单正是漏掉 `solder_mask_bridge` 的洞）。路径感知（按函数段）。"""
+        import ast
+        self.assertAlmostEqual(regen._mask_clear_mm(), 0.05, places=6)   # 在册规则值
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        tree = ast.parse(src)
+        for name in ("mech_probe", "mech_probe_moves"):
+            fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
+            seg = "\n".join(src.splitlines()[fn.lineno - 1:fn.end_lineno])
+            self.assertIn("pad_mask_dam_violations", seg, "%s must consume the rule-derived mask-dam check" % name)
+            self.assertIn("_mask_clear_mm()", seg)
+            self.assertIn("lib_footprint_issues", seg, "%s must use the class BLACKLIST" % name)
+            self.assertNotIn('if ty in ("courtyards_overlap"', seg,
+                             "%s must not fall back to the old 4-type whitelist" % name)
+
+    def test_C389_l14_is_mask_clean_and_the_A_triple_prime_map_is_C8_clean(self):
+        """#K2-389：l14 参照无 mask-dam 违规；A‴ 的**逐件图**（committed）在 l14 位置上 **C8 零越框**；
+        记录在案的闸结果（A‴ 见证 mask-dam=0 · DRC 桥=0 · 无类高于基线）自洽。见证板是**派生件**、
+        按仓规**不入库**（禁止直改 PCB）⇒ 本测试用 l14 ＋ committed 图做算术，不依赖 /tmp 板。"""
+        try:
+            import pcbnew  # noqa: F401
+        except Exception:                                              # noqa: BLE001
+            self.skipTest("pcbnew unavailable")
+        import pcbnew as P
+        clear = json.load(open(os.path.join(ROOT, "..", "_shared", "eda_core", "drc_rules.json"),
+                               encoding="utf-8"))["solder_mask"]["pad_to_mask_clearance"]
+        self.assertEqual(route.pad_mask_dam_violations(os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb"), clear), [])
+        scen = json.load(open(os.path.join(L2, "EXAM_A_TRIPLE_PRIME_SCENARIO_v1.json"), encoding="utf-8"))
+        rect = scen["scenario"]["frame_rect"]
+        rows = scen["scenario"]["placement_map"]
+        self.assertEqual(len(rows), 25)
+        self.assertEqual(sum(1 for m in rows if m["moved"]), scen["scenario"]["n_moved"])
+        pmap = {m["ref"]: m["delta_mm"] for m in rows}
+        b = P.LoadBoard(os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb"))
+        outside = []
+        for fp in b.GetFootprints():
+            if fp.GetReference() not in pmap:
+                continue
+            d = pmap[fp.GetReference()]
+            for pd in fp.Pads():
+                pos = pd.GetPosition()
+                pt = [P.ToMM(pos.x) + d[0], P.ToMM(pos.y) + d[1]]
+                if not (rect[0] - 1e-6 <= pt[0] <= rect[2] + 1e-6 and rect[1] - 1e-6 <= pt[1] <= rect[3] + 1e-6):
+                    outside.append((fp.GetReference(), pd.GetNumber()))
+        self.assertEqual(outside, [], "C8: the A-triple-prime map must keep every member inside the frame")
+        g = scen["gate_result"]
+        self.assertEqual(g["pad_mask_dam_violations_on_the_new_witness"], 0)
+        self.assertEqual(g["drc_solder_mask_bridge_on_the_new_witness"], 0)
+        self.assertTrue(g["no_drc_class_above_the_gate_baseline"])
+
+    def test_C389_the_chain_refuses_a_board_that_still_has_isolated_copper(self):
+        """#K2-389 §二.2：`wipe_resolve` 链必须在**落板前**执行 fail-closed 前置 —— 残留 `isolated_copper`
+        ⇒ **拒板具名**（`W3B_REFUSED_ISOLATED_COPPER`），且必须**在判卷（M4）之前**生效。路径感知（按函数段）。"""
+        import ast
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        tree = ast.parse(src)
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "wipe_resolve_chain")
+        seg = "\n".join(src.splitlines()[fn.lineno - 1:fn.end_lineno])
+        self.assertIn("landing_precondition_no_isolated_copper", seg)
+        self.assertIn("W3B_REFUSED_ISOLATED_COPPER", seg)
+        self.assertIn("isolated_copper", seg)
+        self.assertLess(seg.index("W3B_REFUSED_ISOLATED_COPPER"), seg.index("M4_judge"),
+                        "the landing precondition must bite BEFORE the judge")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

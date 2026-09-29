@@ -115,5 +115,19 @@
   "action_in_this_window": "NOT fixed (out of the authorised scope; fail-closed => report, do not self-authorise an unrelated edit).",
   "proposed_minimal_fix": "initialise `blocked = []` and define the plans file path `rp` before the M3 apply (mirror relocate_block_chain's `rp = os.path.join(work,...)` + json.dump)."
  },
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "c8_backfill_measured": {
+  "authority": "#K2-389 sec.2.3: record the C8 measurement into the archive.",
+  "witness_board_outside_members": 0,
+  "attempt3_final_board_outside_members": 0,
+  "frame_rect": [
+   22.95,
+   32.95,
+   51.5,
+   66.5
+  ],
+  "members": 25,
+  "meaning": "the missing C8 row would have been PASS; attempt 3 FAILs on C1/C2 only.",
+  "method": "read-only pcbnew LoadBoard + pad positions vs the frozen frame (single subprocess)"
+ }
 }

@@ -258,6 +258,61 @@ def mask_bridge_pairs(points, foreign_pads, clear_mm):
     return out
 
 
+def mask_opening_gap(ra, rb):
+    """两阻焊开窗矩形 `[x0,y0,x1,y1]` 之间的**最小间隙**（相接/重叠 => 0）。**纯函数**（#K2-389 §二.1）。"""
+    dx = max(ra[0] - rb[2], rb[0] - ra[2], 0.0)
+    dy = max(ra[1] - rb[3], rb[1] - ra[3], 0.0)
+    return math.hypot(dx, dy)
+
+
+def pad_mask_dam_violations(board_path, clear_mm):
+    """**放置闸的 mask-dam 约束（纯几何 · 消费在册规则 · #K2-389 §二.1）**：
+    把每个焊盘的**阻焊开窗矩形**（焊盘 bbox 外扩 `clear_mm`，焊盘自带 mask margin 更大则取之）两两比对；
+    **异网 · 同一阻焊面（F/B）· 开窗相接或重叠** ⇒ 记为违规对（确定性列表）。
+    `clear_mm` = 在册规则 `solder_mask.pad_to_mask_clearance`（每侧开窗外扩量）⇒ 强制「焊盘边距 ≤ 2×clear_mm」即阻焊坝。"""
+    import pcbnew as P
+    b = P.LoadBoard(board_path)
+    SIDES = ("F.Cu", "B.Cu")
+    pads = []
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            nm = pd.GetNetname()
+            if not nm:
+                continue
+            try:
+                sides = [b.GetLayerName(l) for l in pd.GetLayerSet().Seq()]
+            except Exception:                                          # noqa: BLE001
+                sides = []
+            if not (set(sides) & set(SIDES)):
+                continue
+            bb = pd.GetBoundingBox()
+            m = clear_mm
+            try:
+                _local = P.ToMM(pd.GetLocalSolderMaskMargin())
+                if _local and _local > m:
+                    m = _local
+            except Exception:                                          # noqa: BLE001
+                pass
+            pos = pd.GetPosition()
+            pads.append({"ref": fp.GetReference(), "pad": pd.GetNumber(), "net": nm,
+                         "sides": set(sides) & set(SIDES),
+                         "rect": [P.ToMM(bb.GetX()) - m, P.ToMM(bb.GetY()) - m,
+                                  P.ToMM(bb.GetRight()) + m, P.ToMM(bb.GetBottom()) + m],
+                         "at": [round(P.ToMM(pos.x), 4), round(P.ToMM(pos.y), 4)]})
+    out = []
+    for i in range(len(pads)):
+        for j in range(i + 1, len(pads)):
+            a, c = pads[i], pads[j]
+            if a["net"] == c["net"] or not (a["sides"] & c["sides"]):
+                continue
+            gap = mask_opening_gap(a["rect"], c["rect"])
+            if gap <= 1e-9:
+                out.append({"a": "%s.%s" % (a["ref"], a["pad"]), "b": "%s.%s" % (c["ref"], c["pad"]),
+                            "nets": [a["net"], c["net"]], "at": [a["at"], c["at"]], "opening_gap_mm": round(gap, 4),
+                            "clear_mm": clear_mm, "rule": "opening gap <= 0 => the two mask openings touch (pad gap <= 2 x clear_mm)"})
+    return out
+
+
 def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):
     """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。
     `bound_rect`（#K2-380 §二.3 收尾道 · **新增可选参数，默认不改老行为**）：落板前**框外坐标检查** ——

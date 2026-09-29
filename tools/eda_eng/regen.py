@@ -219,8 +219,19 @@ def _dev_area(b):
     return out
 
 
+def _mask_clear_mm():
+    """**在册**阻焊开窗规则（#K2-389 §二.1）：`solder_mask.pad_to_mask_clearance`（每侧外扩量，mm）。
+    放置闸必须消费它 —— 此前闸只过滤 4 类 DRC，漏掉了 `solder_mask_bridge`（#K2-389 机证）。"""
+    try:
+        rr = json.load(open(os.path.join(ROOT, "..", "_shared", "eda_core", "drc_rules.json"), encoding="utf-8"))
+        return float(rr["solder_mask"]["pad_to_mask_clearance"])
+    except Exception:                                              # noqa: BLE001
+        return None
+
+
 def mech_probe(refs, delta_mm, work, tag):
     """机械探针（gen -> crtyd -> DRC），**基线相对**用。返回 {mechanical_violations}。"""
+    from . import route as _rt
     gw = os.path.join(work, "mp_" + tag)
     shutil.rmtree(gw, ignore_errors=True); os.makedirs(gw, exist_ok=True)
     sh = shadow_mod.build(os.path.join(gw, "shadow"))
@@ -244,14 +255,31 @@ def mech_probe(refs, delta_mm, work, tag):
     if os.path.isfile(gj):
         for v in json.load(open(gj, encoding="utf-8")).get("violations", []):
             ty = v.get("type")
-            if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
+            # #K2-389：闸原只白名单 4 类 ⇒ 漏掉 solder_mask_bridge（本件之根因）。改为**黑名单**
+            # （仅排除库解析类，与 C2 的 pinned caliber 同尺）：**任何新类**都在基线相对比较里被拒。
+            if ty and ty not in ("lib_footprint_issues", "lib_footprint_mismatch"):
                 bad[ty] = bad.get(ty, 0) + 1
+    # #K2-389 §二.1：放置闸**消费在册 mask-dam 规则**（此前只过滤 4 类 DRC ⇒ 漏 solder_mask_bridge）。
+    # 规则不可读 / 检查失败 ⇒ **fail-closed**（拒绝该位移，不静默放行）。
+    clear = _mask_clear_mm()
+    if clear is None:
+        return {"gen_exit": 1, "mechanical_violations": {"mask_dam_rule_unavailable": 1},
+                "mask_dam_error": "in-register solder_mask rule not readable - placement gate refuses (fail-closed)"}
+    try:
+        dam = _rt.pad_mask_dam_violations(pk, clear)
+    except Exception as exc:                                       # noqa: BLE001
+        return {"gen_exit": 1, "mechanical_violations": {"mask_dam_check_failed": 1},
+                "mask_dam_error": "pad_mask_dam_violations raised: %s - placement gate refuses (fail-closed)" % exc}
+    if dam:
+        bad["solder_mask_bridge"] = bad.get("solder_mask_bridge", 0) + len(dam)
+    bad["mask_dam_mm"] = clear                                     # 记录所用在册规则值（可核查）
     return {"gen_exit": rc, "mechanical_violations": bad}
 
 
 def mech_probe_moves(moves, work, tag, return_board=False):
     """机械探针（gen -> crtyd -> DRC）**逐件位移**版（#K2-372 §二.1：目标相对位**逐件**由闸出）。
     moves = [(ref, dx, dy), ...]；返回 {gen_exit, mechanical_violations, [board]}。"""
+    from . import route as _rt
     gw = os.path.join(work, "mq_" + tag)
     shutil.rmtree(gw, ignore_errors=True); os.makedirs(gw, exist_ok=True)
     sh = shadow_mod.build(os.path.join(gw, "shadow"))
@@ -277,8 +305,24 @@ def mech_probe_moves(moves, work, tag, return_board=False):
     if os.path.isfile(gj):
         for v in json.load(open(gj, encoding="utf-8")).get("violations", []):
             ty = v.get("type")
-            if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
+            # #K2-389：闸原只白名单 4 类 ⇒ 漏掉 solder_mask_bridge（本件之根因）。改为**黑名单**
+            # （仅排除库解析类，与 C2 的 pinned caliber 同尺）：**任何新类**都在基线相对比较里被拒。
+            if ty and ty not in ("lib_footprint_issues", "lib_footprint_mismatch"):
                 bad[ty] = bad.get(ty, 0) + 1
+    # #K2-389 §二.1：放置闸**消费在册 mask-dam 规则**（此前只过滤 4 类 DRC ⇒ 漏 solder_mask_bridge）。
+    # 规则不可读 / 检查失败 ⇒ **fail-closed**（拒绝该位移，不静默放行）。
+    clear = _mask_clear_mm()
+    if clear is None:
+        return {"gen_exit": 1, "mechanical_violations": {"mask_dam_rule_unavailable": 1},
+                "mask_dam_error": "in-register solder_mask rule not readable - placement gate refuses (fail-closed)"}
+    try:
+        dam = _rt.pad_mask_dam_violations(pk, clear)
+    except Exception as exc:                                       # noqa: BLE001
+        return {"gen_exit": 1, "mechanical_violations": {"mask_dam_check_failed": 1},
+                "mask_dam_error": "pad_mask_dam_violations raised: %s - placement gate refuses (fail-closed)" % exc}
+    if dam:
+        bad["solder_mask_bridge"] = bad.get("solder_mask_bridge", 0) + len(dam)
+    bad["mask_dam_mm"] = clear                                     # 记录所用在册规则值（可核查）
     out = {"gen_exit": rc, "mechanical_violations": bad}
     if return_board:
         out["board"] = gpcb
@@ -1256,6 +1300,29 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
                             "--bound-rect", ",".join(str(x) for x in rect))
             if rc3 == 0 and os.path.isfile(fixed2):
                 final = fixed2
+
+    # ③″ **落板前置 fail-closed（#K2-389 §二.2）**：refill（＋有界孤岛处置）后若**仍残留 `isolated_copper`**，
+    # 则**拒绝成板**（具名）——「灌注重填后无孤岛」是**落板前置条件**，**不是事后修补**。
+    dz2 = os.path.join(work, "s3c_landing_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dz2, final])
+    residual_iso = []
+    if os.path.isfile(dz2):
+        try:
+            residual_iso = [v for v in json.load(open(dz2, encoding="utf-8")).get("violations", [])
+                            if v.get("type") == "isolated_copper"]
+        except Exception:                                          # noqa: BLE001
+            residual_iso = []
+    chain.append({"stage": "landing_precondition_no_isolated_copper",
+                  "n": len(residual_iso), "pass": not residual_iso})
+    if residual_iso:
+        return {"state": "W3B_REFUSED_ISOLATED_COPPER", "chain": chain,
+                "wipe": {"deleted_segments": mp["deleted_segments"], "deleted_vias": mp["deleted_vias"]},
+                "residual_isolated_copper": [
+                    {"at": (it.get("pos") or (it.get("items") or [{}])[0].get("pos")),
+                     "desc": (it.get("items") or [{}])[0].get("description")}
+                    for it in residual_iso],
+                "rule": "#K2-389 sec.2.2: 'no isolated_copper after refill' is a LANDING PRECONDITION (fail-closed) - "
+                        "the board is REFUSED and named, never repaired after the fact."}
 
     # ④ judge：C1–C7（＋C8/C9 一并报，判据不动）
     dj = os.path.join(work, "s4_drc.json")

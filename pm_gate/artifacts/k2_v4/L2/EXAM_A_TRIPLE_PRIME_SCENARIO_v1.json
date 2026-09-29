@@ -1,0 +1,303 @@
+{
+ "artifact": "k2_exam_a_triple_prime_scenario_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-389 sec.2.1: the placement gate must CONSUME the in-register mask-dam rule and the placement is RE-DERIVED; gate passes => the scenario is legal. A-double-prime is FROZEN/ARCHIVED (its certificate is kept).",
+ "exam": "A-triple-prime",
+ "supersedes": "L2/EXAM_A_PRIME_SCENARIO_v1.json (A-double-prime, kept on file)",
+ "scenario": {
+  "kind": "IN-BLOCK RELATIVE REARRANGEMENT (per-part offsets) - RE-DERIVED WITH THE CORRECTED PLACEMENT GATE",
+  "frame_rect": [
+   22.95,
+   32.95,
+   51.5,
+   66.5
+  ],
+  "members": [
+   "C73",
+   "C84",
+   "C85",
+   "C86",
+   "C87",
+   "C88",
+   "C90",
+   "D1",
+   "D2",
+   "E2",
+   "J11",
+   "J12",
+   "J13",
+   "J6",
+   "J9",
+   "L1",
+   "R1",
+   "R21",
+   "R28",
+   "R40",
+   "R41",
+   "U1",
+   "U2",
+   "U4",
+   "U5"
+  ],
+  "n_members": 25,
+  "direction": "N5 (toward the emptiest quadrant, SE) - unchanged",
+  "target_derivation": "gate-driven PER PART, deterministic: lattice (k*0.5,k*0.5) k=1..8, largest admissible step first, order = pad-area descending; each step must add NO NEW DRC CLASS vs the baseline (library-resolution classes excluded) AND must satisfy the IN-REGISTER mask-dam rule (solder_mask.pad_to_mask_clearance = 0.05mm, i.e. no two foreign-net mask openings may touch).",
+  "gate_correction": "#K2-389 sec.2.1 (this window): the gate no longer filters a 4-type whitelist (it missed solder_mask_bridge) and now CONSUMES the in-register mask-dam rule via route.pad_mask_dam_violations.",
+  "placement_map": [
+   {
+    "ref": "C73",
+    "delta_mm": [
+     2.0,
+     2.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C84",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C85",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C86",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C87",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C88",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "C90",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "D1",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "D2",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "E2",
+    "delta_mm": [
+     1.0,
+     1.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "J11",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "J12",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "J13",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "J6",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "J9",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "L1",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "R1",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "R21",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "R28",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "R40",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "R41",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "U1",
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "moved": false,
+    "k": 0
+   },
+   {
+    "ref": "U2",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "U4",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   },
+   {
+    "ref": "U5",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "moved": true,
+    "k": null
+   }
+  ],
+  "n_moved": 17,
+  "judging": "C1-C9 (nine-row lock)",
+  "status": "SCENARIO RE-DERIVED AND GATE-CLEAN; the A-triple-prime ROUTING run still requires a new N=1 authorisation (apply, do not self-run).",
+  "landing_precondition": "#K2-389 sec.2.2: after refill (and the bounded island disposition) the chain REFUSES the board if any isolated_copper remains (state W3B_REFUSED_ISOLATED_COPPER) - 'no island' is a landing precondition, not an after-the-fact repair.",
+  "nine_row_lock": "#K2-388 sec.7.2: judge(required_rows=verify.LOCKED_EXAM_ROWS); a missing row is fail-closed."
+ },
+ "gate_result": {
+  "in_register_mask_rule_mm": 0.05,
+  "pad_mask_dam_violations_on_the_new_witness": 0,
+  "drc_solder_mask_bridge_on_the_new_witness": 0,
+  "no_drc_class_above_the_gate_baseline": true,
+  "gate_baseline": {
+   "courtyards_overlap": 2,
+   "pth_inside_courtyard": 1,
+   "silk_edge_clearance": 2,
+   "silk_over_copper": 37,
+   "silk_overlap": 15,
+   "mask_dam_mm": 0.05
+  },
+  "old_A_double_prime_witness_pad_mask_dam_violations": 3,
+  "conclusion": "a legal placement EXISTS under the corrected gate => the scenario is NOT mechanically incompatible (the incompatibility branch of #K2-388 sec.6.4 is NOT triggered)."
+ },
+ "witness_board": {
+  "path": "/tmp/opencode/aprime_triple_witness/placed.kicad_pcb",
+  "sha256_16": "32d3c644692c564d",
+  "not_committed_because": "the pre-commit PCB<->SPEC guard forbids committing a .kicad_pcb without a SPEC change (禁止直改 PCB). The witness is a DERIVED artefact; it lives in /tmp like the A-double-prime witness, and the durable record is the committed per-part MAP + the deterministic regeneration below.",
+  "regenerate": "EDA_ENG_PY=<kicad py> python -c \"from eda_eng import regen; ... regen.rearrange_probe('hw/k2_v4_8L.l14.kicad_pcb', <frame_rect>, <members>, <work>, return_board=True)\" -> <work>/mq_witness/placed.kicad_pcb (deterministic: fixed order + fixed lattice + deterministic gate)",
+  "note": "gen-board witness (same kind as the A-double-prime witness): 17 of 25 members move, 8 stay (their SE lattice is inadmissible)."
+ },
+ "OWNER-ITEMS": 0
+}

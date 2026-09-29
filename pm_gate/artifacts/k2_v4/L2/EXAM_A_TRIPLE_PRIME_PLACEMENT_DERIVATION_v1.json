@@ -1,0 +1,306 @@
+{
+ "artifact": "k2_exam_a_triple_prime_placement_derivation_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-389 sec.2.1: re-derive the placement with the mask-dam-aware gate.",
+ "method": "regen.rearrange_probe(hw/k2_v4_8L.l14.kicad_pcb, frame_rect, members, work, return_board=True) with the corrected gate",
+ "baseline_no_moves": {
+  "courtyards_overlap": 2,
+  "pth_inside_courtyard": 1,
+  "silk_edge_clearance": 2,
+  "silk_over_copper": 37,
+  "silk_overlap": 15,
+  "mask_dam_mm": 0.05
+ },
+ "order": [
+  "U1",
+  "J11",
+  "J13",
+  "J9",
+  "D2",
+  "J12",
+  "J6",
+  "E2",
+  "U2",
+  "L1",
+  "C84",
+  "U5",
+  "U4",
+  "C73",
+  "C88",
+  "R1",
+  "R28",
+  "C86",
+  "D1",
+  "R21",
+  "R40",
+  "R41",
+  "C90",
+  "C85",
+  "C87"
+ ],
+ "probes": 51,
+ "n_moved": 17,
+ "n_members": 25,
+ "rows": [
+  {
+   "ref": "U1",
+   "accepted": null
+  },
+  {
+   "ref": "J11",
+   "accepted": null
+  },
+  {
+   "ref": "J13",
+   "accepted": {
+    "ref": "J13",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "J9",
+   "accepted": {
+    "ref": "J9",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "D2",
+   "accepted": null
+  },
+  {
+   "ref": "J12",
+   "accepted": {
+    "ref": "J12",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "J6",
+   "accepted": {
+    "ref": "J6",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "E2",
+   "accepted": {
+    "ref": "E2",
+    "delta_mm": [
+     1.0,
+     1.0
+    ],
+    "k": 2
+   }
+  },
+  {
+   "ref": "U2",
+   "accepted": {
+    "ref": "U2",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "L1",
+   "accepted": {
+    "ref": "L1",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "C84",
+   "accepted": {
+    "ref": "C84",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "U5",
+   "accepted": {
+    "ref": "U5",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "U4",
+   "accepted": {
+    "ref": "U4",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "C73",
+   "accepted": {
+    "ref": "C73",
+    "delta_mm": [
+     2.0,
+     2.0
+    ],
+    "k": 4
+   }
+  },
+  {
+   "ref": "C88",
+   "accepted": {
+    "ref": "C88",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "R1",
+   "accepted": null
+  },
+  {
+   "ref": "R28",
+   "accepted": null
+  },
+  {
+   "ref": "C86",
+   "accepted": {
+    "ref": "C86",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "D1",
+   "accepted": null
+  },
+  {
+   "ref": "R21",
+   "accepted": null
+  },
+  {
+   "ref": "R40",
+   "accepted": {
+    "ref": "R40",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "R41",
+   "accepted": {
+    "ref": "R41",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "C90",
+   "accepted": null
+  },
+  {
+   "ref": "C85",
+   "accepted": {
+    "ref": "C85",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  },
+  {
+   "ref": "C87",
+   "accepted": {
+    "ref": "C87",
+    "delta_mm": [
+     4.0,
+     4.0
+    ],
+    "k": 8
+   }
+  }
+ ],
+ "why_the_8_members_did_not_move": {
+  "U1": "every SE lattice step is inadmissible: k=1,2 => gen_v5 refuses with a REAL copper overlap (S1 PAD_OVERLAP U1.12 vs J9.1); k=3 => mask openings touch (the A-double-prime defect, now caught); k=4 => mask + clearance; k=8 => gen failure. U1 is tried FIRST (largest pad area), so no other member has moved away yet.",
+  "J11,D2,R1,R28,D1,R21,C90": "their admissible steps are exhausted by the baseline-relative no-new-class rule (incl. the mask rule)."
+ },
+ "not_moved_map": {
+  "C90": [
+   0.0,
+   0.0
+  ],
+  "D1": [
+   0.0,
+   0.0
+  ],
+  "D2": [
+   0.0,
+   0.0
+  ],
+  "J11": [
+   0.0,
+   0.0
+  ],
+  "R1": [
+   0.0,
+   0.0
+  ],
+  "R21": [
+   0.0,
+   0.0
+  ],
+  "R28": [
+   0.0,
+   0.0
+  ],
+  "U1": [
+   0.0,
+   0.0
+  ]
+ },
+ "work_dir": "/tmp/opencode/k2389_place_b",
+ "rule": "deterministic: fixed order + fixed lattice + deterministic gate; a same-input re-derivation must reproduce this map (to be re-verified by an independent window, not by a self-rerun).",
+ "OWNER-ITEMS": 0
+}
