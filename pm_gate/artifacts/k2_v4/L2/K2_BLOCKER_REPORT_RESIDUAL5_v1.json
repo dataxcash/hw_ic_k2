@@ -1,0 +1,48 @@
+{
+ "artifact": "k2_blocker_report_residual5_v1",
+ "ts": "2026-09-29",
+ "authority": "the supervisor's stop order (repeated-command flag) - return to Plan, explain in a human engineer's words, and file the blocker report. This file is the machine-readable twin of the markdown report.",
+ "stop_order_compliance": {
+  "stopped": true,
+  "exam_runs_this_window": 0,
+  "note": "the flagged repeats were the write/diff/git-apply-check/read-back steps of ONE artifact build on a COPY, not an exam re-run and not a parameter sweep. The order is accepted and the loop is halted regardless.",
+  "logged_as_false_positive_family": "M-SUP-SAME-SIGNATURE-REFIRE-GATE (output-path / work-dir constant signature)"
+ },
+ "Q1_how_the_signals_go": {
+  "power": "P3V3 / P3V3_AUX / 12V_IN / MCU_VDD ride on INNER-LAYER PLANES (measured: In4.Cu carries the P3V3 and P3V3_AUX zones). A part's power pad only needs to LAND ON ITS PLANE (via or pour) - never a thin track.",
+  "control": "NRST / SWDIO / SWCLK_BOOT0 / PERSTA# / PWR_BTN_*: short F.Cu point-to-point inside the region; a few cross the region edge at x=51.5.",
+  "bus": "I2C1_* / I2C2_* / UART_*: F.Cu or B.Cu, exactly one layer change each; a few cross at x=51.5.",
+  "summary": "most nets are internal to the region; a handful cross the boundary at x=51.5; power needs no thin track."
+ },
+ "Q2_what_is_in_the_way": [
+  {
+   "id": 1,
+   "what": "the region edge x=51.5 is a row of dangling half-stubs",
+   "why": "the wipe cuts copper at x=51.5 and the maze may only work inside x<=51.5, so the stub tip has no free cell => no-free-start-node (4 of the 5 residuals)."
+  },
+  {
+   "id": 2,
+   "what": "the power pads have NO copper path to their plane",
+   "why": "C84.1 (P3V3) and C90.1 (P3V3_AUX) are top-layer SMD pads only and NO footprint carries an In4 pad (measured drill=0, pad=SMD), so a via is the only possible tie; the tool drew thin tracks instead. Additionally the in-frame P3V3 plane finger stops at y~39 and cannot reach C84.1 at y=44."
+  },
+  {
+   "id": 3,
+   "what": "the channel feature was switched off by a wiring bug",
+   "why": "the chain records channels_compute_failed: UnboundLocalError, so the maze received an EMPTY --channels; channels_arg_by_block also returns '' and per_block_flow has no production caller."
+  }
+ ],
+ "Q3_human_solution": [
+  "give every crossing net a landing pad on the INSIDE of x=51.5 (correct layer, net width, centred on the crossing) so the router can start there; the outside copper is left untouched.",
+  "tie every power pad to its plane with ONE via (or extend the plane finger under the decap row); never route power as a thin signal track.",
+  "turn the channel feature back on so the router works INSIDE the given per-net channels.",
+  "then ONE run: wipe -> place -> (unfill) -> route WITH channels and ports -> refill -> judge."
+ ],
+ "one_implementation_list_to_be_approved": [
+  "M-1 (1 place): move the channel computation after the wiped-DRC is written; fail-loud when empty; pass it to BOTH maze passes.",
+  "M-2 (1 place): the block channel source never returns empty; block sizes from the device extent, not the DRC endpoint spread; plane nets out of the pack.",
+  "sec.16.3 drawing (already filed): 4 no_move port/plane landings with frozen coordinates + 1 relocation_listed (C84.1).",
+  "then ONE N=1 (not self-run; to be authorised separately)."
+ ],
+ "gap_layer": "SCHEME (drawing) layer, plus one implementation-layer wiring defect that voided it. NOT a construction-layer tuning matter.",
+ "OWNER-ITEMS": 0
+}
