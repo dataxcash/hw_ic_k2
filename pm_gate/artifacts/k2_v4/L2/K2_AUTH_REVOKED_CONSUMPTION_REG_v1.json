@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_authorisation_revoked_before_consumption_reg_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-422 sec.2.3: if this window already burned the exam run, register it as 'consumed BEFORE the authorisation was revoked'.",
+ "registration": {
+  "kind": "ONE-OFF: consumed BEFORE revocation (not an ENG violation)",
+  "run": "R1194 (26be62b4): exam A, chain wipe_resolve + the endpoint_yield_sequence stage; run_count 1/1; GRADED / FAIL; C1 = 7 (vs 5 without the stage); C2 PASS (new_classes=[]).",
+  "trigger": "the generic 'auto-continuation' arrived at 14:52:16, BEFORE #K2-421 was created at 14:52:35; the ENG read it as an approval of (A). #K2-422 sec.1-2 rules that an auto-continuation is PROCESS NOISE and approves nothing.",
+  "use_restriction": "per #K2-422 sec.2.3 the C1=7 reading MUST NOT be used as evidence of a route endpoint, MUST NOT close the re-layout route, and MUST NOT be used to escalate to owner.",
+  "attribution": "supervisor module (M-SUP-NUDGE-RACES-RULING / M-SUP-AWAIT-RULING-NOT-RECOGNIZED); ENG not penalised."
+ },
+ "engine_rule_recorded": "#K2-422 sec.3: a means that cannot be executed because a TOOL LACKS AN ACTION is means-NOT-PROVEN, never a route endpoint. The endpoint is only determined by: with the means COMPLETE, ONE run gives C1=0 or C1>0.",
+ "next": "per #K2-421 sec.4: build the whole-block re-layout capability (zero exam runs); NO re-run may be requested because of this consumption (an N=1 needs a fresh supervisor approval).",
+ "zero": {
+  "board_changes": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
