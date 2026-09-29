@@ -1,0 +1,87 @@
+{
+ "artifact": "k2_conservation_level_blocker_report_exam_a_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-410 stop order (convergence stagnation, ~80 rounds without a binary): produce a BINARY - a feasible witness OR a conservation-level infeasibility certificate. No further 'caliber clarification / one more tool version' may occupy a round.",
+ "BINARY": {
+  "verdict": "NO FEASIBLE WITNESS WITHIN THE CURRENT MEANS (and not yet proven impossible in principle) => the CONSERVATION-LEVEL BLOCKER REPORT is issued below.",
+  "measured_state": {
+   "exam": "A-quintuple-prime (ERASE J9/J6/J11 + cleared-field placement + maze + 2c_endpoint_stitch)",
+   "C1": 8,
+   "C2": "PASS (122 vs 148, new_classes = [])",
+   "C3..C9": "PASS incl. C6=0/C7=0/C8=0",
+   "reasonableness": "PASS",
+   "stitch_gate": "k = 4/8 in-bound (MCU_VDD / NRST / I2C1_SCL), excluded 4 (PERSTA# / P3V3_AUX / I2C1_SDA / P3V3)"
+  }
+ },
+ "the_four_questions": {
+  "which_layer": "the ENDPOINT/PORT layer of the in-register maze (DEAD-END endpoints) plus the FRAME BOUNDARY (C35 wall): each residual pair is a broken net whose two copper fragments end at points the maze cannot start/goal from.",
+  "which_resource": "free routing cells inside the block frame that are (a) in the endpoint's own net island and (b) >= the netclass clearance from foreign copper - i.e. reachable endpoint cells, not total area.",
+  "who_occupies_it": "(i) foreign-net copper as seen by the maze's own obstacle model (prunes the endpoint cells); and (ii) the frame boundary itself: the wipe cuts each net's copper AT the frame, so the endpoint's remaining copper lies on/outside the wall and no in-domain cell belongs to its island.",
+  "why_no_allocation_is_possible": "for the four excluded pairs the two endpoints are separated across the frame (measured pair spans: PERSTA# 2.3mm, P3V3_AUX 0.6mm, I2C1_SDA 5.6mm, P3V3 41.1mm) so a direct stitch necessarily leaves the bound rect (refused), while the maze refuses the endpoints themselves (no free in-island cell) - hence within the current means NO allocation of the in-register tools closes them; the four in-bound pairs ARE closeable (the partial-apply stage now does exactly that)."
+ },
+ "excluded_pairs_measured": [
+  {
+   "net": "PERSTA#",
+   "a": [
+    51.75,
+    37.5
+   ],
+   "b": [
+    50.05,
+    39.0
+   ],
+   "pair_span_mm": 2.267,
+   "layers": [
+    "In5.Cu"
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "a": [
+    51.15,
+    38.3
+   ],
+   "b": [
+    51.55,
+    38.8
+   ],
+   "pair_span_mm": 0.64,
+   "layers": [
+    "F.Cu"
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "a": [
+    51.500001,
+    67.455001
+   ],
+   "b": [
+    52.205,
+    61.905
+   ],
+   "pair_span_mm": 5.595,
+   "layers": [
+    "F.Cu"
+   ]
+  },
+  {
+   "net": "P3V3",
+   "a": [
+    81.0,
+    60.6
+   ],
+   "b": [
+    43.4,
+    44.0
+   ],
+   "pair_span_mm": 41.101,
+   "layers": [
+    "F.Cu"
+   ]
+  }
+ ],
+ "what_would_be_required_to_reach_C1_zero": "a DRAWING-layer change for the four excluded nets: their connectivity must be re-derived INSIDE the domain (the maze must route them within the frame), which requires the endpoint/port capability (C38-class) - NOT another stitch-tool version. This is a PLANNING-layer filing, per #K2-410 sec.4.3.",
+ "not_an_owner_matter": "no requirement/interface is touched; it is an engineering drawing+tool matter.",
+ "OWNER-ITEMS": 0
+}
