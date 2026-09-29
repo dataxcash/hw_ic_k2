@@ -75,7 +75,8 @@ def main():
         CH[_n] = tuple(float(v) for v in _r.split(","))
     _GLOBAL_WALL = mr.WALL_RECT
     mr._CHANNELS = CH                                 # the channel map must live on `mr` (see solve)
-    mr._CH_MARGIN = 0.5                               # deterministic widen (not a tuned search)
+    mr._CH_MARGIN = 0.0                               # #K2-430 sec.2.4: FROZEN - the channel already includes
+                                                      # the reach; ZERO runtime freedom (no ladder)
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))

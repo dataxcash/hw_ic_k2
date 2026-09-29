@@ -1,0 +1,40 @@
+{
+ "artifact": "k2_sec16_3_channel_determinate_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-430 sec.3.3: the sec.16.3 four-element plan for the channeled field (frozen channels).",
+ "element1_death_cause": "the residual 2 (MCU_VDD exhausted-1; I2C1_SDA no-free-start-node) persist under EVERY channel determination tried (fixed widen, bounded ladder, reach-inclusive) => the wall is NOT the channel's extent/margin.",
+ "element2_proven_facts": [
+  "R1240 channels 2/5",
+  "R1244 +fixed widen 3/5",
+  "R1248 +bounded ladder 3/5 (no further gain)",
+  "R1250 reach-inclusive (own copper) channels, runtime margin frozen to 0 => still 3/5, same two reasons"
+ ],
+ "element3_corrected_plan": {
+  "status": "NOT YET DETERMINATE for the residual 2",
+  "what_is_determined": "the reach-inclusive channel is a FROZEN constant and routes 3/5",
+  "what_is_missing": "a channel PLACEMENT (not a wider channel) that puts the residual net's reachable own-cell INSIDE the search - i.e. the drawing layer must move the channel, not widen it",
+  "per_line_fields": [
+   "net",
+   "channel rect (frozen)",
+   "layer",
+   "entry",
+   "exit",
+   "via hole-pair"
+  ],
+  "conservation": "per-channel (C6/C7 clean: the runs kept outside-copper diff=0 and HS diff=0)"
+ },
+ "element4_buildability": "relocation_listed",
+ "layer_gate": "per #K2-430 sec.5: margin is conclusively NOT the cause => this is 'the drawing lacks the right channel' (scheme layer), NOT a construction-layer tuning matter.",
+ "reading": {
+  "added": 3,
+  "blocked": 2,
+  "segs": 79,
+  "vias": 3,
+  "len": 34.3789,
+  "reasons": {
+   "no-free-start-node": 1,
+   "no-path-coarse(exhausted-1)": 1
+  }
+ },
+ "OWNER-ITEMS": 0
+}
