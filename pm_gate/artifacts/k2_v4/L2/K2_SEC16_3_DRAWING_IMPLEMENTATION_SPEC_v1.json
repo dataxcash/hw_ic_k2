@@ -1118,5 +1118,25 @@
   "conservation": "same-net plane addition: capacity grows, demand unchanged => capacity >= demand",
   "legacy_C6": "expected diff=0 (the predicate reads segments+vias; the added track is INSIDE?? no - it extends to x=58.5, so the legacy C6 WILL see its outside part as new segment geometry) => expect legacy C6 to show the added outside segment",
   "note": "this is the first item that changes OUTSIDE SEGMENT/VAIA geometry, so the legacy C6 row is expected to move (unlike the zone-only changes)."
+ },
+ "R_g_diagnosis_R1358": {
+  "found": "the only 2 shorting_items on the joint-drafted build are BOTH caused by the R-g bridge track (P3V3 In4 (42.8,39.0)->(58.5,39.0), len 15.7mm):",
+  "shorts": [
+   {
+    "vs": "P3V3_AUX blind via In4-In5 @(51.5,38.75)",
+    "why": "the bridge runs along y=39.0 through x=51.5 where MY OWN line-3 tie via sits."
+   }
+  ],
+  "verification_gaps_owned": [
+   "the earlier 'corridor clear' check filtered tracks by a SINGLE GetLayer(), so VIAS (which span layers, e.g. the In2-In5 HS via occupying In4) were MISSED => the R-g corridor was never actually proven clear.",
+   "the so-called 'verified state' (67 added / 0 refused) was only an APPLY count - no DRC was run after the reverts, so the bridge's 2 shorts were carried into it unnoticed."
+  ],
+  "consequence": "the current 67-item spec is NOT DRC-clean either (same 2 shorts, from the bridge). The joint draft itself was fine.",
+  "next": {
+   "a": "re-draft R-g with a VIA-AWARE clearance check (a via occupies every layer between its pair => the corridor must be clear of vias on all of them), OR drop the bridge and let P3V3 stay on the finger island,",
+   "b": "then run a DRC on the stitched field BEFORE claiming any state is clean,",
+   "c": "the pre-authorised N=1 stays UNCONSUMED until then."
+  },
+  "rule_added": "a clearance check must enumerate ALL layers a via covers (not GetLayer()), and no 'verified state' may be claimed without a DRC on the built field."
  }
 }
