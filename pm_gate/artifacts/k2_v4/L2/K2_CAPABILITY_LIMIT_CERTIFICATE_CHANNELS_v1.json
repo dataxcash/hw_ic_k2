@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_capability_limit_certificate_channels_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-425 sec.3.4 (the L1 gate's precondition) + #K2-430 sec.5: a conservation/capability-limit certificate with NAMED blockers.",
+ "subject": "the residual 2 of the channel-to-chain line: MCU_VDD (no-path-coarse(exhausted-1)) and I2C1_SDA (no-free-start-node).",
+ "four_questions": {
+  "which_layer": "the ENDPOINT/PORT layer inside the DOMAIN: the endpoints' own reachable cells / paths are absent because other nets' FIXED copper occupies the neighbourhood (and, for MCU_VDD, encircles the own cell).",
+  "which_resource": "an in-domain cell that is (i) in the endpoint's OWN island, (ii) >= clearance from foreign copper, (iii) has a legal PATH to the goal - a 'start + path' budget.",
+  "who_occupies": "the NAMED fixed copper of other nets: for MCU_VDD - MCU_VDD/NRST/P3V3_AUX neighbourhood (R1208 row blockers); for I2C1_SDA - I2C1_SCL.",
+  "why_no_allocation": "DECISIVE MEASUREMENT: setting the two nets' channel to the FULL FRAME (unbounded search) STILL yields the same two reasons (R1254: added 3 / blocked 2, no-free-start-node 1, exhausted 1). So NO channel width or PLACEMENT (drawing-layer lever) can produce the resource; the occupying copper must MOVE (a domain change), which is outside the maze's allocation."
+ },
+ "exclusions_proven": [
+  "margin/width (fixed widen R1244, bounded ladder R1248, reach-inclusive R1250) - no effect",
+  "channel PLACEMENT (full-frame channel R1254) - no effect"
+ ],
+ "scope": "within the CURRENT domain + governance (other nets' copper fixed; no topology/interface change). NOT yet an L1 claim: L1 (topology/interface/signal-flow/ball-map) is only on the table once the supervisor accepts this certificate.",
+ "note": "per #K2-425 sec.3.4 this certificate is the PRECONDITION for discussing L1; it does not itself change any requirement.",
+ "OWNER-ITEMS": 0
+}
