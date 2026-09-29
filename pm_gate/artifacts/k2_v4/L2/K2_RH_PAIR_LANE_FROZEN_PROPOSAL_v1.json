@@ -1,0 +1,86 @@
+{
+ "artifact": "k2_rh_pair_lane_frozen_proposal_v1",
+ "ts": "2026-09-30",
+ "status": "PROPOSED - NOT APPLIED (drawing change; needs approval)",
+ "authority": "#K2-441 sec.2.4 + R1316/R1318 findings (landings are not lanes; the maze exhausts its search for I2C1_SCL).",
+ "targets_measured_on_the_cleared_field": {
+  "I2C1_SCL": [
+   "slot (51.5,66.185) F.Cu",
+   "E2.6 (45.95,61.635) F.Cu",
+   "U1.47 (33.75,48.837) F.Cu"
+  ],
+  "I2C1_SDA": [
+   "slot (51.5,67.455) F.Cu",
+   "slot (51.5,61.905) B.Cu",
+   "E2.5 (45.95,62.905) F.Cu",
+   "U1.48 (33.25,48.837) F.Cu"
+  ]
+ },
+ "corridor_rect": [
+  50.1,
+  61.2,
+  51.5,
+  67.9
+ ],
+ "lanes": {
+  "I2C1_SCL": {
+   "layer": "F.Cu",
+   "poly": [
+    [
+     51.5,
+     66.185
+    ],
+    [
+     50.9,
+     66.185
+    ],
+    [
+     50.9,
+     61.635
+    ],
+    [
+     45.95,
+     61.635
+    ]
+   ],
+   "segments": 3,
+   "foreign_hits": []
+  },
+  "I2C1_SDA": {
+   "layer": "F.Cu",
+   "poly": [
+    [
+     51.5,
+     67.455
+    ],
+    [
+     50.3,
+     67.455
+    ],
+    [
+     50.3,
+     62.905
+    ],
+    [
+     45.95,
+     62.905
+    ]
+   ],
+   "segments": 3,
+   "foreign_hits": []
+  }
+ },
+ "lane_pitch": {
+  "x_separation_mm": 0.6,
+  "required_mm": 0.4,
+  "verdict": "OK",
+  "rule": "sec.20: a bus pair is ONE group corridor; two parallel lanes spaced by >= width + clearance."
+ },
+ "left_to_the_maze": [
+  "the trunk from each lane's west end to U1.47/U1.48 stays with the maze (its channel must widen accordingly)",
+  "I2C1_SDA's B.Cu slot (51.5,61.905) already has an in-register B.Cu trunk at x=51.5 (y 50.9-61.8) - no new lane needed"
+ ],
+ "clearance_check": "read-only occupancy audit on the CLEARED field (the field the drawing must route in).",
+ "ask": "approve freezing these two polylines into the spec (a change to the approved R-e artifact) before any further run.",
+ "OWNER-ITEMS": 0
+}
