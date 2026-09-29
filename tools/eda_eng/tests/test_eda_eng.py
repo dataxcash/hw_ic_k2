@@ -901,6 +901,62 @@ class T(unittest.TestCase):
         self.assertEqual(recs[-1]["net"], "NOPE")
         self.assertEqual(recs[-1]["ports_available"], 0)
 
+    def test_static_gate_no_undefined_names_in_the_eda_eng_package(self):
+        """#K2-396 §二.5：**静态未定义名闸** —— 覆盖**生产链本体**（不只是测试面），全包 AST 扫描。
+        （`exam_a_chain` 的 `rp`/`blocked` 即此闸的**先 RED 后 GREEN** 用例：修前命中、修后为空。）"""
+        import ast, builtins, glob
+        def scope_nodes(body):
+            stack = list(body)
+            while stack:
+                n = stack.pop(); yield n
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+                    continue
+                stack.extend(ast.iter_child_nodes(n))
+        def scope_bound(body):
+            out = set()
+            for n in scope_nodes(body):
+                if isinstance(n, ast.Import):
+                    out.update((a.asname or a.name).split(".")[0] for a in n.names)
+                elif isinstance(n, ast.ImportFrom):
+                    out.update(a.asname or a.name for a in n.names)
+                elif isinstance(n, ast.ExceptHandler):
+                    if isinstance(n.name, str) and n.name:
+                        out.add(n.name)
+                elif isinstance(n, ast.arg):
+                    out.add(n.arg)
+                elif isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    out.add(n.name)
+                elif isinstance(n, ast.Name) and isinstance(n.ctx, (ast.Store, ast.Del)):
+                    out.add(n.id)
+            return out
+        bad = {}
+        for path in sorted(glob.glob(os.path.join("tools", "eda_eng", "*.py"))):
+            tree = ast.parse(open(path, encoding="utf-8").read(), path)
+            mod = set(dir(builtins)) | scope_bound(tree.body)
+            for fn in tree.body:
+                if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    continue
+                bound = scope_bound(fn.body) | {a.arg for a in fn.args.args + fn.args.kwonlyargs + fn.args.posonlyargs}
+                if fn.args.vararg: bound.add(fn.args.vararg.arg)
+                if fn.args.kwarg: bound.add(fn.args.kwarg.arg)
+                hit = sorted({n.id for n in scope_nodes(fn.body)
+                              if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load)
+                              and n.id not in mod and n.id not in bound})
+                if hit:
+                    bad[os.path.basename(path) + "::" + fn.name] = hit
+        self.assertEqual(bad, {}, "undefined names in the production package: %s" % bad)
+
+    def test_M_ENG_DETECTOR_DUAL_SOURCE_precheck_uses_the_maze_model(self):
+        """#K2-396 §五 `M-ENG-DETECTOR-DUAL-SOURCE`：检测器**唯一源＝迷宫自身模型** ——
+        端口/预检逻辑必须建在 `snap_node`/`solve_edge` 上；**旁路自写几何规则不得入库**
+        （`pad_clearance_violations` 首版实测不实：l14 误报 366，已撤回）。"""
+        w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("orig_snap", w, "the pre-check / snap relaxation must sit on the maze's snap_node")
+        self.assertIn("mr.solve_edge = solve", w, "the decision must go through the maze's solve_edge")
+        self.assertNotIn("pad_clearance_violations", w)
+        r = open(os.path.join("tools", "eda_eng", "route.py"), encoding="utf-8").read()
+        self.assertNotIn("def pad_clearance_violations", r, "the unsound bypass detector must not ship")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

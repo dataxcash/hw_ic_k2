@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_exam_a_triple_prime_bounded_infeasibility_certificate_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-396 sec.2.4: after (C) + (B), anything still residual must produce a BOUNDED INFEASIBILITY CERTIFICATE naming the layer / resource / occupant / why no solution exists.",
+ "verdict": "BOUNDED_INFEASIBLE_FOR_THE_CURRENT_MEANS on C1 = 7 (the remaining unconnected endpoints)",
+ "the_7_named": [
+  {
+   "net": "NRST",
+   "pair": "C73.1(F.Cu) <-> U1.10(F.Cu)"
+  },
+  {
+   "net": "NRST",
+   "pair": "track[F.Cu,0.1414] <-> U1.10(F.Cu)"
+  },
+  {
+   "net": "PERSTA#",
+   "pair": "track[F.Cu,1.9799] <-> track[In5.Cu,0.2500]"
+  },
+  {
+   "net": "P3V3_AUX",
+   "pair": "track[In2.Cu,0.2000] <-> track[In5.Cu,0.0707]"
+  },
+  {
+   "net": "I2C1_SCL",
+   "pair": "U1.47(F.Cu) <-> track[F.Cu,0.8485]"
+  },
+  {
+   "net": "I2C1_SDA",
+   "pair": "track[F.Cu,1.4142] <-> track[F.Cu,0.1414]"
+  },
+  {
+   "net": "P3V3",
+   "pair": "C84.1(F.Cu) <-> blind via F.Cu-In4.Cu [P3V3]"
+  }
+ ],
+ "layer": "the ENDPOINT-CONGESTION layer (each gap is blocked at a maze SNAP node, not by a missing port).",
+ "resource": "free grid cells compatible with the maze's clearance model at these endpoints.",
+ "occupant": "the maze's own obstacle model (foreign-net copper within the in-register clearance); the buried endpoints are U1 pads (U1.10 / U1.47) plus a few track remnants.",
+ "why_no_solution_within_the_current_means": {
+  "port_opening": "REFUTED BY MEASUREMENT (#K2-395 correction): no change-set copper lies within 0.6 mm of the 7 endpoints, so there is NOTHING to consume.",
+  "member_set_expansion_B": "NO OBJECT: regen.member_expansion(radius=1.0 mm) around the 5 in-frame buried points adds ZERO members (no non-member footprint is within 1.0 mm) => the crowding is NOT a non-member part."
+ },
+ "extra_lever_tested_and_refuted": {
+  "routing_order": {
+   "dist_asc": {
+    "added": 73,
+    "blocked": 7
+   },
+   "dist_desc": {
+    "added": 72,
+    "blocked": 8
+   },
+   "hard": {
+    "added": 71,
+    "blocked": 9
+   },
+   "verdict": "the maze's in-register deterministic orders do not beat dist_asc => ordering is NOT the lever."
+  }
+ },
+ "four_questions": {
+  "which_layer": "ENDPOINT CONGESTION (maze snap), not the placement gate, not the criteria, not capacity (93.5% free).",
+  "which_resource": "free cells in the maze's clearance model at 7 endpoints.",
+  "who_occupies_it": "foreign-net copper as seen by the maze's own obstacle model (the endpoints' cells are pruned).",
+  "why_no_allocation_is_possible": "within the frozen means every candidate lever has been measured and has NO OBJECT: (a) port opening - nothing to consume; (b) member-set expansion - nothing to add; (c) ordering - dist_asc is already best; (d) accepting congested cells - REJECTED by #K2-395 (it would manufacture a clearance violation)."
+ },
+ "per_sec_2_4_next": "route this as a DEVIATION under the #K2-372 channel (engineering-layer autonomy); escalate to owner only if it touches requirements/interfaces.",
+ "OWNER-ITEMS": 0
+}

@@ -29,6 +29,8 @@ def main():
                     help="C35 in-loop wall x0,y0,x1,y1 (mm) - set on the maze module so out-of-domain cells "
                          "are never selectable (forwarded, not repaired afterwards)")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard"],
+                    help="#K2-396: the maze's in-register deterministic routing order (default unchanged)")
     a = ap.parse_args()
     sp = importlib.util.spec_from_file_location("k2mrfloor", MROUTE)
     mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
@@ -45,7 +47,7 @@ def main():
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
-    s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, "dist_asc", None)
+    s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, a.order, None)
     # #K2-394 §二.1：**端口可达性预检**并列盘（不可达者**具名**；不改变路由结果）
     if recs:
         pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,

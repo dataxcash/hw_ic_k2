@@ -329,6 +329,65 @@ def mech_probe_moves(moves, work, tag, return_board=False):
     return out
 
 
+def member_expansion(board, rect, members, buried_points, radius=1.0, margin=0.5):
+    """**#K2-396 §二.2 (B) 一次有界扩集（确定性 · 不级联）**：把**压住埋压端点**的围邻并入成员集，
+    并把**块边界重画**为「原框 ∪ 新成员焊盘范围」+ margin；附 **C7（HS 扇出互斥）重校**。
+    返回 {rect2, members2, added, hs_clear, ...}。"""
+    import pcbnew as P
+    from . import block as _blk
+    b = P.LoadBoard(board)
+    cur = set(members)
+    added = []
+    for fp in b.GetFootprints():
+        ref = fp.GetReference()
+        if ref in cur:
+            continue
+        hit = False
+        for pd in fp.Pads():
+            pos = pd.GetPosition(); x, y = P.ToMM(pos.x), P.ToMM(pos.y)
+            for (bx, by) in buried_points:
+                if math.hypot(x - bx, y - by) <= radius:
+                    hit = True; break
+            if hit:
+                break
+        if hit:
+            added.append(ref)
+    added = sorted(set(added))
+    members2 = list(members) + added
+    xs = [rect[0], rect[2]]; ys = [rect[1], rect[3]]
+    want = set(members2)
+    for fp in b.GetFootprints():
+        if fp.GetReference() not in want:
+            continue
+        for pd in fp.Pads():
+            bb = pd.GetBoundingBox()
+            xs += [P.ToMM(bb.GetX()), P.ToMM(bb.GetRight())]
+            ys += [P.ToMM(bb.GetY()), P.ToMM(bb.GetBottom())]
+    rect2 = [round(min(xs) - margin, 4), round(min(ys) - margin, 4),
+             round(max(xs) + margin, 4), round(max(ys) + margin, 4)]
+    hc = _blk.read_copper(board)
+    hx0 = hy0 = 1e18; hx1 = hy1 = -1e18
+    for x in hc["segments"]:
+        if x["net"] not in HS_FANOUT_NETS:
+            continue
+        hx0 = min(hx0, x["a"][0], x["b"][0]); hx1 = max(hx1, x["a"][0], x["b"][0])
+        hy0 = min(hy0, x["a"][1], x["b"][1]); hy1 = max(hy1, x["a"][1], x["b"][1])
+    for v in hc["vias"]:
+        if v["net"] not in HS_FANOUT_NETS:
+            continue
+        hx0 = min(hx0, v["at"][0]); hx1 = max(hx1, v["at"][0])
+        hy0 = min(hy0, v["at"][1]); hy1 = max(hy1, v["at"][1])
+    hs_clear = (hx0 > rect2[2]) or (hx1 < rect2[0]) or (hy0 > rect2[3]) or (hy1 < rect2[1])
+    return {"artifact": "eda_eng_member_expansion", "board": board,
+            "rect": list(rect), "rect2": rect2, "members": list(members), "members2": members2,
+            "added": added, "n_added": len(added), "radius_mm": radius, "margin_mm": margin,
+            "hs_fanout_bbox": [round(hx0, 4), round(hy0, 4), round(hx1, 4), round(hy1, 4)],
+            "hs_clear": hs_clear,
+            "rule": "#K2-396 sec.2.2 (B): a SINGLE bounded expansion - the neighbours crowding the buried endpoints join "
+                    "the member set and the block boundary is redrawn to their pads (+margin); C7 (HS mutual exclusion) is "
+                    "re-checked; C6 is from here on 'diff = 0 OUTSIDE THE NEW FRAME'; NO second expansion."}
+
+
 def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board=False):
     """**A′（#K2-372 §二.1）目标相对位由闸逐件出**：N5 方向（SE，`(k*0.5, k*0.5)` 格点）· 逐件降序最大步
     优先 · 确定性序（默认：焊盘面积降序，面积大者先动 —— N5 是**面积**均衡规则）；逐件过
@@ -526,6 +585,10 @@ def exam_a_chain(refs, delta_mm, work, refs_are_region=True, max_nets=None):
     plans = [{"net": d["net"], "layer": None, "polys": [e["poly"] for e in d["edges"]],
               "layers": [e["layer"] for e in d["edges"]], "vias": [v for e in d["edges"] for v in e["vias"]]}
              for d in drawings]
+    # #K2-396 sec.2.5（硬修）：本链此前读**未定义名** `rp`/`blocked`（运行时 NameError；同族 json/_pcbnew 已两度实跑崩过）
+    blocked = []                                    # 本链无 blocked 收集（具名失败走 review_rows）
+    rp = os.path.join(work, "s3_routes.json")       # 落板批文件（照 relocate_* 链同法）
+    json.dump(plans, open(rp, "w", encoding="utf-8"), ensure_ascii=False)
     chain.append({"stage": "M3a_draw_review", "nets_total": len(nets), "review_pass": len(drawings),
                   "review_fail": len(review_rows) - len(drawings), "fallback_used": fallback_used,
                   "review_rows": review_rows, "drawing_md": plan_md})

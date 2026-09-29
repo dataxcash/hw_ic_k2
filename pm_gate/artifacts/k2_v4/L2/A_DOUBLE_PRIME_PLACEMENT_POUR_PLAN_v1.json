@@ -178,5 +178,25 @@
   },
   "conclusion": "per #K2-395 sec.2.2 the next step is (B): ONE BOUNDED MEMBER-SET EXPANSION (the neighbours crowding these endpoints join the member set; region_select re-run; block boundary redrawn; C7 HS mutual-exclusion re-check; C6 restated as 'new frame outside diff = 0'; NO second expansion). (C) cannot be delivered as specified.",
   "no_exam_run": "not applied - running now would be a same-cause rerun."
+ },
+ "edge_iv_B_status": {
+  "authority": "#K2-396 sec.2.2 (B) - implemented and measured.",
+  "implemented": "regen.member_expansion(board, rect, members, buried_points, radius=1.0, margin=0.5): the neighbours crowding the buried points join the member set; the frame is redrawn to the members' pads + margin; C7 (HS mutual exclusion) is re-checked. Also added `--order` to the floor-router wrapper (default dist_asc, unchanged).",
+  "measurement": {
+   "added_members": 0,
+   "rect2": [
+    22.45,
+    32.45,
+    52.0,
+    67.35
+   ],
+   "hs_clear": true,
+   "orders": {
+    "dist_asc(blocked)": 7,
+    "dist_desc": 8,
+    "hard": 9
+   }
+  },
+  "verdict": "(B) HAS NO OBJECT for these 7 endpoints (no non-member footprint within 1.0 mm) and the ordering lever is refuted => the bounded infeasibility certificate applies (sec.2.4)."
  }
 }
