@@ -1447,6 +1447,12 @@ class T(unittest.TestCase):
                 for _n, _b in per2.items()]
         _, unsat_whole = m.joint(dem2, (rect2[1], rect2[3]), gap=0.40)
         self.assertTrue(unsat_whole, "RED: whole-net y-banding must leave nets unsatisfied")
+        # the interface-ready emitter: the string MUST allow a net to repeat (one entry per corridor)
+        strc, uns3 = m.channels_string_corridor(per2, rect2, h=8.0, pitch=0.40)
+        self.assertEqual(uns3, {})
+        names = [t.split(":", 1)[0] for t in strc.split(";")]
+        self.assertEqual(sorted(set(names)), sorted(per2), "every net must appear")
+        self.assertGreater(len(names), len(set(names)), "a net repeats when it crosses several corridors")
 
     def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad

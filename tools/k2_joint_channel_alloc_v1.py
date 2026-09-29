@@ -99,3 +99,17 @@ def channels_by_corridor(per, rect, h=8.0, pitch=0.40):
             b = per[n]
             chans.setdefault(n, []).append((b[0], ylo + s0, b[2], ylo + s1))
     return chans, unsat
+
+
+def channels_string_corridor(per, rect, h=8.0, pitch=0.40):
+    """**接口就位件**（#K2-450 · R1408 具名之接口改动之一半）：把逐走廊分配**发射**成 `--channels` 串，格式
+    `net:x0,y0,x1,y1@layer` **允许同一网出现多次**（每走廊一次）——这是迷宫端要做「逐走廊施加」时**必须接受**的输入。
+    返回 `(str, unsat)`；`unsat` 非空 ⇒ 调用方**不得**用此串（响亮）。"""
+    chans, unsat = channels_by_corridor(per, rect, h, pitch)
+    if unsat:
+        return "", unsat
+    parts = []
+    for n in sorted(chans):
+        for (x0, y0, x1, y1) in chans[n]:
+            parts.append("%s:%.4f,%.4f,%.4f,%.4f@corridor" % (n, x0, y0, x1, y1))
+    return ";".join(parts), {}
