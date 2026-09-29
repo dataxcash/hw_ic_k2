@@ -1,0 +1,31 @@
+{
+ "artifact": "k2_exam_a_yield_attempt2_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-424 sec.2: the N=1 authorised closing run (corridor redraw + yield + wipe_resolve + refill + M4).",
+ "run": {
+  "chain": "wipe_resolve",
+  "base": "A^5 witness + ERASE J9/J6/J11",
+  "stages": "endpoint_yield_sequence (exact near-edge move) is wired",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 5,
+  "C1_pass": false,
+  "C2_total": 129,
+  "C2_new_classes": [],
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "reading": "C1 = 5 - the SAME as the baseline without the yield stage (and BETTER than R1194's crude-translate 7, i.e. the exact near-edge move no longer DEGRADES). But the planning-layer feasibility (5/5 corridors with conservation PASS) did NOT become board connectivity: the maze (objective-first order + FINE_STEP + the yield translate + refill) still leaves 5. C2 stays clean (new_classes=[]).",
+ "attribution": "the residual is at the BLOCK level (the maze's own competition for space), not at the corridor/width level: the corridors are feasible but the maze must still win that space against the other nets it re-routes.",
+ "zero": {
+  "board_changes": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
