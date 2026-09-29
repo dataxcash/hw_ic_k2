@@ -1,0 +1,53 @@
+{
+ "artifact": "k2_sec16_3_element3_block_contention_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-427 sec.4.1/4.2/4.4: the content-aware allocator + the REAL-BOARD per-channel conservation.",
+ "channels": [
+  {
+   "net": "I2C1_SDA",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "MCU_VDD",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "P3V3",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "P3V3_AUX",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  },
+  {
+   "net": "PERSTA#",
+   "channel": null,
+   "status": "UNPLACEABLE",
+   "capacity_mm": 0.0,
+   "need_mm": 0.6
+  }
+ ],
+ "n_ok": 0,
+ "n": 5,
+ "per_line_fields": [
+  "net",
+  "channel rect",
+  "capacity_mm",
+  "need_mm",
+  "status"
+ ],
+ "rule": "per-channel conservation (this channel's own clear narrow dimension vs the net's need); domain-level substitution FORBIDDEN.",
+ "OWNER-ITEMS": 0
+}

@@ -1418,6 +1418,25 @@ class T(unittest.TestCase):
         self.assertEqual(m.joint_channel_assignment(nets, (0, 0, 10, 10), 0.6, 0.2), ch, "deterministic")
         self.assertEqual(m.artifact_hash16(ch), m.artifact_hash16(ch), "stable artifact hash")
 
+    def test_C427_content_aware_allocation_beats_the_blind_slice(self):
+        """#K2-427 sec.4.3 RED->GREEN: on a block containing a WALL, the equal-width blind slice puts the net ON
+        the wall (conservation FAIL = RED) while the content-aware allocator finds the clear side (PASS = GREEN)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_joint_alloc_v1", os.path.join("tools", "k2_joint_alloc_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        blind = m.joint_channel_assignment(["N1"], (0, 0, 4, 4), 0.6, 0.2)
+        wall = [[1.9, 0, 2.1, 4]]
+        import importlib.util as iu, os as os_
+        sp = iu.spec_from_file_location("rd", os.path.join("tools", "k2_corridor_redraw_v1.py"))
+        rd = iu.module_from_spec(sp); sp.loader.exec_module(rd)
+        b = blind[0]["channel"]; c = min(b[2] - b[0], b[3] - b[1])
+        self.assertLess(rd.clear_subrect_containing_pts(b, wall, 0.20, [(2.0, 2.0)])[0] is not None, 1.0,
+                        "RED: the blind slice's centre sits on the wall (no clear sub-rect)")
+        ca = m.content_aware_joint_allocation([[("N1", 1.0, 2.0, "F.Cu")]], (0, 0, 4, 4), wall, 0.20, 0.60)
+        self.assertEqual(ca[0]["status"], "OK", "GREEN: the content-aware allocator finds the clear side")
+        self.assertGreaterEqual(ca[0]["capacity_mm"], 0.60 - 1e-9)
+
     def test_C426_contraction_lists_are_deterministic_and_net_aware(self):
         """#K2-426 sec.3: the deterministic contraction - parts on the certificate's non-reconnectable nets become
         STAY candidates, the rest MOVE candidates. Deterministic, zero search."""

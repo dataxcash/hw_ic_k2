@@ -24,6 +24,36 @@ def joint_channel_assignment(nets, block_rect, pitch=0.6, gap=0.2):
     return out
 
 
+def content_aware_joint_allocation(nets_pts, block_rect, occupants, clearance=0.20, need=0.60, pad=0.4):
+    """**内容感知 · 确定性 · 零搜索**（#K2-427 §四.1 · 取代等宽盲切）：
+    按**给定网序**，每网取"含其全部端点、避开（占位者⊕净空）的最大净空子矩"作其通道；**与已分配通道重叠 ⇒ 具名 `OVERLAP`**（绝不静默重叠）。
+    `nets_pts`=[[(net,x,y,layer),...],...]（按序）。返回 [{net, channel|None, status, capacity_mm, need_mm}]。"""
+    import importlib.util as _iu, os as _os
+    _sp = _iu.spec_from_file_location("k2rdj", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "k2_corridor_redraw_v1.py"))
+    rd = _iu.module_from_spec(_sp); _sp.loader.exec_module(rd)
+    taken, out = [], []
+    for row in nets_pts:
+        net = row[0][0]
+        xs = [p[1] for p in row]; ys = [p[2] for p in row]
+        sub = None
+        for _pd in (pad, pad * 2, pad * 4):
+            box = (min(xs) - _pd, min(ys) - _pd, max(xs) + _pd, max(ys) + _pd)
+            _s, _ = rd.clear_subrect_containing_pts(box, occupants, clearance, [(p[1], p[2]) for p in row])
+            if _s:
+                sub = _s
+                if min(_s[2] - _s[0], _s[3] - _s[1]) >= need - 1e-9:
+                    break
+        cap = min(sub[2] - sub[0], sub[3] - sub[1]) if sub else 0.0
+        ovl = bool(sub) and any(not (sub[2] <= t[0] or t[2] <= sub[0] or sub[3] <= t[1] or t[3] <= sub[1]) for t in taken)
+        status = ("OK" if (sub and cap >= need - 1e-9 and not ovl) else
+                  ("OVERLAP" if ovl else ("NARROW" if sub else "UNPLACEABLE")))
+        if sub and not ovl:
+            taken.append(sub)
+        out.append({"net": net, "channel": list(sub) if sub else None, "status": status,
+                    "capacity_mm": round(cap, 4), "need_mm": need})
+    return out
+
+
 def artifact_hash16(rep):
     return hashlib.sha256(json.dumps(rep, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 
