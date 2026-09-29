@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_rh_pair_lane_spec_v1",
+ "ts": "2026-09-30",
+ "status": "PROPOSED - NOT APPLIED (drawing change; needs approval)",
+ "authority": "#K2-441 sec.2.4 (line 4 = I2C1 pair corridor) + the R1316 receipt: R-e's landing did NOT move I2C1_SCL.",
+ "measured_reason_landings_are_not_enough": {
+  "evidence": "with the I2C1_SCL landing added at its dR crossing (51.5,66.185), the maze still reports no-path-coarse(exhausted-1) for I2C1_SCL => the coarse search exhausts inside the channel.",
+  "reading": "sec.16.3 requires a DETERMINATE per-line drawing (layer / slot / via pair / corridor). A landing is a slot, NOT a lane. The in-frame lane must be DRAWN, not searched.",
+  "supporting": "the maze does lay a B.Cu staircase for I2C1_SDA down-left from (51.5,61.8) (measured 0.1-0.3mm steps through (50.35,62.205)..(49.65,62.405)), i.e. it can walk the lane once one exists - but it cannot FIND it for SCL inside the pair channel."
+ },
+ "frozen_constants_proposed": {
+  "corridor_rect": [
+   50.4,
+   61.2,
+   51.5,
+   67.9
+  ],
+  "layers": [
+   "F.Cu",
+   "B.Cu"
+  ],
+  "slots": [
+   {
+    "net": "I2C1_SCL",
+    "at": [
+     51.5,
+     66.185
+    ],
+    "layer": "F.Cu",
+    "inner_landing": [
+     50.9,
+     66.185
+    ]
+   },
+   {
+    "net": "I2C1_SDA",
+    "at": [
+     51.5,
+     67.455
+    ],
+    "layer": "F.Cu",
+    "inner_landing": [
+     50.9,
+     67.455
+    ]
+   },
+   {
+    "net": "I2C1_SDA",
+    "at": [
+     51.5,
+     61.905
+    ],
+    "layer": "B.Cu",
+    "inner_landing": [
+     50.9,
+     61.905
+    ]
+   }
+  ],
+  "slot_pitch_mm": 1.27,
+  "shared_layer_change_band": "one band inside the corridor; each net's single via stays inside it",
+  "still_to_be_drawn": "the per-net IN-FRAME polyline from each slot to its in-frame fragment/pad (layer plan + via pair), frozen as constants - this is the piece R-e lacked.",
+  "why_not_drawn_here": "freezing a polyline is a drawing decision that changes the approved R-e artifact; it needs the supervisor's approval (red line: no drawing/spec change without approval)."
+ },
+ "ask": [
+  "approve the per-net polyline being frozen into the spec (and, if the supervisor prefers, state the routing policy: e.g. SCL on F.Cu straight inboard, SDA crossing to B.Cu at the shared band)"
+ ],
+ "OWNER-ITEMS": 0
+}

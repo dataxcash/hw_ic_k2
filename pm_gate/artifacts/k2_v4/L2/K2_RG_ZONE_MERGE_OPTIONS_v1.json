@@ -1,0 +1,72 @@
+{
+ "artifact": "k2_rg_zone_merge_options_v1",
+ "ts": "2026-09-30",
+ "status": "PROPOSED - NOT APPLIED (zone change; needs approval)",
+ "authority": "#K2-441 sec.3 / the R1316 receipt: P3V3's remaining break is a PLANE-ISLAND MERGE, unreachable inside dR.",
+ "the_break_measured_on_the_judged_board": {
+  "finger": {
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "prio": 100,
+   "bbox": [
+    34.271,
+    34.021,
+    58.421,
+    40.25
+   ],
+   "contains_42.8_39.0": true,
+   "contains_81.0_60.6": false
+  },
+  "main": {
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "prio": 0,
+   "bbox": [
+    57.95,
+    33.3,
+    142.7,
+    78.7
+   ],
+   "contains_42.8_39.0": false,
+   "contains_81.0_60.6": true
+  },
+  "kd_connectivity": "C84.1's cluster (88 items, classes {PCB_TRACK:75, PCB_VIA:7, PAD:5, ZONE:1}) does NOT reach the out-of-frame blind via at (81,60.6) => the two zones are SEPARATE items.",
+  "why_local_means_cannot_fix_it": "the merge region is x>=57.95, i.e. OUTSIDE dR; declaring the out-of-frame via a PORT was expressly not adopted."
+ },
+ "candidates": [
+  {
+   "id": "R-g-A",
+   "what": "equalise the two In4 P3V3 priorities (finger 100 -> 0)",
+   "copy_test": "EXECUTED on a copy of the cleared+stitched field: the fill was recomputed with ZONE_FILLER and C84.1's cluster STILL does not reach the goal.",
+   "verdict": "NO EFFECT in that test"
+  },
+  {
+   "id": "R-g-B",
+   "what": "add an In4 P3V3 bridge zone (rect x 36..62, y 38.4..40.2, prio 0) spanning the finger->main gap",
+   "copy_test": "EXECUTED: inconclusive because the CLEARED board's refill is NOT representative (see below).",
+   "verdict": "NEEDS A CHAIN RUN"
+  },
+  {
+   "id": "R-g-C",
+   "what": "extend the finger outline eastward so its fill physically overlaps the main plane",
+   "copy_test": "not executed",
+   "verdict": "NEEDS A CHAIN RUN"
+  }
+ ],
+ "KEY_FINDING_copy_tests_are_not_representative": {
+  "measured": "on the CLEARED field the refill yields DIFFERENT fills than on the judged (routed) board: the finger's fill at (36.5,39.0) is False after a cleared-board refill, while it is True on the judged board.",
+  "reason": "zone fill depends on what anchor copper exists; in the cleared field the islands have no anchors and the filler drops them.",
+  "consequence": "R-g's feasibility can ONLY be judged inside a chain run. A copy-based dry verification is not decisive for zones."
+ },
+ "CONTRACT_CAVEAT_IMPORTANT": {
+  "fact": "the C6 predicate (block.outside_geometry) reads read_copper() = SEGMENTS + VIAS only; ZONES are not counted.",
+  "implication": "a zone change that extends copper OUTSIDE dR would NOT trip C6 even though it physically alters outside copper. R-g-B/R-g-C are exactly such changes.",
+  "ask": "this is a JUDGED-CONTRACT question: either (i) the supervisor accepts a zone-only outside change, or (ii) C6 is restated to cover zones, or (iii) R-g is done by a mechanism that stays inside dR (none found)."
+ },
+ "ask": [
+  "pick the R-g mechanism (A/B/C or another)",
+  "rule on the C6-vs-zones contract question",
+  "accept that judging R-g costs one run"
+ ],
+ "OWNER-ITEMS": 0
+}
