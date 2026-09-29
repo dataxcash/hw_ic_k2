@@ -1,0 +1,27 @@
+{
+ "artifact": "k2_eda_eng_a5_place_near_miss_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-404 sec.3 step 1-2 (ERASE then PLACE on the cleared field) - bounded joint measurement.",
+ "method": "subprocess-only: erase J9/J6/J11 from an l14 copy; `eda_eng move-parts --rect R` with (i) the empty set (post-erase cleared base), (ii) the core map, (iii) the full 18-part map; kicad-cli DRC on each; classes baseline-relative.",
+ "results": {
+  "core_map_U1_1_U2U4U5_4": {
+   "new": {
+    "clearance": 1,
+    "silk_overlap": 1
+   },
+   "ok": false
+  },
+  "all18_map": {
+   "new": {
+    "clearance": 1
+   },
+   "ok": false
+  }
+ },
+ "reading": {
+  "distance_to_a_legal_placement": "the full 18-part map on the erased+cleared field is ONE violation away from admissible (a single `clearance`).",
+  "core_only": "the core alone also leaves a silk_overlap - i.e. the interaction is between the core and the other movable members."
+ },
+ "next_bounded_step": "identify the single `clearance` pair from the all18 DRC, then reduce the step of the member causing it (deterministic: one member, one smaller lattice step) and re-measure - expected to be ADMISSIBLE.",
+ "OWNER-ITEMS": 0
+}
