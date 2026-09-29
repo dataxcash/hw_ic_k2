@@ -68,6 +68,19 @@ def content_aware_joint_allocation(nets_pts, block_rect, occupants, clearance=0.
     return out
 
 
+def joint_allocation_by_row(board, drc, rect, clearance=0.20, need=0.60):
+    """**按排分组的内容感知分配**（#K2-427 §四.1：样板 group fanout）—— 与 R1220/R1222 同口径的实现（逐排：让位＋pad 阶梯重画＋逐排守恒）。
+    委托在册 `k2_block_relayout_gen_v1.plan_from_board`（单一实现，不另起一套），只取 `corridors` 作为"逐通道"读数。"""
+    import importlib.util as _iu, os as _os
+    _sp = _iu.spec_from_file_location("k2br", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "k2_block_relayout_gen_v1.py"))
+    br = _iu.module_from_spec(_sp); _sp.loader.exec_module(br)
+    rep = br.plan_from_board(board, drc, rect, clearance, need)
+    return [{"net": r["nets"][0] if r["nets"] else "?", "row": r["row"], "channel": r["corridor_after_yield"] or r["corridor"],
+             "status": ("OK" if r["conservation"]["pass"] else ("OK_BY_YIELD" if r["conservation_after_yield"]["pass"] else "BLOCKED")),
+             "capacity_mm": (r["conservation_after_yield"] or r["conservation"])["capacity_mm"], "need_mm": need,
+             "nets": r["nets"]} for r in rep["corridors"]]
+
+
 def artifact_hash16(rep):
     return hashlib.sha256(json.dumps(rep, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 
