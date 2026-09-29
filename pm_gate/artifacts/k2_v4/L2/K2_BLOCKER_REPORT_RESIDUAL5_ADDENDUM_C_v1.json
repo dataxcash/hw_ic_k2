@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_c_v1",
+ "ts": "2026-09-30",
+ "authority": "FOURTH stop order - byte-identical to the third (same token, same count) => a REPLAY of a latched alert.",
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_window": 0,
+  "param_or_tool_edits": 0,
+  "reruns": 0
+ },
+ "decisive_replay_evidence": [
+  "the order text is byte-identical to the previous one",
+  "the token is identical",
+  "the count did NOT change (4 -> 4) even though the intervening window never used that token (it used a different work directory) => the scanner produced no new count; it is replaying a historical latch.",
+  "=> this alert carries NO new information; opening a window per replay is itself a form of idling."
+ ],
+ "request_to_supervisor": [
+  "adopt the addendum-B root fix (signature = action pattern, excluding work-dir / output path constants; signature + window + ack dedupe)",
+  "ack the already-filed signature (named three times: R1296/R1300/R1310)",
+  "stop re-delivering the same signature until the module is fixed - otherwise the ENG can only repeat stop+report"
+ ],
+ "ENG_self_limit": "until the module is fixed or a new instruction arrives, the ENG will NOT file further near-duplicate addenda (to avoid turning reporting into noise) and will hold at the approval boundary.",
+ "plan_recap_compressed": {
+  "Q1": "power on inner-layer planes (pads land on the plane); control = short F.Cu links; bus = one layer change each; a few nets cross x=51.5.",
+  "Q2": "boundary half-stubs (NRST fixed); power pads with no plane tie (P3V3_AUX fixed); remaining two are DRAWING-side: the I2C1 pair's two landings squeeze each other (I2C1_SCL newly appeared), and P3V3's goal end is outside the frame (no-free-goal-node).",
+  "Q3": "one corridor for the I2C1 pair; land the P3V3 stub on the plane finger (or a frozen port for the out-of-frame via); then ONE run."
+ },
+ "gap_layer": "SCHEME (drawing) layer: R-e (I2C1 group corridor), R-f (P3V3 goal end).",
+ "one_implementation_list_TO_BE_APPROVED": [
+  "R-e",
+  "R-f",
+  "then ONE N=1"
+ ],
+ "OWNER-ITEMS": 0
+}
