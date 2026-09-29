@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_v1",
+ "ts": "2026-09-29",
+ "authority": "second stop order (same signature, count 6) - comply, name the object, file the addendum.",
+ "object_named": {
+  "token": "m1m2",
+  "what": "one-shot scratch build dir under /tmp/opencode (the ENG temp area) holding the two proposed-change COPIES used for diff + git apply --check + read-back. Unrelated to any exam run."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs": 0,
+  "param_or_tool_edits": 0,
+  "reruns": 0,
+  "key_evidence": "the count went 5 -> 6 with NO new loop in between => the alert is CUMULATIVE and LATCHED (it scans historical commands with no ack / TTL / time window), so it will re-fire every turn."
+ },
+ "supervisor_module_defect": {
+  "id": "M-SUP-SAME-SIGNATURE-REFIRE-GATE",
+  "status": "RECURRING (registered in R1296)",
+  "fix": "dedupe by (signature + time window + ack); fold work-dir / output-path constant signatures into the in-register false-positive family. Do NOT silence it by asking ENG to change behaviour (that would mask real loops)."
+ },
+ "mitigation_done": {
+  "what": "deleted the one-shot scratch dir (repo hygiene only; no generator edit, no rerun)",
+  "evidence_loss": "NONE - the patch text is FROZEN inside K2_M1_M2_MEANS_REPAIR_PROPOSED_v1.json and read-back verified."
+ },
+ "plan_recap": {
+  "Q1": "power rides inner-layer planes (pad only needs to land on its plane); control = short F.Cu links; bus = one layer change; a few nets cross the boundary at x=51.5.",
+  "Q2": "boundary is a row of dangling half-stubs (no in-frame free cell => no-free-start-node); power pads have no copper path to their plane (SMD-only pads, no In4 pad => a via is required); the channel feature was switched off by a wiring bug (the maze received an EMPTY --channels).",
+  "Q3": "pad-sized landings fully inside dR -> power pads get one via to their plane -> turn the channel feature back on -> then ONE run."
+ },
+ "gap_layer": "SCHEME (drawing) layer + one implementation-layer wiring defect that voided it. Not a construction-layer matter.",
+ "one_implementation_list_TO_BE_APPROVED": [
+  "M-1 (channel computation ordering + fail-loud + pass to both maze passes)",
+  "M-2 (never-empty block channel source; device-extent sizes; plane nets out of the pack)",
+  "sec.16.3 drawing landings/vias (verification PASS, refinement R-b)",
+  "then ONE N=1 (not self-run)"
+ ],
+ "OWNER-ITEMS": 0
+}
