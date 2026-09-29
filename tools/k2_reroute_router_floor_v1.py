@@ -232,7 +232,7 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     REC = []
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
-        _saved = mr.WALL_RECT
+        _saved = getattr(mr, "WALL_RECT", None)
         _CH = getattr(mr, "_CHANNELS", {})                # NOTE: `CH` lives on `mr` because solve is defined in a
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
