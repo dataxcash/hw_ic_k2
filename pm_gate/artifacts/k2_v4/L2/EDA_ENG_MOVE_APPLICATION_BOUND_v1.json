@@ -32,7 +32,10 @@
  },
  "item3_real_placement_source": {
   "finding": "gen_v5 documents L2/PLACEMENT_SOLUTION_v1.json as the canonical single source, and edit_placement_at edits exactly that file in the shadow; yet 5 connectors' edits do not reach the produced board => the ref->entry lookup used by edit_placement_at ('refs'/'components'/'placements') and the generator's reader disagree for those refs.",
-  "status": "REAL SOURCE IDENTIFIED AT THE FILE LEVEL; the exact per-ref key divergence is the remaining one-step fix (or a named 'unmovable via this path' declaration)."
+  "status": "REAL SOURCE IDENTIFIED AT THE FILE LEVEL; the exact per-ref key divergence is the remaining one-step fix (or a named 'unmovable via this path' declaration).",
+  "file_level_CONFIRMED": "gen_v5.load_placement() reads PLACEMENT_PATH = L2/PLACEMENT_SOLUTION_v1.json and returns {r: tuple(v['at'])} from d['refs'], requiring EVERY K2_REF to be present (fail-closed otherwise); all five affected connectors (J13/J9/J12/J6/J11) ARE present under refs, and edit_placement_at edits exactly that key => the EDIT and the DOCUMENTED READER point at the same place.",
+  "therefore": "the coordinates must be OVERRIDDEN downstream for those refs (a connector placement rule / square-up / edge-snap, or a later stage re-deriving connector positions) - i.e. the generator's EFFECTIVE source for connectors is NOT the edited field even though the documented source is.",
+  "remaining_one_step": "name that downstream override for the five connectors and either make the edit reach it or declare the refs unmovable via this path (#K2-400 sec.6 item 3, 'one of the two, must be filed')."
  },
  "per_K2_400": {
   "anti_idling": "item 1 asset + regression DELIVERED => the window's hard precondition is met.",
