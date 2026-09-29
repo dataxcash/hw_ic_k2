@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_f_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (same latched family, already ruled VOID twice) + the sec.2.3 blocker-report requirement.",
+ "object_named": {
+  "token": "k2t",
+  "what": "a work-dir path constant of an earlier run; no command this period contained it."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_period": 1,
+  "param_or_tool_edits": 0,
+  "reruns": 0,
+  "note": "the single run was the #K2-444 sec.2.4 authorised N=1 (quota exhausted); no same-parameter rerun."
+ },
+ "count_evidence": "the reported count went 3 -> 6 -> 4 with NO new commands carrying the token => the scanner re-accumulates historical occurrences; it is not a new event. The family was already ruled VOID in #K2-441 sec.2.1 and #K2-444 sec.2.1.",
+ "blocker_report": {
+  "tried": "R1328 (R-g bridge + one run: C1 3->2, I2C1_SCL closed, C2 newly broken) -> R1332: diagnosed the tracks_crossing as MY TWO FROZEN LANES crossing EACH OTHER; fixed by GROUP ORDERING (SDA re-drafted on the board carrying the SCL lane, sec.20 paradigm) -> one run: C1 2 (flat), C2 PASS (broken row fixed); remaining I2C1_SDA and P3V3.",
+  "why_it_fails": [
+   "the drawing toolchain lacks obstacle-avoiding lane generation",
+   "the drafter was fed a foreign DRC (fixed)",
+   "without group ordering the two lanes cross each other (fixed in R1332)",
+   "STILL OPEN: the grouped SDA lane is frozen yet does not close (break: B.Cu 0.2mm <-> F.Cu 0.6mm); the P3V3 bridge zone's effect is masked by that residual and has not been read separately"
+  ],
+  "gap_layer": "SCHEME (drawing) x IMPLEMENTATION junction: the drawing gives lane GEOMETRY but not the statement that the maze must not invade it (shared search domain); and the drawing does not yet cover the SDA/P3V3 break points. NOT a criteria-layer issue (criteria read-only rev=6), NOT a classification issue."
+ },
+ "plan_recap": {
+  "q1": "power on inner-layer planes (P3V3_AUX closed; P3V3 via the bridge zone pending a separate read); the I2C1 pair is one group corridor -> one layer change -> into the chip (SCL closed, SDA not); control = short F.Cu links (NRST closed).",
+  "q2": "nothing is missing physically; there are two specific break points (SDA B.Cu 0.2 <-> F.Cu 0.6; P3V3 blind via <-> F.Cu 0.1) plus the un-modelled responsibility boundary between the frozen copper and the maze.",
+  "q3": "reserve the already-determined copper first (or draw after the maze), then complete the drawing per break point, then ONE run."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "implement zone-aware C6 in the chain (ordered by #K2-444 sec.2.4; missed last window due to my wrong assertion)",
+  "refine the I2C1_SDA break (one F.Cu<->B.Cu change on the grouped lane)",
+  "read the P3V3 bridge zone separately",
+  "then ONE N=1 (hard gate: C1 drops AND C2 clean)"
+ ],
+ "OWNER-ITEMS": 0
+}
