@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_exam_a_quintuple_prime_attempt5_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-415 sec.2.3: the last bounded expansion -> ONE run 1/1 -> nine rows (the 'order' lever + B2 fine grid; B1 withdrawn as unsound).",
+ "run": {
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed <A^5 witness> --erase-refs J9,J6,J11 --scenario L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL"
+ },
+ "nine_rows": {
+  "C1": 5,
+  "C1_pass": false,
+  "C2": {
+   "total": 129,
+   "ref": 148,
+   "new_classes": [],
+   "pass": true
+  },
+  "C3_pass": true,
+  "C4_pass": true,
+  "C5_pass": true,
+  "C6": 0,
+  "C7": 0,
+  "C8": [],
+  "C9_pass": true,
+  "rows_present": 9
+ },
+ "residuals_named": [
+  "P3V3_AUX: In5 track(34.75,55.775) <-> C90.1(29.65,53.5)",
+  "SWCLK_BOOT0: J13.2(29.21,46.54) <-> U1.36(40.163,50.25)",
+  "SWCLK_BOOT0: U1.36(40.163,50.25) <-> R28.1(50.05,45.0)",
+  "I2C1_SDA: B.Cu track(52.205,61.905) <-> F.Cu track(51.5,67.455)  [frame-spanning]",
+  "P3V3: C84.1(43.4,44.0) <-> blind via F.Cu-In4 (81.0,60.6)  [outside the frame]"
+ ],
+ "reading": "the 'order' lever (objective nets routed first) + B2 (FINE_STEP 0.10) took C1 from 8 to 5; C2 stays clean. The residuals MOVED: MCU_VDD / NRST x2 / PERSTA# / I2C1_SCL are now CLOSED; the new residuals are P3V3_AUX / SWCLK_BOOT0 x2 / I2C1_SDA / P3V3 - so the wall is a routing-competition/ordering effect, not a fixed wall.",
+ "order_note": "#K2-415 sec.2.3: C1>0 => the certificate stands + transfer to the DEVIATION channel; NO MORE EXPANSION (end of this approach).",
+ "OWNER-ITEMS": 0
+}
