@@ -94,6 +94,37 @@ def channel_including_reach(row, own_boxes, reach=0.5, pad=0.4):
     return [round(x0, 4), round(y0, 4), round(x1, 4), round(y1, 4)]
 
 
+def channels_arg(board, drc, rect, clearance=0.20, need=0.60, band=2.0, pad=0.4, reach=0.5):
+    """**单一来源**（#K2-431 §二.6 fix 2/3）：产 `--channels` 串 —— 逐排分组 → 每网的**reach-纳入冻结通道**
+    （端点 ∪ 本网铜）。确定性 · 零搜索；供链路与干跑**同一口径**。"""
+    import importlib.util as _iu, os as _os, collections as _c, json as _j
+    _R = _os.path.dirname(_os.path.abspath(__file__))
+    def _m(n, f):
+        sp = _iu.spec_from_file_location(n, _os.path.join(_R, f)); m = _iu.module_from_spec(sp); sp.loader.exec_module(m); return m
+    AUD, DEV, BR = _m("ka2", "k2_corridor_occupancy_audit_v1.py"), _m("kd2", "k2_deviation_gen_v1.py"), _m("kb2", "k2_block_relayout_gen_v1.py")
+    eps = []
+    for pr in DEV.pairs(_j.load(open(drc, encoding="utf-8"))):
+        for p_ in (pr["p1"], pr["p2"]):
+            c = DEV._clamp(p_, rect); eps.append((pr["net"], c[0], c[1], pr["layers"][0]))
+    rows = BR.group_by_row(eps, band)
+    byn = _c.defaultdict(list)
+    for o in AUD.occupant_rects(__import__("pcbnew"), ["F.Cu", "In5.Cu"], "__x__", clearance) if False else []:
+        pass
+    import pcbnew as _P
+    b = _P.LoadBoard(board)
+    for o in AUD.occupant_rects(b, ["F.Cu", "In5.Cu"], "__x__", clearance):
+        byn[o["net"]].append(o["bbox"])
+    parts = []
+    for rw in rows:
+        nets = {p[0] for p in rw}
+        own = [bb for n, bbs in byn.items() if n in nets for bb in bbs]
+        ch = channel_including_reach(rw, own, reach, pad)
+        rs = ",".join("%.4f" % v for v in ch)
+        for n in nets:
+            parts.append("%s:%s" % (n, rs))
+    return ";".join(parts)
+
+
 def artifact_hash16(rep):
     return hashlib.sha256(json.dumps(rep, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 
