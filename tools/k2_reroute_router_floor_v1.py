@@ -220,7 +220,7 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                     out.add((t["layer"], round(X, 4), round(Y, 4), t["uuid"]))
         for (pl, px, py, tpu) in sorted(out):
             PORT_PTS.add((round(px, 3), round(py, 3)))
-        out2 = [(pl, px, py, "t:" + str(tpu)) for (pl, px, py, tpu) in sorted(out)]
+        out2 = [(pl, px, py, str(tpu)) for (pl, px, py, tpu) in sorted(out)]   # bare uuid for tracks
         for (_n, _x, _y, _l) in getattr(mr, "_PORT_PADS", []):       # #K2-431 fix 1: connector pads as ports
             if _n == net:
                 PORT_PTS.add((round(_x, 3), round(_y, 3)))
