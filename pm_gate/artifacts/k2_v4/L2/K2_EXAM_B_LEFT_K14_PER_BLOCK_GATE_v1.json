@@ -21,5 +21,6 @@
   "I2C1_SDA",
   "P3V3"
  ],
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "CORRECTION": "SELF-CORRECTION (R1290 / #K2-438 sec.3.1): this file's `residual_named` list was WRONG - it carried names from an older run (SWDIO@J13.1 / SWCLK_BOOT0@J13.2). The true residuals of the R1286 run are NRST / P3V3_AUX (x2 items) / I2C1_SDA / P3V3, per the run's own raw DRC and the chain's endpoint_stitch_dropped_named. See K2_EXAM_B_LEFT_K14_PER_BLOCK_ATTRIBUTION_v2.json."
 }

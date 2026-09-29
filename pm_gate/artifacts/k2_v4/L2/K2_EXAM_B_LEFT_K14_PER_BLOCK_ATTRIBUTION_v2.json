@@ -1,0 +1,107 @@
+{
+ "artifact": "k2_exam_b_left_k14_per_block_attribution_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-438 sec.3.1 / sec.2.4: the per-block NAMED attribution owed after the authorised run (C1=5>0); block -> residual -> NEW/OLD cause, item by item.",
+ "supersedes": {
+  "artifact": "k2_exam_b_left_k14_per_block_gate_v1 (R1288)",
+  "why": "SELF-CORRECTION: R1288's residual_named carried a WRONG net list from an older run (SWDIO@J13.1 / SWCLK_BOOT0@J13.2). The true residuals of THIS run are NRST / P3V3_AUX(x2) / I2C1_SDA / P3V3 - provable from the run's own raw DRC and the chain's endpoint_stitch_dropped_named."
+ },
+ "run": {
+  "id": "R1286",
+  "entry": "exam A --run --chain wipe_resolve --from-placed <A^5 witness> --erase-refs J9,J6,J11 (K2_NO_YIELD=1)",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "run_count": "1/1",
+  "C1": 5,
+  "C1_prev": 7,
+  "board_work": "/tmp/opencode/k1/s3c_disposed.kicad_pcb"
+ },
+ "ground_truth_sources": [
+  "raw run DRC /tmp/opencode/k1/s4_drc.json  -> unconnected_items (5 entries)",
+  "verdict route.chain endpoint_stitch_dropped_named (5 entries, each with its named reason)",
+  "verdict route.chain per_block_C1_gate (the in-chain K-4 gate)"
+ ],
+ "counts": {
+  "C1_items": 5,
+  "C1_distinct_nets": 4,
+  "per_block_items": {
+   "BUS": 1,
+   "CONTROL": 1,
+   "POWER": 3
+  },
+  "per_block_nets": {
+   "BUS": [
+    "I2C1_SDA"
+   ],
+   "CONTROL": [
+    "NRST"
+   ],
+   "POWER": [
+    "P3V3",
+    "P3V3_AUX"
+   ]
+  },
+  "in_chain_per_block_C1_gate": {
+   "BUS": 1,
+   "CONTROL": 1,
+   "POWER": 2
+  },
+  "note": "the in-chain per_block_C1_gate counts DISTINCT NETS (sums to 4); the true C1 counts ITEMS (5) - the gap is P3V3_AUX, which is TWO unconnected items. Both are consistent."
+ },
+ "attribution_table": [
+  {
+   "block": "CONTROL",
+   "net": "NRST",
+   "drc_items": [
+    "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+    "F.Cu 上 U1 的焊盘 10 [NRST]"
+   ],
+   "cause": "OLD (port/policy class)",
+   "evidence": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3_AUX",
+   "drc_items": [
+    "走线 [P3V3_AUX] (In2.Cu), 长度: 0.7071 mm",
+    "F.Cu 上 C90 的焊盘 1 [P3V3_AUX]"
+   ],
+   "cause": "OLD (port/policy class)",
+   "evidence": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3_AUX",
+   "drc_items": [
+    "走线 [P3V3_AUX] (In5.Cu), 长度: 0.1414 mm",
+    "走线 [P3V3_AUX] (B.Cu), 长度: 2.0000 mm"
+   ],
+   "cause": "OLD (port/policy class)",
+   "evidence": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+  },
+  {
+   "block": "BUS",
+   "net": "I2C1_SDA",
+   "drc_items": [
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm",
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm"
+   ],
+   "cause": "OLD (port/policy class)",
+   "evidence": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+  },
+  {
+   "block": "POWER",
+   "net": "P3V3",
+   "drc_items": [
+    "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+    "F.Cu 上 C84 的焊盘 1 [P3V3]"
+   ],
+   "cause": "OLD (port/policy class)",
+   "evidence": "maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)"
+  }
+ ],
+ "all_causes_OLD": true,
+ "reading": "C1=5, DOWN from 7 => the K-1..K-4 means MOVED it; it sits at the clean floor (R1224). All five residuals share ONE named cause ('maze refused at these endpoints; direct stitch FORBIDDEN #K2-411 sec.2') => the residual class is OLD (port/policy), not a new failure introduced by the means change.",
+ "consequence": "#K2-438 sec.2.5: scheme-layer missing drawing (ports/policy) - NOT a solver-layer search; fix by scheme-layer drawing (sec.16.3 four elements), never by re-searching in the construction layer.",
+ "OWNER-ITEMS": 0
+}

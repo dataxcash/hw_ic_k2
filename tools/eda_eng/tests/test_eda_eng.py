@@ -1325,6 +1325,45 @@ class T(unittest.TestCase):
         self.assertIn('"per_block_C1_gate"', seg)
         self.assertIn('"in_block_C1 must reach zero FIRST', seg + '"in_block_C1 must reach zero FIRST')
 
+    def test_C438_the_chain_extractor_is_robust_and_fails_loud(self):
+        """#K2-438 sec.3.1 / M-ENG-EVIDENCE-EXTRACTION: RED = the naive fixed-shape path fails when the chain is
+        stored as a JSON STRING (the R1286 fault); GREEN = the recursive finder locates the stage in all shapes and
+        FAILS LOUD (KeyError) when absent - never a silent null."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_chain_evidence_v1", os.path.join("tools", "k2_chain_evidence_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        gate = {"stage": "per_block_C1_gate", "per_block": {"POWER": 2, "CONTROL": 1, "BUS": 1}, "pass": False}
+        art_str = {"route": {"chain": json.dumps({"chain": [{"stage": "x"}, gate]})}}
+        # RED: the naive fixed-shape path cannot see through the JSON string (this is exactly the R1286 fault)
+        with self.assertRaises(TypeError):
+            art_str["route"]["chain"]["chain"][-1]
+        # GREEN: the recursive finder locates the stage in each shape it is stored in
+        self.assertEqual(m.find_stage(art_str, "per_block_C1_gate"), gate, "JSON-string shape")
+        self.assertEqual(m.find_stage({"chain": [gate]}, "per_block_C1_gate"), gate, "list shape")
+        self.assertEqual(m.find_stage(gate, "per_block_C1_gate"), gate, "bare dict shape")
+        # fail-LOUD: an absent stage raises KeyError, never a silent null
+        with self.assertRaises(KeyError):
+            m.find_stage({"a": 1}, "per_block_C1_gate")
+        # the per-block residual attribution: counts by ITEM (sums to C1) not by DISTINCT NET
+        drc = {"unconnected_items": [
+            {"type": "unconnected_items", "items": [
+                {"description": "\u8d70\u7ebf [P3V3_AUX] (In2.Cu), \u957f\u5ea6: 0.7071 mm"},
+                {"description": "F.Cu \u4e0a C90 \u7684\u710a\u76d8 1 [P3V3_AUX]"}]},
+            {"type": "unconnected_items", "items": [
+                {"description": "\u8d70\u7ebf [NRST] (F.Cu), \u957f\u5ea6: 0.1414 mm"},
+                {"description": "F.Cu \u4e0a U1 \u7684\u710a\u76d8 10 [NRST]"}]}]}
+        at = m.per_block_attribution(drc)
+        self.assertEqual(at["n_items"], 2); self.assertEqual(at["n_nets"], 2)
+        self.assertEqual(at["per_block"]["POWER"]["items"], 1)
+        self.assertEqual(at["per_block"]["POWER"]["nets"], ["P3V3_AUX"])
+        self.assertEqual(at["per_block"]["CONTROL"]["nets"], ["NRST"])
+        # fail-LOUD: an item whose description has no [NET] must RAISE, never be silently dropped (the R1288 fault)
+        with self.assertRaises(KeyError):
+            m.parse_net("a track with no net tag")
+        with self.assertRaises(KeyError):
+            m.residual_table({"unconnected_items": [{"items": [{"description": "no net tag"}]}]})
+
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
