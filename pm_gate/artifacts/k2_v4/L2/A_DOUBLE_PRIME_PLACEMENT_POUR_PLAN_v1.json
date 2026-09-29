@@ -31,10 +31,10 @@
   "edge_ii_pour_islands": {
    "layer": "TOOL / POUR stage (a post-wipe refill consequence).",
    "deterministic_path": [
-    "step 1: refill the in-frame zones with the in-register pour stage (`tools/k2_p4_build_l9_v1.py --stages pour`; ZONE_FILLER).",
-    "step 2: re-run kicad-cli DRC and READ `isolated_copper`.",
-    "step 3: dispose of each orphan fill island DETERMINISTICALLY (delete the named zone's fill island) - l14 ships every zone with (island_removal_mode 0)=always-remove and k2_gen_v5.py emits the same, so removal is the in-register semantic.",
-    "step 4: re-check; if ANY isolated_copper remains => REFUSE the board (fail-closed) - 'no island' is a LANDING PRECONDITION, never repaired after the fact."
+    "step 1: refill the in-frame zones (ZONE_FILLER).",
+    "step 2: DRC -> read `isolated_copper`.",
+    "step 3 (IMPLEMENTED, #K2-390): for each DRC-named island, remove the NAMED zone's fill (zone UUID -> UnFill) and refill only the other zones - one deterministic pass.",
+    "step 4: re-check; if ANY isolated_copper remains => REFUSE the board (fail-closed landing precondition)."
    ],
    "copyable": [
     "tools/k2_p4_build_l9_v1.py (pour stage)",
@@ -59,5 +59,32 @@
   "edge_ii: a 'no isolated_copper after refill, else REFUSE' regression (fail-closed)",
   "edge_iii: a port-goal regression (the ∂R stubs are legal goals)"
  ],
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "step_1_resolution_implemented": {
+  "authority": "#K2-390 sec.7 step 1: turn 'island => refuse' into 'deterministically dispose of the island so the board can land'.",
+  "implemented": "route.dispose_isolated_copper(board, drc_json, out) + the CLI subcommand `eda_eng dispose-islands` + the chain stage `isolated_copper_disposed`, run BEFORE the landing precondition.",
+  "determinism": "DRC-driven: each `isolated_copper` names its zone UUID; that zone's fill is removed (UnFill) and ONLY the remaining zones are refilled. One pass, no search, no parameter trial.",
+  "experiment_evidence_this_window": [
+   "forcing IslandRemovalMode = ALWAYS (0) on every zone + refill does NOT remove these islands (KiCad keeps them because they attach to a pad) => the 'island-removal setting' route is inert here.",
+   "removing the orphan zone's fill DOES clear them: the DRC-named 2 zones (12V_IN, priority 102 uuid a4658ccd…, priority 200 uuid f5d5cd09…) disposed => isolated_copper 3 -> 0, unconnected unchanged (22).",
+   "the old 'stitch the island to the nearest same-net pad' route is confirmed inert (R1054: planned 2/3, 3 islands remained)."
+  ],
+  "regressions": [
+   "test_C390_isolated_copper_landing_policy_is_pure (two cases: with island => refuse / clean => admit)",
+   "test_C390_the_chain_disposes_isolated_copper_before_the_landing_gate (path-scoped + ordering)"
+  ]
+ },
+ "a_triple_prime_result": {
+  "authority": "#K2-390 sec.7 step 2 outcome (FAIL on C1 only).",
+  "verdict": "FAIL",
+  "run_count": "1/1",
+  "gate": "PASS",
+  "closed": [
+   "C2 (new_classes = [] -> the mask bridge is gone)",
+   "C6/C7/C8/C9",
+   "the isolated_copper class (disposition: 2 zones disposed, precondition n=0)"
+  ],
+  "residual": "C1 unconnected = 18 (was 22), every gap blocked at an ENDPOINT (no-free-start-node 14 / no-free-goal-node 4)",
+  "next_mean": "edge iii (port-aware goals): hand the frame-cut stubs to the maze as legal PORTS instead of re-deriving goals across the block. NOT authorised in this window."
+ }
 }

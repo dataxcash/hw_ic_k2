@@ -313,6 +313,55 @@ def pad_mask_dam_violations(board_path, clear_mm):
     return out
 
 
+def isolated_copper_items(drc_json):
+    """**纯函数**（#K2-390 §七步①）：从 DRC json 取出 `isolated_copper` 违规的具名清单。"""
+    out = []
+    for v in (drc_json.get("violations") or []):
+        if v.get("type") != "isolated_copper":
+            continue
+        its = v.get("items") or []
+        first = its[0] if its else {}
+        out.append({"uuid": first.get("uuid"), "desc": first.get("description"), "pos": first.get("pos")})
+    return out
+
+
+def dispose_isolated_copper(board_path, drc_json, out_path):
+    """**孤岛的确定性处置（#K2-390 §七步① · 子进程专用）**：DRC 点名的每个 `isolated_copper`
+    按其 **zone UUID** 定位该 zone ⇒ **移除其填充**（`UnFill`）⇒ 仅**其余** zone 重填 ⇒ 落盘。
+    **一次 · 确定性 · 不搜索 · 不试探**（区别于「就近连回」的事后修补，那条已实测无效）。
+    返回处置清单（含未定位项，便于具名）。"""
+    import pcbnew as P
+    items = isolated_copper_items(drc_json)
+    want = {it.get("uuid") for it in items if it.get("uuid")}
+    b = P.LoadBoard(board_path)
+    zones = list(b.Zones())
+    disposed, keep, seen = [], [], set()
+    for z in zones:
+        try:
+            u = z.m_Uuid.AsString()
+        except Exception:                                          # noqa: BLE001
+            u = None
+        if u and u in want:
+            try:
+                z.UnFill()
+                disposed.append({"uuid": u, "net": z.GetNetname()})
+                seen.add(u)
+            except Exception as exc:                               # noqa: BLE001
+                disposed.append({"uuid": u, "net": z.GetNetname(), "error": str(exc)})
+        else:
+            keep.append(z)
+    try:
+        P.ZONE_FILLER(b).Fill(keep)
+    except Exception:                                              # noqa: BLE001
+        pass
+    P.SaveBoard(out_path, b)
+    return {"artifact": "eda_eng_dispose_isolated_copper", "board": board_path, "out": out_path,
+            "disposed": disposed, "n_disposed": len(disposed),
+            "unresolved": [it for it in items if it.get("uuid") not in seen],
+            "rule": "#K2-390 sec.7 step 1: dispose of the DRC-named orphan zone fill deterministically "
+                    "(zone UUID -> UnFill), refill only the rest; one pass, no search."}
+
+
 def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):
     """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。
     `bound_rect`（#K2-380 §二.3 收尾道 · **新增可选参数，默认不改老行为**）：落板前**框外坐标检查** ——

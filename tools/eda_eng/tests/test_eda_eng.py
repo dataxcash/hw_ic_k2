@@ -799,6 +799,31 @@ class T(unittest.TestCase):
         self.assertLess(seg.index("W3B_REFUSED_ISOLATED_COPPER"), seg.index("M4_judge"),
                         "the landing precondition must bite BEFORE the judge")
 
+    def test_C390_isolated_copper_landing_policy_is_pure(self):
+        """#K2-390 §七步①：孤岛清单是**纯函数**；两例 ——「有孤岛 ⇒ 拒板」·「无孤岛 ⇒ 放行」。"""
+        with_iso = {"violations": [
+            {"type": "isolated_copper", "items": [{"uuid": "u1", "description": "fill [12V_IN]", "pos": {"x": 1, "y": 2}}]},
+            {"type": "clearance", "items": []}]}
+        without = {"violations": [{"type": "clearance", "items": []}]}
+        a = route.isolated_copper_items(with_iso)
+        self.assertEqual(len(a), 1)
+        self.assertEqual(a[0]["uuid"], "u1")
+        self.assertEqual(route.isolated_copper_items(without), [])
+        self.assertTrue(len(a) > 0)                                  # with island  => the landing gate REFUSES
+        self.assertFalse(len(route.isolated_copper_items(without)) > 0)   # clean     => ADMIT
+
+    def test_C390_the_chain_disposes_isolated_copper_before_the_landing_gate(self):
+        """#K2-390 §七步①：`wipe_resolve` 链必须在**落板前置之前**调用确定性处置 `dispose-islands`。路径感知。"""
+        import ast
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        tree = ast.parse(src)
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "wipe_resolve_chain")
+        seg = "\n".join(src.splitlines()[fn.lineno - 1:fn.end_lineno])
+        self.assertIn("isolated_copper_disposed", seg)
+        self.assertIn('"dispose-islands"', seg)
+        self.assertLess(seg.index('"dispose-islands"'), seg.index("W3B_REFUSED_ISOLATED_COPPER"),
+                        "the dispose step must run BEFORE the landing precondition")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util

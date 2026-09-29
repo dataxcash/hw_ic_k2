@@ -1,0 +1,137 @@
+{
+ "artifact": "k2_exam_a_triple_prime_attempt1_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-390 sec.7 step 2: the single authorised A-triple-prime run (N=1) through the C34-gated wipe_resolve entry.",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_triple_witness/placed.kicad_pcb --work /tmp/opencode/aprime_triple_final",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "gate": {
+   "verdict": "PASS",
+   "capability": "A_double_prime_placement_pour"
+  },
+  "work_dir": "/tmp/opencode/aprime_triple_final",
+  "final_board": "/tmp/opencode/aprime_triple_final/s3c_disposed.kicad_pcb",
+  "final_board_sha256_16": "c95da3b8eb14b13d",
+  "wipe": {
+   "deleted_segments": 615,
+   "deleted_vias": 95,
+   "outside_halves_kept": 15,
+   "n_ports": 15
+  }
+ },
+ "the_nine_rows": {
+  "C1_unconnected": {
+   "value": 18,
+   "pass": false
+  },
+  "C2": {
+   "total": 136,
+   "ref_total": 148,
+   "raw_total": 190,
+   "raw_ref_total": 168,
+   "new_classes": [],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pass": true
+  },
+  "C3": {
+   "pass": true,
+   "max_mm": 0.078764
+  },
+  "C4": {
+   "pass": true,
+   "count": 2843
+  },
+  "C5": {
+   "pass": true,
+   "element_set_diff": 1674
+  },
+  "C6": {
+   "pass": true,
+   "diff": 0
+  },
+  "C7": {
+   "pass": true,
+   "diff": 0
+  },
+  "C8": {
+   "pass": true,
+   "violations": []
+  },
+  "C9": {
+   "pass": true,
+   "before": "1cf4d39614491ccc",
+   "after": "678d0cbe91f8ba87"
+  },
+  "rows_present": 9,
+  "geometry_class_delta": -12
+ },
+ "capability_evidence": {
+  "placement_gate": "PASS (capability A_double_prime_placement_pour) - the C34 gate bit the ACTUAL entry.",
+  "isolated_copper_disposed": [
+   {
+    "stage": "isolated_copper_disposed",
+    "exit": 0,
+    "n_disposed": 2,
+    "detail": {
+     "artifact": "eda_eng_dispose_isolated_copper",
+     "board": "/tmp/opencode/aprime_triple_final/s3b_fixed.kicad_pcb",
+     "out": "/tmp/opencode/aprime_triple_final/s3c_disposed.kicad_pcb",
+     "disposed": [
+      {
+       "uuid": "a4658ccd-d454-5604-b7c2-5a604a515872",
+       "net": "12V_IN"
+      },
+      {
+       "uuid": "f5d5cd09-5ba7-576d-917d-ead37e11410e",
+       "net": "12V_IN"
+      }
+     ],
+     "n_disposed": 2,
+     "unresolved": [],
+     "rule": "#K2-390 sec.7 step 1: dispose of the DRC-named orphan zone fill deterministically (zone UUID -> UnFill), refill only the rest; one pass, no search."
+    }
+   }
+  ],
+  "landing_precondition_no_isolated_copper": [
+   {
+    "stage": "landing_precondition_no_isolated_copper",
+    "n": 0,
+    "pass": true
+   }
+  ],
+  "final_drc_classes": {
+   "solder_mask_bridge": 0,
+   "isolated_copper": 0,
+   "clearance": 0,
+   "shorting_items": 0
+  }
+ },
+ "attribution": {
+  "only_failing_row": "C1 (unconnected 18)",
+  "endpoint_reasons": {
+   "no-free-start-node": 14,
+   "no-free-goal-node": 4
+  },
+  "by_net": {
+   "P3V3_AUX": 3,
+   "I2C1_SDA": 3,
+   "NRST": 2,
+   "I2C2_SDA": 2,
+   "I2C1_SCL": 2,
+   "MCU_VDD": 1,
+   "PERSTA#": 1,
+   "PWR_BTN_OUT": 1,
+   "I2C2_SCL": 1,
+   "P3V3": 1,
+   "PWR_BTN_ISO": 1
+  },
+  "meaning": "both PREVIOUS failing areas are now CLOSED: the mask bridge is gone (the gate-clean placement) and the isolated copper is gone (the deterministic disposition). The residual is the THIRD, not-yet-implemented edge of the plan: the frame-cut stubs are not handed to the maze as legal PORTS, so every remaining gap is blocked at an ENDPOINT (no free start/goal node).",
+  "required": "sec.17.4 / the plan's edge iii (port-aware goals) - a MEANS change for the residual, not a re-run of the same means."
+ },
+ "OWNER-ITEMS": 0
+}

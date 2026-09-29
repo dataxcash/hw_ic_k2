@@ -139,6 +139,9 @@ def main(argv=None):
     p.add_argument("--mask-clear-mm", dest="mask_clear_mm", type=float, default=None,
                    help="#K2-385(b): refuse a plan whose copper would bridge the mask to a FOREIGN pad")
     p.add_argument("--out"); p.add_argument("--json-out")
+    p = sub.add_parser("dispose-islands", help="#K2-390: deterministically dispose of the DRC-named orphan zone fills (zone UUID -> UnFill + refill the rest)")
+    p.add_argument("--board", required=True); p.add_argument("--drc", required=True)
+    p.add_argument("--out", required=True); p.add_argument("--json-out")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
     p.add_argument("--work", default=None)
@@ -386,6 +389,11 @@ def main(argv=None):
         plan = json.load(open(a.plan, encoding="utf-8"))
         r = ripup_mod.execute(a.board, plan, a.out, dry=a.dry_run)
         return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
+
+    if a.cmd == "dispose-islands":
+        drc = json.load(open(a.drc, encoding="utf-8"))
+        r = route_mod.dispose_isolated_copper(a.board, drc, a.out)
+        return _emit(r, a.json_out, 0)
 
     if a.cmd == "route":
         _bound = [float(v) for v in a.bound_rect.split(",")] if getattr(a, "bound_rect", None) else None

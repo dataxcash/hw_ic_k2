@@ -1301,6 +1301,18 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
             if rc3 == 0 and os.path.isfile(fixed2):
                 final = fixed2
 
+    # ③‴ **孤岛的确定性处置（#K2-390 §七步①）**：DRC 点名的每个 `isolated_copper` ⇒ 按其 **zone UUID**
+    # 定位该 zone、**移除其填充**、仅**其余** zone 重填（一次 · 确定性 · 不搜索）——把「有孤岛 ⇒ 拒板」
+    # 补成「先确定性处置，使板可落」；处置后仍残留才由下面的落板前置拒板。
+    dz1 = os.path.join(work, "s3b2_isolated_in.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dz1, final])
+    disp_out = os.path.join(work, "s3c_disposed.kicad_pcb")
+    rc_disp, disp = _cli("dispose-islands", "--board", final, "--drc", dz1, "--out", disp_out)
+    if rc_disp == 0 and os.path.isfile(disp_out):
+        final = disp_out
+    chain.append({"stage": "isolated_copper_disposed", "exit": rc_disp,
+                  "n_disposed": (disp or {}).get("n_disposed"), "detail": disp})
+
     # ③″ **落板前置 fail-closed（#K2-389 §二.2）**：refill（＋有界孤岛处置）后若**仍残留 `isolated_copper`**，
     # 则**拒绝成板**（具名）——「灌注重填后无孤岛」是**落板前置条件**，**不是事后修补**。
     dz2 = os.path.join(work, "s3c_landing_drc.json")
