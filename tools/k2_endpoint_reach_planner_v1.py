@@ -70,10 +70,12 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
     out = []
     for _i, o in enumerate(blockers):
         gap = _seg_gap(o["bbox"], (ax, ay), (bx, by))
-        need = clearance + min(o["bbox"][3] - o["bbox"][1], o["bbox"][2] - o["bbox"][0]) / 2.0
-        move = max(0.0, round(need - gap, 4))
         cyt = (o["bbox"][1] + o["bbox"][3]) / 2.0
         seg_y = (ay + by) / 2.0
+        # EXACT yield: push the blocker's NEAR edge to clearance past the lane (works even if it straddles).
+        near = o["bbox"][1] - seg_y if cyt >= seg_y else seg_y - o["bbox"][3]
+        need = clearance + max(0.0, 0.0)          # the lane is a line => clearance from it suffices
+        move = max(0.0, round(clearance + 1e-4 - near, 4))     # +0.1um so the strict clearance test passes
         d = "+y" if (cyt - seg_y) >= 0 else "-y"                 # each blocker yields AWAY from the lane (deterministic)
         if direction < 0:
             d = "-y" if d == "+y" else "+y"
