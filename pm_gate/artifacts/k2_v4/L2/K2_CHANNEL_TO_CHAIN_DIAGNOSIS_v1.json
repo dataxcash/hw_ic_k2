@@ -1,0 +1,14 @@
+{
+ "artifact": "k2_channel_to_chain_diagnosis_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-429 sec.3: why the channeled maze still fails on 3/5.",
+ "mechanism": "the maze builds its grid over [min(pa,pb)-margin, max+margin] INTERSECT EDGE_IN INTERSECT WALL_RECT. With a tight per-row channel as WALL_RECT, the grid is the CHANNEL. The D1 endpoint-own-cell relaxation (R1156/R1158) deliberately refuses a cell OUTSIDE the wall (C35) - so if a net's reachable own-copper cell lies outside its channel, the maze reports no-free-start-node. That is exactly the observed blocked1 reason.",
+ "evidence": [
+  "dry reading R1240: added 2 / blocked 3 with reasons no-free-start-node 1 and exhausted 2",
+  "the channel rects are the R1222 pad-laddered row corridors (2-3 mm wide)",
+  "R1158: the own-cell relaxation is explicitly wall-guarded (by design)"
+ ],
+ "fix_direction": "widen each net's channel to INCLUDE its reachable own-copper cell (deterministic: the channel = the row corridor UNION the endpoint-own-cell), or feed the channel as a SOFT preference plus a hard frame. Zero search; still deterministic.",
+ "next": "apply the widen-and-include fix in the allocator, re-take the dry reading; then element-3; then a ruled N=1 application.",
+ "OWNER-ITEMS": 0
+}
