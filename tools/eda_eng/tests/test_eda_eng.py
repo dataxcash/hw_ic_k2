@@ -1097,6 +1097,17 @@ class T(unittest.TestCase):
         class Grid:
             step, x0, y0, nx, ny = 0.10, 0.0, 0.0, 200, 200
 
+            def __init__(self):
+                # the plain prune mask: the endpoint's OWN cell is PRUNED (why the plain snap fails)
+                self.bad = {L: bytearray(self.nx * self.ny) for L in ("F.Cu", "In5.Cu")}
+                self.bad["F.Cu"][self._idx(*OWN)] = 1        # the endpoint's own cell: pruned
+                self.bad["F.Cu"][self._idx(1.0, 1.0)] = 1    # a foreign cell that must stay pruned
+                self.bad["F.Cu"][self._idx(9.0, 9.0)] = 1    # another foreign cell that must stay pruned
+
+            def _idx(self, x, y):
+                i, j = self.cell(x, y)
+                return i * self.ny + j
+
             def cell(self, x, y):
                 return int(round((x - self.x0) / self.step)), int(round((y - self.y0) / self.step))
 
@@ -1130,6 +1141,13 @@ class T(unittest.TestCase):
         px, py = grid.pt(cell[0], cell[1])
         self.assertLessEqual(abs(px - OWN[0]) + abs(py - OWN[1]), 0.11,
                              "the snapped cell must lie ON the net's own copper (never a foreign cell)")
+        # #K2-412 sec.4.3(b): `astar` refuses a PRUNED start (`start-blocked`) => D1 must ALSO lift the prune
+        # bit for THAT one cell, otherwise the returned own-copper cell is still unusable (D1 would be inert).
+        self.assertEqual(grid.bad["F.Cu"][grid._idx(*OWN)], 0,
+                         "the returned OWN-copper cell must have its prune bit lifted so `astar` can start")
+        # the lifting is confined to exactly that cell: both foreign cells stay pruned
+        self.assertEqual(grid.bad["F.Cu"][grid._idx(1.0, 1.0)], 1)
+        self.assertEqual(grid.bad["F.Cu"][grid._idx(9.0, 9.0)], 1)
         # negative control (a): a point NOT on this net's own copper is never relaxed (bounded, no blanket door)
         self.assertIsNone(mr.snap_node(grid, None, find, "ISLAND", "N1", "F.Cu", 7.0, 7.0))
         # negative control (b): C35 -- the relaxation NEVER places the start cell outside the declared domain

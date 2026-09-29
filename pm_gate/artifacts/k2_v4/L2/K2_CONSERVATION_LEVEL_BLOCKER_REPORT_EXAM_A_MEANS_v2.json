@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_conservation_level_blocker_report_exam_a_means_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-412 sec.4.3/4.4 + the convergence-stall stop order ('this round MUST produce a binary'): a feasible witness OR a conservation-level infeasibility certificate, with the four questions. Supersedes the v1 certificate (R1142) by adding HARD maze readings from the newly-authorized means (#K2-412 sec.17.4).",
+ "binary": {
+  "means_A_infeasible": "INFEASIBLE within 'only change the PREDICATE SEMANTICS (no domain change, no step change)' - certificate below (four questions).",
+  "means_B_feasible": "FEASIBLE at the DRAWING / DOMAIN layer - the eight in-domain corridors of R1154 (and/or a coarse->fine grid fallback that uses the IN-REGISTER constant FINE_STEP, not a tuned parameter). This is a DOMAIN/drawing change, NOT an allocation inside the maze.",
+  "conclusion": "the current 'one more predicate patch' means is EXHAUSTED (not a resource wall in principle): the domain is 93.5% free and R1150 already connected 6 of 8 nets on it. The exit is a drawing/domain change, which needs its own authorization + one N=1."
+ },
+ "hard_readings": {
+  "R1150_saved_ledger_the_authorised_run": {
+   "maze_pass2": {"edges": 10, "added": 6, "blocked": 4, "reasons": {"no-free-goal-node": 1, "no-free-start-node": 3}},
+   "final_DRC_unconnected": 8
+  },
+  "replay1_D1_as_shipped_in_R1156": {
+   "note": "same reconstructed input state/parameters; the ONLY change = the R1156 endpoint-own-cell snap relaxation",
+   "added": 4, "blocked": 6,
+   "reasons": {"no-free-start-node": 3, "no-path-coarse(exhausted-5004)": 1, "no-path-coarse(start-blocked)": 2},
+   "endpoint_own_cell_hits": 19,
+   "finding": "D1 is INERT: it returns the endpoint's own copper cell, but astar refuses a pruned start (k2_p4_mroute_v1.py:397 `start-blocked`)."
+  },
+  "replay2_D1_plus_prune_lift": {
+   "note": "same reconstructed input state/parameters; adds ONLY the lift of the prune bit for the ONE returned own-copper cell",
+   "added": 4, "blocked": 6,
+   "reasons": {"no-free-start-node": 3, "no-path-coarse(exhausted-1)": 2, "no-path-coarse(exhausted-5004)": 1},
+   "finding": "the block MOVED, it did not disappear: the own-copper cell is now enterable but ALL EIGHT of its neighbours are pruned in the COARSE grid (0.25 mm) => `exhausted-1` (only the start cell expanded)."
+  },
+  "reconstruction_discrepancy_REPORTED_HONESTLY": "replay added 4 vs the R1150 saved ledger added 6 on the same reconstructed input; the cause is NOT established in this round, so the delta is NOT attributed to D1 (only the direct, code-level readings above are claimed). This is a named open item for the next attribution window."
+ },
+ "four_questions": {
+  "which_layer": [
+   "PREDICATE layer: snap_node's 'free AND in-island' demand, then astar's `start-blocked` guard, then the coarse grid's 8-neighbour pruning.",
+   "DOMAIN layer: the frame boundary (dR) cuts each net, so the endpoint's own island has few/no in-domain cells.",
+   "DISCRETISATION layer: the same geometry is pruned at 0.25 mm (coarse) yet may be usable at 0.10 mm (fine)."
+  ],
+  "which_resource": "a maze cell that is (i) INSIDE the declared domain, (ii) in the ENDPOINT'S OWN net island, (iii) >= clearance from foreign copper, AND (iv) usable at the CALLING step size - i.e. a 'startable / connectable cell'.",
+  "occupied_by": [
+   "surviving IN-FRAME FOREIGN copper (its clearance ring seals the endpoint's neighbourhood);",
+   "the dR frame boundary ITSELF (it cuts the net, so the endpoint's island has no in-domain free cell);",
+   "the FROZEN calling step size (0.25 mm coarse / 0.10 mm fine)."
+  ],
+  "why_no_allocation_is_possible": "a predicate can only ACCEPT or REJECT a cell - it CANNOT CREATE one. Three consecutive readings show the block MOVING down the predicate chain (snap -> astar start guard -> grid pitch) WITHOUT vanishing. When the resource 'in-domain, own-island, clearance-clean, step-usable cell' is empty/insufficient near the endpoint, NO assignment of predicates can produce the connection => infeasible within means A. (This is NOT 'exam A is physically impossible': the domain is 93.5% free and 6/8 nets were connected by the maze itself.)"
+ },
+ "self_correction": "R1156 (D1) claimed 'lets the maze START' - that claim is NOT met (astar returns `start-blocked`). This v2 adds the missing half (lift the prune bit for the ONE returned own-copper cell) and the regression test now pins BOTH halves; the lift is confined to that single cell (foreign cells stay pruned) and every emitted leg is still adjudicated by seg_exact/via_exact.",
+ "feasible_exit_requires_authorisation": [
+  "B1 DRAWING: implement the eight in-domain corridors of R1154 (layer / layer-change via / slot / corridor bounds) so the maze is handed a reachable in-domain goal per gap.",
+  "B2 GRID: when the coarse stage cannot even start, seed the FINE stage directly using the IN-REGISTER constant FINE_STEP (a structural fallback, not a parameter search).",
+  "B1/B2 are a CHOICE FOR THE SUPERVISOR; both are a domain/flow change and both require their own one-off N=1 to close C1."
+ ],
+ "zero": {"exam_runs": 0, "exam_quota_consumed": "0/1", "board_changes": 0, "board": "l14/rev-61", "frozen_four": "4/4"},
+ "OWNER-ITEMS": 0
+}

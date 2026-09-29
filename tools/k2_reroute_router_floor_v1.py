@@ -99,6 +99,19 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                         return (i, j)
         return None
 
+    def _lift_prune(grid, layer, cell):
+        """#K2-412 §四.3(b)（承接 D1 的**决定性实锤**）：`astar` 对**被剪枝的起点/终点**直接回
+        `start-blocked`（k2_p4_mroute_v1.py:397）—— 光让 `snap` 返回「端点自身铜格」还**不够**，
+        该格若仍带剪枝位，迷宫照样不认。故把**这一格**的剪枝位**置零**（**只此一格**；邻格仍被剪 ⇒
+        必须立刻走上自由格，首段仍由 seg_exact/via_exact 裁决）。确定性 · 零搜索 · 只在该格确为
+        「端点自身铜」时发生（见 `_own_copper_cell` 的 `node_in_island` 前置）。"""
+        bad = getattr(grid, "bad", None)
+        if isinstance(bad, dict):
+            arr = bad.get(layer)
+            if arr is not None:
+                i, j = cell
+                arr[i * grid.ny + j] = 0
+
     def snap(grid, ctxi, find, comp, net, layer, x, y, maxr=4):
         r = orig_snap(grid, ctxi, find, comp, net, layer, x, y, maxr)
         if r is not None:
@@ -108,11 +121,13 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
             i, j = grid.cell(x, y)
             if grid.inside(i, j):
                 return i, j
-        # ② #K2-412 §四.3（D1）：端点**就在本网铜上** ⇒ 其自身格按定义合法起/止。只松绑**该格**的剪枝掩码，
-        #    C35 框仍守（见 _own_copper_cell），放行闸/终检不改 —— 让迷宫**能起步**，非放水。
+        # ② #K2-412 §四.3（D1）：端点**就在本网铜上** ⇒ 其自身格按定义合法起/止。松绑**该格**的剪枝掩码
+        #    （并把该位**置零**，否则 astar 仍以 `start-blocked` 拒），C35 框仍守（见 _own_copper_cell），
+        #    放行闸/终检不改 —— 让迷宫**能起步**，非放水。
         if mr.node_in_island(ctxi, find, comp, net, layer, x, y):
             cell = _own_copper_cell(grid, ctxi, find, comp, net, layer, x, y, maxr)
             if cell is not None:
+                _lift_prune(grid, layer, cell)
                 OWN_CELL["hits"] += 1
                 return cell
         return None
