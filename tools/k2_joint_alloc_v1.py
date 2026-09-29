@@ -25,6 +25,7 @@ def joint_channel_assignment(nets, block_rect, pitch=0.6, gap=0.2):
 
 
 def content_aware_joint_allocation(nets_pts, block_rect, occupants, clearance=0.20, need=0.60, pad=0.4):
+    """`occupants` 可为 **list**（适用全体）或 **dict {net:[bbox,...]}** —— 后者**逐网排除本网自己的铜**（防自阻塞）。"""
     """**内容感知 · 确定性 · 零搜索**（#K2-427 §四.1 · 取代等宽盲切）：
     按**给定网序**，每网取"含其全部端点、避开（占位者⊕净空）的最大净空子矩"作其通道；**与已分配通道重叠 ⇒ 具名 `OVERLAP`**（绝不静默重叠）。
     `nets_pts`=[[(net,x,y,layer),...],...]（按序）。返回 [{net, channel|None, status, capacity_mm, need_mm}]。"""
@@ -34,11 +35,15 @@ def content_aware_joint_allocation(nets_pts, block_rect, occupants, clearance=0.
     taken, out = [], []
     for row in nets_pts:
         net = row[0][0]
+        if isinstance(occupants, dict):                     # PER-NET: exclude the net's own copper (R1206-fix family)
+            occ = [bb for n, bbs in occupants.items() if n != net for bb in bbs]
+        else:
+            occ = occupants
         xs = [p[1] for p in row]; ys = [p[2] for p in row]
         sub = None
         for _pd in (pad, pad * 2, pad * 4):
             box = (min(xs) - _pd, min(ys) - _pd, max(xs) + _pd, max(ys) + _pd)
-            _s, _ = rd.clear_subrect_containing_pts(box, occupants, clearance, [(p[1], p[2]) for p in row])
+            _s, _ = rd.clear_subrect_containing_pts(box, occ, clearance, [(p[1], p[2]) for p in row])
             if _s:
                 sub = _s
                 if min(_s[2] - _s[0], _s[3] - _s[1]) >= need - 1e-9:
