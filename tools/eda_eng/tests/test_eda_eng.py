@@ -1395,6 +1395,25 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C450_joint_channel_allocation_vs_sequential_starvation(self):
+        """#K2-450 sec.2.4/2.6 (means change: one-shot JOINT channel allocation). RED = the old per-net sequential
+        allocation leaves overlapping channels, so whoever is served last is starved (the observed residual rotation).
+        GREEN = the joint allocation packs all channels disjointly in one pass, so nobody is starved."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2jca", os.path.join("tools", "k2_joint_channel_alloc_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        demands = [{"net": "A", "lo": 0.0, "hi": 10.0}, {"net": "B", "lo": 5.0, "hi": 15.0},
+                   {"net": "C", "lo": 12.0, "hi": 20.0}]
+        seq = m.sequential(demands)
+        self.assertEqual(m.overlaps(seq, 0.20), [("A", "B"), ("B", "C")], "RED: sequential overlaps")
+        self.assertEqual(m.starved(seq, 0.20), ["A", "B", "C"], "RED: sequential starves")
+        ch, unsat = m.joint(demands, (0.0, 40.0), gap=0.20)
+        self.assertEqual(unsat, [], "GREEN: the joint allocation serves every net")
+        self.assertEqual(m.overlaps(ch, 0.20), [], "GREEN: no overlap, hence no starvation")
+        self.assertEqual(len(ch), 3)
+        ch2, unsat2 = m.joint(demands, (0.0, 12.0), gap=0.20)      # a span too small => loud naming
+        self.assertTrue(unsat2, "a span that cannot host everything must NAME the unsatisfied nets, not go silent")
+
     def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
         or to existing copper, otherwise the chain's isolated-copper disposal removes it (proved twice: the R-g zone
