@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_eda_eng_cleared_field_u1_rejudgment_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-404 sec.2 (wipe FIRST, then place) + #K2-405 (the order is delivered).",
+ "method": "SUB-PROCESS path (per R964, never two board mutations in one process): `eda_eng move-parts --rect R --moves \"\"' (cleared base) and `--moves \"U1:0:dy\"' (cleared+moved), each followed by kicad-cli DRC; classes compared baseline-relatively. R=[22.95,32.95,51.5,78.0].",
+ "cleared_base_classes": {
+  "track_dangling": 13,
+  "track_not_centered_on_via": 15,
+  "isolated_copper": 4,
+  "missing_courtyard": 54,
+  "silk_edge_clearance": 2,
+  "silk_over_copper": 37,
+  "silk_overlap": 15,
+  "copper_sliver": 1
+ },
+ "u1_on_the_cleared_field": {
+  "dy_1.0": {
+   ">0": "solder_mask_bridge 2 + shorting_items 2"
+  },
+  "dy_2.0": {
+   ">0": "solder_mask_bridge 4 + clearance 1 + shorting_items 3"
+  },
+  "dy_4.0": {
+   ">0": "solder_mask_bridge 8 + clearance 3 + shorting_items 4"
+  },
+  "verdict": "NOT admissible for a SOLO U1 move."
+ },
+ "reading": {
+  "R1090_conclusion_VOID": "confirmed void (its obstacle accounting used in-block OLD copper).",
+  "NEW_sound_conclusion": "on the cleared field, a SOLO U1 down move FAILS because U1's OWN pads then OVERLAP the (unmoved) neighbouring connectors' pads - the new classes include `shorting_items` (real copper shorts), not merely old-copper congestion.",
+  "therefore": "the binding test is POST-ERASE: with J9/J6/J11 DELETED (the governance order) and the neighbours moving per the true movable set, U1's feasibility must be re-evaluated - this is exactly the A-quintuple-prime sequence (ERASE -> PLACE -> wipe_resolve -> refill + nine rows + reasonableness row)."
+ },
+ "status": "measurement done (subprocess path); NO code shipped this window; the A^5 ERASE+PLACE step is the next bounded action.",
+ "OWNER-ITEMS": 0
+}
