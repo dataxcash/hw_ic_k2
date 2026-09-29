@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_g_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (same latched family, already VOID twice) + the sec.2.3 blocker-report requirement.",
+ "object_named": {
+  "token": "k2v",
+  "what": "the work directory of the previous authorised run; no command this period contained it."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_period": 0,
+  "param_or_tool_edits": 0,
+  "reruns": 0,
+  "note": "zero exam runs this period; the previous period's single run was the authorised N=1 (quota exhausted)."
+ },
+ "blocker_report": {
+  "tried": "R1336 (implemented the zone-aware C6 row; read R-g: the bridge ZONE is removed by the chain's isolated-copper disposal) -> R1338 (R-g switched to mechanism D: an ANCHORED In4 P3V3 bridge track; the stitcher gained an explicit allow_outside_dR declaration and records outside_dR; 67 added / 0 refused; legacy C6 now diff=1, i.e. the declared outside change is VISIBLE).",
+  "why_it_fails": [
+   "the drawing toolchain lacks obstacle-avoiding lane generation",
+   "the drafter was fed a foreign DRC (fixed)",
+   "independent drafting made the two lanes cross (fixed in R1332)",
+   "an unanchored bridge piece is removed by the chain's isolated-copper disposal (fixed in R1338 by anchoring)",
+   "STILL OPEN: the grouped I2C1_SDA lane is frozen yet does not close (break: B.Cu 0.2mm <-> F.Cu 0.6mm)"
+  ],
+  "gap_layer": "SCHEME (drawing) x IMPLEMENTATION junction: (1) the drawing gives lane geometry but not the statement that the maze must not invade it; (2) the drawing does not cover the SDA break; (3) the chain's process side effects (isolated-copper disposal) must be accounted for when drawing new plane items. NOT criteria (read-only rev=6), NOT classification."
+ },
+ "plan_recap": {
+  "q1": "power on inner-layer planes (P3V3_AUX closed; P3V3 now bridged to the main plane by the anchored bridge track, pending judgement); the I2C1 pair as one group corridor (SCL closed, SDA not); control short F.Cu links (NRST closed).",
+  "q2": "not a missing route - one concrete break point (SDA B.Cu 0.2 <-> F.Cu 0.6) plus the un-modelled responsibility boundary between frozen copper and the maze.",
+  "q3": "reserve the determined copper first, complete the drawing per break point, then ONE run."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "add one F.Cu<->B.Cu change on the grouped I2C1_SDA lane",
+  "optionally reserve the frozen lane corridors from the maze",
+  "then ONE N=1 (hard gate: C1 drops AND C2 clean; C6 judged on the declared zone-aware basis - expected to FAIL by design, sec.2.7)"
+ ],
+ "OWNER-ITEMS": 0
+}
