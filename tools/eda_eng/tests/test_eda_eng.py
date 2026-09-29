@@ -1000,6 +1000,19 @@ class T(unittest.TestCase):
             self.assertTrue(na, "an UNLANDED requested move must be NAMED (move_not_applied), never silently accepted")
             self.assertIn("J13", [x["ref"] for x in na])
 
+    def test_C403_layout_reasonableness_gate_is_a_standing_binary_check(self):
+        """#K2-403 §二.B：**布局合理性常设闸** —— 机算行（R6 重叠 / R4 孔·边距 / R3 密度均衡）**基线相对二值**；
+        目视行（R1/R2/R5）**显式 `RENDER_REQUIRED`**（双轨 · 不得以"只注声称"代替）。"""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_layout_reasonableness_v1", os.path.join("tools", "k2_layout_reasonableness_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        r = m.check(os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb"))
+        self.assertIn(r.get("verdict"), ("PASS", "FAIL"))
+        self.assertEqual(sorted(r["rows"].keys()), ["R3_density_balance", "R4_hole_edge", "R6_no_overlap"])
+        self.assertTrue(all("pass" in v for v in r["rows"].values()))
+        self.assertEqual(sorted(set(r["render_rows"].values())), ["RENDER_REQUIRED"])
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
