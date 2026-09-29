@@ -81,6 +81,19 @@ def joint_allocation_by_row(board, drc, rect, clearance=0.20, need=0.60):
              "nets": r["nets"]} for r in rep["corridors"]]
 
 
+def channel_including_reach(row, own_boxes, reach=0.5, pad=0.4):
+    """**确定性 · 零搜索 · 冻结定值**（#K2-430 §三.1）：通道 ＝ 含「该排端点」∪「该网在端点邻近的**自己那段铜**」的最小盒
+    （`reach`＝邻近阈值）。端点自身可达格在**本网铜上**，故把本网铜纳入 ⇒ 通道不再切断可达格（对治 `no-free-start-free`）。
+    返回 `[x0,y0,x1,y1]`（**定值**，同输入恒同输出）。"""
+    xs = [p[1] for p in row]; ys = [p[2] for p in row]
+    x0, y0, x1, y1 = min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad
+    for bb in own_boxes:
+        if not (bb[2] < x0 - reach or bb[0] > x1 + reach or bb[3] < y0 - reach or bb[1] > y1 + reach):
+            x0, y0 = min(x0, bb[0] - pad), min(y0, bb[1] - pad)
+            x1, y1 = max(x1, bb[2] + pad), max(y1, bb[3] + pad)
+    return [round(x0, 4), round(y0, 4), round(x1, 4), round(y1, 4)]
+
+
 def artifact_hash16(rep):
     return hashlib.sha256(json.dumps(rep, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 

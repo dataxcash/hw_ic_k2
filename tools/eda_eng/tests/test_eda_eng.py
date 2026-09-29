@@ -1445,6 +1445,22 @@ class T(unittest.TestCase):
         self.assertEqual(ca[0]["status"], "OK", "GREEN: the content-aware allocator finds the clear side")
         self.assertGreaterEqual(ca[0]["capacity_mm"], 0.60 - 1e-9)
 
+    def test_C430_channel_including_reach_is_deterministic_and_covers_the_net_copper(self):
+        """#K2-430 sec.3.1/3.2 RED->GREEN: a channel drawn only from the endpoints can CUT the net's own copper
+        (=> the reachable own-cell falls outside => no-free-start-node). RED = the narrow box misses it; GREEN = the
+        reach-inclusive channel covers it. FROZEN constant, deterministic."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_joint_alloc_v1", os.path.join("tools", "k2_joint_alloc_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        row = [("N1", 0.0, 0.0, "F.Cu")]
+        own = [[0.6, -0.2, 1.0, 0.2]]                       # the net's own copper just outside the endpoint-only box
+        narrow = [row[0][1] - 0.4, row[0][2] - 0.4, row[0][1] + 0.4, row[0][2] + 0.4]
+        self.assertLess(narrow[2], own[0][0], "RED: the endpoint-only box does not reach the net's own copper")
+        ch = m.channel_including_reach(row, own, 0.5, 0.4)
+        self.assertGreaterEqual(ch[2], own[0][2], "GREEN: the channel covers the net's own copper")
+        self.assertEqual(m.channel_including_reach(row, own, 0.5, 0.4), ch, "frozen constant / deterministic")
+
     def test_C426_contraction_lists_are_deterministic_and_net_aware(self):
         """#K2-426 sec.3: the deterministic contraction - parts on the certificate's non-reconnectable nets become
         STAY candidates, the rest MOVE candidates. Deterministic, zero search."""
