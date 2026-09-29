@@ -1293,6 +1293,32 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
 # **exam A″（#K2-379 owner 简化令）**：局部清空 + 全流程重解（弃一切"保留手术"）
 # 单一谓词：与 R 相交的铜**全删**（不分类）→ 块内 N 网用**在册标准流程**在 域=R 内重解 → 复敷铜 → C1–C7
 # ─────────────────────────────────────────────────────────────────────────────
+def clip_stitch_plans_to_bound(plans, bound_rect, tol=1e-6):
+    """**纯函数**（#K2-410 §四.3 · 端口的在册语义「∂R 端口＝固定端子」）：把 stitch 计划**越框的端点**
+    **钳到框边**（`clamp`），使计划**落在域内**；返回 `(clipped_plans, clipped_named)`（具名被钳点）。
+    **确定性 · 零搜索**；语义＝接回该网**在 ∂R 的端口**（框边处仍是该网自己的铜）。"""
+    x0, y0, x1, y1 = (float(bound_rect[0]) + tol, float(bound_rect[1]) + tol,
+                      float(bound_rect[2]) - tol, float(bound_rect[3]) - tol)
+    out, named = [], []
+    for pl in plans:
+        polys, names = [], []
+        for poly in pl.get("polys", []):
+            np_ = []
+            for q in poly:
+                cx = min(max(q[0], x0), x1); cy = min(max(q[1], y0), y1)
+                if abs(cx - q[0]) > 1e-9 or abs(cy - q[1]) > 1e-9:
+                    names.append({"net": pl.get("net"), "from": [q[0], q[1]], "to": [round(cx, 4), round(cy, 4)]})
+                np_.append([round(cx, 4), round(cy, 4)])
+            polys.append(np_)
+        npl = dict(pl); npl["polys"] = polys
+        if npl.get("vias"):
+            npl["vias"] = [dict(v, at=[round(min(max(v["at"][0], x0), x1), 4), round(min(max(v["at"][1], y0), y1), 4)]) for v in npl["vias"]]
+        out.append(npl)
+        if names:
+            named.append({"net": pl.get("net"), "clipped": names})
+    return out, named
+
+
 def partition_stitch_plans(plans, bound_rect, tol=1e-6):
     """**纯函数**（#K2-410 §四.1）：把 stitch 计划按**框**分成 `(in_bound, excluded)` ——
     越框者**具名排除**（`{"net","points"}`），**绝不**整批拖垮（原 `--bound-rect` 为全有/全无）。
@@ -1429,6 +1455,9 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
         sf = os.path.join(work, "s2c_stitch.json")
         json.dump(st_plans, open(sf, "w", encoding="utf-8"), ensure_ascii=False)
         stitched = os.path.join(work, "s2c_stitched.kicad_pcb")
+        # #K2-410 §四.3（在册端口语义）：**越框端点钳到框边**（∂R 端口＝固定端子）⇒ 计划落域内
+        st_plans, st_clipped = clip_stitch_plans_to_bound(st_plans, rect)
+        chain.append({"stage": "endpoint_stitch_clipped_to_port", "clipped": [n["net"] for n in st_clipped]})
         # #K2-410 §四.1：**框内预过滤 ⇒ 部分应用 ＋ 具名排除**（不再让单条越框计划作废整批）
         inb, exc = partition_stitch_plans(st_plans, rect)
         chain.append({"stage": "endpoint_stitch_partitioned", "in_bound": len(inb), "excluded": len(exc),

@@ -1061,6 +1061,15 @@ class T(unittest.TestCase):
         self.assertLess(seg.index("endpoint_stitch_partitioned"), seg.index("endpoint_stitch_applied"))
         self.assertIn("partition_stitch_plans(st_plans, rect)", seg)
 
+    def test_C410_clipping_puts_out_of_frame_stitches_back_in_bound(self):
+        """#K2-410 §四.3（在册「∂R 端口＝固定端子」语义）：越框端点**钳到框边** ⇒ 计划**落域内**（确定性 · 零搜索 · 具名被钳点）。"""
+        plans = [{"net": "N", "polys": [[[51.75, 37.5], [50.05, 39.0]]], "layers": ["F.Cu"]}]
+        cl, named = regen.clip_stitch_plans_to_bound(plans, [22.95, 32.95, 51.5, 78.0])
+        self.assertEqual(cl[0]["polys"][0][0], [51.5, 37.5], "the out-of-frame point is clamped onto the bound")
+        self.assertEqual([n["net"] for n in named], ["N"], "the clamped point is NAMED")
+        inb, exc = regen.partition_stitch_plans(cl, [22.95, 32.95, 51.5, 78.0])
+        self.assertEqual(len(inb), 1); self.assertEqual(exc, [])
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
