@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_quintuple_prime_attempt5_run_outcome_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-415 sec.2.3 (the last bounded expansion -> ONE run 1/1 -> nine rows).",
+ "run": {
+  "chain": "wipe_resolve",
+  "from_placed": "the A^5 witness board",
+  "erase_refs": [
+   "J9",
+   "J6",
+   "J11"
+  ],
+  "state": "W2_RESOLVE_FAILED",
+  "verdict": null,
+  "criteria": null,
+  "nine_rows": null,
+  "run_count": "1/1 consumed",
+  "quota_note": "the authorised run produced NO graded verdict."
+ },
+ "root_cause": "SELF-INFLICTED TOOLING DEFECT: the chain passed `--order list --order-list <prio>` (the #K2-415 sec.2.2 'order' lever), but the wrapper's `--order` argparse whitelist ended at 'hard' and `--order-list` was never forwarded (mr.run(..., a.order, None)) => argparse exited rc=2, no intermediate board was written, so the chain returned W2_RESOLVE_FAILED before judging.",
+ "evidence": [
+  "work dir has s1_wiped/s1b_erased but NO s2_resolved board",
+  "no new A^5 verdict/record artifact was written (the latest is still the attempt-4 pair)"
+ ],
+ "fix": {
+  "file": "tools/k2_reroute_router_floor_v1.py",
+  "what": "`list` added to the --order choices; `--order-list` declared and forwarded to mr.run(...)",
+  "regression": "test_C415_the_wrapper_actually_exposes_the_order_lever"
+ },
+ "means_A_status": "unchanged: 'only change the predicate' remains INFEASIBLE (the R1158 certificate).",
+ "means_B_status": "unchanged: B2 (fine grid) sound-but-insufficient; B1 (GND as non-obstacle) effective-but-UNSOUND (R1168).",
+ "request": "the authorised run burned on a self-inflicted rc=2 and produced NO verdict => one explicit re-run authorisation is requested; this ENG did NOT self-re-run (standing stop order: no 'change tool -> re-run').",
+ "zero": {
+  "board_changes": 0,
+  "exam_quota": "1/1 consumed (burned, no verdict artifact)",
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}

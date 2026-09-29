@@ -1367,9 +1367,18 @@ def endpoint_stitch_plans(drc_json, bound_rect=None):
     return out
 
 
+GAP_NETS = ("MCU_VDD", "NRST", "PERSTA#", "P3V3_AUX", "I2C1_SCL", "I2C1_SDA", "P3V3")
+
+
 def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
+    # (#K2-415 sec.2.2 lever "顺序"): the eight objective nets are routed FIRST. WHY this is the sound lever:
+    # move_parts wipes EVERY net's copper intersecting the frame, so the "blockers" in the audit are copper the
+    # MAZE ITSELF laid in pass 1/2 - i.e. a routing-ORDER artefact, not a pre-existing wall. Routing the objective
+    # nets first gives them clean space; the other nets still get routed (just afterwards).
+    _prio = os.path.join(work, "prio_nets.txt")
+    open(_prio, "w", encoding="utf-8").write("\n".join(GAP_NETS) + "\n")
     B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
     chain = []
@@ -1412,7 +1421,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
                "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
-               "--bound-rect", ",".join(str(x) for x in rect)])
+               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
     led_j = None
     if os.path.isfile(led):
         try:
@@ -1432,7 +1441,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None):
         led2 = os.path.join(work, "s2b_ledger.json")
         _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
               "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
-              "--bound-rect", ",".join(str(x) for x in rect)])
+              "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
         if os.path.isfile(second):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,

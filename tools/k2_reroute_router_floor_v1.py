@@ -35,7 +35,9 @@ def main():
                          "gate is unchanged. '' = disable.")
     ap.add_argument("--coarse-step", dest="coarse_step", default="fine",
                     help="B2 (#K2-414 sec.2.2): 'fine' = use the in-register FINE_STEP (0.10); or a number.")
-    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard"],
+    ap.add_argument("--order-list", dest="order_list", default=None,
+                    help="#K2-415 lever 'order': a file with one net name per line (priority order, first = first)")
+    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"],
                     help="#K2-396: the maze's in-register deterministic routing order (default unchanged)")
     a = ap.parse_args()
     sp = importlib.util.spec_from_file_location("k2mrfloor", MROUTE)
@@ -66,7 +68,7 @@ def main():
     recs = []
     if mr.WALL_RECT:
         recs = _install_port_aware_goals(mr, tuple(mr.WALL_RECT))
-    s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, a.order, None)
+    s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, a.order, a.order_list)
     # #K2-394 §二.1：**端口可达性预检**并列盘（不可达者**具名**；不改变路由结果）
     if recs:
         pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,

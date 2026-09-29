@@ -1242,6 +1242,23 @@ class T(unittest.TestCase):
                       "B1: the pour-reflowable filter must sit in the maze obstacle context")
         self.assertIn('ap.add_argument("--reflowable"', src)
 
+    def test_C415_the_chain_routes_the_objective_nets_first(self):
+        """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
+        inside the frame), so the sound lever is ORDER - the eight objective nets must be routed first."""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        self.assertIn('"--order", "list"', seg)
+        self.assertIn("GAP_NETS", src)
+        self.assertIn('"--order-list", _prio', seg)
+
+    def test_C415_the_wrapper_actually_exposes_the_order_lever(self):
+        """#K2-415 sec.2.2: the chain wires `--order list --order-list <file>`, so the WRAPPER must accept `list`
+        AND forward the list to the in-register maze (both were missing => the authorised run burned on rc=2)."""
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn('"hard", "list"]', src, "`list` must be an allowed --order choice")
+        self.assertIn("mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, a.order, a.order_list)",
+                      src, "the order-list file must be forwarded, not hardcoded to None")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
