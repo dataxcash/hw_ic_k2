@@ -58,5 +58,19 @@ def main():
     return 0 if rep.get("ok") else 2
 
 
+def _require_pcbnew():
+    """#K2-448 sec.2.5(2): a tool that needs pcbnew must FAIL LOUDLY under a python without it (R1356's lesson:
+    a host-python run silently aborted mid-script). Refusing to continue beats a silent no-op."""
+    try:
+        import pcbnew  # noqa: F401
+    except Exception as _e:                                            # noqa: BLE001
+        raise RuntimeError(
+            "k2: this tool requires EDA_ENG_PY (a python with pcbnew); refusing to run silently under %s (%s)"
+            % (sys.executable, type(_e).__name__))
+
+
+_require_pcbnew()
+
+
 if __name__ == "__main__":
     sys.exit(main())

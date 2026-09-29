@@ -1395,6 +1395,32 @@ class T(unittest.TestCase):
         self.assertIn("_plane_nets(", seg)
         self.assertIn("tgt.get(FB.family_of([n]))", seg, "the family frame must be OPTIONAL, not a gate")
 
+    def test_C448_via_aware_clearance_and_interpreter_gate(self):
+        """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
+        because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
+        without pcbnew (R1356's host-python silent abort)."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2cl", os.path.join("tools", "k2_clearance_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        self.assertEqual(m.via_layer_span("In2.Cu", "In5.Cu"), ["In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu"])
+        via = {"kind": "via", "net": "HS", "layers": ["In2.Cu", "In5.Cu"], "bbox": [57.9, 39.2, 58.1, 39.4]}
+        self.assertEqual(m.obstacle_layers(via), {"In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu"})
+        self.assertTrue(m.seg_blocked([42.8, 39.0], [58.5, 39.0], "In4.Cu", [via]),
+                        "a via on In2-In5 MUST block an In4 segment (the R1358 false-clean case)")
+        self.assertFalse(m.seg_blocked([42.8, 35.5], [58.5, 35.5], "In4.Cu", [via]))
+        self.assertIn("DRC run", m.CLEAN_CLAIM_RULE)
+        # (2) interpreter gate: importing a pcbnew-using tool under the HOST python must fail LOUDLY
+        import shutil, subprocess
+        host = shutil.which("python3")
+        clean = {k: v for k, v in os.environ.items()
+                 if k not in ("PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH")}
+        r = subprocess.run([host, "-c",
+                            "import sys, os; sys.path.insert(0, os.path.join(os.getcwd(), 'tools')); "
+                            "import k2_port_plane_stitch_v1"],
+                           capture_output=True, text=True, cwd=os.path.join(ROOT), env=clean)
+        self.assertNotEqual(r.returncode, 0, "a host-python run must NOT succeed silently")
+        self.assertIn("EDA_ENG_PY", (r.stderr or "") + (r.stdout or ""))
+
     def test_C443_the_lane_drafter_fails_LOUD_on_an_empty_or_foreign_source_draft(self):
         """#K2-443 sec.2.5 / #K2-446 sec.2.3(3): a draft that adds NOTHING must fail LOUDLY (an empty ledger was once
         read as 'infeasible' when in fact the DRC came from a different board). The drafter self-runs the DRC on the
