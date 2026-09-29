@@ -1250,6 +1250,9 @@ class T(unittest.TestCase):
         self.assertIn("mr.WALL_RECT = (_c[0] - _w", src, "the per-net channel must set the maze's bound rect per edge")
         self.assertIn("mr._CHANNELS = CH", src, "the map must live on mr (solve is module-level scope)")
         self.assertIn('ap.add_argument("--port-refs"', src, "#K2-431 fix 1: connector pads as fixed ports")
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn('"--port-refs", PORT_REFS', r, "#K2-431 fix 1 must be WIRED into the chain's maze passes")
+        self.assertIn('PORT_REFS = "J13"', r)
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net

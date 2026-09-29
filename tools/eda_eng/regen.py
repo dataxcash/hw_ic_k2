@@ -1368,6 +1368,7 @@ def endpoint_stitch_plans(drc_json, bound_rect=None):
 
 
 GAP_NETS = ("MCU_VDD", "NRST", "PERSTA#", "P3V3_AUX", "I2C1_SCL", "I2C1_SDA", "P3V3")
+PORT_REFS = "J13"          # #K2-431 sec.2.6 fix 1: the KEPT in-region connector's pads are FIXED PORTS
 
 
 def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None):
@@ -1422,7 +1423,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
                "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
-               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
+               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
+               "--port-refs", PORT_REFS])
     led_j = None
     if os.path.isfile(led):
         try:
@@ -1442,7 +1444,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         led2 = os.path.join(work, "s2b_ledger.json")
         _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
               "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
-              "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
+              "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
+              "--port-refs", PORT_REFS])
         if os.path.isfile(second):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,
@@ -1498,7 +1501,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                     _l3 = os.path.join(work, "s2y_ledger.json")
                     _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", _yout,
                           "--drc", _d3, "--out", _r3, "--ledger", _l3, "--margin", "3.0", "--floor", "0.20",
-                          "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio])
+                          "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
+               "--port-refs", PORT_REFS])
                     if os.path.isfile(_r3):
                         resolved = _r3
         except Exception as _e:                                        # noqa: BLE001
