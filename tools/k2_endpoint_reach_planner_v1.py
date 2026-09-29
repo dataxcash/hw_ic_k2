@@ -72,8 +72,13 @@ def yield_sequence(lane_seg, blockers, clearance=0.20, direction=+1.0):
         gap = _seg_gap(o["bbox"], (ax, ay), (bx, by))
         need = clearance + min(o["bbox"][3] - o["bbox"][1], o["bbox"][2] - o["bbox"][0]) / 2.0
         move = max(0.0, round(need - gap, 4))
+        cyt = (o["bbox"][1] + o["bbox"][3]) / 2.0
+        seg_y = (ay + by) / 2.0
+        d = "+y" if (cyt - seg_y) >= 0 else "-y"                 # each blocker yields AWAY from the lane (deterministic)
+        if direction < 0:
+            d = "-y" if d == "+y" else "+y"
         out.append({"net": o["net"], "gap_mm": round(gap, 4), "need_mm": round(need, 4),
-                    "move_mm": move, "dir": ("+y" if direction >= 0 else "-y")})
+                    "move_mm": move, "dir": d})
     out.sort(key=lambda z: (z["move_mm"], z["net"]))           # the FEWEST-to-move yields FIRST (deterministic)
     for i, z in enumerate(out):
         z["yield_order"] = i
