@@ -1,0 +1,75 @@
+{
+ "artifact": "k2_eng_capability_registration_r1292_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-438 sec.3 (zero exam runs). ENG-side capability registration for window R1292. The supervisor's own ledger is .omo/supervision/** (ENG write-domain rule) - these are the ENG copies.",
+ "closed_this_window": [
+  {
+   "id": "M-ENG-EVIDENCE-EXTRACTION",
+   "status": "FIXED (R1290)",
+   "closing_evidence": "tools/k2_chain_evidence_v1.py (recursive find_stage + fail-loud residual_table/per_block_attribution) + test_C438 (RED->GREEN) + selftest 129/129 PASS; the R1288 mis-copied net list is self-corrected in K2_EXAM_B_LEFT_K14_PER_BLOCK_ATTRIBUTION_v2.json.",
+   "note": "closes the report/evidence defect; does NOT by itself close any ENG routing item."
+  }
+ ],
+ "narrowed_and_STILL_OPEN": [
+  {
+   "id": "M-ENG-CHANNEL-TO-CHAIN-WIRING",
+   "status": "OPEN - root cause now NAMED and machine-proven",
+   "sub_defects": [
+    "D-1 channels computed before d0 exists (UnboundLocalError, swallowed) => --channels always empty",
+    "D-2 channels_arg_by_block returns '' (multi_block_plan INFEASIBLE on endpoint-spread sizes)",
+    "D-3 functional_blocks family predicate is degenerate (per-member first-match collapses 15/25 members into POWER)",
+    "D-4 per_block_flow has no production caller"
+   ],
+   "closing_criteria": "the maze actually receives a non-empty --channels in a run's chain record (no channels_compute_failed stage), AND the functional-block path yields a FEASIBLE plan on the real member extent, AND the same-class regression is green, AND the end-to-end run reaches C1=0.",
+   "evidence": "K2_CHANNEL_WIRING_DEFECT_RECEIPT_v1.json"
+  },
+  {
+   "id": "M-ENG-FUNCTIONAL-BLOCK",
+   "status": "OPEN - degenerate predicate (D-3); the block set is not a function partition",
+   "closing_criteria": "blocks = net-set partition by family_of(net) excluding plane nets; a member may belong to >1 block; deterministic and reproducible."
+  },
+  {
+   "id": "M-ENG-MULTI-BLOCK-PLAN",
+   "status": "OPEN - no production caller (D-2); INFEASIBLE on real input",
+   "closing_criteria": "a per-NET channel assignment is produced and consumed by the chain."
+  },
+  {
+   "id": "M-ENG-PER-BLOCK-FLOW",
+   "status": "OPEN - test-only (D-4)",
+   "closing_criteria": "the per-block step order is either wired into the chain or dropped from the means list."
+  },
+  {
+   "id": "M-ENG-POUR-AWARE-CLEAR",
+   "status": "OPEN (K-1): stands ACCEPTED as the only means proven to move the measure this window (C1 7->5); closes on C1=0.",
+   "supporting_fact": "unfill ran (n_zones_unfilled=18) and the run still improved 7->5 while the channel constraint was absent => the improvement is attributable to K-1 + the dR port goals."
+  },
+  {
+   "id": "M-ENG-PORT-REACHABILITY-DRAWING",
+   "status": "OPEN - this window FILES the drawing (sec.16.3), not the implementation",
+   "closing_criteria": "the sec.16.3 drawing is implemented and the run's residuals drop."
+  }
+ ],
+ "new_this_window": [
+  {
+   "id": "M-ENG-BLOCK-SIZE-SOURCE",
+   "what": "functional-block sizes taken from the DRC endpoint spread instead of the member/device extent",
+   "evidence": "D-2: POWER size 28.37x35.90mm (the whole board) => INFEASIBLE",
+   "closing_criteria": "size blocks by the member pad bbox; same-class regression green."
+  },
+  {
+   "id": "M-ENG-PLANE-TIE-FOR-POWER-PADS",
+   "what": "POWER SMD pads (C84.1 P3V3, C90.1 P3V3_AUX) have no plane tie - the pads are F.Cu-only and no footprint has an In4 pad, so a via is the only plane connection; the chain instead tried thin tracks.",
+   "evidence": "pad attribute SMD / drill 0.0; In4 zone fill test TRUE at C90.1 and (43.4,39.0) but FALSE at C84.1",
+   "closing_criteria": "the drawing's plane ties are implemented and the POWER residuals close."
+  }
+ ],
+ "unchanged_open_family": [
+  "M-ENG-BLOCK-CONTENTION-NEGOTIATION",
+  "M-ENG-ROUTER-REROUTE",
+  "M-ENG-CONSERVATION-CORRIDOR-SPECIFIC",
+  "M-ENG-CHAIN-W2-RESOLVE"
+ ],
+ "zero_exam_runs": true,
+ "board_frozen": "l14/rev-61",
+ "OWNER-ITEMS": 0
+}

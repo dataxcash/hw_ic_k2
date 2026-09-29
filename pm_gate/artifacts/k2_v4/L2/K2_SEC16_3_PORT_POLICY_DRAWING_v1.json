@@ -1,0 +1,221 @@
+{
+ "artifact": "k2_sec16_3_port_policy_drawing_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-438 sec.3.3: the sec.16.3 four-element scheme-layer artifact for the five residuals of the R1286 run. Zero exam runs, zero board change. Nothing here is a claim of success; it is the drawing the next authorised run must obey.",
+ "run_under_repair": {
+  "id": "R1286",
+  "verdict": "GRADED FAIL",
+  "run_count": "1/1",
+  "C1": 5
+ },
+ "element1_one_line_death_cause": "All five residuals are dR-CROSSING or PLANE-TIE nets (NRST / I2C1_SDA / P3V3_AUX x2 / P3V3): the wipe cut them at x=51.5 and left a dangling half-stub outside dR; the in-frame maze refused them (no-free-start-node x3, no-path-coarse(exhausted-1) x1, + one further I2C1_SDA pair) because the drawing never gave it a dR PORT to land on nor a PLANE TIE for the POWER pads. AND - proven in the run's own chain - the functional-block channel hand-off crashed (UnboundLocalError) so the maze ran with NO channel constraint at all.",
+ "element2_proven_facts": [
+  "run chain verbatim: route.chain[0] == {stage: channels_compute_failed, err: UnboundLocalError} => --channels was EMPTY (k2_reroute_router_floor_v1 --channels default ''); the maze ran unbounded.",
+  "regen.py:1413 uses d0 before it is assigned at 1437 => see K2_CHANNEL_WIRING_DEFECT_RECEIPT_v1 (D-1).",
+  "channels_arg_by_block(wiped, d0, rect) -> '' because multi_block_plan is INFEASIBLE (D-2); the fallback channels_arg(...) returns a NON-EMPTY row-grouped reach-inclusive set (so a correct wiring would at least give the maze the reach-inclusive channels).",
+  "functional_blocks / multi_block_plan / per_block_flow have no production caller other than the (ineffective) channels_arg_by_block (D-3/D-4).",
+  "maze ledger, second pass, per-net named reasons: NRST no-free-start-node (dist 25.279) / P3V3_AUX no-path-coarse(exhausted-1) (5.55) / P3V3_AUX no-free-start-node (7.396) / P3V3 no-free-start-node (52.543).",
+  "raw run DRC /tmp/opencode/k1/s4_drc.json: unconnected_items = 5 entries over 4 nets (P3V3_AUX twice) => C1 counts ITEMS (5), the in-chain per_block_C1_gate counts DISTINCT NETS (4).",
+  "every one of the five shares ONE named cause string: 'maze refused at these endpoints; direct stitch FORBIDDEN (#K2-411 sec.2)' => OLD class, no new failure introduced.",
+  "the four nets all have copper on BOTH sides of dR (measured on the judged board): NRST 11 inside / 8 outside tracks; I2C1_SDA 82 / 146; P3V3_AUX 40 / 41; P3V3 82 / 82.",
+  "PLANE FACTS (HitTestFilledArea on the judged board, In4.Cu): P3V3_AUX plane FILLED at C90.1 (29.65,53.5) and at (50.95,37.0); P3V3 plane FILLED at (81.0,60.6) but NOT at C84.1 (43.4,44.0); the in-frame P3V3 In4 finger is filled at (43.4,39.0).",
+  "PAD FACTS: C84.1 (P3V3) and C90.1 (P3V3_AUX) are SMD pads on F.Cu ONLY (pad attribute SMD, drill 0.0); NO footprint carries a P3V3/P3V3_AUX pad on In4 => a VIA is the only plane tie.",
+  "SOLVER-DOMAIN FACT: the maze is called with --bound-rect <frame>; a net whose in-frame piece must land on a half-cut stub at x=51.5 has no in-frame free start cell beyond the boundary => no-free-start-node."
+ ],
+ "element3_corrected_construction": {
+  "means_corrections_required_first": [
+   {
+    "id": "M-1",
+    "what": "hand the frozen channels to the maze",
+    "exactly": "compute channels_arg_by_block(<wiped>, <wiped-DRC>, <frame>) or channels_arg(<wiped>, <wiped-DRC>, <frame>) AFTER the wiped DRC is written, and pass it as --channels to BOTH maze passes; fail-loud if the result is empty.",
+    "why": "D-1: today it is computed before its d0 input exists and the exception is swallowed."
+   },
+   {
+    "id": "M-2",
+    "what": "block sizing source",
+    "exactly": "size functional blocks by their MEMBER/device extent, not by the union of DRC endpoint coordinates; exclude plane nets (GND and any net with an inner-layer zone) from block packing.",
+    "why": "D-2/D-3: endpoint-spread sizing (POWER 28.37x35.90mm) is the whole board => multi_block_plan INFEASIBLE => ''."
+   }
+  ],
+  "per_line_frozen_spec": [
+   {
+    "n": 1,
+    "net": "NRST",
+    "block": "CONTROL",
+    "kind": "dR-port connect",
+    "frozen": {
+     "port": [
+      51.5,
+      40.45,
+      "F.Cu"
+     ],
+     "in_frame_landing": [
+      50.9,
+      40.45,
+      "F.Cu"
+     ],
+     "far_end": [
+      31.8375,
+      54.75,
+      "F.Cu"
+     ],
+     "corridor": "F.Cu (31.837,40.45)-(51.5,54.75) inflated by 0.20",
+     "layer_plan": "F.Cu single layer, no via"
+    },
+    "conservation": "demand = 1 NRST track (netclass width); supply = the frame is cleared wholesale (#K2-431) so F.Cu free width >= demand; the binding constraint is the dR port landing, which is a frozen constant.",
+    "buildability": "no_move"
+   },
+   {
+    "n": 2,
+    "net": "P3V3_AUX",
+    "block": "POWER",
+    "kind": "plane tie",
+    "frozen": {
+     "via_pair": [
+      "F.Cu",
+      "In4.Cu"
+     ],
+     "via_at": [
+      29.65,
+      53.5
+     ],
+     "pad": "C90.1",
+     "plane_verified": "In4 P3V3_AUX zone FILLED at (29.65,53.5)"
+    },
+    "conservation": "demand = 1 pad->plane connection; supply = the In4 P3V3_AUX plane (capacity >> 1) => 1 >= 1. No thin track (owner policy: POWER goes on the pour).",
+    "buildability": "no_move"
+   },
+   {
+    "n": 3,
+    "net": "P3V3_AUX",
+    "block": "POWER",
+    "kind": "plane tie x2",
+    "frozen": {
+     "via_pair": [
+      [
+       "In5.Cu",
+       "In4.Cu"
+      ],
+      [
+       "B.Cu",
+       "In4.Cu"
+      ]
+     ],
+     "via_at": [
+      [
+       51.55,
+       39.0
+      ],
+      [
+       50.95,
+       37.0
+      ]
+     ],
+     "plane_verified": "In4 P3V3_AUX zone FILLED at (50.95,37.0)"
+    },
+    "conservation": "demand = 2 fragment->plane ties; supply = the same In4 plane => 2 >= 2.",
+    "buildability": "no_move"
+   },
+   {
+    "n": 4,
+    "net": "I2C1_SDA",
+    "block": "BUS",
+    "kind": "dR-port connect + ONE layer change",
+    "frozen": {
+     "port_A": [
+      51.5,
+      67.455,
+      "F.Cu"
+     ],
+     "port_B": [
+      51.5,
+      61.905,
+      "B.Cu"
+     ],
+     "via_pair": [
+      "F.Cu",
+      "B.Cu"
+     ],
+     "n_vias": 1,
+     "corridor": "F.Cu/B.Cu (51.5,61.905)-(51.5,67.455) inflated by 0.20 (a pure boundary band: x <= 51.5)",
+     "layer_plan": "enter F.Cu at port A, ONE via to B.Cu, exit at port B"
+    },
+    "conservation": "demand = 1 signal + 1 via; supply = the boundary band inside dR (frame re-laid) => 1 >= 1.",
+    "buildability": "no_move"
+   },
+   {
+    "n": 5,
+    "net": "P3V3",
+    "block": "POWER",
+    "kind": "plane tie with an in-frame plane reach gap",
+    "frozen": {
+     "pad": "C84.1",
+     "pad_at": [
+      43.4,
+      44.0,
+      "F.Cu"
+     ],
+     "frozen_stub": "F.Cu (43.4,44.0) -> (43.4,39.0)",
+     "via_pair": [
+      "F.Cu",
+      "In4.Cu"
+     ],
+     "via_at": [
+      43.4,
+      39.0
+     ],
+     "plane_verified": "In4 P3V3 zone FILLED at (43.4,39.0); NOT filled at (43.4,44.0)"
+    },
+    "conservation": "demand = 1 pad->plane connection over a 5.0mm stub + 1 via; supply = the in-frame P3V3 In4 finger at (43.4,39.0) => 1 >= 1.",
+    "buildability": "relocation_listed",
+    "relocation_named": "the 5.0mm F.Cu stub crosses the C87 / PERSTA# territory on the CURRENT judged board (audit: 8 occupants, dominant PERSTA# 7, MCU_VDD 1). Under a wholesale frame re-lay it needs no relocation of foreign copper, but if the frame is NOT re-laid the alternative is to EXTEND the In4 P3V3 zone finger to cover y <= 44.2 near x = 43.4 (a zone-shape change)."
+   }
+  ],
+  "what_is_determined": "every port coordinate, every via pair and every plane landing above is a FROZEN constant read off the judged board; the maze has zero runtime freedom on them.",
+  "what_is_NOT_determined": "the exact in-frame polyline for lines 1 and 4 (the maze resolves it inside the given corridor) - this is BY DESIGN (the drawing fixes the channel/port, the maze obeys)."
+ },
+ "element4_buildability": "relocation_listed",
+ "element4_note": "4 of 5 lines are no_move; line 5 (P3V3) is relocation_listed as stated.",
+ "layer_gate": "per #K2-438 sec.2.5 this is a SCHEME-LAYER edit (ports / planes / channels), NOT construction-layer search: no parameter sweep, no probe, no extra run is required to make the drawing definite.",
+ "informational_corridor_readings": {
+  "note": "read on the JUDGED board; these are the maze's OWN re-laid copper, not a pre-existing wall - informational, not a blocker (the frame is cleared wholesale each run).",
+  "NRST_F.Cu_bbox": {
+   "occupants": 369,
+   "dominant": [
+    "GND",
+    "MCU_VDD",
+    "SWCLK_BOOT0",
+    "PWR_BTN_ISO"
+   ]
+  },
+  "P3V3_AUX_In2+F.Cu": {
+   "occupants": 69,
+   "dominant": [
+    "GND",
+    "PERSTA#",
+    "PWR_BTN_OUT"
+   ]
+  },
+  "P3V3_AUX_In5+B.Cu": {
+   "occupants": 6,
+   "dominant": [
+    "PERSTA#"
+   ]
+  },
+  "I2C1_SDA_B+F.Cu": {
+   "occupants": 4,
+   "dominant": [
+    "I2C1_SCL"
+   ]
+  },
+  "P3V3_F+In4": {
+   "occupants": 944,
+   "dominant": [
+    "GND",
+    "MCU_VDD",
+    "PCIE_DN_OUT*"
+   ]
+  }
+ },
+ "OWNER-ITEMS": 0
+}

@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_channel_wiring_defect_receipt_v1",
+ "ts": "2026-09-29",
+ "authority": "SELF-DISCLOSURE under #K2-438 sec.3 (zero exam runs): the four 'means' accepted in #K2-436 were, in EXECUTION, only K-1 (+ the K-4 evidence row). K-2 / K-3 / the K-4 flow are NOT wired into the production chain. Machine-proven below; no board change, no exam run.",
+ "run_under_audit": {
+  "id": "R1286",
+  "verdict_artifact": "EDA_ENG_EXAM_B_LEFT_K14_ATTEMPT1_VERDICT_v1.json",
+  "chain_evidence": "route.chain[0] == {stage: channels_compute_failed, err: UnboundLocalError}"
+ },
+ "defects": [
+  {
+   "id": "D-1",
+   "name": "channels computed BEFORE its d0 input exists (swallowed)",
+   "severity": "the K-1..K-4 window's channel hand-off NEVER executed",
+   "evidence": [
+    "tools/eda_eng/regen.py:1413 calls channels_arg_by_block(wiped, d0, rect) / channels_arg(wiped, d0, rect)",
+    "the chain is defined at line 1374 WITHOUT a d0 parameter; d0 is only assigned at line 1437",
+    "=> Python raises UnboundLocalError BEFORE the DRC exists; the except at line 1416 swallows it",
+    "=> the maze at line 1442 receives --channels <empty> (proven: k2_reroute_router_floor_v1 --channels default '')",
+    "the run's own chain records it verbatim: {stage: channels_compute_failed, err: UnboundLocalError}"
+   ],
+   "fix_named": "compute the channels AFTER d0 is written (i.e. between regen.py:1438 and the maze call at 1441); keep the fallback chain channels_arg_by_block(...) or channels_arg(...); make a total failure FAIL-LOUD.",
+   "status": "NOT APPLIED (generator edit; needs the supervisor's approval - red line 'no generator edits without approval')"
+  },
+  {
+   "id": "D-2",
+   "name": "channels_arg_by_block returns '' on its own input (design defect, not just infeasible input)",
+   "evidence": [
+    "channels_arg_by_block(<wiped>, <d0>, [22.95,32.95,51.5,78.0]) -> '' (reproduced 2026-09-29)",
+    "multi_block_plan verdict INFEASIBLE: named CONTROL 'does not fit in the region (area/height)'",
+    "its 'sizes' come from the DRC ENDPOINT spread (POWER 28.37 x 35.90mm) - i.e. the whole board, not a block"
+   ],
+   "fix_named": "size blocks by their MEMBER/device extent (pad bbox), not by the union of DRC endpoint coordinates.",
+   "status": "NOT APPLIED"
+  },
+  {
+   "id": "D-3",
+   "name": "functional_blocks family predicate is degenerate (per-member, first-match over the union of its nets)",
+   "evidence": [
+    "FB.functional_blocks(members, netof) with netof = the real board net map collapses 15/25 members (U1,U2,U4,L1,R1,R40,E2,J12,J13,C84,C85,C86,C88,C90,D2) into POWER because each touches >=1 power net",
+    "with the CORRECT per-NET predicate: 4 blocks whose pad bboxes OVERLAP and whose summed area (2403mm^2) > the frame area (1286mm^2) => a disjoint multi-block plan is INFEASIBLE on this frame"
+   ],
+   "fix_named": "block = net-set partition by family_of(net) EXCLUDING plane nets; a member may belong to >1 block; the plan must be a per-NET channel assignment, not a disjoint rectangle pack.",
+   "status": "NOT APPLIED"
+  },
+  {
+   "id": "D-4",
+   "name": "K-4's per_block_flow has NO production caller",
+   "evidence": [
+    "grep: per_block_flow( appears ONLY in tools/eda_eng/tests/test_eda_eng.py",
+    "the chain's only K-4 effect is the per_block_C1_gate EVIDENCE row (which does work - see R1288/R1290)"
+   ],
+   "fix_named": "either wire per_block_flow into the chain's step order, or stop counting it as an adopted means.",
+   "status": "NOT APPLIED"
+  }
+ ],
+ "consequence_for_the_record": "#K2-438 read the run as 'the new means is effective but not sufficient (C1 7->5)'. CORRECTION: the run is a NO-CHANNEL run; K-2/K-3/the K-4 order were never in play. The 7->5 movement is attributable to K-1 (pour-aware clear) + the dR port goals only.",
+ "no_exam_run": true,
+ "no_board_change": true,
+ "OWNER-ITEMS": 0
+}

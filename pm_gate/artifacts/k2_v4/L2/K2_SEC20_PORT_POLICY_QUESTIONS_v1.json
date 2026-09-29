@@ -1,0 +1,26 @@
+{
+ "artifact": "k2_sec20_port_policy_questions_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-438 sec.3.2: for the port/policy-class residuals, the FIRST action is the product-first three questions (sec.20). Answer all three BEFORE acting.",
+ "subject": "the five residuals of the R1286 run: NRST (CONTROL), P3V3_AUX x2 + P3V3 (POWER), I2C1_SDA (BUS) - all one class: nets whose copper exists BOTH inside and outside dR, or POWER pads with no plane tie.",
+ "q1_same_class_finished_product": {
+  "answer": "YES - two anchors.",
+  "a_same_chip": "TI DS320PR1601 (the K2 main device) - the vendor EVM layout (SNLS683 datasheet + SNLA425 programming guide). In-register as REF-CASE-LIBRARY sec.A1, both machine-fetched HTTP 200 with local copies in /tmp/opencode/sup746_anchor/.",
+  "b_same_class": "PCIe-switch / RD left-region 'power + control + bus' fanout on an 8-layer board with inner-1OZ power planes - REF-CASE-LIBRARY sec.A (Lichuang PEX88096 dual-card open design) and sec.C (Opsero OP103 MCIO PCIe FMC, open datasheet incl. schematic)."
+ },
+ "q2_copyable_in_register": [
+  "REF-CASE-LIBRARY sec.A1 (1) DS320PR1601 datasheet SNLS683 - power/decap and layout notes.",
+  "REF-CASE-LIBRARY sec.A1 (2) SNLA425 sec.1.1 - the vendor's RECOMMENDED grouped/channel fanout (the policy this class needs: group the fanout, run long segments straight, one layer change per group).",
+  "REF-CASE-LIBRARY sec.A (1)(2)(12) PEX88096 datasheet + configured SBR + the machine-fetched attachment set - 8-layer stack with inner-1OZ power planes (the plane-stub practice).",
+  "REF-CASE-LIBRARY sec.C Opsero OP103 - open schematic showing RD power/plane tie and sideband (i2c/perst) fanout.",
+  "in-repo: tools/eda_eng/block.py (frame selection + port semantics), exam A/B judge, regen.wipe_resolve_chain (the wipe->place->route skeleton), tools/k2_endpoint_reach_planner_v1.py (deterministic endpoint-reach lanes)."
+ ],
+ "q3_difference_list": [
+  "MISSING (a) PLANE TIE for POWER pads: C84.1 (P3V3) and C90.1 (P3V3_AUX) are SMD pads on F.Cu ONLY (drill 0, pad type SMD) and NO footprint carries a P3V3/P3V3_AUX pad on In4 - so the plane can only be reached by a VIA. The copyable practice: tie the pad to the inner-1OZ plane with a via, never a thin track.",
+  "MISSING (b) BOUNDARY PORT LANDING: NRST / I2C1_SDA / P3V3_AUX / P3V3 all have copper on BOTH sides of dR. The in-frame maze must land on a dR port that has an in-frame free start cell; the current chain clips to x=51.5 and leaves a 0.14mm dangling stub - the maze then reports no-free-start-node.",
+  "MISSING (c) THE FUNCTIONAL-BLOCK CHANNEL NEVER REACHES THE MAZE (see K2_CHANNEL_WIRING_DEFECT_RECEIPT_v1) - so this class was never actually run under the copied grouped-channel policy.",
+  "MISSING (d) ZONE COVERAGE: the in-frame P3V3 In4 finger stops at y~39.5, so C84.1 (y=44.0) sits outside its own plane. The copyable practice: extend the plane finger under the decap row."
+ ],
+ "verdict": "questions answered; the copyable items EXIST and are in-register => acting by drawing (sec.16.3), not by search.",
+ "OWNER-ITEMS": 0
+}
