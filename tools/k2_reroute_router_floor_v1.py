@@ -35,6 +35,9 @@ def main():
                          "gate is unchanged. '' = disable.")
     ap.add_argument("--coarse-step", dest="coarse_step", default="fine",
                     help="B2 (#K2-414 sec.2.2): 'fine' = use the in-register FINE_STEP (0.10); or a number.")
+    ap.add_argument("--port-refs", dest="port_refs", default="",
+                    help="#K2-431 sec.2.6 fix 1: footprints whose pads are FIXED PORTS (e.g. J13) - their pads become "
+                         "extra goals for their nets (the in-region connector must be terminated ON, not around)")
     ap.add_argument("--channels", default="",
                     help="#K2-429 (A): per-net HARD channel constraints 'net:x0,y0,x1,y1;...' - each edge is routed with "
                          "mr.WALL_RECT set to that net's channel (the maze's EXISTING bound-rect vehicle)")
@@ -75,7 +78,31 @@ def main():
         CH[_n] = tuple(float(v) for v in _r.split(","))
     _GLOBAL_WALL = mr.WALL_RECT
     mr._CHANNELS = CH                                 # the channel map must live on `mr` (see solve)
-    mr._CH_MARGIN = 0.0                               # #K2-430 sec.2.4: FROZEN - the channel already includes
+    mr._CH_MARGIN = 0.0
+    # ── #K2-431 §二.6 修法①：**区内连接器 PTH 焊盘作固定端口目标** ─────────────────────────────
+    _PP = []
+    if a.port_refs:
+        try:
+            import pcbnew as _PY
+            _bd = _PY.LoadBoard(a.src)
+            _want = {r.strip() for r in a.port_refs.split(",") if r.strip()}
+            for _fp in _bd.GetFootprints():
+                if _fp.GetReference() not in _want:
+                    continue
+                for _pd in _fp.Pads():
+                    if not _pd.GetNetname():
+                        continue
+                    _p = _pd.GetPosition()
+                    _lay = None
+                    for _L in ("F.Cu", "B.Cu", "In5.Cu"):
+                        if _bd.GetLayerName(_pd.GetLayer()) == _L:
+                            _lay = _L
+                            break
+                    _PP.append((_pd.GetNetname(), round(_PY.ToMM(_p.x), 4), round(_PY.ToMM(_p.y), 4),
+                                _lay or "F.Cu"))
+        except Exception:                                            # noqa: BLE001
+            _PP = []
+    mr._PORT_PADS = _PP                               # #K2-430 sec.2.4: FROZEN - the channel already includes
                                                       # the reach; ZERO runtime freedom (no ladder)
     recs = []
     if mr.WALL_RECT:
@@ -193,7 +220,12 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                     out.add((t["layer"], round(X, 4), round(Y, 4), t["uuid"]))
         for (pl, px, py, tpu) in sorted(out):
             PORT_PTS.add((round(px, 3), round(py, 3)))
-        return sorted(out)
+        out2 = [(pl, px, py, "t:" + str(tpu)) for (pl, px, py, tpu) in sorted(out)]
+        for (_n, _x, _y, _l) in getattr(mr, "_PORT_PADS", []):       # #K2-431 fix 1: connector pads as ports
+            if _n == net:
+                PORT_PTS.add((round(_x, 3), round(_y, 3)))
+                out2.append((_l, _x, _y, "p:" + str(_x) + ":" + str(_y)))
+        return out2
 
     mr.snap_node = snap
 
@@ -226,7 +258,9 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
             rec["tries"] = []
             for (pl, px, py, tpu) in _ports(ctx, net):
                 rec["ports_tried"] += 1
-                cport = find("t:" + tpu)
+                cport = find(tpu) if str(tpu).startswith("p:") else find("t:" + str(tpu))
+                if cport is None:
+                    continue
                 s2, w2 = orig(ctx, find, compa, cport, net, la, pa, pl, (px, py), margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "goal", "why": w2})
                 if s2 is not None:

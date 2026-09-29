@@ -1247,8 +1247,9 @@ class T(unittest.TestCase):
         maze's EXISTING bound-rect vehicle per edge, not a post-hoc filter."""
         src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
         self.assertIn('ap.add_argument("--channels"', src)
-        self.assertIn("mr.WALL_RECT = _CH[net]", src, "the per-net channel must set the maze's bound rect per edge")
+        self.assertIn("mr.WALL_RECT = (_c[0] - _w", src, "the per-net channel must set the maze's bound rect per edge")
         self.assertIn("mr._CHANNELS = CH", src, "the map must live on mr (solve is module-level scope)")
+        self.assertIn('ap.add_argument("--port-refs"', src, "#K2-431 fix 1: connector pads as fixed ports")
 
     def test_C415_the_chain_routes_the_objective_nets_first(self):
         """#K2-415 sec.2.2 lever 'order': the blockers are copper the MAZE itself laid (move_parts wipes every net
