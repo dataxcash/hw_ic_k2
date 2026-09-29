@@ -1,0 +1,173 @@
+{
+ "artifact": "k2_corridor_occupancy_audit_v1_record",
+ "ts": "2026-09-29",
+ "authority": "#K2-412 sec.4.2 (carrying R1102/R1154 'name the affected items'): audit the R1154 drawn corridors against the board and NAME every foreign item inside.",
+ "board": "/tmp/opencode/k2412_binary/s2b_resolved.kicad_pcb (pre-stitch state of the authorised A^5 run's work dir)",
+ "clear_mm": 0.2,
+ "corridors": [
+  {
+   "gap": 0,
+   "net": "MCU_VDD",
+   "layers": [
+    "F.Cu"
+   ],
+   "rect": [
+    29.2,
+    44.9,
+    31.9,
+    52.8
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 45,
+   "occupants_by_net": {
+    "GND": 29,
+    "12V_IN": 4,
+    "SWCLK_BOOT0": 3,
+    "": 3,
+    "SWDIO": 1
+   }
+  },
+  {
+   "gap": 1,
+   "net": "NRST",
+   "layers": [
+    "F.Cu"
+   ],
+   "rect": [
+    27.5,
+    40.4,
+    31.9,
+    54.8
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 137,
+   "occupants_by_net": {
+    "GND": 40
+   }
+  },
+  {
+   "gap": 2,
+   "net": "NRST",
+   "layers": [
+    "F.Cu"
+   ],
+   "rect": [
+    27.5,
+    51.9,
+    31.9,
+    54.8
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 34,
+   "occupants_by_net": {
+    "GND": 26,
+    "": 4,
+    "MCU_VDD": 2,
+    "P3V3_AUX": 2
+   }
+  },
+  {
+   "gap": 3,
+   "net": "PERSTA#",
+   "layers": [
+    "In5.Cu",
+    "F.Cu"
+   ],
+   "rect": [
+    50.0,
+    37.5,
+    51.6,
+    39.0
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 31,
+   "occupants_by_net": {
+    "P3V3_AUX": 30,
+    "PWR_BTN_OUT": 1
+   }
+  },
+  {
+   "gap": 4,
+   "net": "P3V3_AUX",
+   "layers": [
+    "F.Cu",
+    "In5.Cu"
+   ],
+   "rect": [
+    51.1,
+    38.3,
+    51.6,
+    38.8
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 1,
+   "occupants_by_net": {
+    "PWR_BTN_OUT": 1
+   }
+  },
+  {
+   "gap": 5,
+   "net": "I2C1_SCL",
+   "layers": [
+    "F.Cu"
+   ],
+   "rect": [
+    33.7,
+    48.8,
+    45.9,
+    61.6
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 200,
+   "occupants_by_net": {
+    "GND": 40
+   }
+  },
+  {
+   "gap": 6,
+   "net": "I2C1_SDA",
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "rect": [
+    51.5,
+    61.9,
+    52.2,
+    67.5
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 6,
+   "occupants_by_net": {
+    "I2C1_SCL": 6
+   }
+  },
+  {
+   "gap": 7,
+   "net": "P3V3",
+   "layers": [
+    "F.Cu"
+   ],
+   "rect": [
+    43.4,
+    44.0,
+    51.5,
+    60.6
+   ],
+   "verdict": "OCCUPIED",
+   "n_occupants": 92,
+   "occupants_by_net": {
+    "GND": 40
+   }
+  }
+ ],
+ "OWNER-ITEMS": 0,
+ "summary": {
+  "corridors": 8,
+  "occupied": 8,
+  "clear": 0,
+  "dominant_occupant": "GND"
+ },
+ "conclusion": "ALL 8 drawn corridors are OCCUPIED by foreign copper (dominant: GND) => the R1154 corridors were drawn on the 'free board' assumption (its own Q3 difference list) and are NOT usable on the real post-wipe field. The drawing layer must be REDRAWN AROUND the surviving copper (or the occupants moved) - i.e. means B needs a redraw, not just a feed.",
+ "rule": "read-only deterministic audit; zero exam runs; zero board changes; zero parameter tuning."
+}

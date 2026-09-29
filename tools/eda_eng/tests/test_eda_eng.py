@@ -1156,6 +1156,22 @@ class T(unittest.TestCase):
         self.assertIsNone(mr2.snap_node(grid, None, find, "ISLAND", "N1", "F.Cu", OWN[0], OWN[1]),
                           "C35: the endpoint-own-cell relaxation must never start outside the declared domain")
 
+    def test_C412_corridor_occupancy_audit_names_the_affected_items(self):
+        """#K2-412 sec.4.2 (carrying R1102/R1154 'delimit the affected set'): the drawing-layer prerequisite --
+        every DRAWN corridor is audited against the board and each foreign item inside (plus clearance) is NAMED.
+        Pure part pinned here (deterministic; the board pass is a read-only run, no board change)."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_corridor_occupancy_audit_v1", os.path.join("tools", "k2_corridor_occupancy_audit_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        layers, rect = m.parse_corridor("In5 + F.Cu (50.0-51.6, 37.5-39.0)")
+        self.assertEqual(layers, ["In5.Cu", "F.Cu"], "bare `In5` must be normalised to `In5.Cu`")
+        self.assertEqual(rect, (50.0, 37.5, 51.6, 39.0))
+        self.assertEqual(m.parse_corridor("F.Cu (43.4-81.0 clipped to 51.5, 44.0-60.6)")[1],
+                         (43.4, 44.0, 51.5, 60.6), "the `clipped to` form must take the CLIPPED bound")
+        self.assertLessEqual(m.rect_gap((0, 0, 1, 1), (1.1, 0, 2, 1)), 0.20, "inside clearance => occupant")
+        self.assertGreater(m.rect_gap((0, 0, 1, 1), (1.5, 0, 2, 1)), 0.20, "outside clearance => not an occupant")
+
     def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
         """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
         import importlib.util
