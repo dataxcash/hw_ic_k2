@@ -1,0 +1,54 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_anchored_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-449 sec.2.5: the authorised (and now unblocked) N=1 on the fully anchored 98-piece drawing.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1",
+  "work_dir": "/tmp/opencode/k2z",
+  "foreground": true
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": 803,
+  "C7": 0,
+  "C8": [],
+  "C9": true,
+  "rows_present": 9
+ },
+ "anchoring": {
+  "spec_items": 98,
+  "anchor_audit": "ok=True padless=0"
+ },
+ "residual_named": [
+  {
+   "nets": [
+    "I2C2_SCL"
+   ],
+   "items": [
+    "走线 [I2C2_SCL] (F.Cu), 长度: 9.3000 mm",
+    "F.Cu 上 U1 的焊盘 22 [I2C2_SCL]"
+   ]
+  },
+  {
+   "nets": [
+    "I2C1_SDA"
+   ],
+   "items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.1414 mm"
+   ]
+  }
+ ],
+ "board": "FROZEN (l14/rev-61); no landing.",
+ "OWNER-ITEMS": 0
+}
