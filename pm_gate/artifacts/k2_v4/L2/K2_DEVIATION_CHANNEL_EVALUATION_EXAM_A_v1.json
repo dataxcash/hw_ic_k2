@@ -1,0 +1,44 @@
+{
+ "artifact": "k2_deviation_channel_evaluation_exam_a_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-411 sec.2: the remaining DROP-NAMED gaps go to the DEVIATION channel (engineering layer first; owner only if requirements/interfaces are touched).",
+ "the_eight_named_gaps": [
+  "MCU_VDD (U1.6 <-> In5 track)",
+  "NRST (C73.1 <-> U1.10)",
+  "NRST (F.Cu track 0.1414 <-> U1.10)",
+  "PERSTA# (In5 track 0.25 <-> R1.1)",
+  "P3V3_AUX (F.Cu track 0.2 <-> In5 track 0.0707)",
+  "I2C1_SCL (U1.47 <-> E2.6)",
+  "I2C1_SDA (F.Cu track 0.0636 <-> B.Cu track 0.705)",
+  "P3V3 (blind via F.Cu-In4.Cu <-> C84.1)"
+ ],
+ "layer": "ENDPOINT/PORT layer (maze snap) - NOT capacity (93.5% free), NOT the criteria, NOT the placement gate.",
+ "why_the_current_means_cannot_close_them": [
+  "the maze's snap_node requires a FREE cell that is IN the endpoint's own net island within maxr; for these eight endpoints no such cell exists (the cells are pruned by foreign copper and/or lie outside the frame).",
+  "a direct stitch is FORBIDDEN (#K2-411) and was measured unsafe (R1146: 35 shorts / 25 crossings / 40 mask bridges).",
+  "the port-aware goal patch is already active on this chain (the wrapper installs it when --bound-rect is set) and still leaves these eight."
+ ],
+ "engineering_layer_dispositions": [
+  {
+   "id": "D1",
+   "what": "ENDPOINT-OWN-CELL SEMANTIC FIX (proposed): the point being snapped lies ON the net's own copper, so its own cell is BY DEFINITION a legal start/goal - extend the wrapper's snap relaxation from 'port points' to 'the endpoint's own point' (a semantics fix, not a new tool), and let the final DRC adjudicate the emitted segment.",
+   "why_it_is_principled": "it does not weaken any clearance rule: the connection still terminates on the net's own copper, and any resulting clearance violation is still caught by the final DRC (and would be REFUSED/attributed).",
+   "expected": "may unblock several of the eight; any that still fail remain named."
+  },
+  {
+   "id": "D2",
+   "what": "IN-DOMAIN RE-ROUTE for the four frame-spanning pairs (PERSTA# / P3V3_AUX / I2C1_SDA / P3V3): their two fragments are separated across the frame; their connectivity must be re-derived INSIDE the domain (C38-class), i.e. the maze must be given a legal in-frame goal on the same net."
+  },
+  {
+   "id": "D3",
+   "what": "BOUNDED DEVIATION (fallback): if D1+D2 still leave gaps, accept them as a DOCUMENTED BOUNDED DEVIATION for this exam only, with the four-question certificate (already filed) - NOT as a criteria change."
+  }
+ ],
+ "not_an_owner_matter_yet": "no requirement/interface is touched; all three dispositions are engineering-layer.",
+ "recommended_order": [
+  "D1 (semantic, smallest, may unblock)",
+  "D2 (in-domain re-route for the span pairs)",
+  "D3 (bounded deviation fallback)"
+ ],
+ "OWNER-ITEMS": 0
+}
