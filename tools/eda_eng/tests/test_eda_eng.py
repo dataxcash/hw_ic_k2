@@ -1349,6 +1349,18 @@ class T(unittest.TestCase):
         self.assertEqual([[p[0] for p in row] for row in g], [["A", "C"], ["D", "B"]], "contiguous y-bands, row-ordered")
         self.assertEqual(m.group_by_row(pts, 2.0), g, "deterministic")
 
+    def test_C421_corridor_conservation_is_per_corridor(self):
+        """#K2-421 sec.4 / #K2-413 (pinned): conservation is PER-CORRIDOR - capacity is THIS corridor's own clear
+        narrow dimension vs need; a blocked corridor FAILS even if the block is mostly free."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "k2_block_relayout_gen_v1", os.path.join("tools", "k2_block_relayout_gen_v1.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        free = m.corridor_conservation((0, 0, 4, 4), [], 0.20, 0.60)
+        self.assertTrue(free["pass"]); self.assertAlmostEqual(free["capacity_mm"], 4.0, places=2)
+        blocked = m.corridor_conservation((0, 0, 4, 4), [[1.9, 0, 2.1, 4]], 0.20, 0.60)
+        self.assertFalse(blocked["pass"], "a wall across the corridor must FAIL the per-corridor check")
+
     def test_C416_deviation_generator_is_pure_and_names_the_blockers(self):
         """#K2-416 sec.5: the deviation generator - pure parts pinned (layer parse, in-domain clamp, pair extraction).
         Deterministic; the board pass is a read-only run, no exam, no board change."""

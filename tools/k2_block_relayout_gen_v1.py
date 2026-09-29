@@ -50,6 +50,19 @@ def escape_into_corridor(points, corridor, pitch=0.25):
     return out
 
 
+def corridor_conservation(corridor, occupants, clearance=0.20, need_mm=0.60):
+    """**逐廊道守恒机核（硬）**：`capacity` ＝ 该廊道**自身**的净空子矩窄边（**禁用域/块级空闲代替**）；
+    返回 `{capacity_mm, need_mm, pass}`（capacity ≥ need ⇒ 该廊道承载力足）。确定性 · 零搜索。"""
+    import importlib.util, os as _os
+    _sp = importlib.util.spec_from_file_location(
+        "k2rd", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "k2_corridor_redraw_v1.py"))
+    rd = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(rd)
+    cx, cy = (corridor[0] + corridor[2]) / 2.0, (corridor[1] + corridor[3]) / 2.0
+    sub, _ = rd.clear_subrect_containing_pts(corridor, occupants, clearance, [(cx, cy)])
+    cap = min(sub[2] - sub[0], sub[3] - sub[1]) if sub else 0.0
+    return {"capacity_mm": round(cap, 4), "need_mm": round(need_mm, 4), "pass": cap >= need_mm - 1e-9}
+
+
 def relayout(block_rect, groups, points_by_group, pitch=0.25, gap=0.2):
     corr = slice_corridors(block_rect, groups, gap)
     out = []
