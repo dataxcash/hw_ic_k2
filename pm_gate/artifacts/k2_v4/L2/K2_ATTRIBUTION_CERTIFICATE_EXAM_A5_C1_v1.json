@@ -1,0 +1,146 @@
+{
+ "artifact": "k2_attribution_certificate_exam_a5_c1_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-407 sec.5 (the zero-run attribution window): the C1=8 residual must be named AND attributed with a MACHINE-PINNED baseline.",
+ "baseline_pinned": {
+  "artifact": "L2/EDA_ENG_EXAM_A_TRIPLE_PRIME_ATTEMPT1_VERDICT_v1.json",
+  "row": "C1_connectivity.unconnected",
+  "machine_value": 18,
+  "note": "NOTE (#K2-407 sec.4 correction): my earlier phrase 'A-triple-prime's 7' was NOT reproducible from the registered verdict (which reads C1 = 18); corrected here by pinning the artifact+row+value."
+ },
+ "a5": {
+  "artifact": "L2/EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT1_VERDICT_v1.json",
+  "row": "C1_connectivity.unconnected",
+  "machine_value": 8,
+  "n": 8,
+  "items": [
+   {
+    "pair": [
+     "F.Cu 上 U1 的焊盘 6 [MCU_VDD]",
+     "走线 [MCU_VDD] (In5.Cu), 长度: 0.2000 mm"
+    ],
+    "net": "MCU_VDD"
+   },
+   {
+    "pair": [
+     "F.Cu 上 C73 的焊盘 1 [NRST]",
+     "F.Cu 上 U1 的焊盘 10 [NRST]"
+    ],
+    "net": "NRST"
+   },
+   {
+    "pair": [
+     "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+     "F.Cu 上 U1 的焊盘 10 [NRST]"
+    ],
+    "net": "NRST"
+   },
+   {
+    "pair": [
+     "走线 [PERSTA#] (In5.Cu), 长度: 0.2500 mm",
+     "F.Cu 上 R1 的焊盘 1 [PERSTA#]"
+    ],
+    "net": "PERSTA#"
+   },
+   {
+    "pair": [
+     "走线 [P3V3_AUX] (F.Cu), 长度: 0.2000 mm",
+     "走线 [P3V3_AUX] (In5.Cu), 长度: 0.0707 mm"
+    ],
+    "net": "P3V3_AUX"
+   },
+   {
+    "pair": [
+     "F.Cu 上 U1 的焊盘 47 [I2C1_SCL]",
+     "F.Cu 上 E2 的焊盘 6 [I2C1_SCL]"
+    ],
+    "net": "I2C1_SCL"
+   },
+   {
+    "pair": [
+     "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+     "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm"
+    ],
+    "net": "I2C1_SDA"
+   },
+   {
+    "pair": [
+     "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+     "F.Cu 上 C84 的焊盘 1 [P3V3]"
+    ],
+    "net": "P3V3"
+   }
+  ]
+ },
+ "comparison": {
+  "a3_items_available": true,
+  "a3_n": 18,
+  "a5_items_not_in_a3": [
+   {
+    "pair": [
+     "F.Cu 上 U1 的焊盘 6 [MCU_VDD]",
+     "走线 [MCU_VDD] (In5.Cu), 长度: 0.2000 mm"
+    ],
+    "net": "MCU_VDD"
+   },
+   {
+    "pair": [
+     "走线 [PERSTA#] (In5.Cu), 长度: 0.2500 mm",
+     "F.Cu 上 R1 的焊盘 1 [PERSTA#]"
+    ],
+    "net": "PERSTA#"
+   },
+   {
+    "pair": [
+     "走线 [P3V3_AUX] (F.Cu), 长度: 0.2000 mm",
+     "走线 [P3V3_AUX] (In5.Cu), 长度: 0.0707 mm"
+    ],
+    "net": "P3V3_AUX"
+   },
+   {
+    "pair": [
+     "走线 [I2C1_SDA] (F.Cu), 长度: 0.0636 mm",
+     "走线 [I2C1_SDA] (B.Cu), 长度: 0.7050 mm"
+    ],
+    "net": "I2C1_SDA"
+   },
+   {
+    "pair": [
+     "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+     "F.Cu 上 C84 的焊盘 1 [P3V3]"
+    ],
+    "net": "P3V3"
+   }
+  ],
+  "n_new": 5,
+  "n_carried": 3,
+  "reading": "the ERASE+cleared-field placement changed the endpoint set: 3 carry over, 5 are new/changed."
+ },
+ "per_item_attribution": {
+  "method": "endpoint form = pad|track|via|blind-via as written in the DRC description; device relation read from the ref names",
+  "note": "all eight are NEAREST-NEIGHBOUR endpoint pairs between an IN-BLOCK member (U1/C73/R1/E2/C84) and net copper; none is a capacity or criteria artefact."
+ },
+ "sec20_three_questions": {
+  "Q1_same_kind_product_exists": "YES (in-repo): the in-register maze (tools/k2_p4_mroute_v1.py), the C17 v1 re-router (tools/k2_reroute_affected_v2.py: clip -> islands -> MST stitch -> snap -> bounded repair -> normalise) and the block-chain port logic (regen.relocate_block_chain / block.move_parts ports: dR stubs as FIXED terminals). Externally: commercial refactor tools close exactly these 'nearest-neighbour endpoint' gaps with stitch runs after re-placement.",
+  "Q2_copyable_artifact": [
+   "tools/k2_reroute_affected_v2.py (the composed islands+stitch pipeline)",
+   "regen.relocate_block_chain (dR stubs as FIXED terminals)",
+   "tools/k2_p4_mroute_v1.py (the maze, incl. the WALL_RECT domain + snap_node island test)"
+  ],
+  "Q3_difference_list": [
+   "the maze's ENDPOINT snap needs a free cell IN the net's island within maxr; after ERASE the endpoint set changed and 8 endpoints now have no free in-island cell within reach; the C17 v1 stitch pipeline does NOT run on the wipe_resolve chain (it is a separate product path); nothing in-repo performs a PORT-REACHABILITY-AWARE second stitch on the ERASED field."
+  ],
+  "consequence": "copy the C17 v1 islands+stitch stage onto the A^5 chain (additive), scoped to the 8 named endpoints - i.e. the §16.3(a) route."
+ },
+ "sec22_classification": {
+  "verdict": "ENG CAPABILITY GAP (not a one-time event)",
+  "why": "the same endpoint/port class has now limited the exam across A-prime/A-double-prime/A-triple-prime/A-quintuple-prime (C1 = 22/24/18/8); it is a TOOL capability deficit, not a fluke.",
+  "asset_required": "implement the port-reachability-aware stitch stage on the wipe_resolve chain + a same-kind regression (a named endpoint that must be stitched) as the closure criterion."
+ },
+ "branch": {
+  "chosen": "(a) ENDPOINT/PORT LAYER => the sec.16.3 planning-layer regression artifact is the next filing (four elements).",
+  "(b) not taken": "not classified as a new cause, so sec.17.4 is not triggered this window.",
+  "no_self_run": "#K2-407 sec.5.5: no self-run; a sec.17.4 means-change needs the supervisor first."
+ },
+ "OWNER-ITEMS": 0
+}
