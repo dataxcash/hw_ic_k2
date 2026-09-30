@@ -2057,6 +2057,19 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C509_outside_area_moves_are_named_not_lost_in_the_noise(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-507 sec.3 item 2). RED without it: the disposal's refill could
+        move a zone's OUTSIDE-FRAME covered area silently (R1682/R1692: MCU_VDD|In4 grew 10.9 mm^2 - an area change,
+        so a REAL extension, not a re-polygonisation). GREEN: any |delta| above tolerance is named."""
+        before = {("GND", "In1.Cu"): 10.0, ("X", "In4.Cu"): 5.0}
+        after = {("GND", "In1.Cu"): 10.0004, ("X", "In4.Cu"): 5.5}
+        mv = block.outside_area_moved(before, after)
+        self.assertEqual(list(mv), ["X|In4.Cu"], "sub-tolerance noise is not a move; a real one is named")
+        self.assertAlmostEqual(mv["X|In4.Cu"], 0.5, places=6)
+        self.assertEqual(block.outside_area_moved(before, before), {}, "nothing moved => nothing named")
+        d = block.outside_area_moved(before, after, tol=1e-6)
+        self.assertEqual(len(d), 2, "the tolerance is a parameter, not a fudge")
+
     def test_C508_join_half_stitches_one_ended_stubs_by_net_and_names_what_it_cannot_join(self):
         """TIAN TIAO #1 engine asset + regression (#K2-508). RED without it: a one-end-dangling stub could only be
         DELETED (prune) or left dangling; the chain's direct stitch was forbidden outright. GREEN: a bounded

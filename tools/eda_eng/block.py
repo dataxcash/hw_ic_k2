@@ -1098,6 +1098,22 @@ def declared_outside_keys(spec_paths, rect, nd=3, default_via_drill=0.25):
     return out
 
 
+def outside_area_moved(before, after, tol=1e-3):
+    """#K2-507 sec.3 item 2 ENGINE CAPABILITY（**纯函数**）：两个 `(net,layer)->框外面积` 图之**差**（|Δ| > tol 者具名）。
+
+    **为什么需要一个纯函数**：「处置/重填**不得改动框外覆盖**」这条纪律的判据必须**可单测**；而"重多边形化"与
+    "真实覆盖伸入"之分在此**一望可辨**（前者面积为 0，后者面积非 0）。确定性 · 有界 · 无副作用。
+    """
+    out = {}
+    b0 = before or {}
+    a0 = after or {}
+    for k in sorted(set(b0) | set(a0), key=lambda t: (str(t[0]), str(t[1]))):
+        d = round(a0.get(k, 0.0) - b0.get(k, 0.0), 6)
+        if abs(d) > tol:
+            out["%s|%s" % k] = d
+    return out
+
+
 def outside_copper_equivalent(final, ref, rect, tol_area=1e-3, nd=3, declared=None):
     """#K2-504/#K2-505 ENGINE CAPABILITY：C6「框外铜不变」之**几何等价 × 声明感知**口径。
 

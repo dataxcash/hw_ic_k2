@@ -159,6 +159,7 @@ def main(argv=None):
     p.add_argument("--board", required=True); p.add_argument("--refs", required=True); p.add_argument("--out", required=True)
     p.add_argument("--json-out")
     p = sub.add_parser("dispose-islands", help="#K2-390: deterministically dispose of the DRC-named orphan zone fills (zone UUID -> UnFill + refill the rest)")
+    p.add_argument("--rect", default=None, help="#K2-507: x0,y0,x1,y1 - the refill is DROPPED if it would move any zone's outside-frame covered area")
     p.add_argument("--board", required=True); p.add_argument("--drc", required=True)
     p.add_argument("--out", required=True); p.add_argument("--json-out")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
@@ -443,7 +444,8 @@ def main(argv=None):
 
     if a.cmd == "dispose-islands":
         drc = json.load(open(a.drc, encoding="utf-8"))
-        r = route_mod.dispose_isolated_copper(a.board, drc, a.out)
+        _rc = [float(v) for v in a.rect.split(",")] if getattr(a, "rect", None) else None
+        r = route_mod.dispose_isolated_copper(a.board, drc, a.out, rect=_rc)
         return _emit(r, a.json_out, 0)
 
     if a.cmd == "route":

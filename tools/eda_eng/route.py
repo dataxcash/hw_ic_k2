@@ -353,7 +353,7 @@ def refill_targets(keep, gone):
     return out
 
 
-def dispose_isolated_copper(board_path, drc_json, out_path):
+def dispose_isolated_copper(board_path, drc_json, out_path, rect=None):
     """**孤岛的确定性处置（#K2-390 §七步① · 子进程专用）**：DRC 点名的每个 `isolated_copper`
     按其 **zone UUID** 定位该 zone ⇒ **移除其填充**（`UnFill`）⇒ 仅**其余** zone 重填 ⇒ 落盘。
     **一次 · 确定性 · 不搜索 · 不试探**（区别于「就近连回」的事后修补，那条已实测无效）。
@@ -400,20 +400,52 @@ def dispose_isolated_copper(board_path, drc_json, out_path):
     _keep_meta = [_meta(z) for z in keep]
     _want_ids = set(refill_targets(_keep_meta, gone))
     _targets = [z for z, m in zip(keep, _keep_meta) if m["id"] in _want_ids]
+    # #K2-507 sec.3 item 2 (ENG): the disposal's refill must not change the OUTSIDE-FRAME covered area of any zone
+    # (R1682/R1692 measured the neighbour MCU_VDD|In4 zone growing +10.9 mm^2 ACROSS this stage - an area change, so
+    # a REAL coverage extension, not a re-polygonisation). Policy, deterministic and bounded: fill, MEASURE, and if
+    # any zone's outside-frame area moved, RELOAD the board from disk (the disposal stands, the refill is dropped)
+    # and say so. The chain's own fail-closed check then decides whether that board is still admissible.
+    _before = None
+    if rect is not None:
+        try:
+            from eda_eng import block as _blk
+            _before = _blk.zone_outside_area(b, rect)
+        except Exception:                                          # noqa: BLE001
+            _before = None
+    refilled = 0
     try:
         if _targets:
             P.ZONE_FILLER(b).Fill(_targets)
+            refilled = len(_targets)
     except Exception:                                              # noqa: BLE001
         pass
+    reverted, moved = False, {}
+    if _before is not None:
+        try:
+            from eda_eng import block as _blk
+            moved = _blk.outside_area_moved(_before, _blk.zone_outside_area(b, rect))
+            if moved:
+                b = P.LoadBoard(board_path)                        # disposal only; the refill is dropped
+                for z in b.Zones():
+                    try:
+                        if z.m_Uuid.AsString() in want:
+                            z.UnFill()
+                    except Exception:                              # noqa: BLE001
+                        pass
+                reverted = True
+        except Exception:                                          # noqa: BLE001
+            pass
     P.SaveBoard(out_path, b)
     return {"artifact": "eda_eng_dispose_isolated_copper", "board": board_path, "out": out_path,
             "disposed": disposed, "n_disposed": len(disposed),
             "unresolved": [it for it in items if it.get("uuid") not in seen],
-            "n_refilled": len(_targets), "n_kept_untouched": (len(keep) - len(_targets)),
+            "n_refilled": refilled, "n_kept_untouched": (len(keep) - len(_targets)),
+            "refill_reverted_outside_moved": reverted, "outside_area_moved": moved,
             "rule": "#K2-390 sec.7 step 1 + #K2-507: dispose of the DRC-named orphan zone fill deterministically "
                     "(zone UUID -> UnFill) and refill ONLY the kept zones the disposal could have invalidated "
-                    "(shared copper layer AND overlapping bbox); an untouched zone keeps its fill, so its "
-                    "OUTSIDE-FRAME coverage cannot be rewritten by a re-polygonisation."}
+                    "(shared copper layer AND overlapping bbox); an untouched zone keeps its fill. #K2-507 sec.3 "
+                    "item 2: if any zone's OUTSIDE-FRAME covered area would move, the refill is DROPPED (the board "
+                    "is reloaded so the disposal stands alone) - outside-frame copper must not change."}
 
 
 def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):

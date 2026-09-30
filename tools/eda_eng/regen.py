@@ -1876,7 +1876,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     dz1 = os.path.join(work, "s3b2_isolated_in.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dz1, final])
     disp_out = os.path.join(work, "s3c_disposed.kicad_pcb")
-    rc_disp, disp = _cli("dispose-islands", "--board", final, "--drc", dz1, "--out", disp_out)
+    rc_disp, disp = _cli("dispose-islands", "--board", final, "--drc", dz1, "--out", disp_out,
+                         "--rect", ",".join(str(v) for v in rect))
     if rc_disp == 0 and os.path.isfile(disp_out):
         final = disp_out
     chain.append({"stage": "isolated_copper_disposed", "exit": rc_disp,
