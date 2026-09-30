@@ -1,0 +1,41 @@
+{
+ "artifact": "r6_acceptance_relocation_zero_human_v3",
+ "ts": "2026-10-01",
+ "authority": "#K2-488 sec.2 R6 + #K2-522/#K2-523: the acceptance is a position adjustment UNRELATED to K2, run end to end by the engine with ZERO human intervention; the verb and its syntax are READ FROM SOURCE, never guessed",
+ "board": "/tmp/opencode/r6/r6_in.kicad_pcb",
+ "board_origin": "KiCad own template Arduino_Uno - /tmp copy only, never written in place, not K2 and not another line's repo",
+ "verb": {
+  "name": "move-parts",
+  "from_source": "cli.py: --board --rect x0,y0,x1,y1 --moves 'ref:dx:dy,...' --out O; implements block.move_parts = per-part move + in-block copper re-lay preparation",
+  "why_not_move-copper": "cli.py's own help for move-copper is 'translate NAMED COPPER SEGMENTS' - a copper translator, not a part mover (R1748)"
+ },
+ "adjustment": {
+  "ref": "J1",
+  "delta_mm": [
+   1.0,
+   0.5
+  ],
+  "chosen_by": "engine (first reference in sorted order); delta is the acceptance's fixed declaration"
+ },
+ "call": {
+  "cmd": "/tmp/k2kicad/AppDir/bin/python3.11 -m tools.eda_eng move-parts --board /tmp/opencode/r6/r6_in.kicad_pcb --rect 99.925,46.585,168.655,100.075 --moves",
+  "rc": 0,
+  "stdout": "{\n \"artifact\": \"eda_eng_move_parts\",\n \"board\": \"/tmp/opencode/r6/r6_in.kicad_pcb\",\n \"out\": \"/tmp/opencode/r6/r6_out3.kicad_pcb\",\n \"rect\": [\n  99.925,\n  46.585,\n  168.655,\n  100.075\n ],\n \"moved\": [\n  {",
+  "stderr": ""
+ },
+ "verified": {
+  "out_board_exists": true,
+  "moved_by_mm": [
+   1.0,
+   0.5
+  ],
+  "matches_declared": true,
+  "drc_report_exists": true,
+  "drc_rc": 0,
+  "drc_violations": 10
+ },
+ "verdict": "PASS",
+ "zero_human_intervention": true,
+ "note": "R1748's blocker (2) was an ARTIFACT of blocker (1): the DRC was run on an output board that never existed. This run gives the DRC a real board.",
+ "OWNER-ITEMS": 0
+}
