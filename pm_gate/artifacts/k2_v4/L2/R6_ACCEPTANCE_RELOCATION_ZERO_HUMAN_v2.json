@@ -33,5 +33,11 @@
  },
  "verdict": "FAIL",
  "zero_human_intervention": true,
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "named_root_causes": {
+  "category_error_established_from_source": "cli.py's own help for move-copper reads 'translate NAMED COPPER SEGMENTS for the yield sequence' - it is a copper translator, NOT a part mover. The R6 sheet asked it to move a FOOTPRINT reference, found no copper by that name and returned rc=1 with empty output. The register's part-relocation verb is move-parts (--rect + --moves).",
+  "true_moves_syntax_from_source": "--moves 'ref:dx:dy,ref:dx:dy,...' (colon separated) read from cli.py - the R1746 sheet's 'REF:dx,dy' comma form was wrong too.",
+  "drc_report_absent_on_template_board": "kicad-cli pcb drc produced NO report file on the KiCad template Arduino_Uno board using the register's exact flag form, so that board cannot carry the acceptance as written."
+ },
+ "verdict_reason": "two blockers named: (1) wrong verb for the semantics (copper translator vs part mover) and the wrong --moves syntax; (2) the chosen board yields no DRC report through the register's path."
 }
