@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_c2_clearance_measurement_model_difference_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-493 sec.2 item 2: recompute the 2 clearance items with the new authoritative gauge kgap_violations (R1616), taking each item's own recorded geometry (layer / object type / pad stack / via) - binary: real violation (fix the obstacle model) vs measurement-model difference (name + archive; do NOT chase and do NOT change the criteria).",
+ "method": "local audit at floor 0.200 around each DRC item position; items = every track (centre-line + halfwidth), every via (zero-length segment of its radius, on every layer of its span) and every pad (true-shape capsule, on each layer it is on) within 1.6mm.",
+ "result": {
+  "near_50.05_39.0": {
+   "items": 61,
+   "violations_at_floor_0.200": 0
+  },
+  "near_31.1_62.85": {
+   "items": 23,
+   "violations_at_floor_0.200": 0
+  },
+  "manual_recompute_R1614": {
+   "50.05_39.0": "closest foreign pair = PERSTA# <-> MCU_VDD, gap 0.3000",
+   "31.1_62.85": "closest foreign pair = MCU_VDD <-> GND, gap 0.2500"
+  }
+ },
+ "BINARY": "MEASUREMENT-MODEL DIFFERENCE (not a real violation under the engine's geometry model).",
+ "named_difference": "KiCad's DRC measures exact polygons (rounded pad corners, pad stacks, holes, teardrops) and reports 0.1062mm at those two object positions; the engine's model (capsule pads + centre-line/half-width tracks + radius vias) reproduces 0.300 / 0.250 and no pair below 0.200. The two models disagree; the DRC report's item POSITIONS are not the closest points (R1614).",
+ "disposition": "ARCHIVED as a measurement-model difference. No criteria change, no chase. C2's clearance class therefore needs the caliber question resolved by the supervisor (the caliber row is pinned in verify.class_delta).",
+ "caveat": "if the DRC is right, the residual belongs to the ENGINE'S SHAPE MODEL (an approximation gap in how the engine models pads/vias for clearance); that would be a genuine engine asset item - but it is NOT established by this read, so it is not claimed.",
+ "not_done": [
+  "no board write",
+  "no exam run",
+  "no generator change"
+ ],
+ "OWNER-ITEMS": 0
+}
