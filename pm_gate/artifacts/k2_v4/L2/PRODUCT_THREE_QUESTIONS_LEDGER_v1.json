@@ -214,5 +214,34 @@
    "consequence": "the expansion = rip the whole run in-process, re-route ONCE with the blocked EDGES first, adopt only on a strict improvement, else roll back atomically. Landed R1446; the \"blocked EDGES first\" refinement is measured and pinned in this window."
   },
   "OWNER-ITEMS": 0
+ },
+ "M_ENG_PIN_ACCESS_ESCAPE": {
+  "ts": "2026-09-30",
+  "authority": "#K2-467 sec.2.6 (sec.20 product-first is a hard precondition for a NEW sub-problem family): the ruling re-characterised the lesion as the MISSING STANDARD STAGE \"pin access / escape\", so the three product questions are answered here BEFORE any criterion is re-derived.",
+  "scope": "give every target pad a deterministic, reserved escape corridor (which then becomes a HARD KEEPOUT for the other nets) so that the maze is never asked to start from a pad it cannot leave.",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "PARTIAL - the repository has the building blocks but never the stage: (a) the frozen sec.16.3 drawing already carries 98 pieces of which the \"port_stub\" kind is exactly an escape stub at the block edge (tool tools/k2_port_plane_stitch_v1.py); (b) tools/k2_lane_draft_v1.py is a deterministic same-source drafter (the discipline to copy: draft from the drawing, gate with seg_exact/via_exact, no search); (c) tools/k2_anchor_audit_v1.py already enforces \"every added piece must be anchored\"; (d) the R1488 KEEPOUT hard-reservation mechanism is the vehicle the escape assets ride on. What does NOT exist anywhere in-repo is the stage that DERIVES an escape per pad and RESERVES it BEFORE routing - which is why every run so far could starve (R1430: 267/268 no-free-start-node).",
+   "external": "YES, and this is the honest part: every commercial/OSS router has a fanout/escape pass (KiCad fanout, FreeRouting, commercial tools), and the pin-field practice is codified in the land-pattern/fanout guidance of the product paradigm already in the register (TI DS320PR1601 EVM, SNLA425 sec.1.1 grouped fan-out; IPC-7351 land patterns for pad geometry). Their LICENCES block copying code; their PRACTICE (what a 2mm / clearance-based escape means for a dense pin field) is what the criterion should be derived from.",
+   "reading": "a same-kind product exists externally for the criterion and partially in-repo for the mechanism; the criterion I used (max_escape_len 2.0mm, step 0.1mm) came from the ruling itself, and the real-board reading REFUSED 8 pads in a dense pin field (x~31.8375) - so the open question is whether that criterion matches the product practice or is too coarse for that field."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/k2_lane_draft_v1.py - COPY the same-source deterministic drafting discipline.",
+    "tools/k2_port_plane_stitch_v1.py - COPY the port_stub/landing-piece application path (the escape asset is the same kind of deterministic piece).",
+    "tools/k2_anchor_audit_v1.py - COPY the \"must be anchored\" gate for every escape asset.",
+    "the R1488 KEEPOUT map - COPY the hard-reservation vehicle (escape asset -> reserved corridor)."
+   ],
+   "reference_library": "REF-CASE-LIBRARY.md sec.A1 (TI DS320PR1601 EVM / SNLA425 grouped fan-out) - to be consulted for the CRITERION, not copied as code; sec.B lists the in-repo engine products above.",
+   "reading": "the copy targets are unambiguous for the MECHANISM; the CRITERION needs the product practice (EVM pin-field guidance) and must not be tuned ad hoc."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "they DRAFT from a human-authored drawing; nothing DERIVES an escape per pad from geometry.",
+    "the port_stub kind only handles the block-EDGE ports, not the dense IN-BLOCK pin field where the 8 refusals sit.",
+    "no product in-repo has a pre-routing reservation stage (the R1488 KEEPOUT exists but its regions came from a post-run census - the wrong source, as R1470 proved)."
+   ],
+   "consequence": "the expansion = derive + reserve (this window landed the planner asset and the precheck reading); the CRITERION (length/clearance/layer rules for a dense field) should come from the product paradigm before it is relied on, and the responsible officer should rule whether to re-derive it or to send the dense field to the scheme layer."
+  },
+  "OWNER-ITEMS": 0
  }
 }
