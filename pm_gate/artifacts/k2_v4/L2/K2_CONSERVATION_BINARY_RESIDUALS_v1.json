@@ -1,0 +1,264 @@
+{
+ "artifact": "k2_conservation_binary_residuals_v1",
+ "ts": "2026-09-30",
+ "authority": "convergence stop order (a BINARY is required: feasibility witness || conservation-level infeasibility certificate). Instrument = the frozen maze used as a MEASUREMENT device: mr.solve_edge with the chain parameters (margin 3.0, coarse_step 0.10) AND the chain acceptance caliber (cv._req floored at 0.20 = the wrapper --floor). Read-only; no board written; not a graded run.",
+ "self_correction": "the FIRST probe round forgot the chain --floor 0.20 (importing the maze directly uses the register clearance 0.10/0.175) so its two witnesses were INVALID under the acceptance caliber; corrected here - every number below is measured with cv._req floored at 0.20.",
+ "binary": "FEASIBILITY WITNESS - a conservation-level impossibility does NOT exist (consistent with the standing 50x headroom).",
+ "witness_1_I2C2_SCL": {
+  "what": "port stub (51.5,56.6) -> U1 pad 22 (37.75,57.1625): the residual pair seen in R1430 and R1436",
+  "domain_when_it_works": "the FRAME (22.95,32.95,51.5,78.0) - i.e. WITHOUT the net legacy whole-net hard channel",
+  "construction": [
+   [
+    "F.Cu",
+    [
+     [
+      51.45,
+      56.5
+     ],
+     [
+      48.25,
+      56.5
+     ],
+     [
+      48.05,
+      56.7
+     ]
+    ]
+   ],
+   [
+    "In5.Cu",
+    [
+     [
+      48.05,
+      56.7
+     ],
+     [
+      38.25,
+      56.7
+     ],
+     [
+      37.75,
+      56.2
+     ]
+    ]
+   ],
+   [
+    "F.Cu",
+    [
+     [
+      37.75,
+      56.2
+     ],
+     [
+      37.75,
+      57.2
+     ]
+    ]
+   ]
+  ],
+  "vias": [
+   [
+    48.05,
+    56.7,
+    [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu"
+    ]
+   ],
+   [
+    37.75,
+    56.2,
+    [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu"
+    ]
+   ]
+  ],
+  "gate_status": "produced through mr.solve_edge, so seg_exact / via_exact (the release gates) ACCEPTED it at floor 0.20",
+  "why": "the residual is not physically blocked - it is blocked by the MEANS still in force"
+ },
+ "witness_2_I2C1_SDA": {
+  "what": "F.Cu stub (51.5,67.455) -> B.Cu stub (49.15,62.505): the other residual pair",
+  "domain_when_it_works": "BOTH the frame AND its legacy channel band",
+  "construction": [
+   [
+    "F.Cu",
+    [
+     [
+      51.45,
+      67.305
+     ],
+     [
+      50.95,
+      66.805
+     ]
+    ]
+   ],
+   [
+    "B.Cu",
+    [
+     [
+      50.95,
+      66.805
+     ],
+     [
+      50.35,
+      66.205
+     ],
+     [
+      50.35,
+      66.105
+     ],
+     [
+      50.25,
+      66.005
+     ],
+     [
+      50.25,
+      65.805
+     ],
+     [
+      50.15,
+      65.705
+     ],
+     [
+      50.15,
+      65.505
+     ],
+     [
+      50.05,
+      65.405
+     ],
+     [
+      50.05,
+      65.205
+     ],
+     [
+      49.95,
+      65.105
+     ],
+     [
+      49.95,
+      64.905
+     ],
+     [
+      49.85,
+      64.805
+     ],
+     [
+      49.85,
+      64.605
+     ],
+     [
+      49.75,
+      64.505
+     ],
+     [
+      49.75,
+      64.305
+     ],
+     [
+      49.65,
+      64.205
+     ],
+     [
+      49.65,
+      63.905
+     ],
+     [
+      49.55,
+      63.805
+     ],
+     [
+      49.55,
+      63.605
+     ],
+     [
+      49.45,
+      63.505
+     ],
+     [
+      49.45,
+      63.305
+     ],
+     [
+      49.35,
+      63.205
+     ],
+     [
+      49.35,
+      63.005
+     ],
+     [
+      49.25,
+      62.905
+     ],
+     [
+      49.25,
+      62.705
+     ],
+     [
+      49.15,
+      62.605
+     ],
+     [
+      49.15,
+      62.505
+     ]
+    ]
+   ]
+  ],
+  "vias": [
+   [
+    50.95,
+    66.805,
+    [
+     "B.Cu",
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu",
+     "In6.Cu"
+    ]
+   ]
+  ],
+  "gate_status": "accepted by the release gates at floor 0.20",
+  "consequence": "solvable by the engine as soon as it EXISTS as an edge - but it is NOT in the maze edge list at all (it appears only on the final board): the pair is created by the chain DRAWING/stitch stages and left unjoined => drawing-layer piece."
+ },
+ "certificate_for_the_MEANS_in_force": {
+  "claim": "WITH the legacy whole-net hard channel as the solve domain, I2C2_SCL is INFEASIBLE - not for lack of space but because the domain contains no legal goal cell.",
+  "evidence": {
+   "domain": "the net legacy channel (37.55,56.4,51.5,57.3625) - only 0.96mm tall",
+   "result": "FAIL",
+   "why": "no-free-goal-node",
+   "same_geometry_same_parameters_with_the_frame_domain": "OK (the witness above)"
+  },
+  "reading": "the last remnant of the R1420 lesion (a HARD domain that can only forbid) is still in force for I2C2_SCL: R1424 softened the guidance half, but the hard --channels half was left as a domain."
+ },
+ "isolation_table": {
+  "frame_domain": "OK",
+  "legacy_channel_domain": "OK",
+  "channel_plus_GUIDE_pen3": "OK",
+  "channel_plus_GUIDE_pen0": "OK",
+  "verdict": "the DOMAIN alone flips the outcome (frame OK / channel FAIL at the acceptance caliber); the soft guidance is not the cause (penalty 0 and 3 behave alike) => the HARD half of --channels is the last blocker."
+ },
+ "resource_occupancy": {
+  "I2C2_SCL": "the ~14mm local run between the dR port (51.5,56.6) and U1 pad 22 is NOT held by copper - the free space admits the witness. It is held by the TOOL OWN hard band (0.96mm): the resource is occupied by the means itself.",
+  "I2C1_SDA": "the missing resource is one cross-layer join (one via + a short B.Cu run); the witness shows it is available."
+ },
+ "next_means_candidates": {
+  "A_drop_the_hard_channels_or_make_them_guidance_too": "engine means layer, sec.11: apply the R1424 lesson to the LAST hard half (the whole-net --channels domain). The witness says I2C2_SCL is then routable. The effect on the other 17 nets is what an authorised run measures.",
+  "B_drawing_side_piece_for_I2C1_SDA": "one via + a short B.Cu run, witness geometry in hand; needs the sec.16.2 layer call from the supervisor; no frozen spec edit without approval."
+ },
+ "OWNER-ITEMS": 0
+}

@@ -1,0 +1,14 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_r_v1",
+ "ts": "2026-09-30",
+ "authority": "convergence stop order: produce a binary, or file the conservation-level blocker report (layer / resource / held by whom / why no allocation).",
+ "binary": "WITNESS branch: a feasibility witness is filed (K2_CONSERVATION_BINARY_RESIDUALS_v1.json) - no conservation-level impossibility exists.",
+ "which_layer": "(a) ENGINE MEANS layer - the last HARD domain (the legacy whole-net --channels band, 0.96mm for I2C2_SCL) is still used as a domain; (b) DRAWING layer - the I2C1_SDA pair does not exist as an engine edge at all: it is created by the chain drawing/stitch stages and left unjoined.",
+ "which_resource": "(a) the ~14mm local run between the dR port (51.5,56.6) and U1 pad 22; (b) one cross-layer join (one via + a short B.Cu run) between the 0.6mm F.Cu stub and the 0.2mm B.Cu stub.",
+ "held_by_whom": "(a) NOT by copper and NOT by area (the witness passes the acceptance gates at floor 0.20; frame headroom ~50x): it is held by the TOOL OWN hard band - the resource is occupied by the means itself; (b) held by the frozen drawing (the join was never drawn).",
+ "why_no_allocation_is_possible": "SCOPED, not global: WITH the hard band as the solve domain the geometry yields no legal goal cell (no-free-goal-node, deterministic, same parameters), so NO allocation inside that domain can work; with the domain relaxed the same geometry solves (witness). => the impossibility is a property of the MEANS, not of the card.",
+ "state_before_this_report": "C1=2 unchanged across R1392 / R1430 / R1436; but both residuals are now fully decomposed: one engine-means item WITH a witness and one drawing item WITH a witness.",
+ "what_would_make_it_impossible": "nothing found: a conservation-level certificate would need the resource exhausted, and both the standing conservation count (12862 vs 257.3 line-mm) and the witnesses say the opposite.",
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
