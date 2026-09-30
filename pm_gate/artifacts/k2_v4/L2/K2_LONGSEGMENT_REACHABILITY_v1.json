@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_longsegment_reachability_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-481 sec.3.3: occupancy/reachability audit of the ~13.76mm long segment (U1.22 corridor end -> frame port (51.5,56.6)); read-only; zero board writes; zero exam runs; NO variant.",
+ "board": "/tmp/opencode/k2f1/s3c_disposed.kicad_pcb",
+ "net": "I2C2_SCL",
+ "model": {
+  "layer": "F.Cu",
+  "clear_mm": 0.3,
+  "grid_step_mm": 0.15,
+  "obstacles": "foreign F.Cu tracks (exact segment+halfwidth) + pads (true-shape capsule); the net OWN copper ignored",
+  "rule": "a cell is FREE iff every foreign obstacle is at distance >= clear + obstacle_halfwidth"
+ },
+ "src_corridor_end": [
+  37.75,
+  57.9625
+ ],
+ "dst_frame_port": [
+  51.5,
+  56.6
+ ],
+ "first_blocking_object_on_the_straight_run": {
+  "mm_from_corridor_end": 0.099,
+  "at": [
+   37.849,
+   57.953
+  ],
+  "blocked_by": "I2C2_SDA"
+ },
+ "grid_path_exists_F_Cu_only": false,
+ "src_cell_free": true,
+ "dst_cell_free": true,
+ "reading": "NO free path on F.Cu alone under the model; a layer change would be required.",
+ "OWNER-ITEMS": 0
+}
