@@ -401,9 +401,15 @@ class Grid:
             for u, v in ctx.vias.items():
                 if L not in v["lay"] or v["net"] == net: continue
                 cpt(L, v["x"], v["y"], v["r"] + HW + cv._req(net, v["net"]) + self.margin)
-            for (hx, hy, hr, hnet, hlay) in ctx.holes:
-                if hnet == net or L not in hlay: continue
-                cpt(L, hx, hy, hr + 0.25 + HW + self.margin)
+            for _h in ctx.holes:                              # #K2-483: the in-register gauge interface fix.
+                # f3.Ctx yields 4-tuples (x, y, r, net) while _mark expected 5 (with a layer set) => ValueError.
+                # A hole with no layer data is conservatively treated as blocking EVERY copper layer.
+                if len(_h) >= 5:
+                    _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], _h[4]
+                else:
+                    _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], LAYERS
+                if _hnet == net or L not in _hlay: continue
+                cpt(L, _hx, _hy, _hr + 0.25 + HW + self.margin)
             for e in ctx.edge:
                 cseg(L, e[0], e[1], e[2], e[3], HW + 0.3 + self.margin)
             for poly in ctx.keep_t:
