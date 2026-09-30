@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_m_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: repeated same-type command; object = a work-dir PATH CONSTANT of this window).",
+ "object_named": {
+  "token": "k2ab",
+  "what": "the work-dir path constant of THIS window's ONE authorised run (/tmp/opencode/k2ab). It appears inside several READ-ONLY status/ledger commands and inside the launch/commit chain - as a PATH, never as a repeated parameter or a repeated run.",
+  "distinct_runs_of_that_dir": 1,
+  "how_it_repeats": "the path string is carried by: (a) the launch command embedded in the R1418 commit chain, (b) the liveness probes (ls/pgrep/ps on the work dir), (c) the ledger reads (s2_ledger / s4_drc). All of (b) and (c) are read-only; (a) executed ONCE."
+ },
+ "compliance": {
+  "stopped": true,
+  "stopped_when": "immediately: the work was ALREADY finished before this order (the run closed at 08:52, artifacts committed as R1420); nothing has been started since, and nothing will be.",
+  "exam_runs_this_period": 1,
+  "which_run": "the ONE fresh N=1 authorised by #K2-451 sec.2.5 (run_count 1/1, foreground, K2_NO_YIELD=1)",
+  "param_retries": 0,
+  "reruns": 0,
+  "same_parameter_rerun": false,
+  "tool_edits_this_period": 1,
+  "which_edit": "R1418 - the maze-side half of the adopted option (ii), previously authorised",
+  "board_touched": false,
+  "frozen_four_sources": "4/4; criteria/ read-only rev=6"
+ },
+ "blocker_report": {
+  "tried": "#K2-450 means = joint (grouped) channel allocation, end to end: R1396 allocator core -> R1400 wiring -> R1402 invalid first run (silent fallback) -> R1404 diagnosis -> R1406 loud source gate -> R1408/R1410 per-corridor packing -> R1412 emitter -> R1414/R1416 read-only edit points -> R1418 option (ii) landed. Then the ONE authorised N=1 ran FOR REAL: chain[7] channels_computed source=joint n_nets=48.",
+  "why_not_yet": "C1 2 -> 47 (added 68 -> 20; blocked 316; same 336 candidate edges). The channel slot is a 0.40 mm-tall horizontal trunk strip, and it is fed as mr.WALL_RECT, which is the solve DOMAIN (the region that must contain BOTH endpoints), not a preferred lane (pinned read-only by R1416). A 0.40 mm-tall domain cannot contain pads millimetres away in y => the edges die by construction: no-path-coarse(exhausted-1)=47 and no-free-start-node=22, versus 1 such reason in the unconstrained baseline. The intent \"use trunk lane k\" is inexpressible through the only lever this maze exposes (the domain rect): a hard domain can only FORBID, never PREFER.",
+  "gap_layer": "ENGINE MEANS LAYER (routing allocation/order). NOT the drawing layer (98 anchored pieces, padless=0, stitched-field DRC zero short/cross/clearance), NOT the construction layer, NOT L1 (no topology/interface/pin-map change needed; the #K2-450 sec.2.3 conservation proof stands).",
+  "also_named_not_this_means": "(a) exception:KeyError = 244 in ALL three runs (241 on GND) - tools/k2_p4_mroute_v1.py:722, an endpoint uuid absent from ctx.pads/vias/tracks because GND is a POUR net filtered by _ctx_no_pour => a whole class of GND/pour edges starves by construction; (b) the widen ladder degenerates to (0,0,0) under the frozen margin 0.0 (R1252) - three identical attempts per slot, band never widened, solve cost tripled (33 min)."
+ },
+ "plan_recap": {
+  "q1_signal_path": "The wiped block frame must reconnect every net from its pads back to the block-edge ports on dR. Power on the inner planes, buses as groups, control links short and direct - the 98 anchored pieces already draw exactly that.",
+  "q2_what_blocks": "Not space, not the drawing. The router decides by serving edges one at a time, so whoever is served last starves (the residual rotates). Every attempt to PRE-ASSIGN the answer (whole-net band, layered y-bands, per-corridor slots) must go through the solve domain, and a hard domain can only forbid - that is why 2 residuals became 47.",
+  "q3_human_plan": "Draw everything first, then settle only the collisions: rip up the conflicting runs and re-route them with a penalty for reusing occupied space, iterating a bounded number of times until nothing conflicts (negotiated congestion / rip-up-and-reroute). Plain words: let everyone draw, then arbitrate - do not hand out lanes nobody can reach."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "NOT STARTED IN THIS WINDOW (obeying the stop order; also sec.17.4 forbids occupying a round with \"one more tool version\").",
+  "means change (goal unchanged, C1 -> 0): wrapper-level negotiated congestion / rip-up-and-reroute - pass 1 routes the 336 edges unconstrained (the known-good 68-added state), pass 2 detects conflicting additions, rips them up and re-routes with a congestion cost, bounded iteration, accepted copper kept (registered M-ENG-ROUTER-REROUTE + sec.2.6).",
+  "land WITH it, fail-closed: the chain must REFUSE to re-feed multi-slot (per-corridor) channels into WALL_RECT (starvation now proven) + RED->GREEN regression (sec.22.3).",
+  "optional same window: the degenerate widen ladder at frozen margin 0.0.",
+  "separate case, named: the GND/pour edge class (244 x exception:KeyError)."
+ ],
+ "discipline_note": "Zero parameter retries, zero reruns, one authorised run. The stop-order family (token = a work-dir path constant; previously voided under other tokens) is still a LATENT false positive: M-SUP-SAME-SIGNATURE-REFIRE-GATE is not wired.",
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
