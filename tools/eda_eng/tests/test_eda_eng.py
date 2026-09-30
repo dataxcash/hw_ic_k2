@@ -1800,6 +1800,45 @@ class T(unittest.TestCase):
         self.assertIn('plan["teardown"]', rp)
         self.assertIn('items["tracks"]', rp)
 
+    def test_C466_the_patch_anchor_gate_is_all_or_nothing_RED_then_GREEN(self):
+        """#K2-466 sec.2.6: my two consecutive failures (R1476/R1480) had ONE root cause - patching from memory without
+        reading the current anchor first, which aborted mid-batch and left the suite RED. The gate must therefore REFUSE
+        the whole batch BEFORE any write when an anchor is absent or not unique, and apply all edits only when every
+        anchor is verified present exactly once."""
+        import importlib.util, tempfile
+        sp = importlib.util.spec_from_file_location("k2pag", os.path.join("tools", "k2_patch_anchor_gate_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        d = tempfile.mkdtemp(prefix="k2pag")
+        p = os.path.join(d, "sample.py")
+        open(p, "w", encoding="utf-8").write("A = 1\nB = 2\nB = 2\nC = 3\n")
+        # RED 1: anchor absent => refuse, and NOTHING is written
+        r = m.apply_batch([{"path": p, "old": "NOPE = 9", "new": "X = 1"}])
+        self.assertFalse(r["ok"]); self.assertEqual(r["applied"], 0)
+        self.assertEqual(open(p, encoding="utf-8").read(), "A = 1\nB = 2\nB = 2\nC = 3\n",
+                         "a refused batch must not write ANY file")
+        # RED 2: anchor present twice when exactly one is expected => refuse
+        r = m.apply_batch([{"path": p, "old": "B = 2", "new": "B = 5"}])
+        self.assertFalse(r["ok"]); self.assertEqual(r["applied"], 0)
+        self.assertIn("count 2 != expected 1", str(r["problems"]))
+        # RED 3: a TWO-edit batch where the SECOND anchor is bad => the FIRST must not be written either
+        r = m.apply_batch([{"path": p, "old": "A = 1", "new": "A = 7"},
+                           {"path": p, "old": "MISSING", "new": "y"}])
+        self.assertFalse(r["ok"]); self.assertEqual(open(p, encoding="utf-8").read().splitlines()[0], "A = 1")
+        # GREEN: every anchor unique => all edits applied
+        r = m.apply_batch([{"path": p, "old": "A = 1", "new": "A = 7"},
+                           {"path": p, "old": "C = 3", "new": "C = 9"}])
+        self.assertTrue(r["ok"]); self.assertEqual(r["applied"], 2)
+        self.assertEqual(open(p, encoding="utf-8").read(), "A = 7\nB = 2\nB = 2\nC = 9\n")
+        # and the gate answers the PRACTICAL question: are the anchors the next item-2 batch needs present NOW?
+        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        need = [{"path": os.path.join(root, "tools", "k2_p4_mroute_v1.py"), "old": "AVOID = None"},
+                {"path": os.path.join(root, "tools", "k2_reroute_router_floor_v1.py"),
+                 "old": 'ap.add_argument("--ripup", type=int, default=0,'},
+                {"path": os.path.join(root, "tools", "eda_eng", "regen.py"),
+                 "old": '"--port-refs", PORT_REFS, "--ripup", "3", *_charg])', "count": 3}]
+        chk = m.check_anchors(need)
+        self.assertTrue(chk["ok"], "the anchors the NEXT batch needs must be verifiable up front: %s" % chk["problems"])
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
