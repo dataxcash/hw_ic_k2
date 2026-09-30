@@ -1,0 +1,55 @@
+{
+ "artifact": "r6_acceptance_relocation_zero_human_v4",
+ "ts": "2026-10-01",
+ "authority": "#K2-488 sec.2 R6 (acceptance = position adjustment unrelated to K2, engine end to end, ZERO human) + #K2-524 sec.2 (harden: DRC before/after delta)",
+ "board": "/tmp/opencode/r6/r6_in.kicad_pcb",
+ "board_origin": "KiCad own template Arduino_Uno - /tmp copy only",
+ "verb": {
+  "name": "move-parts",
+  "syntax_from_source": "--board --rect --moves 'ref:dx:dy,...' --out"
+ },
+ "adjustment": {
+  "ref": "J1",
+  "delta_mm": [
+   1.0,
+   0.5
+  ]
+ },
+ "verified": {
+  "moved_by_mm": [
+   1.0,
+   0.5
+  ],
+  "matches_declared": true,
+  "drc_before": {
+   "rc": 0,
+   "report": true,
+   "violations": 10,
+   "types": {
+    "silk_edge_clearance": 2,
+    "lib_footprint_mismatch": 4,
+    "lib_footprint_issues": 4
+   }
+  },
+  "drc_after": {
+   "rc": 0,
+   "report": true,
+   "violations": 10,
+   "types": {
+    "silk_edge_clearance": 2,
+    "lib_footprint_mismatch": 4,
+    "lib_footprint_issues": 4
+   }
+  },
+  "violation_delta_by_type": {
+   "lib_footprint_issues": 0,
+   "lib_footprint_mismatch": 0,
+   "silk_edge_clearance": 0
+  },
+  "new_violation_types": []
+ },
+ "hard_gate": "NO NEW VIOLATION TYPE (a new type is a real regression; item counts may shift legitimately when a part moves)",
+ "verdict": "PASS",
+ "zero_human_intervention": true,
+ "OWNER-ITEMS": 0
+}
