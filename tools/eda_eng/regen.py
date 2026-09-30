@@ -1818,7 +1818,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _mclear = None
     _mask_args = ["--mask-clear-mm", str(_mclear)] if _mclear else []
     rc, ap = _cli("route", "--apply-batch", empty, "--board", resolved, "--out", final,
-                  "--bound-rect", ",".join(str(x) for x in rect), *_mask_args)
+                  "--bound-rect", ",".join(str(x) for x in rect), "--keep-islands", *_mask_args)
     if rc != 0 or not os.path.isfile(final):
         return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
     # ── #K2-510 sec.3 item 1 (ENG): REFILL FRAME DISCIPLINE - the pour must not move OUTSIDE-FRAME copper.
