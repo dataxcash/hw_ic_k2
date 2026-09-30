@@ -1,0 +1,152 @@
+{
+ "artifact": "k2_escape_pad_model_artifact_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-471 (the window authorised: implement the bounded via-escape branch, pin CANDS_MAX as a literal, close the regression fixture on every layer, RED->GREEN, re-run the precheck, GO => one N=1). Before paying for that implementation this record checks the window's PREMISE with a measurement - the same discipline that produced R1470 (a prescription was falsified before it was built) and R1512 (a ruling-named branch was missing). TWO findings, both decisive.",
+ "window": "#K2-471",
+ "finding_1_the_via_branch_is_provably_SUBSUMED_by_the_in_plane_branch": {
+  "statement": "under the planner's own clearance model the via branch can NEVER turn a refusal into an escape, so landing it cannot change any precheck verdict - it would be dead code.",
+  "model": "_leg_clear uses need = clear + hw (0.30 + obstacle half-width). A via is a disc: _via_clear uses need = clear + via_r + hw (0.30 + 0.175 + hw). The via's requirement is STRICTLY LARGER than the leg's at the same point, and the via additionally needs its site reached (a clear in-plane prefix for r>0).",
+  "proof_r0": "if the in-plane ladder refuses, then in EVERY direction the k=1 leg (length 0.1) is blocked, i.e. in every direction there is an obstacle within (clear + hw) + 0.1 = 0.25 + hw of the pad centre. A via at the pad centre (r=0) needs a clear disc of clear + via_r + hw = 0.475 + hw. Since 0.25 + hw < 0.475 + hw, that same obstacle blocks the via. => r=0 can never rescue a refusal.",
+  "proof_r_gt_0": "for r >= step, the via candidate additionally requires a clear in-plane prefix [pad, v]; but the obstacle that blocks the k=1 leg in the SAME direction lies within 0.15+hw of the segment [pad, p_1] (length 0.1), which is a SUB-SEGMENT of that prefix, so the prefix is blocked and the candidate is skipped. => r>0 can never rescue a refusal either.",
+  "empirical_confirmation": "with the current (point) pad model the via-at-centre clearance to the nearest neighbour is 0.50mm while the via needs 0.625mm (0.30 + 0.175 + 0.15) => blocked, exactly as the proof says. The via branch was therefore NOT implemented this window: it is provably a no-op, and landing dead code would be false completeness.",
+  "note": "#K2-467 sec.2.1 does name the via branch; the gap R1512 found is real as a SPEC-vs-CODE gap, but the branch carries no decision power for this gate."
+ },
+ "finding_2_the_two_refusals_are_artifacts_of_an_OVER_SIZED_ISOTROPIC_PAD_MODEL": {
+  "statement": "the refusals are not a property of the board - they are produced by modelling every pad as a POINT with an ISOTROPIC half-width equal to max(size.x,size.y)/2. That is NOT the most permissive model: for a long thin pad it is ~5x too big.",
+  "measured_pads": {
+   "I2C2_SCL @ (37.75,57.1625)  [U1 pad 22]": {
+    "att": "SMD",
+    "layers": [
+     "F.Cu"
+    ],
+    "size_mm": [
+     0.3,
+     1.475
+    ]
+   },
+   "I2C1_SDA @ (33.25,48.8375) [U1 pad 48]": {
+    "att": "SMD",
+    "layers": [
+     "F.Cu"
+    ],
+    "size_mm": [
+     0.3,
+     1.475
+    ]
+   }
+  },
+  "point_model": {
+   "half_width_used": "max(0.300, 1.475)/2 = 0.7375 mm (an isotropic disc of radius 0.7375)",
+   "true_short_half_axis": "0.150 mm",
+   "inflation": "0.7375 / 0.150 = 4.92x in the short direction",
+   "effect": "a neighbour at 0.50mm pitch (GND @ (37.25,57.1625) and I2C2_SDA @ (38.25,57.1625) for pad 22) then needs clear + hw = 0.30 + 0.7375 = 1.0375mm of centre-to-centre room, so EVERY neighbour is fatal and every ray is blocked."
+  },
+  "true_shape_model": {
+   "shape": "capsule along the pad's long axis: segment half-length (1.475-0.300)/2 = 0.5875, hw = 0.300/2 = 0.150",
+   "why_the_escape_is_legal": "along the LONG axis the same neighbour is 0.50mm away centre-to-centre and needs only clear + hw = 0.30 + 0.150 = 0.45mm => 0.50 >= 0.45 => the corridor is LEGAL (edge-to-edge 0.25mm vs the 0.20mm floor). This is exactly the geometry the R1440 witness uses: a short F.Cu run along the pad's long axis to a via at ~(37.75,56.2), i.e. 0.225mm beyond the pad's north tip."
+  },
+  "decisive_read": {
+   "method": "read-only replay of plan_escapes() on the SAME board (/tmp/opencode/k2af/s1d_stitched.kicad_pcb), SAME obstacles (tracks exact), SAME criterion (clear=0.30, max_escape_len=2.0, step=0.1), changing ONLY the pad obstacle model.",
+   "target_set": "the two UNCONNECTED ends only (#K2-468 sec.3.2): I2C2_SCL@U1.22 and I2C1_SDA@U1.48",
+   "point_model_result": {
+    "go": false,
+    "assets": 1,
+    "refused": 2,
+    "refused_named": [
+     "I2C2_SCL@(37.75,57.1625)",
+     "I2C1_SDA@(33.25,48.8375)"
+    ]
+   },
+   "true_shape_model_result": {
+    "go": true,
+    "assets": 3,
+    "refused": 0,
+    "assets_for_the_two_ends": [
+     {
+      "net": "I2C2_SCL",
+      "a": [
+       37.75,
+       57.1625
+      ],
+      "b": [
+       37.75,
+       57.2625
+      ],
+      "dir": [
+       0,
+       1
+      ],
+      "d": 0.1
+     },
+     {
+      "net": "I2C1_SDA",
+      "a": [
+       33.25,
+       48.8375
+      ],
+      "b": [
+       33.25,
+       48.9375
+      ],
+      "dir": [
+       0,
+       1
+      ],
+      "d": 0.1
+     }
+    ]
+   },
+   "conclusion": "both ends own a deterministic in-plane escape along the pad's long axis; the refusal is a MODEL ARTIFACT."
+  },
+  "corrects_two_recorded_claims": [
+   "R1498: 'each PAD obstacle was modelled as a POINT with its half-size, which is SMALLER than the pad TRUE SHAPE, i.e. the MOST PERMISSIVE pad model' - FALSE for an anisotropic pad (0.30 x 1.475): the isotropic disc is 4.92x the true short half-axis.",
+   "#K2-468 sec.2: 'the refusals are conservative-real (a more faithful/larger obstacle can only REDUCE freedom)' - the model is not a lower bound on the pad; the true shape is SMALLER in the short direction and opens the long-axis corridor."
+  ]
+ },
+ "consequence": {
+  "appendix_A": "appendix A (sec.16.3 dead-exit / relocation) must NOT be used to relocate or redraw either pad: neither is a dead exit. Relocating U1 pad 22 would be exactly the 'wrongly relocated pad' risk #K2-470 was written to prevent.",
+  "do_not_run_n1": "the gate reading under the current model is FALSE and the model is the thing under repair => no N=1 is taken.",
+  "via_branch": "not implemented: provably subsumed (finding 1)."
+ },
+ "proposed_fix_for_the_next_authorised_window": [
+  "1. the precheck must model each pad by its TRUE anisotropic shape (capsule / rounded rect along the long axis), not an isotropic disc.",
+  "2. the SOURCE pad's escape origin must leave the pad's own copper (or the asset must reach a free cell beyond the pad), so an asset is a USABLE corridor - a 0.1mm stub that still lies inside the pad is not an escape.",
+  "3. strengthen the asset criterion accordingly (require the corridor to reach a free cell / a usable length), because the current criterion 'any clear 0.1mm leg' is trivially satisfiable.",
+  "4. re-derive and PIN the bound literal as before, close the RED fixture on every reachable layer, and rerun the precheck (unconnected ends only).",
+  "5. only if that corrected gate is GO, take exactly one fresh N=1 (per #K2-468 sec.3.4 / #K2-470 sec.3.4)."
+ ],
+ "capability_registration_proposed": {
+  "id": "M-ENG-PAD-SHAPE-MODEL",
+  "root_cause": "an accelerator/boundary model that is believed conservative but is not; an isotropic half-width on an anisotropic pad over-sizes the obstacle and manufactures refusals",
+  "remedy": "model obstacles with their true shape; state, per model, whether it is an UPPER or LOWER bound on the real freedom, and do not claim 'permissive' without the geometry",
+  "closure_criterion": "asset + same-class regression PASS (an anisotropic long pad enclosed short-axis, open long-axis => GO) + a corrected real-board precheck reading"
+ },
+ "evidence_reproducibility": {
+  "board": "/tmp/opencode/k2af/s1d_stitched.kicad_pcb",
+  "interpreter": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11",
+  "planner": "tools/k2_pin_escape_plan_v1.py (unchanged this window)",
+  "note": "read-only; two runs differ ONLY in how each pad is turned into an obstacle entry; both write nothing to the board"
+ },
+ "tried": [
+  "plan_escapes() on the real board with the point+max-half pad model => go=False (2 named refusals)",
+  "plan_escapes() on the same board with the true anisotropic (capsule) pad model => go=True (0 refusals)"
+ ],
+ "why_not_passing": "the gate was refusing on its own model, not on the board",
+ "gap_layer": "ENG precheck MODELLING layer (量具/模型层) - NOT the scheme/drawing layer, NOT the engine capability, NOT the criteria, NOT L1",
+ "impact": {
+  "exam_runs": 0,
+  "board_writes": 0,
+  "red_piece_left": "none",
+  "tree": "clean",
+  "k2_head": "05fed262768e691dd958a45fb9dc48b2627b6033"
+ },
+ "not_done": [
+  "the via branch (provably subsumed)",
+  "the CANDS_MAX literal",
+  "the corrected pad model",
+  "the precheck rerun under a corrected model",
+  "N=1",
+  "appendix A"
+ ],
+ "OWNER-ITEMS": 0
+}
