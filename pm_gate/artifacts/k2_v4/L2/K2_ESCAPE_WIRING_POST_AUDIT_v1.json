@@ -1,0 +1,33 @@
+{
+ "artifact": "k2_escape_wiring_post_audit_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-473 sec.3.4 (after the one authorised N=1 comes back FAIL with C1>=2: stop + NAME). This is the naming read: WHERE the residual actually is. Read-only; zero board writes; zero exam runs.",
+ "inputs": {
+  "graded_board": "/tmp/opencode/k2w1/s3c_disposed.kicad_pcb",
+  "graded_drc": "/tmp/opencode/k2w1/s4_drc.json",
+  "work": "/tmp/opencode/k2w1",
+  "run": "R1530 (N=1, FAIL, C1=2)"
+ },
+ "finding_1_the_pad_local_corridors_are_FREE": {
+  "I2C2_SCL_corridor": "37.45,56.8625 .. 38.05,58.2625 @F.Cu -> EMPTY: no foreign tracks/vias anywhere inside; the net did NOT even claim it",
+  "I2C1_SDA_corridor": "32.95,48.5375 .. 33.55,49.9375 @F.Cu -> the only in-rect items are the net's OWN F.Cu track and PERSTA# tracks on In2.Cu (a different layer, irrelevant to the F.Cu corridor)"
+ },
+ "finding_2_the_residual_is_a_LONG_HAUL_connection_not_a_pad_escape": {
+  "unconnected_item_1": "track [I2C2_SCL] (F.Cu) @ (51.5, 56.6) <<>> U1 pad 22 [I2C2_SCL] @ (37.75, 57.1625)  => a ~13.75mm path across the block; the pad's own 0.8mm escape corridor is already free",
+  "unconnected_item_2": "U1 pad 13 [PWR_BTN_OUT] @ (33.25,57.1625) <<>> track [PWR_BTN_OUT] (In2.Cu) @ (51.5, 38.7)  => PWR_BTN_OUT was NOT one of the eight corridor targets",
+  "reading": "the pad is accessible (precheck go=TRUE, corridor free); what is missing is the LONG route from the pad to its frame port - i.e. an occupancy/reachability failure in the maze body, far from the pad"
+ },
+ "finding_3_scope_note": {
+  "the_reservation_set": "each corridor was reserved against the OTHER SEVEN OBJECTIVE NETS only",
+  "R1508_census": "named GND as U1 pad 22's first blocker in ALL 8 in-plane directions - under the OLD point model; the corrected gauge (R1522) shows the pad escapes, so that census no longer describes the binding constraint",
+  "possible_cost": "189 reservations were placed while only 2 pads were ever the residual; PWR_BTN_OUT (not a target) is now one of the two unconnected items - a possible, UNVERIFIED cost"
+ },
+ "conclusion": "the pin-escape stage is aimed at the PAD, but the pad was never the binding constraint after the true-shape gauge fix. The residual is a LONG-HAUL routing failure. A pad-local keepout cannot address it. Recommend the supervisor re-scope: close/retarget M-ENG-PIN-ACCESS-ESCAPE, and aim the next read at the long-haul blocker (a read-only occupancy/corridor audit along pad -> frame port for the two residual nets), or take C6 as the separate piece.",
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change",
+  "no same-cause rerun (forbidden by #K2-473 sec.3.4 / #K2-474 sec.4.6)"
+ ],
+ "OWNER-ITEMS": 0
+}
