@@ -611,6 +611,44 @@ def dangling_items(items, tol=0.02):
     return out
 
 
+def board_items(board_path):
+    """#K2-500 ENGINE CAPABILITY (the function the chain's audit/prune stage calls): assemble the copper item list
+    from a real board - tracks as centre-line+halfwidth, vias as zero-length segments of their radius on EVERY layer
+    of their span, pads as true-shape capsules on each layer they are on. Deterministic. R1652's chain wiring
+    referenced this name but the function had only ever existed in reverted attempts (R1634..R1644), so the audit
+    stage died with AttributeError and the prune never ran (named in R1654). This lands it for real.
+    """
+    b = pcbnew.LoadBoard(board_path)
+    N2I = {LNAME[L]: L for L in LAYERS}
+    items = []
+    for t in b.GetTracks():
+        s, e = t.GetStart(), t.GetEnd()
+        if t.GetClass() == "PCB_VIA":
+            seq = list(t.GetLayerSet().Seq())
+            for L in seq:
+                items.append(("VIA", L, pcbnew.ToMM(s.x), pcbnew.ToMM(s.y), pcbnew.ToMM(s.x), pcbnew.ToMM(s.y),
+                              pcbnew.ToMM(t.GetWidth(seq[0])) / 2.0, t.GetNetname()))
+        else:
+            L = N2I.get(b.GetLayerName(t.GetLayer()))
+            if L is None:
+                continue
+            items.append(("TRK", L, pcbnew.ToMM(s.x), pcbnew.ToMM(s.y), pcbnew.ToMM(e.x), pcbnew.ToMM(e.y),
+                          pcbnew.ToMM(t.GetWidth()) / 2.0, t.GetNetname()))
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            pos = pd.GetPosition(); x, y = pcbnew.ToMM(pos.x), pcbnew.ToMM(pos.y)
+            sz = pd.GetSize(); sx, sy = pcbnew.ToMM(sz.x), pcbnew.ToMM(sz.y)
+            if sy >= sx:
+                a, c, hw = (x, y - (sy - sx) / 2.0), (x, y + (sy - sx) / 2.0), sx / 2.0
+            else:
+                a, c, hw = (x - (sx - sy) / 2.0, y), (x + (sx - sy) / 2.0, y), sy / 2.0
+            lys = ([N2I["F.Cu"], N2I["B.Cu"]] if pd.GetAttribute() == pcbnew.PAD_ATTRIB_PTH
+                   else ([N2I["F.Cu"]] if pd.IsOnLayer(pcbnew.F_Cu) else [N2I["B.Cu"]]))
+            for L in lys:
+                items.append(("PAD", L, a[0], a[1], c[0], c[1], hw, pd.GetNetname() or ""))
+    return items
+
+
 def board_dangling(board_path, tol=0.02):
     """#K2-494 ENGINE CAPABILITY: build the item list from a real board and return dangling_ends(...).
 
