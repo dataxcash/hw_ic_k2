@@ -150,16 +150,20 @@ def main():
                                 _lay or "F.Cu"))
         except Exception:                                            # noqa: BLE001
             _PP = []
-    for _it in [x for x in (a.escape_port or "").split(";") if x.strip()]:   # #K2-475 sec.3.2 B
+    _EP = []                                         # #K2-478: escape ports are SUBSTITUTION-ONLY (NOT goals)
+    for _it in [x for x in (a.escape_port or "").split(";") if x.strip()]:   # #K2-475 sec.3.2 B / #K2-478 fix
         try:
             _en, _er = _it.split(":", 1)
             _lay2 = "F.Cu"
             if "@" in _er:
                 _er, _lay2 = _er.split("@", 1)
             _ex, _ey = [float(v) for v in _er.split(",")]
-            _PP.append((_en, round(_ex, 4), round(_ey, 4), _lay2))
+            _EP.append((_en, round(_ex, 4), round(_ey, 4), _lay2))
         except Exception:                                      # noqa: BLE001
             pass
+    mr._ESCAPE_PORTS = _EP                           # #K2-478: R1542 named these as FALSE GOALS when put in
+                                                     # _PORT_PADS (a 0.8mm stub satisfied the edge and blocked=[]
+                                                     # while C1 stayed 2). They now only REPLACE a starved endpoint.
     mr._PORT_PADS = _PP                               # #K2-430 sec.2.4: FROZEN - the channel already includes
                                                       # the reach; ZERO runtime freedom (no ladder)
     recs = []
@@ -360,15 +364,22 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
         # ── #K2-454 sec.2.4/2.5：**起点侧替换**（框外端点 → 该网 ∂R 端口）· 在任何求解之前 ──────────────
         # 确定性 · 零搜索 · 不动 `WALL_RECT`/放行闸/迷宫本体；两个端点皆被替换且落到**同一铜岛** ⇒ 具名 no-op（不加铜）。
         if _saved is not None:
-            _prts = _ports(ctx, net)
+            def _escape_prts(net):
+                out = []
+                for (_n, _x, _y, _l) in getattr(mr, "_ESCAPE_PORTS", []):
+                    if _n == net:
+                        out.append((_norm_layer(_l, _LNAME2ID), _x, _y, "e:" + str(_x) + ":" + str(_y)))
+                return out
+            _prts = _ports(ctx, net)                      # GOAL candidates - UNCHANGED (no escape ports, #K2-478)
+            _prtss = _prts + _escape_prts(net)            # substitution-only rescue set (#K2-478)
             # #K2-454 refinement (measured by the dry-run precheck): substitute ONLY when BOTH ends are outside the wall.
             # Substituting a single outside end REPLACED working retry formulations (R1430 had 13 edges that only
             # succeeded through the retry: reachable_via_port) and collapsed them into same-island no-ops, costing adds
             # (68 -> 66). The both-outside case is the one the retry can NEVER fix, because both of its directions still
             # pass one outside end.
             if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved):
-                _pa, _la2, _tpa = _port_substitute(pa, la, _saved, _prts)
-                _pb, _lb2, _tpb = _port_substitute(pb, lb, _saved, _prts)
+                _pa, _la2, _tpa = _port_substitute(pa, la, _saved, _prtss)
+                _pb, _lb2, _tpb = _port_substitute(pb, lb, _saved, _prtss)
                 if _tpa is not None:
                     _ca = find(_tpa) if str(_tpa).startswith("p:") else find("t:" + str(_tpa))
                     if _ca is not None:
@@ -430,7 +441,7 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
             _fit = {}
             if _saved and _prts:
                 for _nm, _pt, _ly in (("a", pa, la), ("b", pb, lb)):
-                    _p2, _l2, _t2 = _port_substitute(_pt, _ly, _saved, _prts)
+                    _p2, _l2, _t2 = _port_substitute(_pt, _ly, _saved, _prtss)
                     if _t2 is not None:
                         _c2 = find(_t2) if str(_t2).startswith("p:") else find("t:" + str(_t2))
                         if _c2 is not None:

@@ -1616,7 +1616,11 @@ class T(unittest.TestCase):
         mr.WALL_RECT = None
         self.assertEqual(why, "ok", "from the substituted port the maze solves normally (no-new-permission: gates unchanged)")
         src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
-        self.assertIn("_port_substitute(pa, la, _saved, _prts)", src, "the substitution must be wired BEFORE the solve")
+        self.assertIn("_port_substitute(pa, la, _saved, _prtss)", src, "the substitution must be wired BEFORE the solve")
+        # #K2-478: the substitution set = the goal ports PLUS the escape ports (which are SUBSTITUTION-ONLY -
+        # R1542 proved that putting them in the GOAL set made them false goals: a 0.8mm stub satisfied the edge).
+        self.assertIn("_prtss = _prts + _escape_prts(net)", src)
+        self.assertIn("mr._ESCAPE_PORTS = _EP", src)
         self.assertIn("if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved):", src,
                       "ONLY the both-outside case may be substituted: a single outside end is already handled by the "
                       "retry, and re-formulating it (measured in the #K2-454 dry-run) collapsed 13 working retry routes "
