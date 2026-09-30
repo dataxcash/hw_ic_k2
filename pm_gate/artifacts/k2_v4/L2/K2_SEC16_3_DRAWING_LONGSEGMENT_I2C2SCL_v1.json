@@ -5,13 +5,6 @@
  "buildability": "no_move",
  "authority_for_the_move": "#K2-482 sec.2.3 (the deterministic layer-change route for the last long segment) + R1556 (reachability: F.Cu free space cut; a layer change is required) + R1440 (witness geometry: short F.Cu run + F->In5 via + inner-layer continuation)",
  "sec16_3_four_elements": {
-  "1_one_line_cause": "I2C2_SCL's last ~13.76mm run (U1.22 corridor end -> frame port (51.5,56.6)) cannot be made on F.Cu alone: the F.Cu free space is CUT (source cell free, destination cell free, but disconnected); the first blocker on the straight run is I2C2_SDA at (37.849,57.953), 0.099mm from the corridor end.",
-  "2_proven_facts": [
-   "R1556: F.Cu src_free=True, dst_free=True, path_exists(F.Cu alone)=False",
-   "R1556: first blocker on the straight run = I2C2_SDA @ (37.849,57.953), 0.099mm off the corridor end",
-   "R1440 witness: the pad's residual is routed by a short F.Cu run + an F->In5 via + inner-layer continuation",
-   "R1552: the 27 fixed escape stubs are laid (the pad's island reaches the corridor end)"
-  ],
   "3_corrected_complete_construction_drawing": {
    "lines": [
     {
@@ -191,9 +184,23 @@
     "capacity": "the In5 free path is a machine-found free corridor; capacity >= demand by construction"
    },
    "relocation_required": [],
-   "ref_plane_continuity": "no new stitching vias beyond the two listed; the F<->In5 pair is the route itself"
+   "ref_plane_continuity": "no new stitching vias beyond the two listed; the F<->In5 pair is the route itself",
+   "action_board_state": "SOLVE-TIME",
+   "authority_for_the_move": "#K2-482 sec.2.3 (the deterministic layer-change route for the last long segment) + R1556 (reachability: F.Cu free space cut; a layer change is required) + R1440 (witness geometry: short F.Cu run + F->In5 via + inner-layer continuation)",
+   "reservation": {
+    "reserved_for_net": "I2C2_SCL",
+    "corridor": "F.Cu stub (already laid) + F<->In5 via + In5 corridor (25 waypoints) + In5<->F via",
+    "note": "no_move: no other net is displaced; the In5 corridor is machine-found free; per-corridor demand <= capacity"
+   }
   },
-  "4_buildability": "no_move"
+  "4_buildability": "no_move",
+  "1_one_line_cause_of_death": "I2C2_SCL's last ~13.76mm run (U1.22 corridor end -> frame port (51.5,56.6)) cannot be made on F.Cu alone: the F.Cu free space is CUT (source cell free, destination cell free, but disconnected); the first blocker on the straight run is I2C2_SDA at (37.849,57.953), 0.099mm from the corridor end.",
+  "2_verified_fact_list": [
+   "R1556: F.Cu src_free=True, dst_free=True, path_exists(F.Cu alone)=False",
+   "R1556: first blocker on the straight run = I2C2_SDA @ (37.849,57.953), 0.099mm off the corridor end",
+   "R1440 witness: the pad's residual is routed by a short F.Cu run + an F->In5 via + inner-layer continuation",
+   "R1552: the 27 fixed escape stubs are laid (the pad's island reaches the corridor end)"
+  ]
  },
  "OWNER-ITEMS": 0,
  "1_one_line_cause_of_death": "I2C2_SCL's last ~13.76mm run (U1.22 corridor end -> frame port (51.5,56.6)) cannot be made on F.Cu alone: the F.Cu free space is CUT (source cell free, destination cell free, but disconnected); the first blocker on the straight run is I2C2_SDA at (37.849,57.953), 0.099mm from the corridor end.",
