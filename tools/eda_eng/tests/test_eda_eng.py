@@ -2057,6 +2057,21 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C510_a_new_via_must_clear_existing_vias_pads_and_drills(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-509 sec.2 item 2). RED without it: the join placed a via
+        0.27mm from an existing one (hole-to-hole 0.0193mm vs the 0.2495 limit) and SHORTED a foreign In2.Cu track.
+        GREEN: the placement gate refuses anything that close, on pads AND drills."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe510", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        ex = [("VIA", "F.Cu", 51.65, 39.1, 51.65, 39.1, 0.225, "X")]
+        self.assertFalse(m.via_placeable(51.4, 39.0, 0.175, ex), "0.27mm from an existing via must be REFUSED")
+        self.assertTrue(m.via_placeable(50.0, 39.0, 0.175, ex), "far away is fine")
+        self.assertTrue(m.via_placeable(51.4, 39.0, 0.175, []), "no existing vias => placeable")
+        r = m.via_join_for_end("N", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [],
+                               ("F.Cu", "In5.Cu"), existing_vias=ex)
+        self.assertIsNone(r["join"], "the cross-layer join must be refused when the only via sites are blocked")
+
     def test_C509_outside_area_moves_are_named_not_lost_in_the_noise(self):
         """TIAN TIAO #1 engine asset + regression (#K2-507 sec.3 item 2). RED without it: the disposal's refill could
         move a zone's OUTSIDE-FRAME covered area silently (R1682/R1692: MCU_VDD|In4 grew 10.9 mm^2 - an area change,

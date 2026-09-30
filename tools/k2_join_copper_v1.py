@@ -66,14 +66,16 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         cand.sort()
         got = None
         for (dd, ol, qx, qy) in cand:
-            span = [mr.LNAME[z] for z in mr.LAYERS
-                    if min(l, o[1]) <= z <= max(l, o[1])]
-            osp = [x_ for x_ in items if mr.LNAME[x_[1]] in span and x_[7] != net]
+            # #K2-509 sec.2 item 2: check EVERY copper layer (a blind via's annulus may reach layers the integer
+            # id ordering mis-suggests). Conservative superset - the ordering assumption is gone.
+            span = [mr.LNAME[z] for z in mr.LAYERS]
+            osp = [x_ for x_ in items if x_[7] != net]
             obs2 = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in osp
                     if (abs(o[2] - ex) <= local_r or abs(o[4] - ex) <= local_r)
                     and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
             rv = planner.via_join_for_end(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
-                                          clear=clear, via_r=via_r, step=0.05, tol=tol)
+                                          clear=clear, via_r=via_r, step=0.05, tol=tol,
+                                          existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
             if rv.get("join"):
                 got = rv["join"]; got["_kind"] = "via"; got["_other"] = ol; break
         if got:

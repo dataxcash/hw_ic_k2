@@ -235,8 +235,25 @@ def join_for_end(net, layer, end, obstacles, targets, clear=0.30, max_len=2.0, s
                                       "why": "no clear same-layer join candidate (8dir x <=%d steps)" % n}}
 
 
+def via_placeable(vx, vy, via_r, existing_vias, hole_clear=0.25, reach=1.0):
+    """#K2-509 sec.2 item 2 ENGINE CAPABILITY（**纯函数** · 确定性）：**新过孔可置否**。
+
+    真短路实证（`R1702`）：join 之 `P3V3_AUX` 盲孔 `@(51.4,39.0)` **短到**既有 `PWR_BTN_OUT` 铜，且与既有
+    过孔 `@(51.65,39.1)` **孔距仅 0.0193mm**（限 0.2495）——因为**钻径/孔距完全未建模**。本函数把两件事一次
+    装上：**新孔之铜（半径 `via_r`）不得与既有过孔之铜（`hw`）重叠，且两者之孔壁至少留 `hole_clear`**。
+    `existing_vias` ＝ 场上**全部**过孔项（元组第 6 位 ＝ 其焊盘半径）。**保守、无搜索**。
+    """
+    for o in (existing_vias or ()):
+        if o[0] != "VIA":
+            continue
+        d = math.hypot(float(o[2]) - vx, float(o[3]) - vy)
+        if d <= reach and d < via_r + float(o[6]) + hole_clear:
+            return False
+    return True
+
+
 def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_layers,
-                     clear=0.30, via_r=0.175, step=0.05, tol=0.02):
+                     clear=0.30, via_r=0.175, step=0.05, tol=0.02, existing_vias=None, hole_clear=0.25):
     """#K2-508 ENGINE CAPABILITY —— **join 半（跨层）**：以**一枚过孔**把 `end`（在 `layer`）与 `target_pt`
     （在 `other_layer`）接上。过孔位置沿 `end→target_pt` **定步长采样**（有界 · 确定性 · 首中即取）：
     须**同时搭到两端之铜**（≤`via_r+tol`）且**在所跨每一层**（`span_layers`）与**每一个异网障碍**保持净距 ——
@@ -254,6 +271,8 @@ def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_la
         tried += 1
         if math.hypot(vx - x0, vy - y0) > via_r + tol or math.hypot(vx - x1, vy - y1) > via_r + tol:
             continue
+        if not via_placeable(vx, vy, via_r, existing_vias, hole_clear):
+            continue                                    # #K2-509: drill/pad proximity - never place a via too close
         if all(_leg_clear(net, LZ, (vx, vy), (vx, vy), obstacles, need) for LZ in (span_layers or (layer, other_layer))):
             return {"join": {"kind": "via", "net": net, "at": [round(vx, 4), round(vy, 4)],
                              "layers": [layer, other_layer], "from": [round(x0, 4), round(y0, 4)],
