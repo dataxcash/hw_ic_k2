@@ -942,3 +942,55 @@ def geometry_equal(a, b):
     """两个 canonical Counter 的多重集差（正/负/总）。"""
     plus = sum((a - b).values()); minus = sum((b - a).values())
     return {"only_in_a": plus, "only_in_b": minus, "diff": plus + minus, "equal": (plus + minus) == 0}
+
+
+def attribute_delta(cur, ref, zone_keys=()):
+    """#K2-503 ENGINE CAPABILITY（纯函数 · 确定性 · 有界）：把 canonical Counter 之差**逐件归因**。
+
+    C6 的读数是一个数（例：819），但一个数**不可行动**：**灌铜重填的边**与**真铜被增删**是两种完全不同的
+    发现，混在一个数字里会同时误导判读与修法（R1676：819 里 817 是灌铜边、仅 2 是真铜）。本函数把它拆开：
+    `added_by_kind / removed_by_kind`（ZONE / SEG / VIA）、`added_by_net_layer`、`zone_edges`、以及
+    **`real_items`（非灌铜之逐件清单）**。`zone_keys` ＝ 属灌铜填充边之键集（由 `zone_fill_segments` 给出）。
+    零搜索 · 无循环以外的循环 · 确定性排序。
+    """
+    add, rem, by_nl = collections.Counter(), collections.Counter(), collections.Counter()
+    real = []
+    for k, n in (cur - ref).items():
+        if n <= 0:
+            continue
+        kind = "ZONE" if k in zone_keys else ("VIA" if k[1] == "VIA" else "SEG")
+        add[kind] += n
+        by_nl[(k[0], k[1])] += n
+        if kind != "ZONE":
+            real.append({"dir": "added", "key": list(k), "n": n})
+    for k, n in (ref - cur).items():
+        if n <= 0:
+            continue
+        kind = "ZONE" if k in zone_keys else ("VIA" if k[1] == "VIA" else "SEG")
+        rem[kind] += n
+        if kind != "ZONE":
+            real.append({"dir": "removed", "key": list(k), "n": n})
+    real.sort(key=lambda r: (r["dir"], str(r["key"])))
+    return {"added_by_kind": dict(sorted(add.items())), "removed_by_kind": dict(sorted(rem.items())),
+            "added_by_net_layer": {"%s|%s" % k: v for k, v in sorted(by_nl.items(), key=lambda t: (-t[1], str(t[0])))},
+            "total": sum(add.values()) + sum(rem.values()),
+            "zone_edges": add.get("ZONE", 0) + rem.get("ZONE", 0),
+            "real_items": real, "n_real": len(real),
+            "rule": "#K2-503: an outside-copper delta must be NAMEABLE - a zone-fill re-polygonisation and a real "
+                    "copper change are different findings and must never be reported as one number."}
+
+
+def outside_copper_delta(final, ref, rect, nd=3):
+    """#K2-503 ENGINE CAPABILITY：C6「块外铜零改动」读数的**具名分解**（zone-aware 口径，判据不动）。
+
+    引擎自己对**自己的**块外铜差做归因：`attribute_delta(outside_geometry(...,include_zones=True), ...)`，
+    并给出 `legacy_total`（只算段＋孔之口径）以便同时看到两种口径。**只读 · 不开判据 · 不改判据表。**
+    """
+    cur = outside_geometry(final, rect, nd=nd, include_zones=True)
+    r = outside_geometry(ref, rect, nd=nd, include_zones=True)
+    zk = set(zone_fill_segments(final, rect, nd=nd, only_outside=True)) | \
+         set(zone_fill_segments(ref, rect, nd=nd, only_outside=True))
+    out = attribute_delta(cur, r, zk)
+    out["legacy_total"] = geometry_equal(outside_geometry(final, rect, nd=nd),
+                                         outside_geometry(ref, rect, nd=nd))["diff"]
+    return out

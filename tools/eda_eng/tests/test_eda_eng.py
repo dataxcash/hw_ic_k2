@@ -2057,6 +2057,27 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C503_the_outside_copper_delta_is_named_not_a_single_number(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-503). RED without it: the C6 read is ONE number (819) that
+        cannot be acted on - R1676 showed 817 of it was zone-fill edge churn and only 2 were real copper. GREEN:
+        the delta is split by kind (zone churn is never counted as real copper) and a board against ITSELF is 0."""
+        import collections as _c
+        cur = _c.Counter({("N", "In1.Cu", 1, 2, 3, 4): 3, ("M", "F.Cu", 5, 6, 7, 8, 0.2): 1})
+        ref = _c.Counter({("N", "In1.Cu", 1, 2, 3, 4): 1, ("M", "F.Cu", 5, 6, 7, 8, 0.2): 1})
+        a = block.attribute_delta(cur, ref, zone_keys={("N", "In1.Cu", 1, 2, 3, 4)})
+        self.assertEqual(a["zone_edges"], 2, "zone-fill churn is counted as zone edges")
+        self.assertEqual(a["n_real"], 0, "zone churn is NOT real copper")
+        self.assertEqual(a["total"], 2)
+        b = block.attribute_delta(cur, ref)
+        self.assertEqual(b["added_by_kind"], {"SEG": 2}, "without the zone set it is honestly a real-copper read")
+        self.assertEqual(b["n_real"], 1)
+        rect = [22.95, 32.95, 51.5, 78.0]
+        d = block.outside_copper_delta(REF, REF, rect)
+        self.assertEqual(d["total"], 0, "a board against itself must be exactly zero")
+        self.assertEqual(d["real_items"], [])
+        self.assertEqual(d["legacy_total"], 0)
+        self.assertEqual(d["zone_edges"], 0)
+
     def test_C502_escape_clearance_uses_the_true_pad_shape(self):
         """TIAN TIAO #1 engine asset + regression (#K2-502). RED without it: the escape clearance test modelled a
         pad as the inscribed capsule, so a pad's rectangular CORNER was invisible and a 45-degree escape step
