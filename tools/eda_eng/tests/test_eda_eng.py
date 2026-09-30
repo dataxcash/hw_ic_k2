@@ -1737,6 +1737,34 @@ class T(unittest.TestCase):
         self.assertLess(src.index("sol, why = orig("), src.index('if why in ("no-free-start-node", "no-free-goal-node"):'),
                         "the plain attempt must come first")
 
+    def test_C462_drawing_delivery_selfaudit_gate_RED_on_v1_and_GREEN_on_v2(self):
+        """#K2-462 sec.2.8/sec.4: a drawing delivery must be self-audited against the REGISTERED checklist before it is
+        submitted - the R1462 piece was formally correct but missed four named items (from-to / authority / ref-plane
+        continuity / per-corridor conservation) and had to be sent back. This is that gate, BEHAVIOURALLY RED->GREEN on
+        the REAL artifacts: v1 must be rejected with the named items, v2 must pass."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2ddc", os.path.join("tools", "k2_drawing_delivery_check_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        v1 = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                        "K2_SEC16_3_CONTENTION_RESOLUTION_I2C2SCL_v1.json"), encoding="utf-8"))
+        v2 = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                        "K2_SEC16_3_CONTENTION_RESOLUTION_I2C2SCL_v2.json"), encoding="utf-8"))
+        r1 = m.audit_drawing(v1)
+        self.assertFalse(r1["ok"], "RED: the R1462 piece must be REJECTED by the gate")
+        self.assertTrue(any("authority_for_the_move" in x for x in r1["missing"]), r1)
+        self.assertTrue(any("ref_plane_continuity" in x for x in r1["missing"]), r1)
+        self.assertTrue(any("per_corridor" in x for x in r1["reasons"]) or
+                        any("per_corridor_conservation" in x for x in r1["missing"]),
+                        "v1 either omits or pads the per-corridor account: %s %s" % (r1["missing"], r1["reasons"]))
+        self.assertTrue(any("to_where" in x for x in r1["missing"]), r1)
+        r2 = m.audit_drawing(v2)
+        self.assertTrue(r2["ok"], "GREEN: the v2 piece must PASS the gate: %s %s" % (r2["missing"], r2["reasons"]))
+        # and a domain-level padding alone must be flagged
+        bad = json.loads(json.dumps(v2))
+        bad["sec16_3_four_elements"]["3_corrected_complete_construction_drawing"]["per_corridor_conservation"] = \
+            "the frame keeps ~50x headroom (R1394)"
+        self.assertFalse(m.audit_drawing(bad)["ok"], "domain-level padding must be rejected")
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
