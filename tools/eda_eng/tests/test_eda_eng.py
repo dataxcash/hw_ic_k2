@@ -1862,6 +1862,34 @@ class T(unittest.TestCase):
         self.assertIn("_ko = [", r); self.assertIn('"stage": "band_keepout"', r)
         self.assertIn("*_ko, *_charg])", r)
 
+    def test_C467_the_pin_escape_planner_is_deterministic_bounded_and_fail_closed(self):
+        """#K2-467 (owner chose A; the lesion was re-characterised as the MISSING STANDARD STAGE): a pin access / escape
+        planner. Every target pad must own a deterministic escape asset, otherwise the precheck FAILS and names it. Bounds
+        are an OWNER RED LINE (no infinite loop, no CPU spike): 4 fixed directions x a fixed 20-step ladder => at most 80
+        candidates per pad, no while-loop. RED = a fully enclosed pad => named refusal, go=False. GREEN = three sides
+        blocked, one open => the open direction is chosen deterministically and the asset (which becomes a HARD KEEPOUT
+        through the R1488 mechanism) is returned. The criterion is an EXACT segment-segment distance, because the first
+        draft's min(point-to-segment) approximation MISSED a crossing obstacle (caught by this very test)."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe467", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        HW, C = 0.05, 0.10
+        three = [('OTHER', 'F.Cu', -0.25, -1.0, -0.20, 1.0, HW),
+                 ('OTHER', 'F.Cu', -1.0, -0.25, 1.0, -0.20, HW),
+                 ('OTHER', 'F.Cu', -1.0, 0.20, 1.0, 0.25, HW)]
+        r = m.escape_for_pad('N', 'F.Cu', (0.0, 0.0), three, clear=C)
+        self.assertIsNotNone(r["asset"], "GREEN: the OPEN side must yield an escape asset: %s" % r)
+        self.assertEqual(r["asset"]["dir"], [1, 0], "the open (east) direction must be chosen first")
+        self.assertEqual(r["asset"]["a"], [0.0, 0.0])
+        four = three + [('OTHER', 'F.Cu', 0.20, -1.0, 0.25, 1.0, HW)]
+        p = m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], four, clear=C)
+        self.assertFalse(p["go"], "RED: a fully enclosed pad must FAIL the precheck")
+        self.assertEqual(len(p["refused"]), 1); self.assertEqual(p["refused"][0]["net"], "N")
+        self.assertIn("no free escape candidate", p["refused"][0]["why"], "the refusal must be NAMED, never silent")
+        self.assertEqual(p["bounds"]["candidates_per_pad_max"], 80, "OWNER bound: 4 dirs x 20 steps, no while-loop")
+        self.assertEqual(p["bounds"]["max_steps"], m.NSTEPS)
+        self.assertTrue(m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], three, clear=C)["go"], "GREEN: precheck GO")
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
