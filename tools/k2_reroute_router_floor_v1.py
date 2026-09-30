@@ -454,12 +454,12 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                     continue
                 _pa2, _la2, _ca2 = _fit.get("a", (pa, la, compa))
                 if _ca2 == cport:
-                    # #K2-486/#K2-489 ENGINE CAPABILITY (retry-only de-self-collapse): the substitution above replaced
-                    # the OUTSIDE endpoint with THIS port, so taking it as the start makes start == goal and the
-                    # attempt is skipped by construction (R1592: this is why the rescue never fired for the (out,in)
-                    # edge). Fall back to the OTHER endpoint and route (inside -> dR port). Retry-only; the shared
-                    # gate at :369 and f1.islands are untouched.
-                    _pa2, _la2, _ca2 = pb, lb, compb
+                    # #K2-486/#K2-490: the decision lives in the single authoritative engine function
+                    # mr.retry_start (pure + behaviourally unit-tested). It returns the OTHER endpoint so the
+                    # attempt routes (inside -> dR port) instead of collapsing to start == goal.
+                    _st2 = mr.retry_start(pb, lb, compb, cport)
+                    if _st2 is None: continue
+                    _pa2, _la2, _ca2 = _st2
                     if _ca2 == cport: continue
                 s2, w2 = orig(ctx, find, _ca2, cport, net, _la2, _pa2, pl, (px, py), margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "goal", "why": w2})

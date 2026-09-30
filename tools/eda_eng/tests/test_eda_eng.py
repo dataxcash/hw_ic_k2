@@ -1876,6 +1876,20 @@ class T(unittest.TestCase):
         w2 = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
         self.assertIn('"--escape-port"', w2); self.assertIn("mr._PORT_PADS = _PP", w2)
 
+    def test_C490_the_retry_start_de_collapses_the_out_in_class(self):
+        """TIAN TIAO #1 engine asset + BEHAVIOURAL regression (#K2-490/491). RED (without the R1594 logic): when the
+        (out,in) substitution replaced the outside endpoint with the SAME port used as the goal, the retry skipped the
+        attempt by construction (start == goal) - which is why the I2C2_SCL edge was never rescued (R1592). GREEN:
+        retry_start returns the OTHER endpoint so an (inside -> dR port) attempt is made; None when even that endpoint
+        is the goal port. No source-string pinning - this is the closing evidence for the capability."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr490", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        self.assertEqual(mr.retry_start([0.0, 0.0], "F.Cu", "c:in", "c:port"), ([0.0, 0.0], "F.Cu", "c:in"),
+                         "the retry must start from the OTHER endpoint, not from the goal port")
+        self.assertIsNone(mr.retry_start([1.0, 1.0], "F.Cu", "c:port", "c:port"),
+                          "both endpoints at the port => nothing to try")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised

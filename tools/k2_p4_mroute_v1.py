@@ -527,6 +527,18 @@ def simplify(pts):
     return res
 
 
+def retry_start(pb, lb, compb, cport):
+    """#K2-486/#K2-490 ENGINE CAPABILITY (pure, deterministic): pick the START for a port-directed retry.
+    The (out,in) substitution can replace the outside endpoint with the VERY port used as the goal, making
+    start == goal so the attempt is skipped by construction (R1592 - this is why the I2C2_SCL edge was never
+    rescued). Given the OTHER endpoint (pb, lb, compb) this returns it as the start, or None when even that
+    endpoint is the goal port (nothing to try). Single authoritative implementation for the retry decision.
+    """
+    if compb != cport:
+        return (pb, lb, compb)
+    return None
+
+
 def snap_node(grid, ctx, find, comp, net, layer, x, y, maxr=4):
     ci, cj = grid.cell(x, y)
     _dbg = os.environ.get("K2MR_DBG2")
