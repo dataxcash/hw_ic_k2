@@ -113,6 +113,12 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
                                           existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
             if rv.get("join"):
                 got = rv["join"]; got["_kind"] = "via"; got["_other"] = ol; break
+            # #K2-519: the single-via family is provably infeasible here -> try the TWO-HOP connector (deterministic)
+            rh = planner.via_hop_join(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
+                                      clear=clear, via_r=via_r, step=0.1, max_len=max_len,
+                                      existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
+            if rh.get("join"):
+                got = rh["join"]; got["_kind"] = "multi"; got["_other"] = ol; break
         if got:
             joins.append(got)
         else:
@@ -141,9 +147,15 @@ def main(argv=None):
         if j["_kind"] == "track":
             lines.append({"n": "J%d" % n, "kind": "track", "net": j["net"], "layer": j["layer"],
                           "a": j["a"], "b": j["b"]})
-        else:
+        elif j["_kind"] == "via":
             lines.append({"n": "J%d" % n, "kind": "via", "net": j["net"], "at": j["at"],
-                          "layers": [j["_other"], j["layers"][0]] if False else [j["layers"][0], j["_other"]]})
+                          "layers": [j["layers"][0], j["_other"]]})
+        else:                                            # #K2-519 two-hop: one via + two legs
+            lines.append({"n": "J%da" % n, "kind": "via", "net": j["net"], "at": j["via"]["at"],
+                          "layers": [j["via"]["layers"][0], j["_other"]]})
+            for _li, _lg in enumerate(j["legs"]):
+                lines.append({"n": "J%db%d" % (n, _li), "kind": "track", "net": j["net"],
+                              "layer": _lg["layer"], "a": _lg["a"], "b": _lg["b"]})
     rep = {"artifact": "k2_join_copper_v1", "board": a.board, "out": a.out,
            "n_one_end": pj["n_one_end"], "n_planned": len(pj["joins"]), "n_refused": len(pj["refused"]),
            "pad_model": "TRUE rounded-rectangle (pad_obstacle_shape) - #K2-509 sec.2 item 2",

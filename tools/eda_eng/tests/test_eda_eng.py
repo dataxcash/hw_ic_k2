@@ -2057,6 +2057,34 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C519_the_two_hop_connector_is_deterministic_and_fail_loud(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-519 sec.2 item 1). R1740 proved a single via is IMPOSSIBLE at
+        the P3V3_AUX stub (the contact lens' furthest point from the existing via is 0.391mm < the 0.65mm hole gate).
+        GREEN: the two-hop connector finds a deterministic site (via + two legs), the same board always yields the
+        same solution (stability), and an impossible case is NAMED rather than silently connected."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe519", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        ex = [("VIA", "F.Cu", 51.65, 39.1, 51.65, 39.1, 0.225, "X")]
+        r1 = m.via_hop_join("P3V3_AUX", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [], ("F.Cu", "In5.Cu"),
+                            existing_vias=ex)
+        self.assertIsNotNone(r1["join"], "the two-hop family must have a legal site here")
+        self.assertEqual(r1["join"]["kind"], "multi")
+        self.assertEqual(len(r1["join"]["legs"]), 2, "one leg per layer")
+        r2 = m.via_hop_join("P3V3_AUX", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [], ("F.Cu", "In5.Cu"),
+                            existing_vias=ex)
+        self.assertEqual(r1, r2, "STABILITY: the same board must always yield the same solution")
+        import math as _m
+        vx, vy = r1["join"]["via"]["at"]
+        self.assertGreaterEqual(_m.hypot(vx - 51.65, vy - 39.1), 0.175 + 0.225 + 0.25 - 1e-9, "hole gate honoured")
+        # an impossible case must be NAMED, not force-connected
+        wall = [("VIA", "F.Cu", 51.35 + dx * 0.1 * k, 39.0 + dy * 0.1 * k, 51.35 + dx * 0.1 * k, 39.0 + dy * 0.1 * k,
+                 0.30, "X") for dx, dy in m.DIRS for k in range(1, 21)]
+        bad = m.via_hop_join("P3V3_AUX", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [], ("F.Cu", "In5.Cu"),
+                             existing_vias=wall)
+        self.assertIsNone(bad["join"])
+        self.assertIn("two-hop family exhausted", bad["refused"]["why"])
+
     def test_C516_the_zone_row_tolerance_is_derived_and_bites_both_ways(self):
         """TIAN TIAO #1 engine asset + regression (#K2-516 sec.2 item 1/2). The tolerance must be DERIVED (each number
         has a source) and must BITE: a within-tolerance sample passes, an over-tolerance sample fails. No hand-picked

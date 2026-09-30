@@ -283,6 +283,49 @@ def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_la
                                       "why": "no clear via position joining %s -> %s" % (layer, other_layer)}}
 
 
+def via_hop_join(net, layer, other_layer, end, target_pt, obstacles, span_layers,
+                 clear=0.30, via_r=0.175, step=0.1, max_len=2.0, tol=0.02,
+                 existing_vias=None, hole_clear=0.25):
+    """#K2-519 sec.2 item 1 ENGINE CAPABILITY —— **双跳连接器**（`legal alt path`）。
+
+    `R1740` 已**闭式证明**该桩（`P3V3_AUX` · `E=(51.35,39.0)` F.Cu ↔ `T=(51.55,39.0)` In5 · 既有埋孔
+    `X=(51.65,39.1)`）之**单过孔族 0 解**（搭接透镜任一点距 `X` 上界 `0.39102 < ` 孔距闸 `0.65`）。
+    本函数走**双跳**：`E --leg(F.Cu)--> V --via--> V --leg(In5)--> T`。
+
+    **定序枚举**（`DIRS` × ≤`max_len/step` 步 · **首中即取** ⇒ **确定性**），每站点须**双门齐过**：
+      A **孔距门** `via_placeable(V)`（距**每一**既有过孔 ≥ `via_r+hw+hole_clear`）；
+      B **过孔自身净距**（所跨**每一层** · 真形 `_leg_clear` · 过孔半径差计入）；
+    再验**两腿**：`leg1 = _leg_clear(layer, E→V)` · `leg2 = _leg_clear(other_layer, V→T)`（皆真形间距）。
+    **无解 ⇒ 具名 fail-loud**（禁带短/带险连通充数）。
+    """
+    x0, y0 = float(end[0]), float(end[1])
+    tx, ty = float(target_pt[0]), float(target_pt[1])
+    need = clear + max(0.0, via_r - 0.10)
+    n = min(NSTEPS, int(max_len / step))
+    layers = tuple(span_layers or (layer, other_layer))
+    for _di, (dx, dy) in enumerate(DIRS):
+        for k in range(1, n + 1):
+            vx, vy = x0 + dx * k * step, y0 + dy * k * step
+            if not via_placeable(vx, vy, via_r, existing_vias, hole_clear):
+                continue                                                     # gate A
+            if not all(_leg_clear(net, LZ, (vx, vy), (vx, vy), obstacles, need) for LZ in layers):
+                continue                                                     # gate B
+            if not _leg_clear(net, layer, (x0, y0), (vx, vy), obstacles, clear):
+                continue                                                     # leg 1
+            if not _leg_clear(net, other_layer, (vx, vy), (tx, ty), obstacles, clear):
+                continue                                                     # leg 2
+            return {"join": {"kind": "multi", "net": net,
+                             "via": {"at": [round(vx, 4), round(vy, 4)], "layers": [layer, other_layer],
+                                     "radius": via_r},
+                             "legs": [{"layer": layer, "a": [round(x0, 4), round(y0, 4)], "b": [round(vx, 4), round(vy, 4)]},
+                                      {"layer": other_layer, "a": [round(vx, 4), round(vy, 4)], "b": [round(tx, 4), round(ty, 4)]}],
+                             "candidate_index": _di * n + k},
+                    "refused": None}
+    return {"join": None, "refused": {"net": net, "layers": [layer, other_layer], "at": [round(x0, 4), round(y0, 4)],
+                                      "why": "two-hop family exhausted: no site passes the hole gate, the all-layer "
+                                             "clearance and both legs"}}
+
+
 def plan_escapes(pads, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
     """`pads` **应仅含未连通端**（#K2-468 §3.2）。`go` ＝ 预检门（每端点皆有逃逸资产）。
     每条 pad ＝ `(net, layer, x, y)` 或 `(net, layer, x, y, hx, hy[, rot_deg])`（后三者＝焊盘真形半宽/半长/旋转）。"""
