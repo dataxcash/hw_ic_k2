@@ -397,20 +397,36 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                "ports_available": len(_ports(ctx, net)), "ports_tried": 0, "reachable_port": False, "via": None,
                "endpoint_own_cell_hits": OWN_CELL["hits"] - h0}
         if why in ("no-free-start-node", "no-free-goal-node"):
+            # ── #K2-460 sec.2.5 **起步侧覆盖补齐（(out,in) 类）** ────────────────────────────────────────
+            # 判别规则（**实测标定 · 非猜**）：**plain 先行**（保 `R1434 §3` 之 13 条「仅靠重试成功」的边**不回归**），
+            # **仅在 plain 失败后的重试路径**上，把**落在框外的那一端**换成其 **∂R 端口**（`_port_substitute`）。
+            # 旧重试两方向都会带上框外端点 ⇒ `(out,in)` 类结构上修不了（`R1456` 判别件 · 代码级 `:343` 只覆盖两端皆框外）。
+            _fit = {}
+            if _saved and _prts:
+                for _nm, _pt, _ly in (("a", pa, la), ("b", pb, lb)):
+                    _p2, _l2, _t2 = _port_substitute(_pt, _ly, _saved, _prts)
+                    if _t2 is not None:
+                        _c2 = find(_t2) if str(_t2).startswith("p:") else find("t:" + str(_t2))
+                        if _c2 is not None:
+                            _fit[_nm] = (_p2, _l2, _c2)
             rec["tries"] = []
             for (pl, px, py, tpu) in _ports(ctx, net):
                 rec["ports_tried"] += 1
                 cport = find(tpu) if str(tpu).startswith("p:") else find("t:" + str(tpu))
                 if cport is None:
                     continue
-                s2, w2 = orig(ctx, find, compa, cport, net, la, pa, pl, (px, py), margin, coarse_step)
+                _pa2, _la2, _ca2 = _fit.get("a", (pa, la, compa))
+                if _ca2 == cport: continue
+                s2, w2 = orig(ctx, find, _ca2, cport, net, _la2, _pa2, pl, (px, py), margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "goal", "why": w2})
                 if s2 is not None:
                     rec.update({"reachable_port": True, "via": [px, py, pl],
                                 "endpoint_own_cell_hits": OWN_CELL["hits"] - h0})
                     REC.append(rec)
                     return s2, "ok-port-goal"
-                s2, w3 = orig(ctx, find, cport, compb, net, pl, (px, py), lb, pb, margin, coarse_step)
+                _pb2, _lb2, _cb2 = _fit.get("b", (pb, lb, compb))
+                if _cb2 == cport: continue
+                s2, w3 = orig(ctx, find, cport, _cb2, net, pl, (px, py), _lb2, _pb2, margin, coarse_step)
                 rec["tries"].append({"port": [px, py, pl], "dir": "start", "why": w3})
                 if s2 is not None:
                     rec.update({"reachable_port": True, "via": [px, py, pl],

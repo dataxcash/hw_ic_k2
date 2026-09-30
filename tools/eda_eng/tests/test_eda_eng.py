@@ -1720,6 +1720,23 @@ class T(unittest.TestCase):
         mr.WALL_RECT = None; mr.EDGE_IN = _saved_edge_in
         self.assertIsNotNone(sol2, "GREEN: after ripping the blocker the SAME edge solves: %s" % why2)
 
+    def test_C460_the_out_in_endpoint_class_is_covered_in_the_retry_only(self):
+        """#K2-460 sec.2.5: R1456 proved the residual was NOT a missing drawing entry - the start cell exists and nothing
+        seals it; the hole is the (out,in) endpoint class: the retry passed the outside end as its start/goal in BOTH
+        directions, so it could never work (code-level: the R1434 substitution fires only when BOTH ends are outside).
+        RED = (out,in) is uncovered. GREEN = the retry substitutes exactly the outside end by its dR port - and ONLY in
+        the retry, so the plain attempt stays first and the 13 retry-only-success edges measured in R1434 cannot regress."""
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn('for _nm, _pt, _ly in (("a", pa, la), ("b", pb, lb)):', src,
+                      "both ends must be offered to the substitution in the retry")
+        self.assertIn('_pa2, _la2, _ca2 = _fit.get("a", (pa, la, compa))', src)
+        self.assertIn('_pb2, _lb2, _cb2 = _fit.get("b", (pb, lb, compb))', src)
+        self.assertIn("if _ca2 == cport: continue", src); self.assertIn("if _cb2 == cport: continue", src)
+        self.assertIn("if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved):", src,
+                      "the PLAIN-attempt substitution must stay restricted to both-outside (no regression)")
+        self.assertLess(src.index("sol, why = orig("), src.index('if why in ("no-free-start-node", "no-free-goal-node"):'),
+                        "the plain attempt must come first")
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
