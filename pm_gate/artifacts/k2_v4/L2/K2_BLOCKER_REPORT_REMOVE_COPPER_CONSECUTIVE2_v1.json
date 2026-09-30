@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_blocker_report_remove_copper_consecutive2_v1",
+ "ts": "2026-10-01",
+ "authority": "停止令（红线：连续错误 2 次 ⇒ 停转 Plan 报卡点）＋ 宪法第八章第 8 条＋ #K2-488 R7。自令起零运行；本件只做「停＋报告」。",
+ "the_two_errors": [
+  {
+   "id": "R1634",
+   "what": "add remove_items (the delete-copper op) and a regression that called it IN the test process",
+   "red": "selftest 22 errors (mine + 21 unrelated)",
+   "disposition": "reverted in-window",
+   "lesson": "board mutation must NEVER run in the test process (the suite's isolation doctrine); it poisons unrelated tests."
+  },
+  {
+   "id": "R1636",
+   "what": "same asset, regression moved into a SUBPROCESS (isolated)",
+   "red": "1 failure (my own test); the 21 collateral errors vanished",
+   "disposition": "reverted in-window",
+   "lesson": "the isolation diagnosis was CONFIRMED, but the child still failed - the residual was the SAVE step."
+  }
+ ],
+ "root_cause": "the board PERSIST step: after removing the named track the board is saved, but re-reading the saved board raises AttributeError: 'SwigPyObject' object has no attribute 'GetTracks' (LoadBoard returns a NULL wrapper). Both pcbnew.SaveBoard(path, b) and b.Save(path) produced an unreadable file. The delete itself is proven correct (removed=1) and the empty-match fail-closed works.",
+ "layer_of_the_gap": "ENG tooling/implementation layer - HOW the new engine op persists a mutated board. NOT the scheme layer, NOT the engine's routing core, NOT the criteria, NOT L1.",
+ "human_path": {
+  "1_what_the_engine_must_do": "the engine must be able to REMOVE the copper that its own audit names (dangling_items) so floating ends can be pruned - currently there is no such engine operation.",
+  "2_what_blocks": "not the deletion (that works) but the SAVE: the mutated board is written by a hand-rolled pcbnew.SaveBoard/b.Save call and comes out unreadable. In-register board writers (k2_port_plane_stitch_v1, move_copper, the chain's own tools) save boards successfully every chain run - so the in-register way exists and my hand-rolled way does not reproduce it.",
+  "3_the_human_solution": "copy the SAVE route of an in-register board writer instead of hand-rolling one (Tian Tiao #1: the engine's way, not the agent's)."
+ },
+ "one_implementation_proposed": "take k2_port_plane_stitch_v1 (or the chain's apply/stitch path) as the TEMPLATE: load, remove the named items, and persist with the SAME call it uses; regression in a subprocess; then wire dangling_items -> remove_items into the chain and close C2.track_dangling against the reference caliber (<= ref=1, NOT absolute zero).",
+ "not_done": [
+  "no run since the stop order",
+  "no board write to the deliverable",
+  "no generator change (both attempts reverted)"
+ ],
+ "OWNER-ITEMS": 0
+}
