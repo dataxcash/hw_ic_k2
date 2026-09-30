@@ -1531,6 +1531,41 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                         chain.append({"stage": "drawing_addendum_stitch", "err": type(_e3).__name__})
         except Exception as _e2:                                        # noqa: BLE001
             chain.append({"stage": "port_plane_stitch", "err": type(_e2).__name__})
+    # ── #K2-479 sec.3.3 **A：先落固定逃逸铜**（#K2-467 sec.2.1 item 4 原话） ────────────────────────────
+    #    把该网的「岛」延伸到它的**自由起步格**；**真端点（框边端口）仍是目标**（**不替换**）。
+    #    载体 ＝ 已在册之 `k2_port_plane_stitch_v1.stitch()`（照图施工 · 零搜索 · 自带 ∂R 放行闸）；
+    #    几何 ＝ 预检机证之走廊 `a→b`；宽度 ＝ 该网该层既有走线中位数（既有确定性规则）。**零判据改。**
+    _esc_lay = {"stage": "escape_layer_stitch", "source": "k2_pin_escape_plan_v1.py(a->b)", "n_lines": 0, "n_added": 0, "n_refused": 0}
+    try:
+        _iu5 = __import__("importlib").util
+        _sp5 = _iu5.spec_from_file_location("k2pe479", os.path.join(ROOT, "tools", "k2_pin_escape_plan_v1.py"))
+        _pe5 = _iu5.module_from_spec(_sp5); _sp5.loader.exec_module(_pe5)
+        _eo5 = os.path.join(work, "escape_precheck_pre.json")
+        _en5 = list(GAP_NETS) + ["I2C2_SCL"]
+        subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_pin_escape_precheck_v1.py"),
+                        "--board", wiped, "--rect", ",".join(str(x) for x in rect),
+                        "--nets", ",".join(_en5), "--out", _eo5],
+                       cwd=ROOT, capture_output=True, text=True, timeout=1800)
+        _a5 = (json.load(open(_eo5, encoding="utf-8"))["reading"].get("assets") or []) if os.path.isfile(_eo5) else []
+        if _a5:
+            _spec5 = {"rect": [float(v) for v in rect],
+                      "lines": [{"n": "esc%d" % _i, "kind": "track", "net": _x["net"], "layer": _x["layer"],
+                                 "a": list(_x["a"]), "b": list(_x["b"])} for _i, _x in enumerate(_a5)]}
+            # NOTE (R1550): a `track` line takes a/b keys, NOT poly (k2_port_plane_stitch_v1.validate reads
+            # L["a"]/L["b"] for kind=="track"); the first attempt used poly and raised KeyError, leaving the
+            # escape-layer stitch inert. That fix is verified by the suite; its connectivity-level machine
+            # evidence still needs a run, which the spent #K2-479 N=1 does not provide.
+            _iu6 = __import__("importlib").util
+            _sp6 = _iu6.spec_from_file_location("k2pps479", os.path.join(ROOT, "tools", "k2_port_plane_stitch_v1.py"))
+            _pps5 = _iu6.module_from_spec(_sp6); _sp6.loader.exec_module(_pps5)
+            _est5 = os.path.join(work, "s1f_escape.kicad_pcb")
+            _r5 = _pps5.stitch(wiped, list(rect), _spec5, _est5)
+            _esc_lay.update({"n_lines": len(_a5), "n_added": _r5.get("n_added"), "n_refused": _r5.get("n_refused")})
+            if _r5.get("n_refused") == 0 and os.path.isfile(_est5):
+                wiped = _est5
+    except Exception as _e5:                                    # noqa: BLE001
+        _esc_lay["err"] = type(_e5).__name__
+    chain.append(_esc_lay)
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
     d0 = os.path.join(work, "s1_wiped_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])
