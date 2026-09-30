@@ -1,0 +1,37 @@
+{
+ "artifact": "r6_acceptance_relocation_zero_human_v2",
+ "ts": "2026-10-01",
+ "authority": "#K2-488 sec.2 R6 (acceptance = a position adjustment UNRELATED to K2, run by the engine with ZERO human intervention); #K2-522 sec.1 (read the parser, do not guess)",
+ "board": "/tmp/opencode/r6/r6_in.kicad_pcb",
+ "board_origin": "KiCad's own template Arduino_Uno (not K2, not another line's repo) - /tmp copy only",
+ "adjustment": {
+  "ref": "J1",
+  "delta_mm": [
+   1.0,
+   0.5
+  ],
+  "chosen_by": "the engine (first reference in sorted order)"
+ },
+ "syntax_established_from_source": {
+  "parser_help": "cli.py: --moves 'ref:dx:dy,ref:dx:dy,...'",
+  "v1_error_was": "the R1746 sheet used 'REF:dx,dy' (comma after the ref) and the verb rejected it with rc=1 and empty output"
+ },
+ "drc_criterion_corrected": {
+  "what": "read the produced JSON report, NOT kicad-cli's exit code - the register's own _raw() helper ignores that code too",
+  "r1746_error_was": "treating rc!=0 as 'no report' while the report existed"
+ },
+ "engine_call": {
+  "cmd": "python3 -m tools.eda_eng move-copper --board r6_in --moves 'J1:1.000:0.500' --out r6_out",
+  "rc": 1,
+  "stdout": ""
+ },
+ "verified": {
+  "moved_by_mm": null,
+  "matches_declared": false,
+  "drc_rc": 3,
+  "drc_violations": null
+ },
+ "verdict": "FAIL",
+ "zero_human_intervention": true,
+ "OWNER-ITEMS": 0
+}
