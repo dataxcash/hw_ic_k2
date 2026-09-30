@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_conservation_blocker_report_residual_startgoal_v1",
+ "ts": "2026-09-30",
+ "authority": "停止令（收敛停滞 ≈80 轮无二值）：本件必须出二值（可行见证 ‖ 守恒级不可行证书），禁以口径澄清/工具再升一版单独占轮；出不来 ⇒ 出《守恒级卡点报告》：哪层/哪资源/被谁占死/为何任何分配都不可能。",
+ "binary_answer": {
+  "feasibility_witness": "EXISTS - but only for the START SEGMENT (machine-verified).",
+  "conservation_infeasibility_certificate": "NOT PRODUCED - and I refuse to fabricate one: the evidence says the opposite.",
+  "witness_evidence": [
+   "R1522/R1530 precheck (true-shape gauge): go=TRUE, U1.22 and U1.48 each own a deterministic 0.8mm escape corridor along the pad's long axis at clear=0.30 with ALL foreign copper clear - a machine-verified legal escape segment.",
+   "R1532 (read-only, final graded board): that same corridor is EMPTY in the final board (no foreign tracks/vias inside, and the net did not claim it).",
+   "Therefore the pad region is NOT resource-starved: a legal start exists and is free. The residual cannot be an infeasibility."
+  ],
+  "conclusion": "the binary is: NOT infeasible. The residual is a START/GOAL-NODE FREEDOM failure of the MAZE'S OWN MODEL (R1534: I2C2_SCL no-free-start-node, PWR_BTN_OUT no-free-goal-node), because the R1528 wiring handed the maze a MASK (keepout) that can only remove cells from other nets - it cannot CREATE a free start cell."
+ },
+ "layer": {
+  "value": "the maze's START/GOAL-NODE RULE, on F.Cu, in the neighbourhood of U1 pad 22 and U1 pad 13",
+  "not": "NOT a copper-layer capacity, NOT a via budget, NOT a layer count"
+ },
+ "resource": {
+  "value": "a free GRID CELL (within the required clearance) at the net's own endpoint",
+  "not": "NOT copper area, NOT routing channels"
+ },
+ "occupied_by": {
+  "value": "the pads' own 0.5mm-pitch neighbours and their required clearance (U1.22's neighbours: GND @ (37.25,57.1625) and I2C2_SDA @ (38.25,57.1625); PWR_BTN_OUT is the same family)",
+  "reading": "the maze's cell test sees no free cell at the endpoint even though a legal 0.8mm corridor exists 0.0-0.8mm away - i.e. the rule is anchored at the wrong place, not the geometry"
+ },
+ "why_no_allocation_is_possible": {
+  "value": "NOT ESTABLISHED - I do not claim it. A legal start exists (machine-verified). Allocation IS possible in principle; what is missing is that the maze is never TOLD where the legal start is.",
+  "the_register_says": "#K2-467 sec.2.1 item 4: LAY all the escape assets (FIXED PIECES) first, then run the existing maze. A fixed piece (copper) or an explicit PORT would give the net a free start cell; a mask cannot."
+ },
+ "decisive_next_step": [
+  "B (no new copper): register the corridor's far endpoint as an explicit maze PORT for the net (the maze already takes --port-refs), giving it a free start/goal node.",
+  "A (adds board geometry): lay the escape asset as a fixed copper stub before the maze - needs an explicit ruling and C6 handling.",
+  "C: C6 (796) as the separate piece."
+ ],
+ "discipline": "zero exam runs, zero board writes, zero generator changes; no same-cause rerun.",
+ "OWNER-ITEMS": 0
+}
