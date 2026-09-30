@@ -139,6 +139,7 @@ def main():
     # #K2-394 §二.1：**端口可达性预检**并列盘（不可达者**具名**；不改变路由结果）
     if recs:
         pre = {"artifact": "eda_eng_port_reachability_precheck", "board": a.src, "bound_rect": a.bound_rect,
+               "channel_domain_refused": sorted(set(getattr(mr, "_CH_DOMAIN_REFUSED", []))),
                "n_failed_edges": len(recs),
                "endpoint_own_cell_hits": getattr(mr, "_endpoint_own_cell_hits", {}).get("hits", 0),
                "b1_reflowable": sorted(POUR),
@@ -168,6 +169,21 @@ def _set_step(mode):
         _FINE, _FINE_NUM = True, None
     else:
         _FINE, _FINE_NUM = False, float(mode)
+
+
+def _channel_contains(rect, pa, pb, tol=0.05):
+    """#K2-455 sec.2.5 (A)① **fail-closed 闸的判据**：硬域 `rect` 是否**装得下该边两端**（含 `tol`）。
+
+    `R1440` 见证（同名几何、同参数）：域＝整框 ⇒ 布通；域＝该网旧硬通道带（0.96mm）⇒ `FAIL · no-free-goal-node`
+    ⇒ **域装不下端点时，该域构造性饿死该边**。故此处**不再允许**这种域被当域用（只可作引导）。
+    """
+    if not rect:
+        return True
+    x0, y0, x1, y1 = rect
+    for p in (pa, pb):
+        if not (x0 - tol <= p[0] <= x1 + tol and y0 - tol <= p[1] <= y1 + tol):
+            return False
+    return True
 
 
 def _outside_wall(pt, wall, eps=1e-9):
@@ -333,11 +349,26 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                         pb, lb, compb = _pb, _lb2, _cb
                 if compa == compb:
                     return None, "no-op-after-port-substitution(same-island)"
-        _GD = getattr(mr, "_GUIDES", {})
+        # ── #K2-455 sec.2.5 (A)① **fail-closed 闸**：域**装不下该边两端** ⇒ **拒绝当域**（响亮记盘），
+        #    **改按监理首选「也作引导」消费**（偏好保留、饿死消除）。此前该耦合**静默饿死**（`R1440` 机证）。
+        _refused_ch = None
+        if net in _CH:
+            _r0 = _CH[net][0] if isinstance(_CH[net], list) else _CH[net]
+            if not _channel_contains(_r0, pa, pb):
+                _refused_ch = _r0
+                mr._CH_DOMAIN_REFUSED = list(getattr(mr, "_CH_DOMAIN_REFUSED", [])) + [net]
+                sys.stderr.write("REFUSED-AS-DOMAIN(#K2-455 sec.2.5 A1): the channel for %s %s cannot contain both "
+                                 "endpoints %s/%s (tol 0.05) => used as GUIDANCE instead (a hard domain that cannot "
+                                 "contain the endpoints starves the edge by construction - R1440).\n"
+                                 % (net, tuple(round(v, 3) for v in _r0), tuple(round(v, 3) for v in pa),
+                                    tuple(round(v, 3) for v in pb)))
+        _GD = dict(getattr(mr, "_GUIDES", {}))
+        if _refused_ch is not None:                        # #K2-455 (A)①: the refused band is consumed AS GUIDANCE
+            _GD = dict(_GD); _GD[net] = list(_GD.get(net, [])) + [tuple(_refused_ch)]
         _gsaved = getattr(mr, "GUIDE", None)
         if net in _GD:
             mr.GUIDE = {"rects": _GD[net], "penalty": float(getattr(mr, "_GUIDE_PEN", 3.0))}
-        if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
+        if net in _CH and _refused_ch is None:
             # #K2-452 sec.2.4 item 1: --channels is a hard domain, exactly ONE rect per net (multi-slot is refused
             # at parse time), so there is nothing to iterate here any more.
             _c = _CH[net][0] if isinstance(_CH[net], list) else _CH[net]

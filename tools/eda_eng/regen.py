@@ -1388,12 +1388,14 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
             import importlib.util as _iu
             _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
             ja_module = _iu.module_from_spec(_sp); _sp.loader.exec_module(ja_module)
-        # ── #K2-452 sec.2.4 **换手段 ＝ 补「引导表达」能力**（强制序：闸→引导→回归）─────────────────────
-        # 硬域（`--channels`）＝ 仓内既有**每网一条**构建器（#K2-429 车辆 · 语义不变）。
+        # ── #K2-455 sec.2.5 (A) **最后硬域软化**：`--channels` 旧整网通道带**不再当域** ─────────────────────
+        # 依据 #K2-455 §2.3／§2.4：`R1440` 见证证明「同几何同参数，只把域从整框换成该网旧硬通道带 ⇒
+        # `FAIL · no-free-goal-node`」⇒ 硬带**构造性饿死**本可布通的线（`I2C2_SCL`）⇒ 依监理首选：**改为「也作引导」**。
+        # 硬半＝旧「每网一条」构建器；软半＝逐走廊槽。**两者合一**为 `--guide`（偏好/代价），**不再发 `--channels`**。
+        # NOTE: the builders' own exceptions must propagate to the outer handler (stage channels_compute_failed) -
+        # the frozen loud-failure contract of #K2-440. Do NOT swallow them here.
         hard = (ja_module.channels_arg_by_block(wiped, drc, list(rect))
                 or ja_module.channels_arg(wiped, drc, list(rect)) or "")
-        # 软引导（`--guide`）＝ `R1396`/`R1410`/`R1412` 的**逐走廊槽**（`R1420` 已证其**不能**当硬域用），
-        # 现改为**偏好/代价**：迷宫偏好走它，但永远可以离开 ⇒ **不可能饿死**。
         soft = ""
         try:
             import importlib.util as _iu4
@@ -1403,7 +1405,7 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
             _dev = _iu4.module_from_spec(_sp5); _sp5.loader.exec_module(_dev)
             _pairs = _dev.pairs(json.load(open(drc, encoding="utf-8")))
             _per = {}
-            for _pr in _pairs:                                 # 真图端点 → 每网包围盒（读真图，非域级充数）
+            for _pr in _pairs:                                 # 真图端点 → 每网包围盒（读真图）
                 _n2 = _pr["net"]
                 for _p2 in (_pr["p1"], _pr["p2"]):
                     _x2 = min(max(_p2[0], rect[0]), rect[2]); _y2 = min(max(_p2[1], rect[1]), rect[3])
@@ -1411,31 +1413,29 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
                     _b2[0] = min(_b2[0], _x2); _b2[1] = min(_b2[1], _y2)
                     _b2[2] = max(_b2[2], _x2); _b2[3] = max(_b2[3], _y2)
             _chs, _unsat = _jca.channels_string_corridor(_per, list(rect))
-            if _chs and not _unsat:                            # 不满意的走廊 ⇒ **整体不用**（绝不半用）
+            if _chs and not _unsat:
                 soft = _chs
         except Exception:                                          # noqa: BLE001
             soft = ""
-        if not hard:
-            return {"ok": False, "stage": "channels_compute_empty",
-                    "err": "no HARD channels from the builders", "args": [], "n_nets": 0, "n_guide": 0}
-        # ── #K2-452 sec.2.4 item 1 **闸（链侧 · fail-closed）**：硬域每网**恰好一条**；多槽 ⇒ **响亮拒绝** ──
-        _hc = {}
+        # 硬半**改述为引导**（标签 `@band` 自证来源；`--guide` 允许同网重复）
+        band = ""
+        _b=[]
         for _it in [x for x in hard.split(";") if x.strip()]:
-            _hn = _it.split(":", 1)[0]
-            _hc[_hn] = _hc.get(_hn, 0) + 1
-        _hmulti = sorted(n for n, c in _hc.items() if c > 1)
-        if _hmulti:
-            return {"ok": False, "stage": "channels_hard_multislot_refused", "err": ",".join(_hmulti),
-                    "args": [], "n_nets": 0, "n_guide": 0}
-        args = ["--channels", hard]
-        if soft:
-            args += ["--guide", soft, "--guide-penalty", "%.1f" % GUIDE_PENALTY]
-        # 自证（承 #K2-450/R1404「未执行的手段不得冒称已测」）：逐走廊串带 `@corridor` 标签 ⇒ 来源自证。
+            _n,_r = _it.split(":",1)
+            _b.append("%s:%s@band" % (_n, _r.split("@")[0]))
+        band = ";".join(_b)
+        guide = ";".join([x for x in (soft, band) if x.strip()])
+        if not guide:
+            return {"ok": False, "stage": "channels_compute_empty",
+                    "err": "no guidance from either source (soft corridor + legacy band)", "args": [], "n_nets": 0, "n_guide": 0}
+        args = ["--guide", guide, "--guide-penalty", "%.1f" % GUIDE_PENALTY]
+        # 自证（承 #K2-450/R1404）：逐走廊串带 `@corridor`、旧整网带带 `@band` ⇒ 两半来源各自可证。
         return {"ok": True, "stage": "channels_computed", "err": None, "args": args,
                 "n_nets": len([x for x in hard.split(";") if x.strip()]),
-                "source": "hard=legacy-single-rect",
-                "n_guide": len([x for x in soft.split(";") if x.strip()]),
-                "guide_source": ("joint-per-corridor" if "@" in soft else ("legacy" if soft else "none"))}
+                "source": "hard-DROPPED(merged-into-guide)",
+                "n_guide": len([x for x in guide.split(";") if x.strip()]),
+                "guide_source": ("corridor+band" if ("@corridor" in guide and "@band" in guide)
+                                 else ("corridor" if "@corridor" in guide else ("band" if "@band" in guide else "none")))}
     except Exception as _e:                                            # noqa: BLE001
         return {"ok": False, "stage": "channels_compute_failed", "err": type(_e).__name__,
                 "args": [], "n_nets": 0, "n_guide": 0}
@@ -1512,6 +1512,23 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                 chain.append({"stage": "port_plane_stitch", "n_added": _rep["n_added"],
                               "n_refused": _rep["n_refused"], "refused": _rep["refused"],
                               "added": _rep["added"]})
+                # ── #K2-455 sec.2.5 (B) **图纸层补件（附加件 · 不改冻结 SPEC 原件）** ──────────────────────
+                # 监理已定裁：I2C1_SDA 残余＝**图纸层缺图**（跨层接点从未画出）⇒ 按 `R1440` 见证几何补一个接点。
+                # 本处**只追加一个附加 spec**（冻结件 byte-identical），第二遍 stitch，仍走同一放行/锚定闸。
+                _addp = os.path.join(os.path.dirname(stitch_spec or ""), 
+                                     "K2_SEC16_3_DRAWING_ADDENDUM_I2C1SDA_CROSSLAYER_v1.json")
+                if stitch_spec and os.path.isfile(_addp):
+                    try:
+                        _spec_add = json.load(open(_addp, encoding="utf-8"))
+                        _st2 = os.path.join(work, "s1e_stitched_addendum.kicad_pcb")
+                        _rep2 = _pps.stitch(wiped, list(rect), _spec_add, _st2)
+                        if _rep2["n_refused"] == 0 and os.path.isfile(_st2):
+                            wiped = _st2
+                        chain.append({"stage": "drawing_addendum_stitch", "spec": os.path.basename(_addp),
+                                      "n_added": _rep2["n_added"], "n_refused": _rep2["n_refused"],
+                                      "refused": _rep2["refused"]})
+                    except Exception as _e3:                                # noqa: BLE001
+                        chain.append({"stage": "drawing_addendum_stitch", "err": type(_e3).__name__})
         except Exception as _e2:                                        # noqa: BLE001
             chain.append({"stage": "port_plane_stitch", "err": type(_e2).__name__})
     # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）

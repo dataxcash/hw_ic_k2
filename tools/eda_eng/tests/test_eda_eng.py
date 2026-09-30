@@ -1624,6 +1624,51 @@ class T(unittest.TestCase):
         self.assertIn("no-op-after-port-substitution(same-island)", src,
                       "two substituted ends landing on one island must be a NAMED no-op, never phantom copper")
 
+    def test_C455_the_last_hard_domain_is_softened_and_a_noncontaining_domain_is_REFUSED(self):
+        """#K2-455 sec.2.5 (A). The R1440 witness proved the lesion: the SAME geometry solves with the frame as the
+        domain and fails with the net's legacy whole-net channel band as the domain (no-free-goal-node) - a hard domain
+        that cannot contain the edge's endpoints starves it BY CONSTRUCTION. RED = such a band is silently used as the
+        domain (R1430/R1436: I2C2_SCL). GREEN = (a) the chain no longer emits --channels at all (the legacy bands are
+        merged into --guide), and (b) the wrapper REFUSES to use a non-containing rect as a domain, loudly, and consumes
+        it as GUIDANCE instead."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2floor455",
+                                                    os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        band = [37.55, 56.4, 51.5, 57.3625]              # the I2C2_SCL legacy whole-net band (0.96mm tall)
+        slot = [49.15, 57.75, 51.5, 58.15]               # one of its per-corridor SLOTS: 0.40mm tall
+        self.assertTrue(m._channel_contains(band, (51.5, 56.6), (37.75, 57.1625)),
+                        "the band DOES contain both endpoint COORDINATES - so containment alone would NOT have caught the "
+                        "R1442 starvation (that was no-free-goal-node INSIDE a containing band): containment is "
+                        "NECESSARY BUT NOT SUFFICIENT, and the substantive protection is that the chain now emits no "
+                        "hard domain at all (see below)")
+        self.assertFalse(m._channel_contains(slot, (51.5, 56.6), (37.75, 57.1625)),
+                         "RED: a 0.40mm trunk slot cannot contain the endpoints => it must be refused as a domain")
+        self.assertTrue(m._channel_contains(band, (51.5, 56.6), (37.75, 56.5)))
+        self.assertTrue(m._channel_contains(None, (0, 0), (99, 99)))
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("REFUSED-AS-DOMAIN(#K2-455 sec.2.5 A1)", src, "the refusal must be LOUD")
+        self.assertIn("mr._CH_DOMAIN_REFUSED", src); self.assertIn('"channel_domain_refused"', src)
+        self.assertIn("if net in _CH and _refused_ch is None:", src)
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn("hard-DROPPED(merged-into-guide)", r)
+        self.assertIn("drawing_addendum_stitch", r, "the drawing-side addendum must be applied as its own stitch pass")
+        # (B) the drawing-side piece exists, is additive, and carries its buildability + the witness-driven geometry
+        add = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                          "K2_SEC16_3_DRAWING_ADDENDUM_I2C1SDA_CROSSLAYER_v1.json"), encoding="utf-8"))
+        self.assertEqual(add["buildability"], "relocation_listed")
+        kinds = [l["kind"] for l in add["lines"]]
+        self.assertEqual(kinds.count("via"), 1, "exactly ONE cross-layer join was authorised")
+        self.assertIn("track", kinds)
+        v = [l for l in add["lines"] if l["kind"] == "via"][0]
+        self.assertEqual(v["layers"], ["F.Cu", "B.Cu"]); self.assertEqual(v["size"], 0.35); self.assertEqual(v["drill"], 0.20)
+        self.assertTrue(all(l["net"] == "I2C1_SDA" for l in add["lines"]))
+        # (C) sec.13 correction: the witness artifact carries explicit buildability fields
+        w = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                        "K2_CONSERVATION_BINARY_RESIDUALS_v1.json"), encoding="utf-8"))
+        self.assertEqual(w["witness_1_I2C2_SCL"]["buildability"], "no_move")
+        self.assertEqual(w["witness_2_I2C1_SDA"]["buildability"], "relocation_listed")
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
@@ -1714,14 +1759,20 @@ class T(unittest.TestCase):
         self.assertFalse(r["ok"]); self.assertEqual(r["stage"], "channels_compute_failed")
         r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", "NRST:0,0,1,1;P3V3:0,0,1,1"))
         self.assertTrue(r["ok"]); self.assertEqual(r["stage"], "channels_computed")
-        self.assertEqual(r["source"], "hard=legacy-single-rect", "#K2-452: --channels is the HARD half")
-        self.assertEqual(r["args"][0], "--channels"); self.assertEqual(r["n_nets"], 2)
-        # #K2-452 sec.2.4 item 1 (CHAIN side of the gate): a multi-slot HARD set is REFUSED loudly. R1420 proved a
-        # multi-slot channel fed as mr.WALL_RECT starves the edges by construction (C1 2 -> 47) => it must never be
-        # re-fed silently; the soft half (--guide) is where a per-corridor allocation belongs now.
+        self.assertEqual(r["source"], "hard-DROPPED(merged-into-guide)",
+                         "#K2-455 sec.2.5 (A): the legacy whole-net bands are no longer a HARD domain - they are merged "
+                         "into --guide (the ruling's first choice, 'also as guidance')")
+        self.assertEqual(r["n_nets"], 2, "the legacy band count is still reported for continuity (as guidance now)")
+        # #K2-455 sec.2.5 (A): the chain no longer emits a HARD domain AT ALL. The legacy whole-net bands are MERGED
+        # into --guide (the supervisor's first choice: "also as guidance"), so R1422's starved coupling (a hard band as
+        # the solve domain) cannot recur from the chain; a repeated net is legal in a GUIDE (one slot per corridor).
+        self.assertEqual(r["args"][0], "--guide", "no --channels may be emitted any more")
+        self.assertNotIn("--channels", r["args"])
+        self.assertGreater(r["n_guide"], 0)
+        self.assertEqual(r["source"], "hard-DROPPED(merged-into-guide)")
         r2 = regen.channels_for_maze("B", "D", rect, ja_module=_JA("GND:0,0,1,1;GND:0,2,1,3", ""))
-        self.assertFalse(r2["ok"]); self.assertEqual(r2["stage"], "channels_hard_multislot_refused")
-        self.assertEqual(r2["args"], []); self.assertIn("GND", r2["err"])
+        self.assertTrue(r2["ok"], "a repeated net is LEGAL in a guide (band entries merge)")
+        self.assertNotIn("--channels", r2["args"]); self.assertEqual(r2["n_guide"], 2)
         # the chain must consume the helper and bail out loudly (no silent run)
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         seg = src[src.index("def wipe_resolve_chain("):]

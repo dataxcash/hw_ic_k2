@@ -83,7 +83,9 @@
    ]
   ],
   "gate_status": "produced through mr.solve_edge, so seg_exact / via_exact (the release gates) ACCEPTED it at floor 0.20",
-  "why": "the residual is not physically blocked - it is blocked by the MEANS still in force"
+  "why": "the residual is not physically blocked - it is blocked by the MEANS still in force",
+  "buildability": "no_move",
+  "buildability_note": "the means adds no board geometry: it is a ROUTER start/domain policy change (the channel band is consumed as a preference instead of a boundary). Nothing to draw, move or retire."
  },
  "witness_2_I2C1_SDA": {
   "what": "F.Cu stub (51.5,67.455) -> B.Cu stub (49.15,62.505): the other residual pair",
@@ -233,7 +235,9 @@
    ]
   ],
   "gate_status": "accepted by the release gates at floor 0.20",
-  "consequence": "solvable by the engine as soon as it EXISTS as an edge - but it is NOT in the maze edge list at all (it appears only on the final board): the pair is created by the chain DRAWING/stitch stages and left unjoined => drawing-layer piece."
+  "consequence": "solvable by the engine as soon as it EXISTS as an edge - but it is NOT in the maze edge list at all (it appears only on the final board): the pair is created by the chain DRAWING/stitch stages and left unjoined => drawing-layer piece.",
+  "buildability": "relocation_listed",
+  "buildability_note": "DRAWING side: the new cross-layer join IS geometry, and every added item is listed in K2_SEC16_3_DRAWING_ADDENDUM_I2C1SDA_CROSSLAYER_v1.json (28 items: 27 track segments + 1 through via, size 0.35 / drill 0.20). Anchor audit on the real stitched board: ok=True, padless=0."
  },
  "certificate_for_the_MEANS_in_force": {
   "claim": "WITH the legacy whole-net hard channel as the solve domain, I2C2_SCL is INFEASIBLE - not for lack of space but because the domain contains no legal goal cell.",
@@ -260,5 +264,6 @@
   "A_drop_the_hard_channels_or_make_them_guidance_too": "engine means layer, sec.11: apply the R1424 lesson to the LAST hard half (the whole-net --channels domain). The witness says I2C2_SCL is then routable. The effect on the other 17 nets is what an authorised run measures.",
   "B_drawing_side_piece_for_I2C1_SDA": "one via + a short B.Cu run, witness geometry in hand; needs the sec.16.2 layer call from the supervisor; no frozen spec edit without approval."
  },
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "sec13_correction_done": "#K2-455 sec.2.3 required explicit buildability fields; added above (and the addendum carries its own). The engine side is no_move; the drawing side is relocation_listed with the item list attached."
 }

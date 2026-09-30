@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_contention_rootcause_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-455 sec.2.5 conditional gate: the in-band precheck did NOT show the required drop, so NO run was made and this is the mechanism evidence collected instead (the ruling requires stopping and reporting in that case).",
+ "three_way_isolation": {
+  "question": "why does I2C2_SCL (port stub (51.5,56.6) -> U1 pad 22 (37.75,57.1625)) still fail after the last hard domain was softened?",
+  "probe_1_frame_domain_M_false": {
+   "result": "OK"
+  },
+  "probe_2_legacy_channel_domain": {
+   "result": "FAIL",
+   "why": "no-free-goal-node"
+  },
+  "probe_3_frame_plus_the_exact_merged_guide": {
+   "result": "OK"
+  },
+  "probe_4_frame_plus_guide_penalty_0": {
+   "result": "OK"
+  },
+  "probe_5_the_wrapper_patch_chain_replicated": {
+   "result": "OK (with J13 port pads, floor 0.20, the merged guide)"
+  },
+  "probe_6_the_real_wrapper_single_net": {
+   "result": "OK",
+   "detail": "--only-net I2C2_SCL --dry-run: added 1, blocked 0; the port->pad attempt logs \"[astar] ok exp=11390\""
+  },
+  "probe_7_the_real_wrapper_all_nets": {
+   "result": "FAIL",
+   "detail": "the same call logs no-path-coarse(exhausted-42049) - the ledger records why=\"no-free-start-node\" for the edge (the plain attempt failed first) and try dir=\"start\" exhausted"
+  },
+  "reading": "SAME endpoints, SAME parameters, SAME kernel, SAME patch chain, SAME guide: it succeeds alone and fails in the full run => the difference is the ORDER: earlier edges have already been routed."
+ },
+ "root_cause_code_site": "tools/k2_p4_mroute_v1.py:771-780: after every successful solve the maze APPENDS the newly added copper back into ctx (ctx.tracks.append(...) / ctx.vias[...] = ... / ctx.holes.append(...)), so every later edge sees it as an obstacle. The last-served net is therefore starved by copper that did not exist when the run started - the classic winner-takes-all order effect, registered as M-ENG-BLOCK-CONTENTION-NEGOTIATION.",
+ "consequence": "I2C2_SCL is NOT a start-side, domain or drawing problem: it is a CONTENTION problem. The remedy is the means already registered for it - rip-up-and-reroute / negotiated congestion (pass 2): when an edge fails, rip the copper that sealed it (or re-solve the suite with a congestion cost) and try again, bounded.",
+ "landed_this_window": {
+  "A": "the last hard domain is GONE from the chain: no --channels is emitted any more; the legacy whole-net bands are merged into --guide as @band preferences (n_nets=18 -> n_guide=66, source=hard-DROPPED(merged-into-guide)). A fail-closed gate refuses to use a rect that cannot contain an edge's endpoints as a domain (loud, recorded in the precheck as channel_domain_refused) and demotes it to guidance. HONEST LIMIT: containment is necessary but NOT sufficient - the real starvation here happened INSIDE a containing band, so the gate is a safety net, and the substantive protection is that the chain now emits no hard domain at all.",
+  "B": "the drawing-side piece K2_SEC16_3_DRAWING_ADDENDUM_I2C1SDA_CROSSLAYER_v1.json (28 items from the R1440 witness: 27 track segments + 1 through via 0.35/0.20 at (50.95,66.805)); anchor audit on the real stitched board ok=True padless=0; applied by the chain as its own stitch pass (drawing_addendum_stitch) - the FROZEN SPEC IS NOT EDITED. NOT yet measured end to end (that needs the next authorised run).",
+  "C": "buildability fields added: engine side no_move; drawing side relocation_listed with the item list attached."
+ },
+ "gate_result": {
+  "required": "the precheck must show both residuals can start/route, relative to the current reading",
+  "measured": "no-free-start-node 23 -> 23; unreachable 24 -> 24 (I2C2_SCL is still the blocked one, now with no-free-start-node)",
+  "verdict": "GATE NOT PASSED => per #K2-455 sec.2.5 no N=1 was run. Stopping and reporting, as the ruling requires."
+ },
+ "OWNER-ITEMS": 0
+}
