@@ -17,8 +17,28 @@ def _mod(name, path):
     return m
 
 
+def build_pad_rects(board_path, planner, pcmod, P):
+    """#K2-509 sec.2 item 2（真形化）：把板上**全部焊盘**建成**真形圆角矩形**障碍记录。
+
+    旧路（`board_items`）把焊盘建成**内切胶囊** —— 正是 `R1668` 已在**逃逸规划器**里修掉的那把粗尺
+    （内切 ⇒ **方角隐形** ⇒ 缝合腿会擦角）。join 现改用同一真形模型（`_true_corner_radius` ＋
+    `pad_obstacle_shape`），与逃逸侧口径一致。只读 · 确定性。
+    """
+    b = P.LoadBoard(board_path)
+    out = []
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            pos = pd.GetPosition(); cx, cy = P.ToMM(pos.x), P.ToMM(pos.y)
+            sz = pd.GetSize(); sx, sy = P.ToMM(sz.x), P.ToMM(sz.y)
+            rr = pcmod._true_corner_radius(P, pd, sx, sy)
+            for L in pd.GetLayerSet().Seq():
+                out.append(planner.pad_obstacle_shape(pd.GetNetname() or "", b.GetLayerName(L),
+                                                      cx, cy, sx, sy, pd.GetOrientationDegrees(), rr))
+    return out
+
+
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
-               via_r=0.175, local_r=3.5):
+               via_r=0.175, local_r=3.5, pad_rects=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
     one-end 桩（恰好一端悬空）⇒ 同层直线腿优先，其次跨层过孔；**零搜索之外的定步长枚举**；确定性。
     """
@@ -48,7 +68,16 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
                and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
         targs = [(o[2], o[3], o[4], o[5]) for o in loc
                  if o[7] == net and o[0] != "PAD" and not (o[2] == xa and o[3] == ya and o[4] == xb and o[5] == yb)]
-        obsg = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in loc if o[7] != net]
+        # #K2-509 sec.2 item 2: foreign pads come from the TRUE-SHAPE list (rect records), not the inscribed
+        # capsule that board_items still yields; tracks/vias stay as exact capsules.
+        obsg = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6])
+                for o in loc if o[7] != net and o[0] != "PAD"]
+        for _r in (pad_rects or []):
+            if _r[0] == net or _r[1] != mr.LNAME[l]:
+                continue
+            cx_, cy_ = (float(_r[2]) + float(_r[4])) / 2.0, (float(_r[3]) + float(_r[5])) / 2.0
+            if abs(cx_ - ex) <= local_r and abs(cy_ - ey) <= local_r:
+                obsg.append(_r)
         r = planner.join_for_end(net, mr.LNAME[l], (ex, ey), obsg, targs, clear, max_len, step, tol,
                                  own=(xa, ya, xb, yb))   # #K2-507(a): no degenerate re-lay along our own line
         if r.get("join"):
@@ -73,6 +102,12 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             obs2 = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in osp
                     if (abs(o[2] - ex) <= local_r or abs(o[4] - ex) <= local_r)
                     and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
+            for _r in (pad_rects or []):                       # true-shape pads, every layer the via may touch
+                if _r[0] == net:
+                    continue
+                cx_, cy_ = (float(_r[2]) + float(_r[4])) / 2.0, (float(_r[3]) + float(_r[5])) / 2.0
+                if abs(cx_ - ex) <= local_r and abs(cy_ - ey) <= local_r:
+                    obs2.append(_r)
             rv = planner.via_join_for_end(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                           clear=clear, via_r=via_r, step=0.05, tol=tol,
                                           existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
@@ -97,7 +132,10 @@ def main(argv=None):
     pps = _mod("k2ppsjoin", os.path.join(_HERE, "k2_port_plane_stitch_v1.py"))
     rect = [float(v) for v in a.rect.split(",")]
     items = mr.board_items(a.board)
-    pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len)
+    pcmod = _mod("k2pcjoin", os.path.join(_HERE, "k2_pin_escape_precheck_v1.py"))
+    import pcbnew as _P
+    pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len,
+                    pad_rects=build_pad_rects(a.board, planner, pcmod, _P))
     lines = []
     for n, j in enumerate(pj["joins"]):
         if j["_kind"] == "track":
@@ -108,6 +146,7 @@ def main(argv=None):
                           "layers": [j["_other"], j["layers"][0]] if False else [j["layers"][0], j["_other"]]})
     rep = {"artifact": "k2_join_copper_v1", "board": a.board, "out": a.out,
            "n_one_end": pj["n_one_end"], "n_planned": len(pj["joins"]), "n_refused": len(pj["refused"]),
+           "pad_model": "TRUE rounded-rectangle (pad_obstacle_shape) - #K2-509 sec.2 item 2",
            "refused": pj["refused"], "lines": lines}
     if lines:
         r = pps.stitch(a.board, rect, {"rect": rect, "lines": lines}, a.out)

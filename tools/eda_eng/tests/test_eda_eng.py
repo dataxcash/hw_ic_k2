@@ -2057,6 +2057,18 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C511_join_obstacles_use_the_true_pad_shape_not_the_inscribed_capsule(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-509 sec.2 item 2). RED: the join's foreign-pad obstacles came
+        from board_items' INSCRIBED capsule, so a pad's rectangular corner was invisible and a leg could graze it.
+        GREEN: with the rect record in the obstacle list the same leg is refused, while the capsule clears it."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe511", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        rect_pad = m.pad_obstacle_shape("X", "F.Cu", 32.0, 62.85, 0.6, 0.7)
+        cap_pad = m.pad_obstacle("X", "F.Cu", 32.0, 62.85, 0.6, 0.7)
+        self.assertFalse(m._leg_clear("N", "F.Cu", (31.1, 62.85), (31.5, 63.25), [rect_pad], 0.30))
+        self.assertTrue(m._leg_clear("N", "F.Cu", (31.1, 62.85), (31.5, 63.25), [cap_pad], 0.30))
+
     def test_C510_a_new_via_must_clear_existing_vias_pads_and_drills(self):
         """TIAN TIAO #1 engine asset + regression (#K2-509 sec.2 item 2). RED without it: the join placed a via
         0.27mm from an existing one (hole-to-hole 0.0193mm vs the 0.2495 limit) and SHORTED a foreign In2.Cu track.
