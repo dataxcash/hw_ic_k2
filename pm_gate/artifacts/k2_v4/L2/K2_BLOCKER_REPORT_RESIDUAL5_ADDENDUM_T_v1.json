@@ -1,0 +1,29 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_t_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: two consecutive errors -> stop and return to Plan) + the standing blocker-report requirement.",
+ "errors_owned": {
+  "count": 2,
+  "what": "BOTH are the SAME mechanical failure: a patch anchor did not match the CURRENT file content, so the batch aborted mid-way, the suite went RED (1/1), and the change was auto-reverted in the same window. (1) R1476: the chain anchor \"--port-refs\", PORT_REFS, \"--ripup\", \"3\", *_charg]) was not present in the intended form, so regen.py was never written while the wrapper and the new test were - RED, reverted. (2) R1480: the wrapper anchor mr._RESV = _RESV belongs to the R1476 attempt, which had itself been REVERTED - so that line does not exist in the current file - RED, reverted.",
+  "root_cause": "I patched from MEMORY of an earlier window instead of reading the exact anchor region of the CURRENT file first. My own standing discipline (used successfully in earlier windows: print the anchor region, confirm a unique match, then write) was NOT applied. That is a real ENG process defect, twice.",
+  "impact": "zero product impact: no exam run, no board write, no red piece left (both times the tree was restored byte-identically to the pushed green commit; HEAD unchanged at 224453d5; closure PASS). The cost was two wasted windows of wall clock.",
+  "remedy_declared": "ANCHOR-FIRST GATE (must land before item 2 is attempted a third time): for every file to be patched - read the file, ASSERT the target string exists exactly once in the CURRENT content, and only then write; any failed assert must abort the whole batch BEFORE any write (all-or-nothing), so the tree can never be left half-patched. This is the machine form of the discipline I failed to apply.",
+  "note_on_the_first_attempt_design": "independently of the mechanics, the R1476 design (soft AVOID cost) was WRONG by #K2-465 sec.2.4, which requires a HARD keepout; the v4 piece therefore states the hard semantics explicitly and the soft form is superseded, not retried."
+ },
+ "blocker_report": {
+  "tried": "item 2 of #K2-465 sec.2.4 (make the reserved band chain-visible and mechanically enforced) was attempted twice: (1) as a per-cell soft cost (AVOID, penalty 50) - later ruled FORBIDDEN by the ruling, so it is superseded by the v4 piece that states the HARD keepout semantics and the four machine-readable fields (band_rect_mm, layer, protected_net, kept_out_net); (2) as a HARD keepout (core KEEPOUT mask + wrapper --keepout + chain reads v4 and records a band_keepout stage) - which failed on an anchor before any of it could run.",
+  "why_not_yet": "the ENGINE was never actually exercised in either attempt: both died in the patching process, so there is no evidence either way about the hard keepout. What is proven: the drawing side is complete and machine-readable (v4), and my patch process was not.",
+  "gap_layer": "ENG PROCESS/IMPLEMENTATION layer (how a change is applied to the tree) - NOT the scheme/drawing layer (the v4 piece is complete), NOT the engine capability, NOT the criteria, NOT L1. The fix is the anchor-first gate above, and it is a small, verifiable asset rather than a new means."
+ },
+ "plan_recap": {
+  "q1_signal_path": "One management wire (I2C) must reach from the connector edge into the main chip. Its entry point exists and it has a verified route; what happens instead is that the ground copper the router itself lays during the run covers the little box the wire needs.",
+  "q2_what_blocks": "Not the drawing (the reservation piece is written and machine-readable), and not the engine ability. What blocks is MY WAY OF EDITING: I tried twice to patch the code from memory, both patches missed their anchor and both were rolled back - so the machine never got to try.",
+  "q3_human_plan": "Write the rule into the machines the way a crew would: read the exact spot first, change only that spot, and if the spot is not what you expected, do NOT guess - stop and abort the whole edit. Then wire the reserved box to the router as a HARD \"do not use these cells\" rule (not a preference), check it automatically, and only then take one graded measurement."
+ },
+ "one_implementation_list": {
+  "landed_now": "this blocker report (appendix T) only.",
+  "next_single_step": "(i) land the ANCHOR-FIRST GATE (read + assert-unique + all-or-nothing write) with its own regression; (ii) then apply item 2 through it in ONE batch: core KEEPOUT hard mask + wrapper --keepout + chain reads v4 and records band_keepout + the chain-level RED->GREEN; (iii) only then, if the in-band precheck shows the residual solvable, run the single authorised N=1 (which also measures the I2C1_SDA addendum end to end)."
+ },
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
