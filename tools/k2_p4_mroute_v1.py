@@ -555,24 +555,38 @@ def dangling_ends(items, tol=0.02):
     {"net","layer","at"} so the engine can NAME (and then prune or connect) floating copper instead of leaving it
     to a human. This is the detector half of the rule 'a short end must not dangle - connect it or do not lay it'.
     """
+    # #K2-494: BOUNDED via a grid-bucket index. Each item is registered in every bucket its bbox EXPANDED by
+    # (halfwidth + tol) overlaps, so an endpoint's test only has to look at the ONE bucket it sits in: any item
+    # that could touch it is guaranteed to be registered there. O(n) build + O(1) lookup per end - no while-loop,
+    # fixed bucket size, so the owner's "no CPU spike" rule holds on a 6000-item board.
+    _B = 1.0
+    _idx = {}
+
+    def _bk(x, y):
+        return (int(math.floor(x / _B)), int(math.floor(y / _B)))
+
+    for _i, _it in enumerate(items):
+        _k, _l, _x1, _y1, _x2, _y2, _hw, _net = _it
+        _pad = _hw + tol
+        _i0, _j0 = _bk(min(_x1, _x2) - _pad, min(_y1, _y2) - _pad)
+        _i1, _j1 = _bk(max(_x1, _x2) + _pad, max(_y1, _y2) + _pad)
+        for _a in range(_i0, _i1 + 1):
+            for _b in range(_j0, _j1 + 1):
+                _idx.setdefault((_net, _l, _a, _b), []).append(_i)
     out = []
     for i in range(len(items)):
         ka, la, ax1, ay1, ax2, ay2, a_hw, a_net = items[i]
         for (px, py) in ((ax1, ay1), (ax2, ay2)):
             hit = False
-            for j in range(len(items)):
+            bx, by = _bk(px, py)
+            for j in _idx.get((a_net, la, bx, by), ()):
                 if j == i:
                     continue
                 kb, lb, bx1, by1, bx2, by2, b_hw, b_net = items[j]
-                if b_net != a_net:
-                    continue
                 if kb == "PAD":
-                    if lb == la and _pt_seg_dist(px, py, bx1, by1, bx2, by2) <= b_hw + tol:
+                    if _pt_seg_dist(px, py, bx1, by1, bx2, by2) <= b_hw + tol:
                         hit = True; break
-                    continue
-                if lb != la:
-                    continue
-                if min(math.hypot(px - bx1, py - by1), math.hypot(px - bx2, py - by2)) <= tol:
+                elif min(math.hypot(px - bx1, py - by1), math.hypot(px - bx2, py - by2)) <= tol:
                     hit = True; break
             if not hit:
                 out.append({"net": a_net, "layer": la, "at": [round(px, 4), round(py, 4)]})

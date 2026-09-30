@@ -1924,6 +1924,15 @@ class T(unittest.TestCase):
         d = mr.dangling_ends(onpad)
         self.assertEqual(len(d), 1, "only the end away from the pad dangles")
         self.assertEqual(d[0]["at"], [1.0, 0.0])
+        # #K2-494 SCALE regression: the bounded (bucket-indexed) detector must stay fast on a big board. 2000 lone
+        # tracks = 4000 free ends; the O(n^2) draft would need ~4e6 pair tests, the indexed one O(n). Time-bounded.
+        import time as _t
+        big = [("TRK", 0, float(k) * 10.0, 0.0, float(k) * 10.0 + 1.0, 0.0, 0.10, "N%d" % k) for k in range(2000)]
+        _t0 = _t.time()
+        db = mr.dangling_ends(big)
+        _el = _t.time() - _t0
+        self.assertEqual(len(db), 4000, "2000 lone tracks => 4000 free ends")
+        self.assertLess(_el, 5.0, "the bounded detector must not spike the CPU (owner red line): %.2fs" % _el)
 
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
