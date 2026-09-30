@@ -198,6 +198,69 @@ def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, s
                                        "why": "no free escape candidate (8dir + dogleg) within max_escape_len"}}
 
 
+def join_for_end(net, layer, end, obstacles, targets, clear=0.30, max_len=2.0, step=0.1, tol=0.02):
+    """#K2-508 ENGINE CAPABILITY —— **join 半（同层）**：把一根**单端悬空**之铜，**有界同网缝合**接上。
+
+    `end` ＝ 该悬空端 `(x,y)`；`targets` ＝ **同网同层**之铜 `[(x1,y1,x2,y2), ...]`（点 ＝ 零长段）。
+    在 **8 方向 × ≤⌊max_len/step⌋ 步**内找**直线腿**：**远端须落在某个 target 上**（≤`tol`），且**整条腿**与
+    **每一个异网障碍**保持 `clear`（用**真形**间距模型 `_leg_clear`；同网障碍自动放行 ⇒ 可穿过自家铜）。
+    **首中即取**（确定性）· **无候选 ⇒ 具名拒绝**（网/层/位置/已试候选数）—— 绝不静默放弃。
+    这是 `R1652` 在册设计「接上或不铺」之**另一半**（prune ＝ 不铺；join ＝ 接上）。**非新机制**
+    （与逃逸规划器同一套方向序与间距口径）。
+    """
+    x0, y0 = float(end[0]), float(end[1])
+    n = min(NSTEPS, int(max_len / step))
+    tried = 0
+    for (dx, dy) in DIRS:
+        for k in range(1, n + 1):
+            tried += 1
+            d = k * step
+            px, py = x0 + dx * d, y0 + dy * d
+            hit = None
+            for (tx1, ty1, tx2, ty2) in targets:
+                if _pt_seg(px, py, tx1, ty1, tx2, ty2) <= tol:
+                    hit = [round(tx1, 4), round(ty1, 4), round(tx2, 4), round(ty2, 4)]
+                    break
+            if hit is None:
+                continue
+            if _leg_clear(net, layer, (x0, y0), (px, py), obstacles, clear):
+                return {"join": {"kind": "track", "net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
+                                 "b": [round(px, 4), round(py, 4)], "d": round(d, 4), "dir": [dx, dy], "to": hit},
+                        "refused": None}
+    return {"join": None, "refused": {"net": net, "layer": layer, "at": [round(x0, 4), round(y0, 4)],
+                                      "candidates_tried": tried,
+                                      "why": "no clear same-layer join candidate (8dir x <=%d steps)" % n}}
+
+
+def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_layers,
+                     clear=0.30, via_r=0.175, step=0.05, tol=0.02):
+    """#K2-508 ENGINE CAPABILITY —— **join 半（跨层）**：以**一枚过孔**把 `end`（在 `layer`）与 `target_pt`
+    （在 `other_layer`）接上。过孔位置沿 `end→target_pt` **定步长采样**（有界 · 确定性 · 首中即取）：
+    须**同时搭到两端之铜**（≤`via_r+tol`）且**在所跨每一层**（`span_layers`）与**每一个异网障碍**保持净距 ——
+    过孔比走线多出的半径 `max(0, via_r-0.10)` **计入**所需间距（走线自身半宽 0.10 已在 `clear` 里）。
+    **无候选 ⇒ 具名拒绝。**
+    """
+    (x0, y0), (x1, y1) = (float(end[0]), float(end[1])), (float(target_pt[0]), float(target_pt[1]))
+    L = math.hypot(x1 - x0, y1 - y0)
+    n = max(1, int(math.ceil(L / max(step, 1e-6))))
+    need = clear + max(0.0, via_r - 0.10)
+    tried = 0
+    for k in range(n + 1):
+        t = k / float(n)
+        vx, vy = x0 + t * (x1 - x0), y0 + t * (y1 - y0)
+        tried += 1
+        if math.hypot(vx - x0, vy - y0) > via_r + tol or math.hypot(vx - x1, vy - y1) > via_r + tol:
+            continue
+        if all(_leg_clear(net, LZ, (vx, vy), (vx, vy), obstacles, need) for LZ in (span_layers or (layer, other_layer))):
+            return {"join": {"kind": "via", "net": net, "at": [round(vx, 4), round(vy, 4)],
+                             "layers": [layer, other_layer], "from": [round(x0, 4), round(y0, 4)],
+                             "to": [round(x1, 4), round(y1, 4)], "radius": via_r},
+                    "refused": None}
+    return {"join": None, "refused": {"net": net, "layers": [layer, other_layer],
+                                      "at": [round(x0, 4), round(y0, 4)], "candidates_tried": tried,
+                                      "why": "no clear via position joining %s -> %s" % (layer, other_layer)}}
+
+
 def plan_escapes(pads, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
     """`pads` **应仅含未连通端**（#K2-468 §3.2）。`go` ＝ 预检门（每端点皆有逃逸资产）。
     每条 pad ＝ `(net, layer, x, y)` 或 `(net, layer, x, y, hx, hy[, rot_deg])`（后三者＝焊盘真形半宽/半长/旋转）。"""

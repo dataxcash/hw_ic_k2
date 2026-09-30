@@ -2057,6 +2057,36 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C508_join_half_stitches_one_ended_stubs_by_net_and_names_what_it_cannot_join(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-508). RED without it: a one-end-dangling stub could only be
+        DELETED (prune) or left dangling; the chain's direct stitch was forbidden outright. GREEN: a bounded
+        same-net leg joins it, a cross-layer pair is joined by ONE via, and anything that cannot be joined is
+        NAMED (fail-loud), never silently dropped."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe508", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        # (1) same layer, straight leg onto a same-net point
+        r = m.join_for_end("N", "F.Cu", (5.0, 5.0), [], [(6.5, 5.0, 6.5, 5.0)], max_len=2.0)
+        self.assertIsNotNone(r["join"], "a clear straight leg must join")
+        self.assertEqual(r["join"]["b"], [6.5, 5.0])
+        # (2) a foreign pad in the way blocks it, and the failure is NAMED
+        block_rect = m.pad_obstacle_shape("X", "F.Cu", 5.75, 5.0, 1.0, 1.0)
+        r2 = m.join_for_end("N", "F.Cu", (5.0, 5.0), [block_rect], [(6.5, 5.0, 6.5, 5.0)], max_len=2.0)
+        self.assertIsNone(r2["join"])
+        self.assertEqual(r2["refused"]["net"], "N")
+        self.assertIn("no clear same-layer join", r2["refused"]["why"])
+        # (3) cross-layer: ONE via sits between the F.Cu stub end and the In5 end
+        r3 = m.via_join_for_end("P3V3_AUX", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [],
+                                ("F.Cu", "In5.Cu"))
+        self.assertIsNotNone(r3["join"], "one via must join the two layer ends")
+        self.assertAlmostEqual(r3["join"]["at"][0], 51.4, places=6)
+        # (4) a foreign obstacle covering the whole span => NAMED refusal
+        wall = m.pad_obstacle_shape("X", "F.Cu", 51.45, 39.0, 0.6, 0.6)
+        r4 = m.via_join_for_end("P3V3_AUX", "F.Cu", "In5.Cu", (51.35, 39.0), (51.55, 39.0), [wall],
+                                ("F.Cu", "In5.Cu"))
+        self.assertIsNone(r4["join"])
+        self.assertIn("no clear via position", r4["refused"]["why"])
+
     def test_C507_disposal_refills_only_the_zones_it_could_have_invalidated(self):
         """TIAN TIAO #1 engine asset + regression (#K2-507). RED without it: disposal refilled EVERY kept zone,
         so an untouched zone was re-polygonised and its OUTSIDE-FRAME copper coverage was rewritten (R1684
