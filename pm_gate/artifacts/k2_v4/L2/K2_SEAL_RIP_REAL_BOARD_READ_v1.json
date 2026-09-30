@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_seal_rip_real_board_read_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-463 sec.2.2 authorised the chain-side landing of the _v2 relocation drawing. Before wiring it, the planner was run ON THE REAL BOARD (read-only): this is the result, and it invalidates my own prescription.",
+ "measured": {
+  "board": "/tmp/opencode/k2af/s1d_stitched.kicad_pcb",
+  "band": [
+   46.75,
+   53.6,
+   50.35,
+   60.1
+  ],
+  "yield_net": "GND",
+  "layer": "F.Cu",
+  "plan_ok": false,
+  "n_items_to_rip": 0,
+  "refused": [
+   {
+    "net": "GND",
+    "why": "no item of this net/layer intersects the declared box"
+   }
+  ],
+  "why": "NO-YIELD-ITEMS: the drawing yielded nothing to rip (fail-closed, never a silent no-op)",
+  "preserve_items_in_band_kept": {
+   "MCU_VDD": 0,
+   "I2C1_SDA": 14
+  },
+  "board_tracks_total": 5824
+ },
+ "finding": "DECISIVE AND SELF-CORRECTING: on the stitched board (the maze input, i.e. BEFORE any routing) the declared band contains ZERO GND F.Cu items (and zero MCU_VDD items; I2C1_SDA has 14 because those are DRAWN pieces). The GND wall that seals the port->pad channel is therefore copper that THE MAZE ITSELF ADDS during the run - not pre-existing drawing copper. A \"rip before solving\" prescription cannot work: there is nothing to rip yet.",
+ "what_this_invalidates": "the _v2 relocation_listed piece (R1464) is INVALID as an action plan: its items_to_yield were derived from a pass-1 (post-routing) census, so it names a yielder that does not exist at the time the drawing would act. The fail-closed planner (R1468) caught this by returning NO-YIELD-ITEMS on the real board instead of silently no-oping - which is exactly what the gate was built for.",
+ "corrected_remedy_direction": "the band must be expressed as a ROUTING-SIDE RESERVATION, not as a pre-solve rip: either (a) reserve the band as a lane the engine must not claim with GND (i.e. GND keeps out of x=[46.75,50.35], y=[53.6,60.1] on F.Cu while the I2C2_SCL edge is served), or (b) make the settlement treat SELF-ADDED copper as rip-able - which the pass-2 loop already does (it unwinds to the pre-loop snapshot) yet GND still wins the band, because the cost/ordering terms do not know that this particular band is reserved for I2C2_SCL. Option (a) is the smaller, deterministic change and is a means change: NOT started here.",
+ "honest_status": "no chain wiring was made (it would have been a no-op by construction); the _v2 action plan must be revised before anything is landed. Zero exam runs; nothing landed on the board.",
+ "OWNER-ITEMS": 0
+}
