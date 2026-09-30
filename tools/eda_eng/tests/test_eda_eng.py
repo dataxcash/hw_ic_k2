@@ -1758,7 +1758,12 @@ class T(unittest.TestCase):
                         "v1 either omits or pads the per-corridor account: %s %s" % (r1["missing"], r1["reasons"]))
         self.assertTrue(any("to_where" in x for x in r1["missing"]), r1)
         r2 = m.audit_drawing(v2)
-        self.assertTrue(r2["ok"], "GREEN: the v2 piece must PASS the gate: %s %s" % (r2["missing"], r2["reasons"]))
+        self.assertFalse(r2["ok"], "#K2-464: v2 is a no-op action plan with no action_board_state => REJECTED")
+        self.assertIn("action_board_state", r2["missing"], r2)
+        v3 = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                        "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v3.json"), encoding="utf-8"))
+        r3 = m.audit_drawing(v3)
+        self.assertTrue(r3["ok"], "GREEN: the grounded v3 reservation must PASS: %s %s" % (r3["missing"], r3["reasons"]))
         # and a domain-level padding alone must be flagged
         bad = json.loads(json.dumps(v2))
         bad["sec16_3_four_elements"]["3_corrected_complete_construction_drawing"]["per_corridor_conservation"] = \

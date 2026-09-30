@@ -22,6 +22,8 @@ def audit_drawing(doc):
         if not el.get(k):
             miss.append(k)
     d = el.get("3_corrected_complete_construction_drawing") or {}
+    if not d.get("action_board_state"):
+        miss.append("action_board_state")
     b = el.get("4_buildability")
     if b == "relocation_listed":
         items = d.get("items_to_yield") or []
@@ -42,10 +44,14 @@ def audit_drawing(doc):
             why.append("per_corridor_conservation 以**域级**（框级）论据充数 ⇒ 禁用")
         if not (d.get("preserve_list") or d.get("preserve_list_note")):
             why.append("未列 preserve_list（搬迁区内**他网铜须保留**之具名项）")
+    elif b == "no_move":
+        if not d.get("reservation"):
+            why.append("no_move 图纸须给 reservation")
+        for k in ("per_corridor_conservation", "authority_for_the_move", "ref_plane_continuity"):
+            if not d.get(k):
+                miss.append(k)
     else:
-        for k in ("buildability_note",):
-            if not el.get(k):
-                why.append("非搬迁件须给 %s" % k)
+        why.append("buildability 须为 no_move 或 relocation_listed")
     return {"ok": not miss and not why, "missing": sorted(set(miss)), "reasons": why}
 
 
