@@ -2003,6 +2003,24 @@ class T(unittest.TestCase):
         self.assertEqual(j["n1"], j["n0"] - 1, "remove -> save -> reload roundtrip must keep the board readable")
         self.assertTrue(j["pro_out"], "the .kicad_pro sidecar must be carried (in-register template)")
 
+    def test_C500_board_items_builds_the_engine_item_list(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-500). R1654 landed board_items (the item-list builder the
+        chain's audit/prune consumes) WITHOUT a regression - so it did not count. RED without it (the chain's audit
+        died with AttributeError, named in R1654). GREEN: the engine builds the list itself from a real board -
+        deterministic, tracks/vias/pads present, every entry well formed. Loading only; no board is mutated (C40)."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr500", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        b = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+        it1 = mr.board_items(b); it2 = mr.board_items(b)
+        self.assertTrue(it1, "the engine must build a non-empty item list")
+        self.assertEqual(it1, it2, "board_items must be deterministic")
+        kinds = {x[0] for x in it1}
+        self.assertEqual(kinds, {"TRK", "VIA", "PAD"}, "tracks, vias and pads must all be present: %s" % kinds)
+        for x in it1[:200]:
+            self.assertEqual(len(x), 8, "each item is (kind, layer, x1,y1,x2,y2, halfwidth, net)")
+            self.assertIsInstance(x[1], int, "the layer is a pcbnew layer id")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
