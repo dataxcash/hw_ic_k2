@@ -1821,6 +1821,27 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                   "--bound-rect", ",".join(str(x) for x in rect), *_mask_args)
     if rc != 0 or not os.path.isfile(final):
         return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
+    # ── #K2-510 sec.3 item 1 (ENG): REFILL FRAME DISCIPLINE - the pour must not move OUTSIDE-FRAME copper.
+    #    R1702 measured the refilled board's outside-frame covered area coming out BELOW the reference on 6
+    #    (net,layer) rows (all negative, <=0.91 mm^2) - a real geometric deficit, not a vertex-count artefact.
+    #    Same remedy the disposal already uses (R1700): measure the outside coverage before/after; if it moved,
+    #    do NOT adopt the refill (keep the pre-refill board) and NAME the moved rows.
+    try:
+        from eda_eng import block as _blk510                              # local import: bound in this scope only
+        _rf_mv = _blk510.outside_area_moved(_blk510.zone_outside_area(resolved, rect),
+                                            _blk510.zone_outside_area(final, rect))
+    except Exception as _e7:                                               # noqa: BLE001
+        _rf_mv = {"__error__": type(_e7).__name__}
+    if _rf_mv:
+        chain.append({"stage": "refill_frame_discipline", "adopted": False, "outside_area_moved": _rf_mv,
+                      "rule": "#K2-510 sec.3 item 1: a pour that moves outside-frame copper is NOT adopted (the "
+                              "pre-refill board is kept); the fail-closed checks below judge that board."})
+        if not os.path.isfile(resolved):
+            return {"state": "W3_REFILL_REVERTED_NO_BOARD", "chain": chain}
+        final = resolved
+    else:
+        chain.append({"stage": "refill_frame_discipline", "adopted": True, "outside_area_moved": {}})
+
     # ③′ **(a) 灌注孤岛重连**（#K2-385 §五.2(a) · 加法式 · 确定性）：
     # 复铜后若 DRC 报 `isolated_copper`（填充岛不再搭在网铜上），把**每个孤岛**就近连回**同网最近焊盘** ——
     # 用**同一件**域内迷宫（同 `--bound-rect` · 同 floor），**一次**、**不循环**、**不搜索**。
