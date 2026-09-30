@@ -594,6 +594,23 @@ def dangling_ends(items, tol=0.02):
     return out
 
 
+def dangling_items(items, tol=0.02):
+    """#K2-494 ENGINE CAPABILITY (pure, deterministic): the PRUNE PLAN.
+
+    Given the same item list as dangling_ends, return the INDICES of every item that OWNS at least one dangling end
+    (sorted, deterministic). That is the removable set the registered delete route (netplan -> ripup) consumes, and
+    the "connect" alternative is the same set with a stitch target. A fully connected item is never listed.
+    """
+    bad = dangling_ends(items, tol)
+    keys = {(round(d["at"][0], 4), round(d["at"][1], 4), d["layer"], d["net"]) for d in bad}
+    out = []
+    for i, it in enumerate(items):
+        k, l, x1, y1, x2, y2, hw, net = it
+        if (round(x1, 4), round(y1, 4), l, net) in keys or (round(x2, 4), round(y2, 4), l, net) in keys:
+            out.append(i)
+    return out
+
+
 def board_dangling(board_path, tol=0.02):
     """#K2-494 ENGINE CAPABILITY: build the item list from a real board and return dangling_ends(...).
 

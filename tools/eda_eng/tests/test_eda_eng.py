@@ -1946,6 +1946,22 @@ class T(unittest.TestCase):
         for d in res[:5]:
             self.assertIn("net", d); self.assertIn("layer", d); self.assertIn("at", d)
 
+    def test_C494_the_dangling_prune_plan_lists_only_affected_items(self):
+        """TIAN TIAO #1 engine asset + regression: the prune plan. RED without dangling_items. GREEN: a lone track is
+        listed; in an L only the two legs are listed (both own a far free end); a track whose both ends land on
+        same-net pads is NOT listed."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr494c", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        lone = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N")]
+        self.assertEqual(mr.dangling_items(lone), [0])
+        L = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N"), ("TRK", 0, 1.0, 0.0, 1.0, 1.0, 0.10, "N")]
+        self.assertEqual(mr.dangling_items(L), [0, 1], "both legs own a far free end")
+        bridged = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N"),
+                   ("PAD", 0, 0.0, 0.0, 0.0, 0.0, 0.30, "N"),
+                   ("PAD", 0, 1.0, 0.0, 1.0, 0.0, 0.30, "N")]
+        self.assertEqual(mr.dangling_items(bridged), [], "both ends land on same-net pads => not listed")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
