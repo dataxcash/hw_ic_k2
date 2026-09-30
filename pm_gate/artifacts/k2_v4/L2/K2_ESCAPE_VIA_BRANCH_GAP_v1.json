@@ -1,0 +1,14 @@
+{
+ "artifact": "k2_escape_via_branch_gap_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-469 appendix A requires the scheme-layer dead-exit/relocation drawing because the precheck refuses both unconnected ends. Before asking the scheme layer to RELOCATE a pad, this record checks whether the refusals are real: it finds a gap in MY OWN planner against the ruling text.",
+ "finding": "#K2-467 sec.2.1 specifies the candidate set as \"four orthogonal directions x step ladder PLUS (PTH/allowed) a NEARBY VIA to change layer\". My planner implements 8 in-plane directions and an in-plane dogleg but NOT the via branch. Therefore a pad whose escape REQUIRES leaving the layer (which is exactly what the R1440 witness does near U1 pad 22: a short F.Cu run north to a via at (37.75,56.2) into In5.Cu) is reported as having NO escape even though a gate-verified route exists through it.",
+ "evidence": {
+  "witness_R1440": "the witness for the residual pair lands ON U1 pad 22 from In5.Cu via a via at ~(37.75,56.2), i.e. the pad escapes BY LAYER CHANGE within ~1mm - an escape my single-layer planner cannot see.",
+  "census_R1508": "U1 pad 22 is first-blocked by GND in ALL 8 in-plane directions, which is consistent with \"no in-plane escape\" and does NOT exclude a via escape.",
+  "ruling_text": "#K2-467 sec.2.1 lists the via branch explicitly; omitting it is my implementation gap, not a ruling change."
+ },
+ "consequence": "APPENDIX A MUST NOT BE USED TO RELOCATE U1 PAD 22 YET: the refusal is not yet proven to be a dead exit - it is proven only to have no IN-PLANE escape. The honest next step is to add the via branch (bounded: a fixed set of via candidate radii along the allowed via classes, F<->In5 / F<->B, all already in the register) and re-run the precheck; only what still refuses after that is a genuine scheme-layer dead exit.",
+ "what_i_did_not_do": "the via branch is NOT implemented (needs a window: implementation + RED->GREEN + re-run); the scheme-layer drawing of appendix A is NOT produced; no N=1 was run. Declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
