@@ -1,0 +1,106 @@
+{
+ "artifact": "k2_exam_a_n1_r1594_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-489 sec.2 (the five steps, one window) - the one fresh N=1 after the retry-only de-self-collapse fix.",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "work": "/tmp/opencode/k2g1",
+  "verdict": "FAIL"
+ },
+ "HEADLINE": {
+  "C1_connectivity": "unconnected = 0  ** C1 REACHED ZERO FOR THE FIRST TIME **"
+ },
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 0,
+   "pass": true
+  },
+  "C2_drc_no_new_increase": {
+   "total": 142,
+   "ref_total": 148,
+   "raw_total": 193,
+   "raw_ref_total": 168,
+   "new_classes": [
+    "clearance"
+   ],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pinned_caliber": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 3047,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 2138,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 819,
+   "pass": false,
+   "legacy_diff": 2,
+   "scope": "tracks+vias outside the wiped block frame"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  },
+  "C8_members_inside_frame": {
+   "violations": [],
+   "pass": true,
+   "authority": "#K2-388 sec.7.2: the A-double-prime chain must read all nine ECO rows"
+  },
+  "C9_geometric_digest": {
+   "before": "1cf4d39614491ccc",
+   "after": "39da8108a33467d9",
+   "pass": true
+  }
+ },
+ "named_failures": {
+  "C2_drc_no_new_increase": "NEW classes rose - FAIL",
+  "C6_outside_copper_unchanged": "diff 819 vs legacy 2 - FAIL (the separate piece)"
+ },
+ "engine_capability": "retry-only de-self-collapse in k2_reroute_router_floor_v1: when the (out,in) substitution replaces the outside endpoint with the SAME port used as the goal, the attempt was skipped by construction (start==goal); the fix falls back to the OTHER (inside) endpoint and routes inside -> dR port. Evidence: the standalone K2MR_DBG2 probe on the same edge now reports blocked=[], reasons={}, added=1, segs=12, vias=2, len=14.97mm (the F<->In5 layer change), and the chain run closes C1.",
+ "discipline": "selftest 153/153 with an explicit exit code BEFORE the run (incl. test_C454/test_C460 non-regression); no shared gate touched; no f1.islands change; no hardcoded data.",
+ "OWNER-ITEMS": 0
+}
