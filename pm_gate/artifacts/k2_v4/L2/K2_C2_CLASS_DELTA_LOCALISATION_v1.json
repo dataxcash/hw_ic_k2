@@ -1,0 +1,83 @@
+{
+ "artifact": "k2_c2_class_delta_localisation_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-490 sec.4.2 / #K2-492 sec.3: C2 read-only per-item localisation before any fix (R7 counts independently).",
+ "read": {
+  "run": "R1594 (/tmp/opencode/k2g1)",
+  "C2_row": {
+   "total": 142,
+   "ref_total": 148,
+   "raw_total": 193,
+   "raw_ref_total": 168,
+   "new_classes": [
+    "clearance"
+   ],
+   "pass": false
+  },
+  "class_delta_by_class": {
+   "clearance": {
+    "result": 2,
+    "ref": 0,
+    "delta": 2
+   },
+   "copper_sliver": {
+    "result": 0,
+    "ref": 1,
+    "delta": -1
+   },
+   "missing_courtyard": {
+    "result": 51,
+    "ref": 54,
+    "delta": -3
+   },
+   "silk_edge_clearance": {
+    "result": 1,
+    "ref": 2,
+    "delta": -1
+   },
+   "silk_over_copper": {
+    "result": 30,
+    "ref": 37,
+    "delta": -7
+   },
+   "silk_overlap": {
+    "result": 14,
+    "ref": 15,
+    "delta": -1
+   },
+   "track_dangling": {
+    "result": 15,
+    "ref": 1,
+    "delta": 14
+   },
+   "track_not_centered_on_via": {
+    "result": 28,
+    "ref": 32,
+    "delta": -4
+   },
+   "via_dangling": {
+    "result": 1,
+    "ref": 6,
+    "delta": -5
+   }
+  },
+  "total_delta": -6,
+  "raw_total_delta": 25
+ },
+ "named": {
+  "A_clearance": "2 items, ref 0 -> a NEW class. Per-item read: one of them is 'Silkscreen clearance @ ((29.7,60.5)-(31.55,60.85))' - a SILKSCREEN spacing item, i.e. the class name 'clearance' here covers a silk case, so at least one may be a caliber/classification artefact rather than a copper violation; the second item must be named next.",
+  "B_track_dangling": "15 vs ref 1 = +14 - the LARGEST positive delta, and the likely true issue: the A-window's fixed escape stubs (27 laid before the maze) plus the de-collapse route leave copper whose far end connects to nothing. That is a REAL manufacturability defect, and the fix belongs in the ENGINE: an escape stub must not be left dangling (the engine must connect it or not lay it)."
+ },
+ "judgement": "mixed: the clearance class needs one more per-item read (silk vs copper; artefact vs violation); track_dangling +14 is a genuine engine defect introduced by the escape-stub strategy.",
+ "next": [
+  "1. read the second clearance item (per-item) and decide artefact vs violation;",
+  "2. ENGINE ASSET: 'an escape stub is never left dangling' - engine rule + regression;",
+  "3. C6 (819) as the separate piece."
+ ],
+ "not_done": [
+  "no board write",
+  "no exam run",
+  "no generator change"
+ ],
+ "OWNER-ITEMS": 0
+}
