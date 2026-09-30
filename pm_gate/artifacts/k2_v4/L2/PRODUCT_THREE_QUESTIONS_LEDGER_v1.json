@@ -187,5 +187,32 @@
    "NOT_in_scope": "the R1430 residuals I2C2_SCL and I2C1_SDA are NOT of this class end to end: I2C2_SCL IS a port edge but the port->U1.pad22 search EXHAUSTED with no path at all (a free-space disconnection), and I2C1_SDA is not a maze edge at all (a 0.6mm F.Cu stub vs a 0.2mm B.Cu stub = a DRAWING-side pair). Both are named in the sec.16.3 artifact for the supervisor to rule on."
   },
   "OWNER-ITEMS": 0
+ },
+ "M_ENG_ROUTER_REROUTE_NEGOTIATION": {
+  "ts": "2026-09-30",
+  "authority": "#K2-456 sec.2.5 item 3: a NEW sub-problem family (negotiated settlement / rip-up & reroute in a deterministic, bounded maze) => answer the product three questions and backfill REF-CASE-LIBRARY BEFORE settling the algorithm (sec.20.5: look for the product first).",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES - tools/eda_eng/ripup.py is a manifest-exact teardown executor (already imported by the regression suite); tools/k2_p4_b2_in5_ripup_v1.py is a full/local rip-up-and-reroute solver WITH its own calibration lessons (D-1: the stamp criterion was stricter than the real gate; D-2: the negotiation counter must be same-caliber as the gate or viol==0 is unreachable) - both are copy targets. Our own maze already exposes the exact hook this needs: the unwind snapshot (ctx length/keys) and the per-edge loop, so the settlement runs inside one process and stays deterministic.",
+   "external": "YES for shape only (licence-blocked for copying): freeRouting and the KiCad interactive router both settle collisions by ripping and re-routing; the classic method is negotiated congestion (PathFinder, McMurchie & Ebeling 1995) with a present+history cost. None may be copied into this repo.",
+   "reading": "a same-kind product exists in-repo; the missing half was only the DETERMINISTIC BOUNDED settlement inside one maze process."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/eda_eng/ripup.py - COPY the manifest discipline: rip exactly what is listed, never \"while I am here\" cleanup.",
+    "tools/k2_p4_b2_in5_ripup_v1.py - COPY the two calibration lessons (the criterion must equal the acceptance gate; the counter must be same-caliber) and the \"failed first + conflict set\" order.",
+    "tools/k2_p4_mroute_v1.py itself - the unwind snapshot + the promoted re-pass (landed R1446)."
+   ],
+   "reference_library": "BACKFILLED HERE: REF-CASE-LIBRARY.md now exists next to this ledger (it did not before; the earlier honest note \"no file literally named REF-CASE-LIBRARY exists\" is superseded by this file). Product references recorded there: the TI DS320PR1601 EVM anchors in P6_execution/P6_OPEN_READINESS/, the SNLA425 sec.1.1 grouped fan-out policy, and the two in-repo router/ripup products above.",
+   "reading": "the copy target is unambiguous: deterministic bounded settlement in-process, copying the rip discipline and the two calibration lessons; no new algorithm."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "DETERMINISM: in5_ripup_v1 uses scipy/numpy distance fields and multi-round budgets; PF2 shuffles the net order with a seed. Our maze must stay seedless, snapshot-based and adopt-or-rollback atomic.",
+    "SCOPE: those products solve a single-layer lane bundle on the B2 card with their own raster; ours settles frame edges on 4 layers under seg_exact/via_exact release gates.",
+    "WIRING: none of them is reachable from the live chain; the settlement had to be landed inside the maze process."
+   ],
+   "consequence": "the expansion = rip the whole run in-process, re-route ONCE with the blocked EDGES first, adopt only on a strict improvement, else roll back atomically. Landed R1446; the \"blocked EDGES first\" refinement is measured and pinned in this window."
+  },
+  "OWNER-ITEMS": 0
  }
 }

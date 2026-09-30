@@ -802,6 +802,11 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
     if RIPUP > 0 and blocked:
         _prio_net = {b["net"] for b in blocked}
         _p1 = [e for e in edges if e[1] in _prio_net]
+        # #K2-456 refinement (measured): promoting the blocked NETS was not enough - inside the promoted set the
+        # starved edge was still served BEHIND its own blockers and starved again (r1 269 -> r2 269, adopted round1).
+        # So the BLOCKED EDGES THEMSELVES go first (stable within each group), then the rest of the promoted nets.
+        _bkey = {(b["net"], b["dist"]) for b in blocked}
+        _p1.sort(key=lambda e: 0 if (e[1], e[0]) in _bkey else 1)
         _p2 = [e for e in edges if e[1] not in _prio_net]
         _unwind()
         a2, b2, k2 = _pass(_p1 + _p2)                     # ① 阻断边优先 ② 其余保原序 ③ 一次

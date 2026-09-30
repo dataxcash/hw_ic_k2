@@ -1687,6 +1687,8 @@ class T(unittest.TestCase):
                       "the round is adopted ONLY if the block count strictly drops (else roll back - atomic)")
         self.assertIn("def _unwind():", src)
         self.assertIn("_pass(_p1 + _p2)", src, "one re-route: blocked first, the rest in the original order")
+        self.assertIn("_p1.sort(key=lambda e: 0 if (e[1], e[0]) in _bkey else 1)", src,
+                      "the BLOCKED EDGES themselves must go first (measured: promoting only their nets was not enough)")
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn('"--ripup", "1"', r, "the chain must enable exactly one pass-2 round")
         w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
