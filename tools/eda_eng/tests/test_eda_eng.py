@@ -1962,6 +1962,47 @@ class T(unittest.TestCase):
                    ("PAD", 0, 1.0, 0.0, 1.0, 0.0, 0.30, "N")]
         self.assertEqual(mr.dangling_items(bridged), [], "both ends land on same-net pads => not listed")
 
+    def test_C499_remove_copper_verb_roundtrips_in_a_subprocess_and_fails_loud(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-499 C41): the CLI verb tools/k2_remove_copper_v1.py, invoked
+        the IN-REGISTER way (a subprocess - production shell == test shell). The child asserts the three things the
+        ruling names: removed==1, the remove -> save -> RELOAD roundtrip is readable with the count down exactly one,
+        and the exit code is binary (0 on success, non-zero when nothing matches - fail-closed). The parent only reads
+        the child's JSON; no board operation happens in the test process (C40)."""
+        import subprocess, sys as _sys
+        script = (
+            "import os, sys, json, shutil, tempfile, subprocess\n"
+            "ROOT = %r\n"
+            "import pcbnew as P\n"
+            "work = tempfile.mkdtemp(prefix='k2v499')\n"
+            "src = os.path.join(ROOT, 'hw', 'k2_v4_8L.l14.kicad_pcb')\n"
+            "a = os.path.join(work, 'a.kicad_pcb'); out = os.path.join(work, 'b.kicad_pcb')\n"
+            "shutil.copy(src, a)\n"
+            "pro = os.path.splitext(src)[0] + '.kicad_pro'\n"
+            "if os.path.isfile(pro): shutil.copy(pro, os.path.join(work, 'a.kicad_pro'))\n"
+            "b0 = P.LoadBoard(a); n0 = len(list(b0.GetTracks()))\n"
+            "spec = None\n"
+            "for t in b0.GetTracks():\n"
+            "    if t.GetClass() != 'PCB_VIA':\n"
+            "        s, e = t.GetStart(), t.GetEnd()\n"
+            "        spec = [{'layer': b0.GetLayerName(t.GetLayer()), 'net': t.GetNetname(), 'a': [P.ToMM(s.x), P.ToMM(s.y)], 'b': [P.ToMM(e.x), P.ToMM(e.y)]}]\n"
+            "        break\n"
+            "items = os.path.join(work, 'items.json'); open(items, 'w').write(json.dumps(spec))\n"
+            "verb = os.path.join(ROOT, 'tools', 'k2_remove_copper_v1.py')\n"
+            "r = subprocess.run([sys.executable, verb, '--board', a, '--items', items, '--out', out], capture_output=True, text=True, timeout=900)\n"
+            "bad = os.path.join(work, 'none.json'); open(bad, 'w').write(json.dumps([{'layer': 'F.Cu', 'net': 'NOPE', 'a': [1.0, 1.0], 'b': [2.0, 2.0]}]))\n"
+            "r2 = subprocess.run([sys.executable, verb, '--board', a, '--items', bad, '--out', out + '.x'], capture_output=True, text=True, timeout=900)\n"
+            "b1 = P.LoadBoard(out) if os.path.isfile(out) else None\n"
+            "print(json.dumps({'n0': n0, 'n1': (len(list(b1.GetTracks())) if b1 is not None and hasattr(b1, 'GetTracks') else None),\n"
+            "                  'rc_ok': r.returncode, 'rc_bad': r2.returncode, 'pro_out': os.path.isfile(os.path.join(work, 'b.kicad_pro'))}))\n"
+        ) % (ROOT,)
+        rr = subprocess.run([_sys.executable, "-c", script], capture_output=True, text=True, cwd=os.getcwd(), timeout=1800)
+        self.assertEqual(rr.returncode, 0, "child failed: %s" % (rr.stderr or "")[-800:])
+        j = json.loads(rr.stdout.strip().splitlines()[-1])
+        self.assertEqual(j["rc_ok"], 0, "the verb must succeed on a matching item")
+        self.assertNotEqual(j["rc_bad"], 0, "the verb must exit non-zero when nothing matches (fail-closed)")
+        self.assertEqual(j["n1"], j["n0"] - 1, "remove -> save -> reload roundtrip must keep the board readable")
+        self.assertTrue(j["pro_out"], "the .kicad_pro sidecar must be carried (in-register template)")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
