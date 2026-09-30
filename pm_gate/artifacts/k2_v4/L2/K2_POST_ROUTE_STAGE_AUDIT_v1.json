@@ -1,0 +1,44 @@
+{
+ "artifact": "k2_post_route_stage_audit_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-476 sec.3.2 (read-only audit window: name the break for I2C2_SCL / GND across the post-maze stages; check whether the 27 escape ports worsened the no-op count). Zero board writes; zero exam runs; zero generator changes.",
+ "method": "for each chain stage board, enumerate the net's copper objects and measure the nearest endpoint to the pad, to the escape-port, and to the frame-port track. BEFORE = /tmp/opencode/k2w1/s3c_disposed.kicad_pcb (pre-B), AFTER = /tmp/opencode/k2b1/s3c_disposed.kicad_pcb (post-B).",
+ "named_break": {
+  "layer": "the MAZE'S PORT SEMANTICS (a port is an extra GOAL for its net) - not a copper layer",
+  "stage": "M2 maze (k2_reroute_router_floor_v1) - NOT the stitch/refill/dispose stages",
+  "object": "the 27 escape ports registered by R1540 (#K2-475 B)",
+  "why": "an escape port sits 0.8mm from the pad, while the edge's REAL endpoint (the frame-port track) is 13.76mm away. With the escape port in the goal set the maze satisfies the edge with a trivial 0.8mm stub and reports blocked=[] - the 13.76mm route is never attempted."
+ },
+ "evidence": {
+  "BEFORE_B_k2w1": {
+   "I2C2_SCL_copper_objects": 17,
+   "nearest_endpoint_to_U1_22_pad": "13.762 mm",
+   "nearest_to_escape_port": "13.817 mm",
+   "objects_with_an_endpoint_within_0.6mm_of_the_pad": 0
+  },
+  "AFTER_B_k2b1": {
+   "I2C2_SCL_copper_objects": 19,
+   "nearest_endpoint_to_U1_22_pad": "0.000 mm",
+   "nearest_to_escape_port": "0.000 mm",
+   "objects_with_an_endpoint_within_0.6mm_of_the_pad": 2,
+   "the_two_objects": [
+    "PCB_TRACK F.Cu (37.75,57.962)->(37.75,57.163)",
+    "PCB_TRACK F.Cu (37.75,57.962)->(37.75,57.163)  <-- DUPLICATE: two identical overlapping segments"
+   ],
+   "note": "the corridor WAS laid as copper - from the escape port to the pad - i.e. exactly the 0.8mm false goal. The frame-port distance is unchanged and the DRC still reports the pad <-> 9.3mm frame-port track as UNCONNECTED."
+  }
+ },
+ "audit_item_2_answer": "YES - the 27 escape ports WORSE this. They converted genuine routing failures into FALSE SUCCESSES: the residual maze pass now reports blocked=[] and reasons={} (R1540's machine evidence) precisely because the edge is 'solved' by a 0.8mm stub to the escape port, while C1 stays 2. So the R1540 machine criterion was satisfied in a way that HIDES the failure.",
+ "consequence": "the residual is a maze PORT-SEMANTICS defect introduced by R1540's B, not a stitch/refill/dispose break. The real edge endpoint (the frame port) must be the goal; the escape corridor may serve as a START, not as a GOAL.",
+ "next_candidates": [
+  "1. RESTRICT the escape ports: register them as START-only / do not add them to the maze's goal set (or require the edge's own endpoint to be reached). Deterministic, bounded, zero geometry.",
+  "2. remove the duplicate overlapping segments (a cosmetic wart in the same area).",
+  "3. C6 (800 vs legacy 2) as the separate piece."
+ ],
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change"
+ ],
+ "OWNER-ITEMS": 0
+}
