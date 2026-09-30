@@ -1765,6 +1765,36 @@ class T(unittest.TestCase):
             "the frame keeps ~50x headroom (R1394)"
         self.assertFalse(m.audit_drawing(bad)["ok"], "domain-level padding must be rejected")
 
+    def test_C463_the_seal_rip_planner_is_manifest_exact_and_fails_closed_on_empty(self):
+        """#K2-463 sec.2.2: the authorised action is to land the _v2 drawing in the chain - rip the declared GND F.Cu seal
+        inside the declared band BEFORE solving, nothing outside, nothing of the preserve-list nets. The plan must be a
+        MANIFEST (the input format of the registered tools/eda_eng/ripup.py::execute), deterministic, and it must FAIL LOUDLY
+        when it would rip nothing (never a silent no-op)."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2srp", os.path.join("tools", "k2_seal_rip_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        band = (46.75, 53.6, 50.35, 60.1)
+        items = [
+            {"net": "GND", "layer": "F.Cu", "x1": 47.0, "y1": 54.0, "x2": 49.0, "y2": 54.0, "width": 0.2},   # in band -> rip
+            {"net": "GND", "layer": "F.Cu", "x1": 44.0, "y1": 54.0, "x2": 45.0, "y2": 54.0, "width": 0.2},   # outside -> keep
+            {"net": "GND", "layer": "In5.Cu", "x1": 47.0, "y1": 54.0, "x2": 49.0, "y2": 54.0, "width": 0.2},  # wrong layer
+            {"net": "MCU_VDD", "layer": "F.Cu", "x1": 47.0, "y1": 55.0, "x2": 49.0, "y2": 55.0, "width": 0.2},  # preserve net
+        ]
+        r = m.rip_plan(band, [{"net": "GND", "layer": "F.Cu", "bbox_mm": list(band)}], items)
+        self.assertTrue(r["ok"], r)
+        self.assertEqual(r["n"], 1, "exactly the ONE in-band GND F.Cu item: %s" % r)
+        self.assertIn("GND", r["teardown"]); self.assertEqual(len(r["teardown"]["GND"]["tracks"]), 1)
+        self.assertEqual(r["teardown"]["GND"]["tracks"][0][0], "GND")
+        self.assertEqual(r["teardown"]["GND"]["tracks"][0][1], "F.Cu")
+        self.assertNotIn("MCU_VDD", r["teardown"], "a preserve-list net must never be ripped")
+        empty = m.rip_plan(band, [{"net": "GND", "layer": "F.Cu", "bbox_mm": list(band)}], [])
+        self.assertFalse(empty["ok"], "an empty plan must FAIL LOUDLY (never a silent no-op)")
+        self.assertIn("NO-YIELD-ITEMS", empty["why"])
+        # and the plan must be exactly what the registered ripup executor consumes
+        rp = open(os.path.join("tools", "eda_eng", "ripup.py"), encoding="utf-8").read()
+        self.assertIn('plan["teardown"]', rp)
+        self.assertIn('items["tracks"]', rp)
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python
