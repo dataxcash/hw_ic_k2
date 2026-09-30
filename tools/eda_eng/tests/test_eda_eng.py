@@ -2071,6 +2071,11 @@ class T(unittest.TestCase):
         self.assertEqual(r["join"]["b"], [6.5, 5.0])
         # (2) a foreign pad in the way blocks it, and the failure is NAMED
         block_rect = m.pad_obstacle_shape("X", "F.Cu", 5.75, 5.0, 1.0, 1.0)
+        # (#K2-507(a)) the far end must not land on the piece we extend from - a degenerate re-lay is refused
+        deg = m.join_for_end("N", "F.Cu", (5.0, 5.0), [], [(4.5, 5.0, 4.5, 5.0)], max_len=2.0, own=(3.0, 5.0, 5.0, 5.0))
+        self.assertIsNone(deg["join"], "re-laying along our own segment must be refused")
+        good = m.join_for_end("N", "F.Cu", (5.0, 5.0), [], [(4.5, 5.0, 4.5, 5.0)], max_len=2.0, own=(5.0, 5.0, 6.0, 5.0))
+        self.assertIsNotNone(good["join"], "a target off our own line is still joined")
         r2 = m.join_for_end("N", "F.Cu", (5.0, 5.0), [block_rect], [(6.5, 5.0, 6.5, 5.0)], max_len=2.0)
         self.assertIsNone(r2["join"])
         self.assertEqual(r2["refused"]["net"], "N")

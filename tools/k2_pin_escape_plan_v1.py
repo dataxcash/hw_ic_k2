@@ -198,7 +198,7 @@ def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, s
                                        "why": "no free escape candidate (8dir + dogleg) within max_escape_len"}}
 
 
-def join_for_end(net, layer, end, obstacles, targets, clear=0.30, max_len=2.0, step=0.1, tol=0.02):
+def join_for_end(net, layer, end, obstacles, targets, clear=0.30, max_len=2.0, step=0.1, tol=0.02, own=None):
     """#K2-508 ENGINE CAPABILITY —— **join 半（同层）**：把一根**单端悬空**之铜，**有界同网缝合**接上。
 
     `end` ＝ 该悬空端 `(x,y)`；`targets` ＝ **同网同层**之铜 `[(x1,y1,x2,y2), ...]`（点 ＝ 零长段）。
@@ -223,6 +223,9 @@ def join_for_end(net, layer, end, obstacles, targets, clear=0.30, max_len=2.0, s
                     break
             if hit is None:
                 continue
+            if own is not None and _pt_seg(px, py, own[0], own[1], own[2], own[3]) <= tol:
+                continue        # #K2-507(a): the far end must NOT lie on the piece we are extending from -
+                                # otherwise the leg re-lays copper that is already there (a DEGENERATE join).
             if _leg_clear(net, layer, (x0, y0), (px, py), obstacles, clear):
                 return {"join": {"kind": "track", "net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
                                  "b": [round(px, 4), round(py, 4)], "d": round(d, 4), "dir": [dx, dy], "to": hit},

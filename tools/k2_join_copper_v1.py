@@ -49,7 +49,8 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         targs = [(o[2], o[3], o[4], o[5]) for o in loc
                  if o[7] == net and o[0] != "PAD" and not (o[2] == xa and o[3] == ya and o[4] == xb and o[5] == yb)]
         obsg = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in loc if o[7] != net]
-        r = planner.join_for_end(net, mr.LNAME[l], (ex, ey), obsg, targs, clear, max_len, step, tol)
+        r = planner.join_for_end(net, mr.LNAME[l], (ex, ey), obsg, targs, clear, max_len, step, tol,
+                                 own=(xa, ya, xb, yb))   # #K2-507(a): no degenerate re-lay along our own line
         if r.get("join"):
             j = r["join"]; j["_kind"] = "track"; joins.append(j)
             continue
