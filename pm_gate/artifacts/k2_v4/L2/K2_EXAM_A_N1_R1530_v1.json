@@ -1,0 +1,127 @@
+{
+ "artifact": "k2_exam_a_n1_r1530_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-473 sec.3.4: after the chain wiring is green, take exactly ONE fresh N=1. This is that run.",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "gate_c34": "PASS",
+  "work": "/tmp/opencode/k2w1",
+  "stdout": "/tmp/opencode/k2w1_stdout.txt"
+ },
+ "wiring_actually_ran": {
+  "escape_keepout": {
+   "stage": "escape_keepout",
+   "source": "k2_pin_escape_precheck_v1.py",
+   "go": true,
+   "n_assets": 27,
+   "n_args": 189,
+   "n_refused": 0,
+   "exit": 0
+  },
+  "band_keepout_args_total": 190,
+  "note": "the chain computed the escape assets on the board the maze read (go=TRUE, 27 assets), emitted 189 R1488 keepout entries, and joined them with the band entry into ONE --keepout argument. The wiring is NOT a no-op."
+ },
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 2,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 134,
+   "ref_total": 148,
+   "raw_total": 185,
+   "raw_ref_total": 168,
+   "new_classes": [],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pinned_caliber": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "pass": true
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 3035,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 2083,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 796,
+   "pass": false,
+   "legacy_diff": 2,
+   "scope": "tracks+vias outside the wiped block frame"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  },
+  "C8_members_inside_frame": {
+   "violations": [],
+   "pass": true,
+   "authority": "#K2-388 sec.7.2: the A-double-prime chain must read all nine ECO rows"
+  },
+  "C9_geometric_digest": {
+   "before": "1cf4d39614491ccc",
+   "after": "19c6e3e147962f58",
+   "pass": true
+  }
+ },
+ "verdict": "FAIL",
+ "named_failures": {
+  "C1_connectivity": "unconnected=2 (UNCHANGED across three readings: the residual pair I2C2_SCL/I2C1_SDA is still unconnected)",
+  "C6_outside_copper_unchanged": "diff=796 vs legacy_diff=2"
+ },
+ "analysis": {
+  "resolve_residual_before": 4,
+  "what_was_reserved": "each corridor was reserved against the OTHER 7 OBJECTIVE nets (the maze's routed set), NOT against GND.",
+  "census_contradiction": "R1508 recorded that U1 pad 22 is first-blocked by GND in ALL 8 in-plane directions - i.e. the pour net, which was NOT in the kept-out set. So the one blocker the census named was not covered by this wiring.",
+  "honest_reading": "the keepout mechanism is proven live and hard (189 cells masks), yet C1 did not move; the reserved net set (objective nets only) is the open question."
+ },
+ "discipline": "C1>=2 => STOP + name + NO same-cause rerun (#K2-473 sec.3.4). No re-run with a tweaked kept-out set: that would be a parameter change + rerun. A conservation-grade infeasibility certificate (L1) is NOT carried, so no owner escalation on infeasibility grounds.",
+ "next_candidates_for_the_supervisor": [
+  "1. include the POUR net (GND) - and/or ALL nets - in the kept-out set per corridor (the R1508 census names GND as U1 pad 22's blocker).",
+  "2. inspect whether the residual is port/grid reachability rather than occupancy (a read-only audit).",
+  "3. C6 (796) is a separate piece."
+ ],
+ "OWNER-ITEMS": 0
+}
