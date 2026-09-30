@@ -1,0 +1,20 @@
+{
+ "artifact": "k2_remove_copper_inregister_template_diff_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-498 sec.2: port the IN-REGISTER save template into remove_items; if it STILL reproduces, stop and hand back WITH THE DIFF - no fourth route.",
+ "ported_diff": {
+  "save_call": "pcbnew.SaveBoard(board_out, b)  ==  k2_port_plane_stitch_v1:157 / k2_move_copper_v1 uses b.Save(a.out)",
+  "sidecar_carry": "copy <in_stem>.kicad_pro and .kicad_dru onto <out_stem> after saving  ==  route.py:487-491 / block.py:350 ('carry the project config, otherwise the DRC library caliber drifts')",
+  "verification": "the roundtrip regression (subprocess-isolated, C40) still fails: the child exits non-zero and the capturable stderr is consumed by KiCad's own 'Adding duplicate image handler' noise, so the child's real error is still not isolated."
+ },
+ "observed_difference_to_the_in_register_context": {
+  "1_env": "the chain runs the board writers as subprocesses of tools/eda_eng.sh with env {PM_GATE_PROJECT_ROOT: <shadow project root>, K2_OUT_PCB, ...} (regen.py sets these) - my child runs with the plain test env, no shadow root.",
+  "2_project": "the in-register writers work inside a SHADOW PROJECT (a full project tree whose .kicad_pro is carried by the tool), not a bare temp dir.",
+  "3_invocation": "the chain never calls board writers in-process from a test; they are CLI subprocesses of the shim.",
+  "note": "hw/ does carry .kicad_pro files (hw/k2_v4_8L[.lNN].kicad_pro) and the child DID copy them onto the output stem - so the sidecar alone is not the whole difference."
+ },
+ "conclusion": "the residual is the CONTEXT of the write (shadow project root + the chain's env), not the save call and not the sidecar. Per #K2-498 this is handed back with the diff above; no fourth save route is invented.",
+ "next_candidate": "make the regression (and any in-chain use) invoke the operation the in-register way: as a CLI subprocess under the chain's env/shadow root - i.e. add a thin CLI verb (e.g. eda_eng remove-copper) and have both the chain and the regression call THAT, never the core in-process.",
+ "disposition": "reverted in-window; green point stands (158/158).",
+ "OWNER-ITEMS": 0
+}
