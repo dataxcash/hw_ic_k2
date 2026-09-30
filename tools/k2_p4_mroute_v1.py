@@ -611,6 +611,24 @@ def dangling_items(items, tol=0.02):
     return out
 
 
+def dead_stages(chain):
+    """#K2-501 ENGINE CAPABILITY (pure, deterministic): the "a dead segment kills the run" gate.
+
+    Given a chain record list, return the NAMED list of segments that died - any record carrying an "err" key.
+    A run whose chain contains a dead segment must never be graded as if it were whole; this is the one
+    authoritative test the pipeline and the judge consult, so a swallowed stage error becomes a named FAILURE
+    (the closing asset for the night's "stage errors swallowed" defect family, live-reproduced at R1654).
+    """
+    out = []
+    for i, r in enumerate(chain or []):
+        if not isinstance(r, dict):
+            continue
+        if r.get("err"):
+            out.append({"at": i, "stage": r.get("stage"), "err": r.get("err")})
+    out.sort(key=lambda x: (x["at"], str(x.get("stage"))))
+    return out
+
+
 def board_items(board_path):
     """#K2-500 ENGINE CAPABILITY (the function the chain's audit/prune stage calls): assemble the copper item list
     from a real board - tracks as centre-line+halfwidth, vias as zero-length segments of their radius on EVERY layer

@@ -2021,6 +2021,25 @@ class T(unittest.TestCase):
             self.assertEqual(len(x), 8, "each item is (kind, layer, x1,y1,x2,y2, halfwidth, net)")
             self.assertIsInstance(x[1], int, "the layer is a pcbnew layer id")
 
+    def test_C501_a_dead_chain_segment_is_named_and_never_passes(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-501): the "a dead segment kills the run" gate. RED without it:
+        the R1654 rerun's chain carried {"stage":"copper_dangling_audit","err":"AttributeError"} yet a verdict was
+        still produced - a swallowed stage error. GREEN: dead_stages names every such segment deterministically, so
+        the pipeline/judge can refuse to grade a run carrying a dead segment."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr501", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        self.assertEqual(mr.dead_stages([]), [])
+        self.assertEqual(mr.dead_stages([{"stage": "ok"}, {"stage": "fine", "pass": True}]), [],
+                         "healthy segments are never reported")
+        chain = [{"stage": "maze"}, {"stage": "copper_dangling_audit", "err": "AttributeError"},
+                 {"stage": "judge", "pass": True}]
+        d = mr.dead_stages(chain)
+        self.assertEqual(len(d), 1, "exactly the dead segment must be named")
+        self.assertEqual(d[0]["stage"], "copper_dangling_audit")
+        self.assertEqual(d[0]["at"], 1, "its position in the chain is reported")
+        self.assertEqual(len(mr.dead_stages(chain + [{"stage": "x", "err": "Boom"}])), 2, "deterministic count")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
