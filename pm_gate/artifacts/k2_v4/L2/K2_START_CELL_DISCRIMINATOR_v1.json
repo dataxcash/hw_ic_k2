@@ -1,0 +1,20 @@
+{
+ "artifact": "k2_start_cell_discriminator_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-459 sec.2.5 ruled the residual to the SOLUTION layer on the premise \"the start point does not exist in the drawing\". This is the discriminator read that premise requires: it measures, on the REAL pass-1 board (the maze re-run to /tmp with --ripup 0, i.e. with the run's own added copper present), whether the port can start and what seals it. Read-only w.r.t. the repo; no frozen file touched; not a graded run.",
+ "method": "maze re-run to /tmp (--ripup 0, same inputs/params/caliber floor 0.20) -> LoadBoard -> ctx -> snap_node at the port (51.5,56.6) on F.Cu with the net own island root, inside a 8x8mm window at the frame wall.",
+ "measured": {
+  "port": [
+   51.5,
+   56.6
+  ],
+  "legal_start_exists_WITH_pass1_copper": true,
+  "sealing_items_within_the_clearance_ring": 0,
+  "sealing_items_after_rip": true
+ },
+ "binary": "(b) NOT-A-MISSING-DRAWING-ENTRY: the start cell EXISTS with the run own copper present and NOTHING seals it within the clearance ring, so the solution-layer premise \"no start point in the drawing\" is CONTRADICTED on both counts.",
+ "what_the_failure_actually_is": "the chain records why=\"no-free-start-node\" as the LAST attempt of the retry, and that attempt is the dir=\"goal\" one, whose START is the OUTSIDE anchor (82.91,51.19) - an endpoint outside the C35 wall, exactly the class R1434 substitutes only when BOTH ends are outside. The dir=\"start\" attempt (port -> pad) is the one that would work, and it EXHAUSTS in the full run while it succeeds with --only-net => the binding difference is the OTHER NETS COPPER ALONG THE PATH (contention), not a missing or sealed start.",
+ "consequence": "a solution-layer drawing piece would add copper to a place the R1440 witness shows is already routable, and would not touch the measured cause. The honest next step is one of: (i) let the (out,in) endpoint class use the same dR-port substitution the both-outside class already uses (engine means, already landed for the other class), or (ii) a conservation-level conflict-set read ALONG the port->pad corridor naming the nets whose copper must yield.",
+ "declared_not_produced": "#K2-459 sec.2.6 items 1-4 (solution-layer drawing / sec.20 backfill / deterministic implementation + RED->GREEN / selftest+closure) remain NOT produced - declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
