@@ -1,0 +1,68 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_startside_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-454 sec.2.5: the CONDITIONAL fresh N=1 (granted only if the in-band precheck showed a significant drop - it did: no-free-start-node 267 -> 23).",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "rc": 1,
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "work_dir": "/tmp/opencode/k2af",
+  "foreground": true,
+  "wall_clock": "10:29:18 -> 10:31:30 (~2 min total; the R1430 maze stage alone was ~31 min)"
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": 811,
+  "C6_note": "DECLARED ROW, NOT A GATE (#K2-446 sec.2.2)",
+  "C7": 0,
+  "C7_pass": true,
+  "C8": [],
+  "C9": true,
+  "rows_present": 9
+ },
+ "verdict_vs_branch": "C1=2 => the branch \"C1>=2 => stop + name + ban same-cause rerun + bring new mechanism evidence\" applies. NOT improved; NOT worse. The measured ledger is IDENTICAL to the dry-run precheck (added 67 / blocked 269 / no-free-start-node 23 / 245 same-island no-ops / segs 636 / vias 60 / len 576.7708), and the C9 digest 86ba4cc20255ad08 is IDENTICAL to R1430 => the start-side fix changed NO geometry.",
+ "means_executed": {
+  "hard_channels": "n_nets=18 (one rect per net)",
+  "soft_guidance": "n_guide=48, guide_source=joint-per-corridor",
+  "start_side_substitution": "ON (both-outside-only) - the former 244-block crash/noise class is now 245 NAMED same-island no-ops + 23 genuinely start-blocked",
+  "gate": "not tripped"
+ },
+ "residual_named": [
+  {
+   "nets": [
+    "I2C2_SCL"
+   ],
+   "items": [
+    "走线 [I2C2_SCL] (F.Cu), 长度: 9.3000 mm",
+    "F.Cu 上 U1 的焊盘 22 [I2C2_SCL]"
+   ]
+  },
+  {
+   "nets": [
+    "I2C1_SDA"
+   ],
+   "items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.2000 mm"
+   ]
+  }
+ ],
+ "new_mechanism_evidence": {
+  "1_the_fix_is_purely_a_NOISE_and_SPEED_fix": "identical ledger to the dry-run and an identical C9 digest to R1430 => the 245 former blocks never needed routing (same island) and no copper changed. The maze stage went from ~31 min to ~1 min: the old code spent two doomed retry solves per phantom block.",
+  "2_the_residuals_are_PROVABLY_not_start_side": "they are unchanged (I2C2_SCL: 9.3mm F.Cu stub at (51.5,56.6) vs U1 pad 22 at (37.75,57.1625); I2C1_SDA: 0.6mm F.Cu stub at (51.5,67.455) vs 0.2mm B.Cu stub at (49.15,62.505)).",
+  "3_I2C2_SCL_is_a_FREE-SPACE_DISCONNECTION": "its pair IS a port edge and the port -> U1.pad22 direction already runs and EXHAUSTS with no path at all (no-path-coarse(exhausted-5693)). The remedy is not a start policy: the route is blocked by other nets occupying the free space => this is exactly what pass-2 (negotiated congestion / rip-up-and-reroute) is for, and it is now the RELEVANT means rather than a spare one.",
+  "4_I2C1_SDA_is_a_DRAWING-SIDE_pair": "0.6mm F.Cu vs 0.2mm B.Cu on the frozen drawing side (the chain I2C1_SDA joint + D2 stitch) => sec.16.2 layer call, which belongs to the supervisor; ENG does not touch the frozen drawing without approval.",
+  "5_one_phantom_add_removed": "R1430 counted added 68; with the correct formulation it is 67 and the extra one is named a no-op - i.e. the previous run booked an add that produced no copper (consistent with I2C1_SDA staying unconnected)."
+ },
+ "same_cause_rerun_ban": "BANNED: soft guidance + start-side substitution over this frame/board state is now MEASURED twice (dry-run and graded, identical). No further run without a new authorisation AND a different mechanism.",
+ "board": "FROZEN (l14/rev-61, PCB fb07d25ac426ff84); nothing landed.",
+ "OWNER-ITEMS": 0
+}
