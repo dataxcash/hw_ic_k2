@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_pour_edge_keyerror_rootcause_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-452 sec.2.4 item 3 (fix + regression, or a read-only proof that it does not affect C1).",
+ "symptom": "R1420 (and R1392/R1402, identical 244 every time): 241 x GND + 3 x MCU_VDD edges blocked with 'exception:KeyError' - opaque, because the maze caught the exception and recorded only the type name.",
+ "diagnostic": "ONE bounded, read-only diagnostic (single net, distinct work dir, no board landed, K2MR_EXC_TRACE=1) - not a rerun of the graded configuration: the traceback names the site.",
+ "root_cause": {
+  "exception": "KeyError('F.Cu')",
+  "site": "tools/k2_p4_mroute_v1.py:513 in snap_node -> grid.bad[layer], reached from the WRAPPER's port-goal retry (tools/k2_reroute_router_floor_v1.py:304) because __ports()__ returned the J13 port pad's layer as the STRING 'F.Cu' (assigned in the _PP block from GetLayerName), while grid.bad is keyed by pcbnew layer IDs.",
+  "blast_radius": "every net that owns a J13 pad - i.e. GND (241) and MCU_VDD (3) - so the #K2-431 'port-aware goals' lever was DEAD for exactly those two nets."
+ },
+ "fix": "tools/k2_reroute_router_floor_v1.py: _norm_layer(layer, lname2id) normalises a NAME to the pcbnew ID (IDs pass through) and _ports() applies it to the mr._PORT_PADS entries; plus the maze now records exceptions WITH their name and message (never 'exception:KeyError' again) and the endpoint lookup names an absent uuid instead of raising.",
+ "red_green_evidence_same_command": {
+  "command": "wrapper --only-net MCU_VDD (same board/drc/frame/priority as the chain)",
+  "BEFORE_fix": {
+   "added": 8,
+   "blocked": 3,
+   "reasons": {
+    "exception:KeyError('F.Cu')": 3
+   },
+   "tracebacks": 3
+  },
+  "AFTER_fix": {
+   "added": 8,
+   "blocked": 3,
+   "reasons": {
+    "no-free-start-node": 3
+   },
+   "tracebacks": 0
+  }
+ },
+ "honest_caveat": "the above proves the exception is GONE and replaced by a NAMED reason, and it shows the 3 MCU_VDD edges were blocked before and after (=> C1-neutral for those 3). For the 241 GND edges the retry now actually runs, so the outcome is NOT yet measured: a lone GND-only diagnostic did not finish inside a 200s bound (each edge builds heavy 0.10mm grids). C1-neutrality is therefore NOT claimed for GND - the authorised run will measure it.",
+ "OWNER-ITEMS": 0
+}

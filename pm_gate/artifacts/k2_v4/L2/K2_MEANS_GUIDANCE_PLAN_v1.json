@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_means_guidance_plan_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-452 sec.2.4 (means change: give the router a GUIDANCE-EXPRESSION capability, gate first) + sec.16.3 (a feasibility claim MUST answer the four elements) + sec.13 (can the construction crew just connect it?)",
+ "sec16_3_four_elements": {
+  "1_one_line_cause_of_death": {
+   "old_means": "'pre-assign the answer, then route to it' - expressed through the maze's ONLY lever, the solve DOMAIN (mr.WALL_RECT), which is a BOUNDARY, not a preference: a 0.40mm-tall trunk lane fed as the domain excludes the endpoints by construction, so the edges die (R1420: C1 2 -> 47, no-path-coarse(exhausted-1)=47 + no-free-start-node=22, against 1 such reason unconstrained).",
+   "why_the_new_means_is_different": "a PREFERENCE is expressed as a per-cell COST (steps outside the guided cells cost (1+penalty) times) while the SEARCH DOMAIN stays the whole frame - so the router is BIASED towards the assigned lane and can never be made unable to reach an endpoint."
+  },
+  "2_verified_fact_list": [
+   "R1420 (in-band proof route.chain[7] channels_computed source=joint n_nets=48): the hard-domain form STARVES - C1 2->47, added 68->20, blocked 316.",
+   "R1394/sec.2.3 conserving count stands: frame area 1286.2mm^2, pitch 0.40mm, 4 signal layers => 12862 line-mm capacity vs 257.3 line-mm demand (MST lower bound) => ~50x headroom; NOT area limited.",
+   "K2_CORRIDOR_ALLOCATION_MAP_v1.json (this window): reading the REAL wiped board + its REAL DRC, 6 corridors of 8mm => 112.625mm of lane capacity, 18 nets, 48 per-corridor slots, 19.2mm used, 93.425mm spare, ZERO unsatisfied corridors; every slot lies inside its corridor, no two overlap, every crossing net gets exactly one slot there.",
+   "K2_POUR_EDGE_KEYERROR_ROOTCAUSE_v1.json (this window): the 244 opaque blocks were a layer-name/layer-ID mismatch (port pads carried 'F.Cu'), i.e. the #K2-431 port-aware-goal lever was DEAD on the only two nets that own J13 pads.",
+   "Determinism: the maze stays seedless/bounded (no shuffle, no search); the widen ladder is deduplicated (frozen margin 0.0 => one attempt instead of three identical ones)."
+  ],
+  "3_corrected_complete_construction_drawing": {
+   "note": "the means is a ROUTER capability, not new board geometry: the drawing stays the frozen 98-piece sec.16.3 spec (anchor audit padless=0). What is 'drawn' here is the DETERMINISTIC INPUT the router will consume.",
+   "hard_half": "--channels = the legacy builders' EXACTLY ONE rect per net (unchanged semantics; a multi-slot set is REFUSED loudly, rc=2, no board written).",
+   "soft_half": "--guide = the per-corridor allocation (one slot per corridor per net) with --guide-penalty 3.0; the maze multiplies every step OUTSIDE the guided cells by 4.0.",
+   "per_corridor_conservation": "see K2_CORRIDOR_ALLOCATION_MAP_v1.json: per corridor height / capacity / crossing nets / used / leftover, each slot tied to the real per-net endpoint interval (no domain-level padding).",
+   "layers": "guidance is layer-agnostic (the allocation carries no layer); the maze's existing span-aware via rules and the seg_exact/via_exact release gates are UNCHANGED - guidance only reweights the A* step cost."
+  },
+  "4_buildability": "no_move",
+  "buildability_plain": "no board geometry is added, moved or retired by this means; it changes only HOW the existing router chooses between admissible paths. The frozen four sources stay untouched and nothing lands on the board until an authorised run says so."
+ },
+ "sec13_human_sentence": "Can the construction crew just connect it? YES - because nothing is handed to them that they must interpret: the lane assignment is now advice the router may ignore, exactly like a human layout engineer who prefers a trunk corridor but is allowed to step out of it when the pads are not there. The old form asked them to build a 0.4mm tunnel that does not reach the pads - which is why 47 connections vanished.",
+ "acceptance_regressions_in_this_window": {
+  "test_C452_soft_guidance_prefers_and_never_starves": "RED = the same lane as a HARD domain => astar returns 'start-blocked' (starvation at unit scale); GREEN = the same lane as SOFT guidance => 'ok' AND the route leaves the direct line to use the lane; penalty 0.0 is a verified no-op.",
+  "test_C452_the_wrapper_REFUSES_a_multislot_hard_channel_and_never_widens_a_frozen_ladder": "BEHAVIOURAL: the wrapper is executed with a multi-slot --channels and exits rc=2 with REFUSED before touching any board; the ladder dedup is pinned.",
+  "test_C452_the_port_pad_layer_must_be_normalised_to_a_pcbnew_layer_id": "RED = a layer NAME reaches grid.bad (the 244 KeyError); GREEN = normalised to the ID.",
+  "test_C440 (chain side)": "a multi-slot HARD set => stage channels_hard_multislot_refused (loud, no silent fallback)."
+ },
+ "not_in_this_window": "pass 2 (rip-up-and-reroute with negotiated congestion) is the NEXT step and needs its own authorisation; its copy sources are already named in PRODUCT_THREE_QUESTIONS_LEDGER_v1.json (M_ENG_CHANNEL_GUIDANCE_EXPRESSION).",
+ "OWNER-ITEMS": 0
+}

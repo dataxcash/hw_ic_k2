@@ -188,6 +188,11 @@ def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
 # **C35 环路内框界**（#K2-378 §三.1）：把作业域**作为搜索约束**传入 —— 域外格一律不可选。
 # 事后恢复框外铜已被实测否决（R1020：得 C6=0 但坏连通 C1 14->17 · C2 249->1237）；界必须下在**搜索环路里**。
 WALL_RECT = None          # (x0, y0, x1, y1) mm；None = 不设界
+# #K2-452 sec.2.4 item 2 —— **软引导（偏好/代价）**：`GUIDE = {"rects":[(x0,y0,x1,y1),...], "penalty":f}`。
+#   引导矩形**不是**边界（绝不改 `bad`）：只把**引导之外**的每一步代价乘以 `(1+penalty)` ⇒ 迷宫**偏好**走引导，
+#   **但永远可以离开**（⇒ 引导**不可能**造成「构造性无解」—— 这正是 `R1420` 把 0.40mm 带当**硬域**踩到的坑：
+#   `C1 2→47`，`no-path-coarse(exhausted-1)=47`）。`None` ⇒ 无引导 ⇒ 既有调用**行为不变**。
+GUIDE = None
 
 
 class Grid:
@@ -209,6 +214,21 @@ class Grid:
                     for j in range(self.ny):
                         if out_x or (self.y0 + j * self.step < wy0 - 1e-9) or (self.y0 + j * self.step > wy1 + 1e-9):
                             bb2[i * self.ny + j] = 1
+        # #K2-452 sec.2.4 item 2：软引导**格掩码**（层无关；只影响**代价**，不堵任何格）。
+        self.gflag = None
+        self.gpen = 0.0
+        if GUIDE:
+            self.gpen = float(GUIDE.get("penalty") or 0.0)
+            gf = bytearray(self.nx * self.ny)
+            for (_gx0, _gy0, _gx1, _gy1) in (GUIDE.get("rects") or []):
+                _i0 = max(0, int(math.floor((_gx0 - self.x0) / self.step)))
+                _i1 = min(self.nx - 1, int(math.ceil((_gx1 - self.x0) / self.step)))
+                _j0 = max(0, int(math.floor((_gy0 - self.y0) / self.step)))
+                _j1 = min(self.ny - 1, int(math.ceil((_gy1 - self.y0) / self.step)))
+                for _i in range(_i0, _i1 + 1):
+                    for _j in range(_j0, _j1 + 1):
+                        gf[_i * self.ny + _j] = 1
+            self.gflag = gf
         if os.environ.get("K2MR_DBG"):
             sys.stderr.write("[grid] step=%.2f %dx%d cells=%d mark=%.1fs\n" %
                              (step, self.nx, self.ny, self.nx * self.ny, _t.time() - _t0))
@@ -420,7 +440,8 @@ def astar(grid, ctx, net, s, g, sl, gl, fine=False):
             if not grid.inside(ni, nj): continue
             if grid.bad[L][ni * ny + nj]: continue
             if di and dj and (grid.bad[L][i * ny + nj] or grid.bad[L][ni * ny + j]): continue
-            nd = d + step * (math.sqrt(2) if di and dj else 1.0)
+            _gc = 1.0 if (grid.gflag is None or grid.gflag[ni * ny + nj]) else (1.0 + grid.gpen)
+            nd = d + step * (math.sqrt(2) if di and dj else 1.0) * _gc
             nn = nid(L, ni, nj)
             if nd < dist[nn] - 1e-9:
                 dist[nn] = nd; came[nn] = n
@@ -716,13 +737,27 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
 
     added, blocked, blocks = [], [], []
     for dist, net, ua, ub, la, lb, pa, pb in edges:
-        ca, cb = find("p:" + ua) if ua in ctx.pads else (find("v:" + ua) if ua in ctx.vias else find("t:" + ua)), \
-                 find("p:" + ub) if ub in ctx.pads else (find("v:" + ub) if ub in ctx.vias else find("t:" + ub))
+        # #K2-452 sec.2.4 item 3 —— 端点 uuid **不在 pads/vias/tracks 任一处**时必须**具名**成阻断原因，
+        # 绝不静默成 `exception:KeyError`（`R1420` 实测 244/316 条以 `exception:KeyError` 记盘 · 无法定位）。
+        _trk = {_t["uuid"] for _t in ctx.tracks}
+        def _lk(uu):
+            if uu in ctx.pads: return find("p:" + uu)
+            if uu in ctx.vias: return find("v:" + uu)
+            if uu in _trk: return find("t:" + uu)
+            return None
+        ca, cb = _lk(ua), _lk(ub)
+        if ca is None or cb is None:
+            led["blocked"].append({"net": net, "dist": dist,
+                                   "why": "endpoint-absent-from-ctx(%s)" % ("a" if ca is None else "b")})
+            continue
         if ca == cb: continue
         try:
             sol, why = solve_edge(ctx, find, ca, cb, net, la, pa, lb, pb, margin, 0.25)
         except Exception as ex:
-            sol, why = None, "exception:%s" % type(ex).__name__
+            if os.environ.get("K2MR_EXC_TRACE"):
+                import traceback as _tb; _tb.print_exc()
+            # #K2-452 sec.2.4 item 3：异常必须**带名字**（类型 ＋ 摘要）入盘，否则无法定位（承 R1420 教训）。
+            sol, why = None, "exception:%s(%s)" % (type(ex).__name__, str(ex)[:60])
         if sol is None:
             blocked.append({"net": net, "dist": dist, "why": why}); continue
         nseg = 0; nvia = 0; ln = 0.0

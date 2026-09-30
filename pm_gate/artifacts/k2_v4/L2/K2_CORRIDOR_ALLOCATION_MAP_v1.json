@@ -1,0 +1,847 @@
+{
+ "artifact": "k2_corridor_allocation_map_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-452 sec.2.4 item 2 acceptance: ONE solve must produce the COMPLETE allocation map with PER-CORRIDOR conservation READ FROM THE REAL DRAWING (no domain-level padding); this is that map, plus the sec.16.3 four elements and buildability in K2_MEANS_GUIDANCE_PLAN_v1.json.",
+ "inputs_read_from_the_real_drawing": {
+  "frame_rect_mm": [
+   22.95,
+   32.95,
+   51.5,
+   78.0
+  ],
+  "corridor_height_mm": 8.0,
+  "pitch_mm": 0.4,
+  "real_wiped_board": "/tmp/opencode/k2ab/s1d_stitched.kicad_pcb",
+  "real_wiped_board_sha256_16": "4f43f797d07478b8",
+  "real_wiped_board_drc": "/tmp/opencode/k2ab/s1_wiped_drc.json",
+  "real_wiped_board_drc_sha256_16": "5afb2ac923140e9a",
+  "how_the_per_net_intervals_were_derived": "k2_deviation_gen_v1.pairs(real DRC unconnected_items) -> per-net endpoint bbox clamped into the frame; every number below comes from those real coordinates (nothing is a domain-level count)."
+ },
+ "totals": {
+  "corridors": 6,
+  "nets": 18,
+  "slot_entries": 48,
+  "capacity_mm_sum": 112.625,
+  "used_mm_sum": 19.2,
+  "global_leftover_mm": 93.425,
+  "unsatisfied_corridors": {}
+ },
+ "per_corridor": [
+  {
+   "corridor_idx": 0,
+   "y_span_mm": [
+    32.95,
+    40.95
+   ],
+   "height_mm": 8.0,
+   "capacity_nets": 20,
+   "crossing_nets": 9,
+   "used_mm": 3.6,
+   "leftover_mm": 4.4,
+   "conservation_ok": true,
+   "slots": [
+    {
+     "net": "FB_U2",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      41.635
+     ],
+     "slot_rect_abs": [
+      28.99,
+      32.95,
+      31.05,
+      33.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.95
+    },
+    {
+     "net": "GND",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      70.5
+     ],
+     "slot_rect_abs": [
+      26.67,
+      33.35,
+      51.5,
+      33.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.95
+    },
+    {
+     "net": "MCU_VDD",
+     "real_endpoint_y_span_mm": [
+      39.8,
+      69.5
+     ],
+     "slot_rect_abs": [
+      24.13,
+      33.75,
+      51.5,
+      34.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 1.15
+    },
+    {
+     "net": "NRST",
+     "real_endpoint_y_span_mm": [
+      40.45,
+      54.75
+     ],
+     "slot_rect_abs": [
+      27.55,
+      34.15,
+      51.5,
+      34.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.5
+    },
+    {
+     "net": "P3V3",
+     "real_endpoint_y_span_mm": [
+      35.5,
+      64.0
+     ],
+     "slot_rect_abs": [
+      28.99,
+      34.55,
+      51.5,
+      34.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 5.45
+    },
+    {
+     "net": "P3V3_AUX",
+     "real_endpoint_y_span_mm": [
+      37.0,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      29.65,
+      34.95,
+      51.5,
+      35.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 3.95
+    },
+    {
+     "net": "PERSTA#",
+     "real_endpoint_y_span_mm": [
+      37.5,
+      55.75
+     ],
+     "slot_rect_abs": [
+      31.8375,
+      35.35,
+      51.5,
+      35.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 3.45
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "real_endpoint_y_span_mm": [
+      38.699999,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      33.25,
+      35.75,
+      51.5,
+      36.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.25
+    },
+    {
+     "net": "SW_U2",
+     "real_endpoint_y_span_mm": [
+      34.6,
+      44.2
+     ],
+     "slot_rect_abs": [
+      31.05,
+      36.15,
+      40.7,
+      36.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 6.35
+    }
+   ]
+  },
+  {
+   "corridor_idx": 1,
+   "y_span_mm": [
+    40.95,
+    48.95
+   ],
+   "height_mm": 8.0,
+   "capacity_nets": 20,
+   "crossing_nets": 13,
+   "used_mm": 5.2,
+   "leftover_mm": 2.8,
+   "conservation_ok": true,
+   "slots": [
+    {
+     "net": "12V_IN",
+     "real_endpoint_y_span_mm": [
+      41.635,
+      45.0
+     ],
+     "slot_rect_abs": [
+      29.05,
+      40.95,
+      34.95,
+      41.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 3.365
+    },
+    {
+     "net": "FB_U2",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      41.635
+     ],
+     "slot_rect_abs": [
+      28.99,
+      41.35,
+      31.05,
+      41.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.685
+    },
+    {
+     "net": "GND",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      70.5
+     ],
+     "slot_rect_abs": [
+      26.67,
+      41.75,
+      51.5,
+      42.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "MCU_VDD",
+     "real_endpoint_y_span_mm": [
+      39.8,
+      69.5
+     ],
+     "slot_rect_abs": [
+      24.13,
+      42.15,
+      51.5,
+      42.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "NRST",
+     "real_endpoint_y_span_mm": [
+      40.45,
+      54.75
+     ],
+     "slot_rect_abs": [
+      27.55,
+      42.55,
+      51.5,
+      42.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "P3V3",
+     "real_endpoint_y_span_mm": [
+      35.5,
+      64.0
+     ],
+     "slot_rect_abs": [
+      28.99,
+      42.95,
+      51.5,
+      43.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "P3V3_AUX",
+     "real_endpoint_y_span_mm": [
+      37.0,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      29.65,
+      43.35,
+      51.5,
+      43.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "PERSTA#",
+     "real_endpoint_y_span_mm": [
+      37.5,
+      55.75
+     ],
+     "slot_rect_abs": [
+      31.8375,
+      43.75,
+      51.5,
+      44.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "real_endpoint_y_span_mm": [
+      42.799999,
+      55.1
+     ],
+     "slot_rect_abs": [
+      43.2,
+      44.15,
+      51.5,
+      44.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 6.15
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "real_endpoint_y_span_mm": [
+      38.699999,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      33.25,
+      44.55,
+      51.5,
+      44.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "real_endpoint_y_span_mm": [
+      45.0,
+      50.25
+     ],
+     "slot_rect_abs": [
+      29.21,
+      44.95,
+      50.05,
+      45.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 3.95
+    },
+    {
+     "net": "SWDIO",
+     "real_endpoint_y_span_mm": [
+      46.54,
+      50.75
+     ],
+     "slot_rect_abs": [
+      31.75,
+      45.35,
+      40.1625,
+      45.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.41
+    },
+    {
+     "net": "SW_U2",
+     "real_endpoint_y_span_mm": [
+      34.6,
+      44.2
+     ],
+     "slot_rect_abs": [
+      31.05,
+      45.75,
+      40.7,
+      46.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 3.25
+    }
+   ]
+  },
+  {
+   "corridor_idx": 2,
+   "y_span_mm": [
+    48.95,
+    56.95
+   ],
+   "height_mm": 8.0,
+   "capacity_nets": 20,
+   "crossing_nets": 11,
+   "used_mm": 4.4,
+   "leftover_mm": 3.6,
+   "conservation_ok": true,
+   "slots": [
+    {
+     "net": "GND",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      70.5
+     ],
+     "slot_rect_abs": [
+      26.67,
+      48.95,
+      51.5,
+      49.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "I2C2_SCL",
+     "real_endpoint_y_span_mm": [
+      56.6,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      37.75,
+      49.35,
+      51.5,
+      49.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.35
+    },
+    {
+     "net": "MCU_VDD",
+     "real_endpoint_y_span_mm": [
+      39.8,
+      69.5
+     ],
+     "slot_rect_abs": [
+      24.13,
+      49.75,
+      51.5,
+      50.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "NRST",
+     "real_endpoint_y_span_mm": [
+      40.45,
+      54.75
+     ],
+     "slot_rect_abs": [
+      27.55,
+      50.15,
+      51.5,
+      50.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 5.8
+    },
+    {
+     "net": "P3V3",
+     "real_endpoint_y_span_mm": [
+      35.5,
+      64.0
+     ],
+     "slot_rect_abs": [
+      28.99,
+      50.55,
+      51.5,
+      50.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "P3V3_AUX",
+     "real_endpoint_y_span_mm": [
+      37.0,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      29.65,
+      50.95,
+      51.5,
+      51.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "PERSTA#",
+     "real_endpoint_y_span_mm": [
+      37.5,
+      55.75
+     ],
+     "slot_rect_abs": [
+      31.8375,
+      51.35,
+      51.5,
+      51.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 6.8
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "real_endpoint_y_span_mm": [
+      42.799999,
+      55.1
+     ],
+     "slot_rect_abs": [
+      43.2,
+      51.75,
+      51.5,
+      52.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 6.15
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "real_endpoint_y_span_mm": [
+      38.699999,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      33.25,
+      52.15,
+      51.5,
+      52.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "real_endpoint_y_span_mm": [
+      45.0,
+      50.25
+     ],
+     "slot_rect_abs": [
+      29.21,
+      52.55,
+      50.05,
+      52.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 1.3
+    },
+    {
+     "net": "SWDIO",
+     "real_endpoint_y_span_mm": [
+      46.54,
+      50.75
+     ],
+     "slot_rect_abs": [
+      31.75,
+      52.95,
+      40.1625,
+      53.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 1.8
+    }
+   ]
+  },
+  {
+   "corridor_idx": 3,
+   "y_span_mm": [
+    56.95,
+    64.95
+   ],
+   "height_mm": 8.0,
+   "capacity_nets": 20,
+   "crossing_nets": 9,
+   "used_mm": 3.6,
+   "leftover_mm": 4.4,
+   "conservation_ok": true,
+   "slots": [
+    {
+     "net": "GND",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      70.5
+     ],
+     "slot_rect_abs": [
+      26.67,
+      56.95,
+      51.5,
+      57.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "GPIO_LED",
+     "real_endpoint_y_span_mm": [
+      57.1625,
+      70.5
+     ],
+     "slot_rect_abs": [
+      33.75,
+      57.35,
+      45.05,
+      57.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 7.7875
+    },
+    {
+     "net": "I2C1_SDA",
+     "real_endpoint_y_span_mm": [
+      62.505,
+      67.455
+     ],
+     "slot_rect_abs": [
+      49.15,
+      57.75,
+      51.5,
+      58.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.445
+    },
+    {
+     "net": "I2C2_SCL",
+     "real_endpoint_y_span_mm": [
+      56.6,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      37.75,
+      58.15,
+      51.5,
+      58.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.2125
+    },
+    {
+     "net": "I2C2_SDA",
+     "real_endpoint_y_span_mm": [
+      57.1625,
+      69.5
+     ],
+     "slot_rect_abs": [
+      38.25,
+      58.55,
+      51.5,
+      58.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 7.7875
+    },
+    {
+     "net": "MCU_VDD",
+     "real_endpoint_y_span_mm": [
+      39.8,
+      69.5
+     ],
+     "slot_rect_abs": [
+      24.13,
+      58.95,
+      51.5,
+      59.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 8.0
+    },
+    {
+     "net": "P3V3",
+     "real_endpoint_y_span_mm": [
+      35.5,
+      64.0
+     ],
+     "slot_rect_abs": [
+      28.99,
+      59.35,
+      51.5,
+      59.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 7.05
+    },
+    {
+     "net": "P3V3_AUX",
+     "real_endpoint_y_span_mm": [
+      37.0,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      29.65,
+      59.75,
+      51.5,
+      60.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.2125
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "real_endpoint_y_span_mm": [
+      38.699999,
+      57.1625
+     ],
+     "slot_rect_abs": [
+      33.25,
+      60.15,
+      51.5,
+      60.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.2125
+    }
+   ]
+  },
+  {
+   "corridor_idx": 4,
+   "y_span_mm": [
+    64.95,
+    72.95
+   ],
+   "height_mm": 8.0,
+   "capacity_nets": 20,
+   "crossing_nets": 6,
+   "used_mm": 2.4,
+   "leftover_mm": 5.6,
+   "conservation_ok": true,
+   "slots": [
+    {
+     "net": "GND",
+     "real_endpoint_y_span_mm": [
+      38.0,
+      70.5
+     ],
+     "slot_rect_abs": [
+      26.67,
+      64.95,
+      51.5,
+      65.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 5.55
+    },
+    {
+     "net": "GPIO_LED",
+     "real_endpoint_y_span_mm": [
+      57.1625,
+      70.5
+     ],
+     "slot_rect_abs": [
+      33.75,
+      65.35,
+      45.05,
+      65.75
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 5.55
+    },
+    {
+     "net": "I2C1_SDA",
+     "real_endpoint_y_span_mm": [
+      62.505,
+      67.455
+     ],
+     "slot_rect_abs": [
+      49.15,
+      65.75,
+      51.5,
+      66.15
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 2.505
+    },
+    {
+     "net": "I2C2_SDA",
+     "real_endpoint_y_span_mm": [
+      57.1625,
+      69.5
+     ],
+     "slot_rect_abs": [
+      38.25,
+      66.15,
+      51.5,
+      66.55
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 4.55
+    },
+    {
+     "net": "LED_A",
+     "real_endpoint_y_span_mm": [
+      70.5,
+      70.5
+     ],
+     "slot_rect_abs": [
+      45.95,
+      66.55,
+      48.95,
+      66.95
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 0.0
+    },
+    {
+     "net": "MCU_VDD",
+     "real_endpoint_y_span_mm": [
+      39.8,
+      69.5
+     ],
+     "slot_rect_abs": [
+      24.13,
+      66.95,
+      51.5,
+      67.35
+     ],
+     "slot_height_mm": 0.4,
+     "real_overlap_mm": 4.55
+    }
+   ]
+  },
+  {
+   "corridor_idx": 5,
+   "y_span_mm": [
+    72.95,
+    78.0
+   ],
+   "height_mm": 5.05,
+   "capacity_nets": 12,
+   "crossing_nets": 0,
+   "used_mm": 0.0,
+   "leftover_mm": 5.05,
+   "conservation_ok": true,
+   "slots": []
+  }
+ ],
+ "conservation_check": {
+  "slots_inside_their_corridor": true,
+  "no_two_slots_overlap_in_a_corridor": true,
+  "every_corridor_within_capacity": true,
+  "every_crossing_net_has_exactly_one_slot_in_that_corridor": true
+ },
+ "OWNER-ITEMS": 0
+}

@@ -40,7 +40,15 @@ def main():
                          "extra goals for their nets (the in-region connector must be terminated ON, not around)")
     ap.add_argument("--channels", default="",
                     help="#K2-429 (A): per-net HARD channel constraints 'net:x0,y0,x1,y1;...' - each edge is routed with "
-                         "mr.WALL_RECT set to that net's channel (the maze's EXISTING bound-rect vehicle)")
+                         "mr.WALL_RECT set to that net's channel (the maze's EXISTING bound-rect vehicle). "
+                         "EXACTLY ONE RECT PER NET: the multi-slot (per-corridor) form is REFUSED here (#K2-452 "
+                         "sec.2.4 item 1 - it starves by construction, R1420) - use --guide for a preference.")
+    ap.add_argument("--guide", default="",
+                    help="#K2-452 sec.2.4 item 2: per-net SOFT guidance 'net:x0,y0,x1,y1[@corridor|@layer];...'. The "
+                         "maze PREFERS guided cells (each step OUTSIDE costs (1+penalty) times) but may ALWAYS leave "
+                         "them, so guidance can never make an edge unsolvable (unlike a hard --channels domain).")
+    ap.add_argument("--guide-penalty", dest="guide_penalty", type=float, default=3.0,
+                    help="#K2-452: cost multiplier-1 for steps outside the guided cells (default 3.0).")
     ap.add_argument("--order-list", dest="order_list", default=None,
                     help="#K2-415 lever 'order': a file with one net name per line (priority order, first = first)")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"],
@@ -72,16 +80,33 @@ def main():
     # **不改迷宫本体**：运行期在 wrapper 内给 `mr.solve_edge` 打补丁（与 `cv._req`/`WALL_RECT` 同法）。
     _set_step(a.coarse_step)
     # ── #K2-429 §三.2 **通道分配入链（硬约束）**：逐网把通道喂给迷宫的既有 bound-rect 车辆 ─────────────
-    CH = {}
-    for _it in [x for x in (a.channels or "").split(";") if x.strip()]:
-        _n, _r = _it.split(":", 1)
-        _r = _r.split("@")[0]                             # #K2-451 (ii): tolerate the "@corridor/@layer" tag
-        # #K2-451 (ii): a net may appear MANY times (one slot per corridor) => net -> [rect, ...] (backward
-        # compatible: a single-rect input yields a one-element list, so legacy behaviour is unchanged).
-        CH.setdefault(_n, []).append(tuple(float(v) for v in _r.split(",")))
+    def _parse_rects(txt):
+        """#K2-451 (ii) / #K2-452: 'net:x0,y0,x1,y1[@corridor|@layer];...' -> {net: [rect, ...]} (order kept)."""
+        out = {}
+        for _it in [x for x in (txt or "").split(";") if x.strip()]:
+            _n, _r = _it.split(":", 1)
+            _r = _r.split("@")[0]                         # tolerate the "@corridor/@layer" tag
+            out.setdefault(_n, []).append(tuple(float(v) for v in _r.split(",")))
+        return out
+
+    CH = _parse_rects(a.channels)
+    # ── #K2-452 sec.2.4 item 1 **fail-closed 闸（硬门 · 强制序第一件）** ────────────────────────────────
+    # `--channels` 是**硬域**（喂 `mr.WALL_RECT`），每网**只许一条**矩形。**多槽（逐走廊）**形式已由
+    # `R1420` **实测证明构造性饿死**（`C1 2→47` · `no-path-coarse(exhausted-1)=47` · `no-free-start-node=22`）
+    # ⇒ **拒绝**：响亮报错、rc=2、**不写板**、不静默回退。要表达「偏好」一律走 `--guide`。
+    _multi = sorted(_n for _n, _v in CH.items() if len(_v) > 1)
+    if _multi:
+        sys.stderr.write(
+            "REFUSED(#K2-452 sec.2.4 item 1): --channels is a HARD domain and may carry exactly ONE rect per net; "
+            "got MULTI-SLOT entries for: %s. A multi-slot (per-corridor) channel fed as WALL_RECT starves the edges "
+            "by construction (R1420: C1 2->47). Use --guide to express a PREFERENCE instead.\n" % ", ".join(_multi))
+        return 2
+    GD = _parse_rects(a.guide)
     _GLOBAL_WALL = mr.WALL_RECT
     mr._CHANNELS = CH                                 # the channel map must live on `mr` (see solve)
     mr._CH_MARGIN = 0.0
+    mr._GUIDES = GD                                   # #K2-452 item 2: SOFT guidance (preference/cost) - NOT a boundary
+    mr._GUIDE_PEN = float(a.guide_penalty)
     # ── #K2-431 §二.6 修法①：**区内连接器 PTH 焊盘作固定端口目标** ─────────────────────────────
     _PP = []
     if a.port_refs:
@@ -143,6 +168,15 @@ def _set_step(mode):
         _FINE, _FINE_NUM = True, None
     else:
         _FINE, _FINE_NUM = False, float(mode)
+
+
+def _norm_layer(layer, lname2id):
+    """#K2-452 sec.2.4 item 3 —— **根因修复**：迷宫的 `grid.bad` 以 **pcbnew 层 ID**（int）为键，而端口焊盘表
+    `mr._PORT_PADS` 存的是**层名**（'F.Cu'）。层名直接透传 ⇒ 每次「端口回退」都在 `snap_node` 的
+    `grid.bad[layer]` 崩成 `KeyError('F.Cu')`（`R1420` 实测 244/316 条：GND 241 ＋ MCU_VDD 3 —— 恰是
+    **有 J13 焊盘的那两个网**）；即 `#K2-431` 的「端口感知目标」杠杆对该两网**一直是死的**。
+    归一：名字 → ID；ID 原样透传；未知键原样透传（由放行闸/命名异常兜底）。"""
+    return lname2id.get(layer, layer) if isinstance(layer, str) else layer
 
 
 def _install_port_aware_goals(mr, wall, tol=0.02):
@@ -212,6 +246,8 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
                 return cell
         return None
 
+    _LNAME2ID = {mr.LNAME[L]: L for L in mr.LAYERS}      # {'F.Cu': pcbnew.F_Cu, ...} - #K2-452 item 3
+
     def _ports(ctx, net):
         out = set()
         for t in ctx.tracks:
@@ -227,7 +263,9 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
         for (_n, _x, _y, _l) in getattr(mr, "_PORT_PADS", []):       # #K2-431 fix 1: connector pads as ports
             if _n == net:
                 PORT_PTS.add((round(_x, 3), round(_y, 3)))
-                out2.append((_l, _x, _y, "p:" + str(_x) + ":" + str(_y)))
+                # #K2-452 sec.2.4 item 3: the port table carries a layer NAME - normalise it to the pcbnew layer ID
+                # the maze keys its grids by, otherwise the retry crashes in snap_node (the 244 x KeyError).
+                out2.append((_norm_layer(_l, _LNAME2ID), _x, _y, "p:" + str(_x) + ":" + str(_y)))
         return out2
 
     mr.snap_node = snap
@@ -239,20 +277,29 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
         _CH = getattr(mr, "_CHANNELS", {})                # NOTE: `CH` lives on `mr` because solve is defined in a
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
+        # ── #K2-452 sec.2.4 item 2：**软引导**（偏好/代价）—— 在**不改域**的前提下给迷宫一个偏好 ────────────
+        # 引导只改 `astar` 的**步代价**（引导外 ×(1+penalty)），**绝不堵格** ⇒ 永远可离开 ⇒ **不可能饿死**。
+        _GD = getattr(mr, "_GUIDES", {})
+        _gsaved = getattr(mr, "GUIDE", None)
+        if net in _GD:
+            mr.GUIDE = {"rects": _GD[net], "penalty": float(getattr(mr, "_GUIDE_PEN", 3.0))}
         if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
-            _cs = _CH[net] if isinstance(_CH[net], list) else [_CH[net]]   # #K2-451 (ii): per-corridor slots
+            # #K2-452 sec.2.4 item 1: --channels is a hard domain, exactly ONE rect per net (multi-slot is refused
+            # at parse time), so there is nothing to iterate here any more.
+            _c = _CH[net][0] if isinstance(_CH[net], list) else _CH[net]
             _m = float(getattr(mr, "_CH_MARGIN", 0.5))
             sol, why = None, "no-attempt"
-            for _c in _cs:                                # try each of the net's corridor slots (legacy = one)
-                for _w in (_m, _m * 2, _m * 4):           # BOUNDED deterministic ladder (not a search): a wider
-                    mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)   # channel must not cut the net's
-                    sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)   # reachable cell
-                    if sol is not None:
-                        break
+            # #K2-452 sec.2.4 item 3: the widen ladder is BOUNDED and DEDUPLICATED. With the frozen margin 0.0 the
+            # old tuple (m, 2m, 4m) was three IDENTICAL attempts: the band was never widened, the result was
+            # identical, and the solve cost was tripled (the R1420 maze stage took 33 min).
+            for _w in sorted(set((_m, _m * 2, _m * 4))):
+                mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)
+                sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
                 if sol is not None:
                     break
         else:
             sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)
+        mr.GUIDE = _gsaved
         mr.WALL_RECT = _saved
         if sol is not None:
             return sol, why

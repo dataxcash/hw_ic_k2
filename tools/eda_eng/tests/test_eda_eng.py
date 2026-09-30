@@ -1455,18 +1455,20 @@ class T(unittest.TestCase):
         self.assertEqual(sorted(set(names)), sorted(per2), "every net must appear")
         self.assertGreater(len(names), len(set(names)), "a net repeats when it crosses several corridors")
 
-    def test_C451_the_maze_keeps_every_per_corridor_slot_of_a_repeated_net(self):
-        """#K2-451 sec.2.4 option (ii): --channels may carry the SAME net many times (one slot per corridor). The
-        parser must keep ALL of them (net -> [rect,...]) instead of overwriting, and must tolerate the '@tag' suffix;
-        the consumer must iterate the slots. RED = today a repeated net survives only as its LAST rect."""
+    def test_C451_a_multislot_hard_channel_is_REFUSED_and_the_same_string_is_a_LEGAL_SOFT_GUIDE(self):
+        """#K2-452 sec.2.4 (item 1 = the fail-closed gate, mandatory FIRST) - SUPERSEDES the R1418 law (option (ii),
+        which fed every per-corridor slot to the maze as its solve DOMAIN). R1420 MEASURED that form: the 0.40mm
+        lane-as-domain starves the edge by construction (C1 2 -> 47, no-path-coarse(exhausted-1)=47). RED = the R1418
+        state (multi-slot accumulated into mr.WALL_RECT). GREEN = the wrapper REFUSES a multi-slot --channels loudly
+        (rc=2, no board written) while the SAME repeated-net string stays legal as --guide (a PREFERENCE, accumulated
+        per net, consumed as cost - never as a boundary).
+        The behaviour is driven end to end in test_C452_the_wrapper_REFUSES_a_multislot_hard_channel_..."""
         src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
-        self.assertIn("CH.setdefault(_n, []).append(", src, "a repeated net must ACCUMULATE its rects")
+        self.assertIn("REFUSED(#K2-452 sec.2.4 item 1)", src, "the gate must be LOUD")
+        self.assertIn("_multi = sorted(_n for _n, _v in CH.items() if len(_v) > 1)", src)
+        self.assertIn("out.setdefault(_n, []).append(", src, "the GUIDE parser must ACCUMULATE a repeated net")
         self.assertIn('_r.split("@")[0]', src, "the @corridor/@layer tag must be tolerated")
-        self.assertIn("_cs = _CH[net] if isinstance(_CH[net], list) else [_CH[net]]", src,
-                      "the consumer must iterate the net's slots (legacy single rect still works)")
-        self.assertIn("for _c in _cs:", src)
-        # a legacy single-rect string still yields exactly one rect (backward compatibility)
-        self.assertIn("CH.setdefault(_n, []).append(", src)
+        self.assertNotIn("for _c in _cs:", src, "the per-corridor-as-DOMAIN loop (R1418) must be GONE")
 
 
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
@@ -1488,6 +1490,86 @@ class T(unittest.TestCase):
         self.assertTrue(m.audit([port], pads, kept)["ok"], "a port stub anchored on kept copper is anchored")
         via_ok = {"kind": "via", "at": [45.95, 62.905]}
         self.assertTrue(m.audit([via_ok], pads, routes)["ok"])
+
+    def test_C452_soft_guidance_prefers_and_never_starves_where_a_hard_domain_starves(self):
+        """#K2-452 sec.2.4 item 2 RED->GREEN (the core of the means change). RED = R1420: a channel fed as the HARD
+        domain (mr.WALL_RECT) is a BOUNDARY that must contain both endpoints, so a thin trunk lane starves the edge
+        (C1 2->47). GREEN = the SAME rect fed as SOFT guidance (mr.GUIDE) only multiplies the cost of steps OUTSIDE
+        it: the edge is ALWAYS solvable, and the route really does leave the direct line to use the lane."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr452", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+
+        class _Ctx:
+            tracks, holes, edge, keep_t, keep_v = [], [], [], [], []
+            pads, vias = {}, {}
+
+        ctx = _Ctx()
+        lane = (0.0, 1.0, 5.0, 1.25)      # the trunk lane: 0.25mm tall; the endpoints are NOT inside it
+        s, g = (1, 1), (19, 1)            # both at y=0.25mm (off-lane), same layer
+        step = 0.25
+        # RED: the lane as the HARD domain => the maze cannot even start (R1420's starvation at unit scale)
+        m.WALL_RECT = lane; m.GUIDE = None
+        p1, why1 = m.astar(m.Grid(ctx, "N", step, 0.0, 0.0, 5.0, 5.0, 0.0), ctx, "N", s, g, m.F_CU, m.F_CU)
+        self.assertIsNone(p1, "a hard domain that excludes the endpoints MUST starve the edge")
+        self.assertEqual(why1, "start-blocked")
+        # no domain, no guidance: the plain shortest path is the straight off-lane line
+        m.WALL_RECT = None; m.GUIDE = None
+        p2, why2 = m.astar(m.Grid(ctx, "N", step, 0.0, 0.0, 5.0, 5.0, 0.0), ctx, "N", s, g, m.F_CU, m.F_CU)
+        self.assertEqual(why2, "ok"); self.assertLessEqual(max(c[2] for c in p2), 1)
+        # GREEN: the SAME lane as SOFT guidance at a high penalty => solvable, and the route PREFERS the lane
+        m.GUIDE = {"rects": [lane], "penalty": 50.0}
+        p3, why3 = m.astar(m.Grid(ctx, "N", step, 0.0, 0.0, 5.0, 5.0, 0.0), ctx, "N", s, g, m.F_CU, m.F_CU)
+        m.GUIDE = None; m.WALL_RECT = None
+        self.assertEqual(why3, "ok", "soft guidance can NEVER starve an edge")
+        self.assertGreater(max(c[2] for c in p3), 1, "the route must leave the direct line and use the guided lane")
+        # penalty 0 must be a NO-OP (backward compatibility of the cost surface)
+        m.GUIDE = {"rects": [lane], "penalty": 0.0}
+        p4, why4 = m.astar(m.Grid(ctx, "N", step, 0.0, 0.0, 5.0, 5.0, 0.0), ctx, "N", s, g, m.F_CU, m.F_CU)
+        m.GUIDE = None
+        self.assertEqual(why4, "ok"); self.assertLessEqual(max(c[2] for c in p4), 1)
+
+    def test_C452_the_wrapper_REFUSES_a_multislot_hard_channel_and_never_widens_a_frozen_ladder(self):
+        """#K2-452 sec.2.4 item 1 + item 3, BEHAVIOURAL. (a) The gate is driven for real: the wrapper is executed with
+        a multi-slot --channels and must exit rc=2 with a REFUSED message BEFORE touching any board (R1420's starvation
+        form must be impossible to re-feed silently). (b) The widen ladder must be DEDUPLICATED: with the frozen
+        margin 0.0 the old (m, 2m, 4m) tuple was three IDENTICAL attempts (band never widened, solve cost tripled)."""
+        import subprocess, sys
+        r = subprocess.run([sys.executable, os.path.join("tools", "k2_reroute_router_floor_v1.py"),
+                            "--in", "/nonexistent.kicad_pcb", "--drc", "/nonexistent_drc.json",
+                            "--out", "/tmp/opencode/k2gate_out.kicad_pcb", "--ledger", "/tmp/opencode/k2gate_led.json",
+                            "--channels", "GND:0,0,1,1;GND:0,2,1,3;P3V3:0,0,1,1"],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 2, "a multi-slot HARD channel must be REFUSED (rc=2), never run: %s" % r.stderr[-300:])
+        self.assertIn("REFUSED", r.stderr)
+        self.assertFalse(os.path.exists("/tmp/opencode/k2gate_out.kicad_pcb"), "the gate must refuse BEFORE writing a board")
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("sorted(set((_m, _m * 2, _m * 4)))", src,
+                      "the ladder must be deduplicated (frozen margin 0.0 => exactly one attempt, provably identical)")
+        self.assertIn("mr._GUIDE_PEN", src); self.assertIn("mr._GUIDES = GD", src)
+        # #K2-452 sec.2.4 item 3: an absent endpoint uuid must be a NAMED block reason, never a silent KeyError
+        mr_src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        self.assertIn("endpoint-absent-from-ctx", mr_src)
+        self.assertIn('why = None, "exception:%s(%s)" % (type(ex).__name__, str(ex)[:60])', mr_src,
+                      "an exception must reach the ledger WITH its name and message (the R1420 lesson: 244 opaque blocks)")
+
+    def test_C452_the_port_pad_layer_must_be_normalised_to_a_pcbnew_layer_id(self):
+        """#K2-452 sec.2.4 item 3 ROOT CAUSE (located by the K2MR_EXC_TRACE diagnostic, not by guesswork): the maze keys
+        grid.bad by PCBNew LAYER IDs, but mr._PORT_PADS carries layer NAMES, so every port-goal retry crashed with
+        KeyError('F.Cu') - the 244/316 blocks of R1420, sitting exactly on the two nets that own J13 pads (GND 241 +
+        MCU_VDD 3); i.e. the #K2-431 port-aware-goal lever was DEAD for them. RED = the name passes through
+        (grid.bad['F.Cu'] -> KeyError). GREEN = the name is normalised to the ID; IDs pass through unchanged."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2floor452",
+                                                    os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        lname2id = {"F.Cu": 11, "In5.Cu": 13, "B.Cu": 12}
+        self.assertEqual(m._norm_layer("F.Cu", lname2id), 11, "a layer NAME must become the pcbnew layer ID")
+        self.assertEqual(m._norm_layer(13, lname2id), 13, "an ID must pass through unchanged")
+        self.assertIsNone(m._norm_layer(None, lname2id))
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("_norm_layer(_l, _LNAME2ID)", src, "the port table must be normalised at the source")
+        self.assertIn("_LNAME2ID = {mr.LNAME[L]: L for L in mr.LAYERS}", src)
 
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
@@ -1579,11 +1661,14 @@ class T(unittest.TestCase):
         self.assertFalse(r["ok"]); self.assertEqual(r["stage"], "channels_compute_failed")
         r = regen.channels_for_maze("B", "D", rect, ja_module=_JA("", "NRST:0,0,1,1;P3V3:0,0,1,1"))
         self.assertTrue(r["ok"]); self.assertEqual(r["stage"], "channels_computed")
-        self.assertEqual(r["source"], "fallback", "legacy channels carry no @layer tag => source=fallback")
-        self.assertEqual(regen.channels_for_maze("B", "D", rect,
-                         ja_module=_JA("N:1,2,3,4@F.Cu", ""))["source"], "joint",
-                         "the joint builder's @layer tag proves the source")
+        self.assertEqual(r["source"], "hard=legacy-single-rect", "#K2-452: --channels is the HARD half")
         self.assertEqual(r["args"][0], "--channels"); self.assertEqual(r["n_nets"], 2)
+        # #K2-452 sec.2.4 item 1 (CHAIN side of the gate): a multi-slot HARD set is REFUSED loudly. R1420 proved a
+        # multi-slot channel fed as mr.WALL_RECT starves the edges by construction (C1 2 -> 47) => it must never be
+        # re-fed silently; the soft half (--guide) is where a per-corridor allocation belongs now.
+        r2 = regen.channels_for_maze("B", "D", rect, ja_module=_JA("GND:0,0,1,1;GND:0,2,1,3", ""))
+        self.assertFalse(r2["ok"]); self.assertEqual(r2["stage"], "channels_hard_multislot_refused")
+        self.assertEqual(r2["args"], []); self.assertIn("GND", r2["err"])
         # the chain must consume the helper and bail out loudly (no silent run)
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         seg = src[src.index("def wipe_resolve_chain("):]

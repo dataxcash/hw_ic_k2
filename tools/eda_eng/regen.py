@@ -1371,19 +1371,30 @@ GAP_NETS = ("MCU_VDD", "NRST", "PERSTA#", "P3V3_AUX", "I2C1_SCL", "I2C1_SDA", "P
 PORT_REFS = "J13"          # #K2-431 sec.2.6 fix 1: the KEPT in-region connector's pads are FIXED PORTS
 
 
+GUIDE_PENALTY = 3.0        # #K2-452: cost multiplier-1 for steps OUTSIDE the guided cells
+
+
 def channels_for_maze(wiped, drc, rect, ja_module=None):
-    """**可测 · 行为**（#K2-440 sec.3.3）：为迷宫算 `--channels`。
-    **空集合 ⇒ 响亮失败**（`ok=False` + 具名 stage），**异常 ⇒ 响亮失败** —— **绝不静默**（#K2-438 病根）。
+    """**可测 · 行为**（#K2-440 sec.3.3；#K2-452 sec.2.4 改）：为迷宫算**两半**输入。
+    · `--channels`（**硬域**）＝ 既有「每网恰好一条」构建器；**多槽（逐走廊）形式一律拒绝**（`R1420` 已证其
+      构造性饿死 · `C1 2→47`）⇒ stage `channels_hard_multislot_refused`（**响亮 · 不静默回退**）。
+    · `--guide`（**软引导/偏好**）＝ 逐走廊联合分配槽，带 `@corridor` 标签**自证来源**；任一走廊不满足 ⇒
+      **整体不用**（绝不半用）。
+    **空硬集 ⇒ 响亮失败**（`ok=False` ＋ 具名 stage），**异常 ⇒ 响亮失败** —— **绝不静默**（承 #K2-438 病根）。
     `ja_module` 可注入（回归用桩），默认从仓内单一来源 `tools/k2_joint_alloc_v1.py` 装载。
-    返回 `{"ok","stage","args","n_nets","err"}`；纯判定，不改板、不写盘（写盘由调用方按 `ok` 决定）。"""
+    返回 `{"ok","stage","args","n_nets","n_guide","source","guide_source","err"}`；纯判定，不改板、不写盘。"""
     try:
         if ja_module is None:
             import importlib.util as _iu
             _sp = _iu.spec_from_file_location("k2ja2", os.path.join(ROOT, "tools", "k2_joint_alloc_v1.py"))
             ja_module = _iu.module_from_spec(_sp); _sp.loader.exec_module(ja_module)
-        # #K2-450 sec.2.4 (means change): prefer the ONE-SHOT JOINT allocation (disjoint y-bands) over the
-        # per-net sequential channel builders, which starve whichever net is served last.
-        ch = ""
+        # ── #K2-452 sec.2.4 **换手段 ＝ 补「引导表达」能力**（强制序：闸→引导→回归）─────────────────────
+        # 硬域（`--channels`）＝ 仓内既有**每网一条**构建器（#K2-429 车辆 · 语义不变）。
+        hard = (ja_module.channels_arg_by_block(wiped, drc, list(rect))
+                or ja_module.channels_arg(wiped, drc, list(rect)) or "")
+        # 软引导（`--guide`）＝ `R1396`/`R1410`/`R1412` 的**逐走廊槽**（`R1420` 已证其**不能**当硬域用），
+        # 现改为**偏好/代价**：迷宫偏好走它，但永远可以离开 ⇒ **不可能饿死**。
+        soft = ""
         try:
             import importlib.util as _iu4
             _sp4 = _iu4.spec_from_file_location("k2jca", os.path.join(ROOT, "tools", "k2_joint_channel_alloc_v1.py"))
@@ -1392,31 +1403,42 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
             _dev = _iu4.module_from_spec(_sp5); _sp5.loader.exec_module(_dev)
             _pairs = _dev.pairs(json.load(open(drc, encoding="utf-8")))
             _per = {}
-            for _pr in _pairs:                                 # #K2-451 (ii): per-corridor slots (not whole-net bands)
+            for _pr in _pairs:                                 # 真图端点 → 每网包围盒（读真图，非域级充数）
                 _n2 = _pr["net"]
                 for _p2 in (_pr["p1"], _pr["p2"]):
                     _x2 = min(max(_p2[0], rect[0]), rect[2]); _y2 = min(max(_p2[1], rect[1]), rect[3])
                     _b2 = _per.setdefault(_n2, [_x2, _y2, _x2, _y2])
                     _b2[0] = min(_b2[0], _x2); _b2[1] = min(_b2[1], _y2)
                     _b2[2] = max(_b2[2], _x2); _b2[3] = max(_b2[3], _y2)
-            _chj, _unsat = _jca.channels_string_corridor(_per, list(rect))
-            if _chj and not _unsat:
-                ch = _chj
+            _chs, _unsat = _jca.channels_string_corridor(_per, list(rect))
+            if _chs and not _unsat:                            # 不满意的走廊 ⇒ **整体不用**（绝不半用）
+                soft = _chs
         except Exception:                                          # noqa: BLE001
-            ch = ""
-        ch = ch or (ja_module.channels_arg_by_block(wiped, drc, list(rect))
-                    or ja_module.channels_arg(wiped, drc, list(rect)))
+            soft = ""
+        if not hard:
+            return {"ok": False, "stage": "channels_compute_empty",
+                    "err": "no HARD channels from the builders", "args": [], "n_nets": 0, "n_guide": 0}
+        # ── #K2-452 sec.2.4 item 1 **闸（链侧 · fail-closed）**：硬域每网**恰好一条**；多槽 ⇒ **响亮拒绝** ──
+        _hc = {}
+        for _it in [x for x in hard.split(";") if x.strip()]:
+            _hn = _it.split(":", 1)[0]
+            _hc[_hn] = _hc.get(_hn, 0) + 1
+        _hmulti = sorted(n for n, c in _hc.items() if c > 1)
+        if _hmulti:
+            return {"ok": False, "stage": "channels_hard_multislot_refused", "err": ",".join(_hmulti),
+                    "args": [], "n_nets": 0, "n_guide": 0}
+        args = ["--channels", hard]
+        if soft:
+            args += ["--guide", soft, "--guide-penalty", "%.1f" % GUIDE_PENALTY]
+        # 自证（承 #K2-450/R1404「未执行的手段不得冒称已测」）：逐走廊串带 `@corridor` 标签 ⇒ 来源自证。
+        return {"ok": True, "stage": "channels_computed", "err": None, "args": args,
+                "n_nets": len([x for x in hard.split(";") if x.strip()]),
+                "source": "hard=legacy-single-rect",
+                "n_guide": len([x for x in soft.split(";") if x.strip()]),
+                "guide_source": ("joint-per-corridor" if "@" in soft else ("legacy" if soft else "none"))}
     except Exception as _e:                                            # noqa: BLE001
-        return {"ok": False, "stage": "channels_compute_failed", "err": type(_e).__name__, "args": [], "n_nets": 0}
-    if not ch:
-        return {"ok": False, "stage": "channels_compute_empty",
-                "err": "no channels from either source", "args": [], "n_nets": 0}
-    # #K2-450/R1404: a non-executed means must NEVER look like a tested one. The joint builder tags its channels
-    # with "@<layer>"; the legacy builders do not => the source is self-proving (no extra bookkeeping).
-    return {"ok": True, "stage": "channels_computed", "err": None,
-            "source": ("joint" if "@" in ch else "fallback"),
-            "args": ["--channels", ch], "n_nets": len([x for x in ch.split(";") if x.strip()])}
-
+        return {"ok": False, "stage": "channels_compute_failed", "err": type(_e).__name__,
+                "args": [], "n_nets": 0, "n_guide": 0}
 
 
 def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None, stitch_spec=None):
@@ -1498,8 +1520,11 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # #K2-431 sec.2.6 / #K2-438 M-1 / #K2-440 sec.3.3: the per-net FROZEN channels, computed AFTER d0 exists and
     # via a BEHAVIOUR-TESTED helper (channels_for_maze). Empty or raising => LOUD failure, never a silent run.
     _cr = channels_for_maze(wiped, d0, rect)
+    # #K2-452 sec.2.4: the chain record must show BOTH halves (HARD domain iff n_nets>0 / SOFT guidance iff
+    # n_guide>0) so that "which half actually ran" stays machine-provable instead of self-reported.
     chain.append({"stage": _cr["stage"], "n_nets": _cr["n_nets"], "err": _cr["err"],
-                  "source": _cr.get("source", "fallback")})
+                  "source": _cr.get("source", "fallback"),
+                  "n_guide": _cr.get("n_guide", 0), "guide_source": _cr.get("guide_source", "none")})
     if not _cr["ok"]:
         return {"state": ("W1B_CHANNELS_EMPTY" if _cr["stage"] == "channels_compute_empty"
                           else "W1B_CHANNELS_FAILED"), "chain": chain}

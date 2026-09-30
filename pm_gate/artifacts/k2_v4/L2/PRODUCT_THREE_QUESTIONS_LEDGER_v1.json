@@ -125,5 +125,37 @@
   },
   "process_note": "answered before the window opens; the wired gate (DEFAULT_GATE_CAPABILITY[wipe_resolve]) enforces its presence at the command door.",
   "OWNER-ITEMS": 0
+ },
+ "M_ENG_CHANNEL_GUIDANCE_EXPRESSION": {
+  "ts": "2026-09-30",
+  "authority": "#K2-452 sec.2.4 + sec.2.7 (HARD gate): the lesion has moved from \"allocation/order\" to \"the router cannot EXPRESS a preference\", so the three product questions must be answered for the NEW sub-problem BEFORE any code is touched.",
+  "scope": "the new sub-problem = make the maze router (tools/k2_p4_mroute_v1.py, wrapper tools/k2_reroute_router_floor_v1.py) able to CONSUME a channel allocation as a PREFERENCE/COST instead of a hard domain, so that pre-assigned lanes stop starving the edges (R1420 proved the hard-domain form starves: C1 2 -> 47).",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES - the same kind of product already exists in-repo, three of them: (a) tools/k2_p4_b2_in5_pf2_pathfinder_v1.py = a STANDARD PATHFINDER (negotiated congestion + history term + full rip-up) with a per-cell COST surface ((cost2d) -> sparse dijkstra) - i.e. preference IS expressed as cost there; (b) tools/k2_p4_b2_in5_ripup_v1.py = full/local rip-up-and-reroute on a CONTINUOUS distance field, whose header records two calibration lessons (D-1 the stamp criterion was stricter than the real gate; D-2 the negotiation counter must be same-caliber as the gate or viol==0 is unreachable) - directly relevant; (c) tools/k2_ripup_reroute_gen_v1.py = the deterministic \"rip WHICH copper / route WHERE\" planner already written for THIS board's residual gaps (read-only, zero-search). Plus the in-register maze itself already retries with MARGINS((0.0,0.03,0.08,0.15,0.25)) = a crude widening ladder (the guidance capability is the missing half of that same idea).",
+   "external": "YES but LICENCE-BLOCKED for copying: FreeRouting (rip-up-and-reroute autorouter; reachable, HTTP 200 https://www.freerouting.app/) is AGPL and KiCad's interactive router (shove/walk-around, https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html HTTP 200) is GPL - neither may be copied into this repo; the underlying method (negotiated congestion / PathFinder, McMurchie & Ebeling 1995) is a published ALGORITHM, which per sec.20.5 is the LAST resort, not the first.",
+   "reading": "a same-kind product EXISTS in-repo (cost-surface PathFinder + rip-up-and-reroute + a plan generator for this very board); per sec.20.3 the in-repo product is the copy source, and the external products are cited for shape only (licence-blocked for copying). No new stochastic autorouter will be written."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/k2_p4_b2_in5_pf2_pathfinder_v1.py - COPY the cost-surface shape: a per-cell cost array multiplied into the graph weights, plus present-cost + history-cost iteration (our maze gets the same shape with a bounded guide-penalty, no stochastic shuffles).",
+    "tools/k2_p4_b2_in5_ripup_v1.py - COPY the two calibration disciplines (criterion must equal the acceptance gate; the congestion counter must be same-caliber as the gate) and its \"failed lanes first + conflict set rip-up\" order.",
+    "tools/k2_ripup_reroute_gen_v1.py - COPY the deterministic rip/write plan shape for the NEXT step (pass 2), not for this window (this window = the guidance expression only, per the sec.2.4 hard order).",
+    "tools/eda_eng/ripup.py - COPY the manifest discipline: rip only the items named one by one (net+layer+geometry), never \"while I am here\" cleanup, fail-fast on a stale list.",
+    "tools/k2_p4_mroute_v1.py - the in-register maze to EXTEND (it is an ENG in-production artifact, explicitly modifiable per #K2-451 sec.2.4; default-off so existing callers stay byte-identical)."
+   ],
+   "reference_library": "the product library lives in P6_execution/P6_OPEN_READINESS/ (K2_L1_A_ANCHOR_EVM_SNLU300A_v1.json etc., TI DS320PR1601 EVM + SNLA425 sec.1.1 grouped fan-out policy) and in this ledger; this entry BACKFILLS it for the new sub-problem. The earlier honest note stands: no file literally named REF-CASE-LIBRARY exists at the referenced path.",
+   "reading": "the copy target is unambiguous: the cost-surface/present+history shape (PF2) on the in-register maze, with the rip-up discipline (in5_ripup / ripup.py) reserved for the next step. Do NOT invent a new algorithm."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "COST FIELD: the in-register maze (k2_p4_mroute_v1.py) has only a BINARY occupancy mask (grid.bad) and a UNIFORM step cost, so a \"preferred lane\" has no way to be expressed except by the WALL_RECT domain - which is a BOUNDARY, not a preference (exactly the R1420 lesion). PF2 has the cost surface but is a separate scipy/numpy pipeline monkey-patched for the In5 lane bundle of the B2 card, not for this frame/dR-port maze.",
+    "DOMAIN: PF2 and in5_ripup_v1 solve a lane BUNDLE on one layer (In5.Cu) with their own raster/anchor model; our maze solves frame edges on 4 layers with seg_exact/via_exact release gates and the C35 frame.",
+    "WIRING: none of them is reachable from the live chain (regen.wipe_resolve_chain -> k2_reroute_router_floor_v1.py --channels); the guidance capability must be plumbed end to end, including a fail-closed refusal of the starved hard-domain form.",
+    "DETERMINISM: PF2 shuffles the net order per iteration (rng) and is budget/seed-driven; our chain must stay deterministic and seedless (bounded ladder, no search).",
+    "PASS 2 (rip-up) is NOT in this window: the hard order (sec.2.4) is gate -> guidance -> regressions first."
+   ],
+   "consequence": "the expansion = ADD a bounded soft cost surface to the in-register maze (+ wrapper --guide / --guide-penalty plumbing + a loud refusal of multi-slot HARD channels) and COPY the PF2 cost shape and in5_ripup calibration lessons; the rip-up-and-reroute LOOP itself is the next step and needs its own authorisation."
+  },
+  "OWNER-ITEMS": 0
  }
 }
