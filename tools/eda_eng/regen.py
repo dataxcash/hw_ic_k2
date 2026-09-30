@@ -1894,10 +1894,17 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     # re-polygonisation of the SAME copper is no longer reported as a change (R1676: 817 of the 819 were that).
     # The judging-table semantics and thresholds are untouched; "outside copper unchanged" is still exactly
     # "no real copper change AND the zone coverage is unchanged".
-    _c6eq = _blk.outside_copper_equivalent(final, B0, rect)
+    # #K2-505 sec.2.1: DECLARATION-AWARE - copper the in-register drawing explicitly authorises
+    # (allow_outside_dR) is excluded from "changed" and NAMED with its authority; anything without a
+    # declaration match is reported exactly as before (fail-closed).
+    _c6decl = _blk.declared_outside_keys([stitch_spec] if stitch_spec else [], rect)
+    _c6eq = _blk.outside_copper_equivalent(final, B0, rect, declared=_c6decl)
     c6 = {"diff": _c6eq["real_diff"], "equal": _c6eq["equivalent"],
           "zone_area_delta": _c6eq["zone_area_delta"], "n_zone_delta": _c6eq["n_zone_delta"],
-          "tol_area_mm2": _c6eq["tol_area_mm2"], "caliber": "geometric-equivalent (zone by coverage area)"}
+          "tol_area_mm2": _c6eq["tol_area_mm2"], "n_authorized": _c6eq["n_authorized"],
+          "authorized": _c6eq["authorized"], "n_unauthorized": _c6eq["n_unauthorized"],
+          "unauthorized": _c6eq["unauthorized"], "removed": _c6eq["removed"],
+          "caliber": "geometric-equivalent + declaration-aware (zone by coverage area; authorised dR crossings named)"}
     c6_legacy = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
     # C36（#K2-388 §七.2）：A″ 链必须在**实际执行的路径**上逐行读数 —— 补 C8（成员零越框）

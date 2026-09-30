@@ -2057,6 +2057,36 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C505_authorised_dr_crossings_are_named_not_reported_as_leaks(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-505 sec.2.1). RED without it: copper that an in-register
+        drawing explicitly authorises (allow_outside_dR) counted as an outside-copper CHANGE, i.e. a leak. GREEN:
+        it is excluded and NAMED with its authority, and anything undeclared is still reported (fail-closed)."""
+        import json as _json, tempfile
+        rect = [0, 0, 10, 10]
+        spec = {"lines": [
+            {"n": "R-g", "kind": "track", "net": "P3V3", "layer": "In4.Cu", "a": [2.0, 5.0], "b": [18.0, 5.0],
+             "width": 0.25, "allow_outside_dR": True, "why": "authorised bridge"},
+            {"n": 9, "kind": "via", "net": "P3V3", "at": [14.0, 5.0], "layers": ["In1.Cu", "In2.Cu"],
+             "allow_outside_dR": True, "why": "authorised via"},
+            {"n": 8, "kind": "track", "net": "GND", "layer": "In1.Cu", "a": [2.0, 7.0], "b": [18.0, 7.0],
+             "width": 0.2},
+        ]}
+        d = tempfile.mkdtemp(prefix="k2c505_")
+        p = os.path.join(d, "K2_SEC16_3_SPEC.json")
+        open(p, "w").write(_json.dumps(spec))
+        keys = block.declared_outside_keys([p], rect)
+        self.assertEqual(len(keys), 2, "ONLY the explicitly declared lines are admitted (fail-closed)")
+        self.assertTrue(all(v["source"] == "K2_SEC16_3_SPEC.json" for v in keys.values()), "each is named")
+        self.assertIn(("P3V3", "In4.Cu", 10, 5.0, 18, 5.0, 0.25), keys, "the track's OUTSIDE part is keyed")
+        self.assertIn(("P3V3", "VIA", 14.0, 5.0, 0.25), keys, "the declared via is keyed")
+        self.assertFalse(any(k[0] == "GND" for k in keys), "an undeclared line is never admitted")
+        real = os.path.join(L2, "K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json")
+        if os.path.isfile(real):
+            dk = block.declared_outside_keys([real], [22.95, 32.95, 51.5, 78.0])
+            self.assertGreaterEqual(len(dk), 2, "the real drawing's authorised crossings are recognised")
+        r = block.outside_copper_equivalent(REF, REF, [22.95, 32.95, 51.5, 78.0])
+        self.assertTrue(r["equivalent"] and r["n_authorized"] == 0, "a board against itself has nothing to authorise")
+
     def test_C504_outside_copper_is_compared_geometrically_not_by_zone_vertices(self):
         """TIAN TIAO #1 engine asset + regression (#K2-503 sec.3.1). RED without it: C6 compared zone fill by its
         VERTEX SET, so a re-polygonisation of the SAME copper was reported as a change (817 of 819). GREEN: zone

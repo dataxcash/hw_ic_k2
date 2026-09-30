@@ -1053,26 +1053,85 @@ def zone_outside_area(board, rect):
     return {k: round(v, 6) for k, v in acc.items() if abs(v) > 1e-9}
 
 
-def outside_copper_equivalent(final, ref, rect, tol_area=1e-3, nd=3):
-    """#K2-504 ENGINE CAPABILITY：C6「框外铜不变」的**几何等价口径**（#K2-503 §三.1 执行令）。
+def declared_outside_keys(spec_paths, rect, nd=3, default_via_drill=0.25):
+    """#K2-505 ENGINE CAPABILITY：在册图纸之**授权框外铜**（声明感知量具之事实源）。
 
-    `真实铜`（段＋孔）＝ **精确多重集**比对（不变）；`灌铜` ＝ **框外面积按 (net,layer) 等价**（容差
-    `tol_area` mm²）—— 灌铜**重多边形化**（同覆盖域 · 异顶点集）**不再**被误报为变更。
-    判据表语义与阈值**零触碰**："框外铜不变"仍严格＝**无真实铜变更** ∧ **灌铜覆盖不变**。
+    带 `allow_outside_dR: true` 的线条 ＝ **已裁·已画·已过闸** 的框端跨接件（#K2-442 sec.2.7），**是授权铜，
+    不是泄漏**（#K2-505 §一）。本函数把每条声明件的**框外几何**转成与 `outside_geometry` **同形**之键，
+    于是 diff 里的每一项都能被**指认其授权出处**（文件名＋行号＋原由）。
+    **fail-closed by construction**：只认**显式声明**且**文件在册**者；无匹配之一律照报。
     """
-    real = geometry_equal(outside_geometry(final, rect, nd=nd), outside_geometry(ref, rect, nd=nd))
+    out = {}
+    for p in (spec_paths or []):
+        if not p or not os.path.isfile(p):
+            continue
+        try:
+            d = json.load(open(p, encoding="utf-8"))
+        except Exception:                                          # noqa: BLE001
+            continue
+        lines = d.get("lines") or (d.get("spec") or {}).get("lines") or []
+        for i, L in enumerate(lines):
+            if not L.get("allow_outside_dR"):
+                continue
+            src = {"source": os.path.basename(p), "line": L.get("n", i + 1), "kind": L.get("kind"),
+                   "net": L.get("net"), "why": (L.get("why") or "")[:180]}
+            if L.get("kind") == "via":
+                at = [float(v) for v in L.get("at") or []]
+                if len(at) == 2:
+                    out[(L.get("net"), "VIA", round(at[0], nd), round(at[1], nd),
+                         float(L.get("drill", default_via_drill)))] = src
+                continue
+            if L.get("kind") == "zone":
+                r = [float(v) for v in (L.get("rect") or [])]
+                if len(r) == 4:
+                    out[("ZONE", L.get("net"), L.get("layer"), tuple(r))] = src
+                continue
+            a = [float(v) for v in (L.get("a") or [])]; b = [float(v) for v in (L.get("b") or [])]
+            ly = L.get("layer") or (L.get("layers") or [None])[0]
+            if len(a) != 2 or len(b) != 2 or ly is None:
+                continue
+            for (pp, qq) in clip_iu(a, b, rect)[1]:
+                if (pp[0] - qq[0]) ** 2 + (pp[1] - qq[1]) ** 2 <= 1e-16:
+                    continue
+                out[(L.get("net"), ly) + tuple(round(v, nd) for v in _canon(pp, qq))
+                    + (float(L.get("width", 0.25)),)] = src
+    return out
+
+
+def outside_copper_equivalent(final, ref, rect, tol_area=1e-3, nd=3, declared=None):
+    """#K2-504/#K2-505 ENGINE CAPABILITY：C6「框外铜不变」之**几何等价 × 声明感知**口径。
+
+    `真实铜`（段＋孔）＝ 精确多重集（**不变**）；但其中命中**在册声明件**（`declared_outside_keys`）者＝
+    **授权铜 ⇒ 不计为变更**，且**逐件具名其授权出处**；**未声明者一律照报**（fail-closed）。`灌铜` ＝
+    框外**覆盖面积**按 `(net,layer)` 等价（重多边形化不计）。判据表语义与阈值**零触碰**：
+    "框外铜不变" 仍严格 ＝ **无未授权真实铜变更** ∧ **灌铜覆盖不变**。
+    """
+    declared = declared or {}
+    cur = outside_geometry(final, rect, nd=nd)
+    r0 = outside_geometry(ref, rect, nd=nd)
+    add = {k: v for k, v in (cur - r0).items() if v > 0}
+    rem = {k: v for k, v in (r0 - cur).items() if v > 0}
+    auth, unauth = [], []
+    for k, v in sorted(add.items(), key=lambda t: (str(t[0][0]), str(t[0][1]), str(t[0][2:]))):
+        (auth if k in declared else unauth).append({"key": list(k), "n": v, "authority": declared.get(k)})
+    rm = [{"key": list(k), "n": v} for k, v in sorted(rem.items(), key=lambda t: (str(t[0][0]), str(t[0][1])))]
     af, ar = zone_outside_area(final, rect), zone_outside_area(ref, rect)
     rows = {}
     for k in sorted(set(af) | set(ar), key=lambda t: (str(t[0]), str(t[1]))):
         d = round(af.get(k, 0.0) - ar.get(k, 0.0), 6)
         if abs(d) > tol_area:
             rows["%s|%s" % k] = {"final": af.get(k, 0.0), "ref": ar.get(k, 0.0), "delta": d}
-    return {"equivalent": (real["diff"] == 0) and (not rows),
-            "real_diff": real["diff"], "real_only_in_final": real["only_in_a"], "real_only_in_ref": real["only_in_b"],
+    return {"equivalent": (not unauth) and (not rm) and (not rows),
+            "real_diff": sum(u["n"] for u in unauth) + sum(u["n"] for u in rm),
+            "real_only_in_final": sum(a["n"] for a in auth) + sum(u["n"] for u in unauth),
+            "real_only_in_ref": sum(u["n"] for u in rm),
+            "unauthorized": unauth, "authorized": auth, "removed": rm,
+            "n_authorized": len(auth), "n_unauthorized": len(unauth), "n_removed": len(rm),
             "zone_area_delta": rows, "n_zone_delta": len(rows), "tol_area_mm2": tol_area,
-            "rule": "#K2-504 / #K2-503 sec.3.1: 'outside copper unchanged' is GEOMETRIC - a zone fill covering the "
-                    "same domain is unchanged even when re-filling enumerates different vertices (C6's vertex-set "
-                    "read reported 817 such non-changes). Real segments/vias stay an EXACT multiset compare."}
+            "rule": "#K2-504/#K2-505: 'outside copper unchanged' is GEOMETRIC and DECLARATION-AWARE - a zone fill "
+                    "covering the same domain is unchanged, and copper that an in-register drawing explicitly "
+                    "authorises (allow_outside_dR) is NAMED as authorised rather than reported as a leak. Anything "
+                    "without a declaration match is reported exactly as before (fail-closed)."}
 
 
 def outside_copper_delta(final, ref, rect, nd=3):
