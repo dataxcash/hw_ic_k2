@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_remove_copper_hop1_stderr_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-496 sec.2.1: one diagnostic hop - surface the child stderr. Done. Per the same ruling, if the unknown persists after the hop, STOP and hand back WITH THE STDERR VERBATIM.",
+ "hop_result": {
+  "board_items_ok": "10619 items (6338 tracks) on hw/k2_v4_8L.l14.kicad_pcb",
+  "remove_items_ok": "{'n_requested': 1, 'removed': 1} - the DELETE itself works",
+  "failure": "re-reading the SAVED board raised: AttributeError: 'SwigPyObject' object has no attribute 'GetTracks' at tools/k2_p4_mroute_v1.py:620 (for t in b.GetTracks()) - i.e. LoadBoard() returned a NULL board wrapper, so the file written by the save is unreadable.",
+  "stderr_verbatim": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\n  File \"/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_mroute_v1.py\", line 620, in board_items\n    for t in b.GetTracks():\nAttributeError: 'SwigPyObject' object has no attribute 'GetTracks'",
+  "what_was_tried": "pcbnew.SaveBoard(board_out, b) AND b.Save(board_out) - both produced a file that LoadBoard cannot read; the delete step itself is proven to work."
+ },
+ "conclusion": "the residual unknown is the SAVE/PERSIST step of a board mutated in this way (not the delete logic, not the regression isolation). Per #K2-496 this is handed back with the verbatim stderr rather than iterated further.",
+ "next_hypotheses": [
+  "a known in-repo route writes boards: k2_port_plane_stitch_v1 / move_copper etc. - COPY THEIR SAVE CALL (that is the in-register way) instead of pcbnew.SaveBoard/b.Save",
+  "or the mutant board needs pcbnew.SaveBoard with the project name / the file must sit next to a .kicad_pro (see the chain's m15_tmp.kicad_pro pattern)"
+ ],
+ "disposition": "reverted in-window; green point R1630 stands (158/158). Engine code board_items/remove_items is written and syntax-clean but NOT landed.",
+ "OWNER-ITEMS": 0
+}
