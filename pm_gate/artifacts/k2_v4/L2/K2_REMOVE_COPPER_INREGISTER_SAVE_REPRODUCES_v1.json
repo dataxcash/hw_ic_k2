@@ -1,0 +1,18 @@
+{
+ "artifact": "k2_remove_copper_inregister_save_reproduces_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-497 sec.2.4: if the IN-REGISTER save route reproduces the same failure => STOP and hand back with the two-route comparison; no further mechanism.",
+ "two_route_comparison": {
+  "route_A_handrolled_SaveBoard": "pcbnew.SaveBoard(board_out, b) - produced a file that LoadBoard cannot read (AttributeError: SwigPyObject has no attribute GetTracks at k2_p4_mroute_v1.py:620).",
+  "route_B_handrolled_bSave": "b.Save(board_out) - same: unreadable.",
+  "route_C_the_in_register_call": "pcbnew.SaveBoard(out, b) exactly as k2_port_plane_stitch_v1:157 uses it, exercised through a fresh load+Remove+Save in a subprocess with a .kicad_pro sidecar written next to it - the child still exited non-zero (returncode 1). NOTE: the stderr surface I could capture was consumed by KiCad's own 'Adding duplicate image handler' debug noise, so the child's real error was not isolated before the budget ended."
+ },
+ "what_is_proven": [
+  "the DELETE works: board_items loads 10619 items and remove_items returns removed=1",
+  "the empty-match fail-closed works (RuntimeError)",
+  "the in-register save CALL (same as k2_port_plane_stitch_v1) ALSO fails in MY harness - while the chain's own runs save boards fine every time"
+ ],
+ "conclusion": "the residual is an ENVIRONMENT/HARNESS difference, not a wrong save call: my standalone harness (load a source pcb, mutate, save, reload) does not reproduce the context the chain provides (shadow project root / a real .kicad_pro / its env). The next read is exactly that difference - not another save mechanism.",
+ "disposition": "reverted in-window; the green point stands; per #K2-497 sec.2.4 this goes back to the supervisor with the comparison above.",
+ "OWNER-ITEMS": 0
+}
