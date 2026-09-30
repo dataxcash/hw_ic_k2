@@ -1,0 +1,15 @@
+{
+ "artifact": "k2_outin_gate_relax_regression_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-485 sec.3.3 pre-authorised a deterministic, bounded, non-copper defence for the last edge (bad=1 case). Attempt + outcome.",
+ "attempt": "relax the port-substitution gate at k2_reroute_router_floor_v1.py:369 from (outside_wall(pa) and outside_wall(pb)) to (or), so the (out,in) class gets its outside endpoint substituted while the inside one is left unchanged by _port_substitute's own early return.",
+ "result": "REGRESSION - selftest 152 -> 2 failures. Reverted in-window (git checkout); the probe and the N=1 were NOT run (the explicit exit-code guard held).",
+ "why": "the gate that was relaxed is shared by other paths/stages whose expectations are pinned by existing tests; a one-token AND->OR changes behaviour beyond the (out,in) edge.",
+ "lesson": "the fix must be TARGETED at the (out,in) case (e.g. an explicit per-endpoint substitution attempt in the retry path that is already there at :431-433, or a dedicated flag), not a global relaxation of a shared gate.",
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change (reverted)"
+ ],
+ "OWNER-ITEMS": 0
+}
