@@ -1,0 +1,41 @@
+{
+ "artifact": "k2_contention_cut_read_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-461 sec.2.7 item 1 (the cheap named supporting artifact): name WHICH added copper nets/pieces seal the port->pad channel and on which layer, and answer whether any feasible assignment frees it. Read-only; written to /tmp; no frozen file touched; not a graded run.",
+ "method": "maze pass-1 board (the run own added copper present) -> ctx -> Grid on F.Cu, step 0.10, window = the port/pad bbox +/-3mm -> BFS over the FREE cells from the port cell -> is the pad cell in the same component? + owner of every obstacle cell on the component boundary (nearest copper item within 0.45mm).",
+ "measured": {
+  "window_mm": [
+   34.75,
+   53.6,
+   54.5,
+   60.163
+  ],
+  "step": 0.1,
+  "port_free_component_cells": 3757,
+  "pad_reachable_in_the_same_free_component": false,
+  "boundary_obstacle_cells": 73,
+  "sealers_named": [
+   [
+    [
+     "GND",
+     "F.Cu"
+    ],
+    66
+   ],
+   [
+    [
+     "PCIE_DN_OUT4_P_MCIO",
+     "F.Cu"
+    ],
+    7
+   ]
+  ]
+ },
+ "binary": "#K2-461 item 1 answered: the F.Cu free space between the port and U1 pad 22 is CUT (pad_reachable=false) and the cut is owned, in order, by GND (F.Cu, 66 boundary cells) and PCIE_DN_OUT4_P_MCIO (7). So the channel is not free-able by any ROUTING assignment on that layer alone: the sealing copper belongs to other nets and must YIELD (move) - which is exactly the \"contention-resolution\" question the ruling sends to the solution layer.",
+ "scope_limit_honest": "the read is per-layer (F.Cu). The maze can also use In2/In5/B, so this shows that the DIRECT layer is cut, not that no multi-layer route exists - and the R1440 witness proves a multi-layer route DOES exist when the domain is the frame. The measured difference remains: --only-net succeeds, the full run fails, i.e. other nets copper is the variable (consistent with GND/PCIE copper sealing the corridor here).",
+ "item_2_status": "NOT PRODUCED: the complete sec.16.3 contention-resolution drawing (relocation_listed: per-line geometry + a named migration list + per-corridor conservation) OR a conservation-level infeasibility certificate. The cut read above is its structural basis (it names exactly which copper must yield), but the drawing/certificate itself is outstanding.",
+ "item_3_status": "sec.20 increment cited only: REF-CASE-LIBRARY.md sec.A1 (TI DS320PR1601 EVM) already in the register; no re-run needed.",
+ "item_4_status": "selftest unchanged at 147/147 (no code change this window); closure PASS.",
+ "item_5_status": "I2C1_SDA addendum end-to-end NOT measured: it is bundled with the conditional N=1, and the gate did not pass.",
+ "OWNER-ITEMS": 0
+}
