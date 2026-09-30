@@ -49,6 +49,9 @@ def main():
                          "them, so guidance can never make an edge unsolvable (unlike a hard --channels domain).")
     ap.add_argument("--guide-penalty", dest="guide_penalty", type=float, default=3.0,
                     help="#K2-452: cost multiplier-1 for steps outside the guided cells (default 3.0).")
+    ap.add_argument("--keepout", default="",
+                    help="#K2-465 sec.2.4: HARD keepout 'net:x0,y0,x1,y1[@layer]' - the named net may NOT use cells "
+                         "in the rect on that layer (a hard mask, NOT a cost).")
     ap.add_argument("--ripup", type=int, default=0,
                     help="#K2-456 sec.2.5 pass-2: bounded rip-up & reroute (whole-run rip, ONE re-route with the "
                          "blocked nets promoted; adopted only if the block count strictly drops - atomic).")
@@ -62,6 +65,15 @@ def main():
     cv = mr.cv
     orig = cv._req
     cv._req = lambda x, y: max(orig(x, y), a.floor)
+    _KO = {}
+    for _it in [x for x in (a.keepout or "").split(";") if x.strip()]:
+        _n, _r = _it.split(":", 1)
+        _lay = "F.Cu"
+        if "@" in _r:
+            _r, _lay = _r.split("@", 1)
+        _lid = [k for k, v in mr.LNAME.items() if v == _lay]
+        _KO.setdefault(_n, []).append((_lid[0] if _lid else mr.F_Cu, tuple(float(v) for v in _r.split(","))))
+    mr.KEEPOUT = _KO or None                              # #K2-465: hard keepout (net -> [(layer, rect), ...])
     mr.RIPUP = int(a.ripup or 0)                       # #K2-456 sec.2.5: pass-2 rounds (0 = off)
     if a.bound_rect:                                  # C35：把域作为**搜索约束**注入（不改迷宫本体）
         mr.WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))

@@ -1829,15 +1829,38 @@ class T(unittest.TestCase):
                            {"path": p, "old": "C = 3", "new": "C = 9"}])
         self.assertTrue(r["ok"]); self.assertEqual(r["applied"], 2)
         self.assertEqual(open(p, encoding="utf-8").read(), "A = 7\nB = 2\nB = 2\nC = 9\n")
-        # and the gate answers the PRACTICAL question: are the anchors the next item-2 batch needs present NOW?
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        need = [{"path": os.path.join(root, "tools", "k2_p4_mroute_v1.py"), "old": "AVOID = None"},
-                {"path": os.path.join(root, "tools", "k2_reroute_router_floor_v1.py"),
-                 "old": 'ap.add_argument("--ripup", type=int, default=0,'},
-                {"path": os.path.join(root, "tools", "eda_eng", "regen.py"),
-                 "old": '"--port-refs", PORT_REFS, "--ripup", "3", *_charg])', "count": 3}]
-        chk = m.check_anchors(need)
-        self.assertTrue(chk["ok"], "the anchors the NEXT batch needs must be verifiable up front: %s" % chk["problems"])
+        # NOTE (#K2-466): the "are the NEXT batch anchors present now" check was DELETED from this regression on purpose:
+        # it pinned a TRANSIENT migration fact (once the batch is applied those anchors are legitimately consumed),
+        # and pinning transients is what made this very test go RED after the batch landed. Behaviour only.
+
+    def test_C465_the_band_keepout_is_a_HARD_mask_on_the_named_net_only(self):
+        """#K2-465 sec.2.4: the reserved band must be a HARD keepout - the kept-out net may not USE those cells - and MUST
+        NOT be implemented as a cost/ordering preference. RED = the band is usable; GREEN = unusable for the named net and
+        still usable for the protected one."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr465", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+
+        class _Ctx:
+            pads, vias = {}, {}
+            holes, edge, keep_t, keep_v = [], [], [], []
+            tracks = []
+        ctx = _Ctx(); band = (2.0, 2.0, 3.0, 3.0)
+        mr.KEEPOUT = None
+        g0 = mr.Grid(ctx, "GND", 0.10, 0.0, 0.0, 5.0, 5.0, 0.0)
+        i, j = g0.cell(2.5, 2.5)
+        self.assertEqual(g0.bad[mr.F_CU][i * g0.ny + j], 0, "RED: without a keepout the band is usable")
+        mr.KEEPOUT = {"GND": [(mr.F_CU, band)]}
+        g1 = mr.Grid(ctx, "GND", 0.10, 0.0, 0.0, 5.0, 5.0, 0.0)
+        self.assertEqual(g1.bad[mr.F_CU][i * g1.ny + j], 1, "GREEN: the kept-out net may NOT use a band cell")
+        g2 = mr.Grid(ctx, "I2C2_SCL", 0.10, 0.0, 0.0, 5.0, 5.0, 0.0)
+        self.assertEqual(g2.bad[mr.F_CU][i * g2.ny + j], 0, "the PROTECTED net keeps the band usable")
+        mr.KEEPOUT = None
+        w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("mr.KEEPOUT = _KO or None", w); self.assertIn('"--keepout"', w)
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn("_ko = [", r); self.assertIn('"stage": "band_keepout"', r)
+        self.assertIn("*_ko, *_charg])", r)
 
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean

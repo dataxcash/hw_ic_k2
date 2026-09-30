@@ -1546,12 +1546,24 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         return {"state": ("W1B_CHANNELS_EMPTY" if _cr["stage"] == "channels_compute_empty"
                           else "W1B_CHANNELS_FAILED"), "chain": chain}
     _charg = _cr["args"]
+    # #K2-465 sec.2.4 item 2: the chain reads the machine-readable v4 piece and passes a HARD keepout
+    _ko = []
+    try:
+        _kr = os.path.join(os.path.dirname(stitch_spec or ""), "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json")
+        if stitch_spec and os.path.isfile(_kr):
+            _draw = json.load(open(_kr, encoding="utf-8"))["sec16_3_four_elements"]["3_corrected_complete_construction_drawing"]
+            _br, _kn, _kl = _draw.get("band_rect_mm"), _draw.get("kept_out_net"), (_draw.get("layer") or "F.Cu")
+            if _br and _kn:
+                _ko = ["--keepout", "%s:%s,%s,%s,%s@%s" % (_kn, _br[0], _br[1], _br[2], _br[3], _kl)]
+    except Exception:                                          # noqa: BLE001
+        _ko = []
+    chain.append({"stage": "band_keepout", "args": _ko, "source": "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json"})
     resolved = os.path.join(work, "s2_resolved.kicad_pcb")
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
                "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
                "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, "--ripup", "3", *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
     led_j = None
     if os.path.isfile(led):
         try:
@@ -1572,7 +1584,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
               "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-              "--port-refs", PORT_REFS, "--ripup", "3", *_charg])
+              "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
         if os.path.isfile(second):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,
@@ -1629,7 +1641,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                     _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", _yout,
                           "--drc", _d3, "--out", _r3, "--ledger", _l3, "--margin", "3.0", "--floor", "0.20",
                           "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, "--ripup", "3", *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
                     if os.path.isfile(_r3):
                         resolved = _r3
         except Exception as _e:                                        # noqa: BLE001

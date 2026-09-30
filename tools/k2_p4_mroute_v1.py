@@ -198,6 +198,10 @@ GUIDE = None
 #   落在这些矩形内的**格**每步 ×(1+penalty)（与 `GUIDE` 反向：GUIDE 奖励引导内、AVOID 惩罚已拥塞区）。
 #   `None` ⇒ 无代价（既有调用**行为不变**）。确定性（格掩码由矩形集合唯一确定）。
 AVOID = None
+# #K2-465 sec.2.4 -- HARD KEEPOUT: `KEEPOUT = {net: [(layer_id, (x0,y0,x1,y1)), ...]}`.
+# Those cells are UNUSABLE (bad=1) for that net on that layer -> the A* may not claim them. A HARD rule,
+# NOT a cost and NOT an ordering preference. None => no keepout (existing callers unchanged).
+KEEPOUT = None
 
 
 class Grid:
@@ -220,6 +224,18 @@ class Grid:
                         if out_x or (self.y0 + j * self.step < wy0 - 1e-9) or (self.y0 + j * self.step > wy1 + 1e-9):
                             bb2[i * self.ny + j] = 1
         # #K2-452 sec.2.4 item 2：软引导**格掩码**（层无关；只影响**代价**，不堵任何格）。
+        # #K2-465: HARD keepout cells (only for the named net / named layer)
+        for (_ly, (_kx0, _ky0, _kx1, _ky1)) in (KEEPOUT or {}).get(net, []):
+            if _ly not in LAYERS:
+                continue
+            _ki0 = max(0, int(math.floor((_kx0 - x0) / step)))
+            _ki1 = min(self.nx - 1, int(math.ceil((_kx1 - x0) / step)))
+            _kj0 = max(0, int(math.floor((_ky0 - y0) / step)))
+            _kj1 = min(self.ny - 1, int(math.ceil((_ky1 - y0) / step)))
+            _bb = self.bad[_ly]
+            for _ki in range(_ki0, _ki1 + 1):
+                for _kj in range(_kj0, _kj1 + 1):
+                    _bb[_ki * self.ny + _kj] = 1
         self.gflag = None
         self.gpen = 0.0
         if GUIDE:
