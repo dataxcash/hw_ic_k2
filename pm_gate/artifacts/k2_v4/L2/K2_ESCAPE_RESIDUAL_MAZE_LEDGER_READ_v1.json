@@ -1,0 +1,83 @@
+{
+ "artifact": "k2_escape_residual_maze_ledger_read_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-474 sec.4.5 (a VOID signature re-fired: log one line, do NOT idle, continue) + #K2-473 sec.3.4 (C1>=2: stop + NAME). This is the naming read, straight from the MAZE's own per-net ledger. Read-only; zero board writes; zero exam runs.",
+ "inputs": {
+  "s2_ledger": "/tmp/opencode/k2w1/s2_ledger.json (first maze pass)",
+  "s2b_ledger": "/tmp/opencode/k2w1/s2b_ledger.json (residual pass)",
+  "run": "R1530 (the one authorised N=1, FAIL, C1=2)"
+ },
+ "finding_final_pass_reasons": {
+  "summary": {
+   "added": 2,
+   "blocked": 2,
+   "segs": 79,
+   "vias": 4,
+   "len": 62.5019,
+   "reasons": {
+    "no-free-goal-node": 1,
+    "no-free-start-node": 1
+   }
+  },
+  "blocked": [
+   {
+    "net": "PWR_BTN_OUT",
+    "dist": 27.162,
+    "why": "no-free-goal-node"
+   },
+   {
+    "net": "I2C2_SCL",
+    "dist": 45.553,
+    "why": "no-free-start-node"
+   }
+  ],
+  "ripup": {
+   "rounds": [
+    {
+     "round": 0,
+     "blocked": 2
+    },
+    {
+     "round": 1,
+     "blocked": 2
+    },
+    {
+     "round": 2,
+     "blocked": 2
+    }
+   ],
+   "adopted": false
+  },
+  "reading": "the residual is a START/GOAL-NODE FREEDOM failure, NOT a blocked long path: I2C2_SCL has NO FREE START CELL (the R1430 lesion verbatim: no-free-start-node) and PWR_BTN_OUT has NO FREE GOAL NODE."
+ },
+ "finding_first_pass_reasons": {
+  "summary": {
+   "reasons": {
+    "no-free-start-node": 23,
+    "no-op-after-port-substitution(same-island)": 245,
+    "no-free-goal-node": 1,
+    "no-path-coarse(exhausted-9959)": 1
+   }
+  },
+  "reading": "the whole block starts life with 23 no-free-start-node edges - start-node starvation is the dominant failure mode across the block, exactly the lesion #K2-467 was written for."
+ },
+ "correction_of_R1532": {
+  "R1532_said": "the residual is a long-haul routing failure far from the pad (based on the final DRC's pad<->port distance of ~13.75mm).",
+  "this_read_says": "the final DRC shows the leftover GAP, but the maze's own recorded REASON is that I2C2_SCL cannot even get a free start cell. Both are true; the actionable one is the start node.",
+  "why_the_corridor_did_not_help": "R1528 wired the escape asset as a KEEPOUT - a MASK that forbids the named nets from using those cells. A mask cannot CREATE a free start cell: it only removes cells from other nets. So the corridor is free-but-unused (R1532 measured it empty) and the net still has no free start.",
+  "what_the_register_actually_specified": "#K2-467 sec.2.1 item 4: 'LAY all the escape assets (FIXED PIECES) FIRST, then run the existing maze'. A fixed piece = copper laid for the net, giving it an island that reaches a free grid cell - not merely a reservation."
+ },
+ "conclusion": "the stage is aimed correctly (start-node starvation is real), but the R1528 wiring used the wrong MECHANISM: reservation (mask) instead of laying the asset as a fixed copper piece (or registering the corridor end as an explicit maze port).",
+ "next_candidates": [
+  "A. LAY the escape asset as a fixed copper stub for its net before the maze (per #K2-467 sec.2.1 item 4). NOTE: this ADDS board geometry, which the previous windows explicitly forbade (no new board geometry) and which C6 (outside-frame copper) may be sensitive to => needs an explicit ruling and its own C6 handling.",
+  "B. WITHOUT any new copper: register the corridor's far endpoint as an explicit MAZE PORT for the net (the maze already takes --port-refs), so the net owns a free start cell. No geometry change; the residual still has to be routed from there.",
+  "C. C6 (796) as the separate piece."
+ ],
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change",
+  "no same-cause rerun (forbidden)"
+ ],
+ "OWNER-ITEMS": 0
+}
