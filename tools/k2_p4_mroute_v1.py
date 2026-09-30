@@ -797,26 +797,41 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         for _u in [u for u in ctx.vias if u not in _b_vi]: del ctx.vias[_u]
         del ctx.holes[_b_ho:]
 
+    # ── #K2-458 **完整协商回路**：**有界迭代** ＋ **拥塞代价（history 历史 ＋ present 当前）驱动排序** ＋ 原子取优 ──
+    # 教令 ②（#K2-456 §2.5 / #K2-458 §2.5）：不是「一次重排」，而是**迭代**「拆边—重布」，每轮按**拥塞代价**
+    # 重排行序（被饿死边自然提前），并**保留历轮最优**（不更差才采纳）。
+    # · 确定性：代价为整数计数；并列按**原序**（稳定）⇒ 同输入同输出。
+    # · 有界：**固定 `RIPUP` 轮**（无搜索 · 无参数试探 · 无回溯爆炸）。
+    # · 原子：每轮先 `_unwind()` 到跑前快照；最终**只在严格更优时采纳**，否则回主线结果。
     added, blocked, blocks = _pass(edges)
     led["ripup"] = []
     if RIPUP > 0 and blocked:
-        _prio_net = {b["net"] for b in blocked}
-        _p1 = [e for e in edges if e[1] in _prio_net]
-        # #K2-456 refinement (measured): promoting the blocked NETS was not enough - inside the promoted set the
-        # starved edge was still served BEHIND its own blockers and starved again (r1 269 -> r2 269, adopted round1).
-        # So the BLOCKED EDGES THEMSELVES go first (stable within each group), then the rest of the promoted nets.
-        _bkey = {(b["net"], b["dist"]) for b in blocked}
-        _p1.sort(key=lambda e: 0 if (e[1], e[0]) in _bkey else 1)
-        _p2 = [e for e in edges if e[1] not in _prio_net]
-        _unwind()
-        a2, b2, k2 = _pass(_p1 + _p2)                     # ① 阻断边优先 ② 其余保原序 ③ 一次
-        led["ripup"].append({"round": 0, "r1_blocked": len(blocked), "r2_blocked": len(b2),
-                             "promoted_nets": sorted(_prio_net), "adopted": ("round2" if len(b2) < len(blocked) else "round1")})
-        if len(b2) < len(blocked):                        # ④ 取更优（平手回主线 ⇒ 确定性 · 原子）
-            added, blocked, blocks = a2, b2, k2
+        _hist = {}                                        # 每网：历轮**被阻断次数**＝history 代价
+        _best = (len(blocked), added, blocked, blocks)
+        _order = list(edges)
+        for _r in range(int(RIPUP)):
+            _unwind()
+            _a, _b, _k = _pass(_order)
+            _nb = len(_b)
+            _trail = {"round": _r, "blocked": _nb, "best": _best[0],
+                      "adopted": None, "history_nets": sorted(_hist)}
+            if _nb < _best[0]:
+                _best = (_nb, _a, _b, _k); _trail["adopted"] = "round%d" % _r
+            else:
+                _trail["adopted"] = None
+            for _r2 in _b:                                # present（本轮被阻断）→ 计入 history
+                _hist[_r2["net"]] = _hist.get(_r2["net"], 0) + 1
+            led["ripup"].append(_trail)
+            # 下一轮序：**拥塞代价高的网在前**（被饿死者提前占位），并列保原序
+            _pos = {_i: _e for _i, _e in enumerate(edges)}
+            _order = [_e for _i, _e in sorted(_pos.items(),
+                                              key=lambda t: (-_hist.get(t[1][1], 0), t[0]))]
+        if _best[0] < len(blocked):                       # **原子取优**：只在严格更优时替换
+            added, blocked, blocks = _best[1], _best[2], _best[3]
         else:
             _unwind()
-            added, blocked, blocks = _pass(edges)
+            added, blocked, blocks = _best[1], _best[2], _best[3]
+        led["ripup_adopted"] = any(t["adopted"] for t in led["ripup"])
     if not blocks:                                        # 无新铜 ⇒ 无需整轮拆线（保兜底）
         pass
     led.update({"added": added, "blocked": blocked,

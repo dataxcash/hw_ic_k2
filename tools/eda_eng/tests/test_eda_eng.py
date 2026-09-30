@@ -1682,15 +1682,15 @@ class T(unittest.TestCase):
         mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
         src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
         self.assertIn("RIPUP = 0", src); self.assertIn("def _pass(eorder):", src)
-        self.assertIn("_prio_net = {b[\"net\"] for b in blocked}", src, "the blocked nets must be promoted")
-        self.assertIn('"adopted": ("round2" if len(b2) < len(blocked) else "round1")', src,
-                      "the round is adopted ONLY if the block count strictly drops (else roll back - atomic)")
+# (removed: stale pin superseded by the #K2-458 negotiated loop)
         self.assertIn("def _unwind():", src)
-        self.assertIn("_pass(_p1 + _p2)", src, "one re-route: blocked first, the rest in the original order")
-        self.assertIn("_p1.sort(key=lambda e: 0 if (e[1], e[0]) in _bkey else 1)", src,
-                      "the BLOCKED EDGES themselves must go first (measured: promoting only their nets was not enough)")
+        # #K2-458: the authorised means is the COMPLETE negotiated loop - bounded iteration + congestion cost ordering
+        self.assertIn("_hist = {}", src, "a per-net history cost is required")
+        self.assertIn("for _r in range(int(RIPUP)):", src, "the settlement must ITERATE (bounded by the fixed cap)")
+        self.assertIn("key=lambda t: (-_hist.get(t[1][1], 0), t[0])", src,
+                      "each round's order must be driven by the congestion cost (history), ties by the original order")
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
-        self.assertIn('"--ripup", "1"', r, "the chain must enable exactly one pass-2 round")
+        self.assertIn('"--ripup", "3"', r, "the chain must enable a BOUNDED ITERATION (fixed cap 3), not one re-order")
         w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
         self.assertIn("mr.RIPUP = int(a.ripup or 0)", w)
         # the MECHANISM, at unit level on the real core: a barrier blocks the edge; ripping it frees the edge
