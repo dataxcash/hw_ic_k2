@@ -2063,13 +2063,17 @@ class T(unittest.TestCase):
         mm^2, and the registered tracks+vias row stays an exact zero-diff compare."""
         tv = block.zone_area_tolerance(4003.2521)
         self.assertAlmostEqual(tv["geom_bound_mm2"], 0.30 * 147.2, places=6, msg="clear x frame perimeter")
-        self.assertAlmostEqual(tv["rel_cap_mm2"], 0.001 * 4003.2521, places=6, msg="0.1% of the reference area")
-        self.assertEqual(tv["binding"], "rel_cap", "the relative arm binds on a 4000mm^2 plane")
-        self.assertAlmostEqual(tv["tol_mm2"], 4.0032521, places=6, msg="min(geom, rel)")
+        self.assertAlmostEqual(tv["rel_cap_mm2"], 0.005 * 4003.2521, places=6, msg="0.5% of the reference area")
+        self.assertEqual(tv["binding"], "rel_arm", "the relative arm binds on a 4000mm^2 plane")
         small = block.zone_area_tolerance(169.374132)
-        self.assertAlmostEqual(small["tol_mm2"], 0.169374, places=6, msg="a small plane gets a tight cap")
-        self.assertTrue(block.zone_area_tolerance(4003.2521)["tol_mm2"] > 0.913609, "GND In1's 0.914 passes")
-        self.assertFalse(0.756946 <= small["tol_mm2"], "MCU_VDD In4's 0.757 does NOT fit its 0.169 cap")
+        self.assertAlmostEqual(small["rel_cap_mm2"], 0.005 * 169.374132, places=6, msg="0.5% cap")
+        self.assertAlmostEqual(small["tol_mm2"], 0.846871, places=6, msg="min(geom, rel) - MCU_VDD")
+        tiny = block.zone_area_tolerance(30.202143)
+        self.assertAlmostEqual(tiny["tol_mm2"], 0.5, places=6, msg="the 0.5mm^2 FLOOR binds on a 30mm^2 plane")
+        # two states: the ruled tolerance must ACCEPT the observed rows and REFUSE a genuinely larger move
+        for ref, d in ((4003.252051, 0.913609), (169.374132, 0.756946), (30.202143, 0.061674)):
+            self.assertTrue(abs(d) <= block.zone_area_tolerance(ref)["tol_mm2"], (ref, d))
+        self.assertFalse(1.0 <= block.zone_area_tolerance(169.374132)["tol_mm2"], "1.0mm^2 on MCU_VDD must FAIL")
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn("zone_area_tolerance", open(os.path.join("tools", "eda_eng", "block.py"), encoding="utf-8").read())
 

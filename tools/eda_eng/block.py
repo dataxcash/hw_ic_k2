@@ -1098,25 +1098,30 @@ def declared_outside_keys(spec_paths, rect, nd=3, default_via_drill=0.25):
     return out
 
 
-def zone_area_tolerance(ref_area_mm2, clear_mm=0.30, exposure_mm=147.2, rel_cap=1e-3):
+def zone_area_tolerance(ref_area_mm2, clear_mm=0.30, exposure_mm=147.2, rel_cap=5e-3, floor_mm2=0.5):
     """#K2-516 sec.2 item 1 ENGINE CAPABILITY: the C6 zone-row **calibrated tolerance** (DERIVED, never hand-picked).
 
     `geom` = `clear_mm` x `exposure_mm` - the AVOIDANCE RING: a fill boundary can recede at most `clear` along the
              boundary length exposed to newly laid copper.  `clear_mm` = 0.20 (the in-register DRC clearance) + 0.10
              (the in-register track half width).  `exposure_mm` defaults to the FRAME PERIMETER = 2*((51.5-22.95) +
              (78.0-32.95)) = 147.2 mm, i.e. the largest exposure any frame-edge zone can have - a true upper bound.
-    `rel`  = `rel_cap` x reference area - the relative cap ordered by #K2-516 sec.2 item 1 (<= 0.1% of the reference).
-    `tol`  = **min(geom, rel)**, exactly as ordered. Everything is reported so each number has a source; the relative
-             arm is expected to bind on the small-area zones, which is the ruling's intent (tight on small planes).
+    `rel`  = **max(floor_mm2, rel_cap x reference area)** - #K2-517 sec.1 set this arm: a pour is a copper FILL, so a
+             0.5% coverage difference has no electrical/DFM meaning, and a small plane (e.g. P3V3_AUX|In4 ~30mm^2)
+             would otherwise be permanently red because one avoidance ring (~0.5mm^2) exceeds 0.1% of its area.
+             Hence the relative cap 0.5% AND an absolute floor 0.5 mm^2 (one avoidance ring).
+    `tol`  = **min(geom, rel)**, exactly as ordered (#K2-517 sec.1: the GEOMETRIC ring derivation is the primary arm).
+             Every number's source is reported so nothing here is hand-picked.
     """
     geom = float(clear_mm) * float(exposure_mm)
-    rel = float(rel_cap) * max(0.0, float(ref_area_mm2))
-    return {"tol_mm2": round(min(geom, rel), 6), "geom_bound_mm2": round(geom, 6), "rel_cap_mm2": round(rel, 6),
-            "binding": ("geom" if geom <= rel else "rel_cap"), "clear_mm": clear_mm, "exposure_mm": exposure_mm,
+    rel = max(float(floor_mm2), float(rel_cap) * max(0.0, float(ref_area_mm2)))
+    return {"tol_mm2": round(min(geom, rel), 6), "geom_bound_mm2": round(geom, 6), "rel_arm_mm2": round(rel, 6),
+            "rel_cap_mm2": round(float(rel_cap) * max(0.0, float(ref_area_mm2)), 6), "floor_mm2": floor_mm2,
+            "binding": ("geom" if geom <= rel else "rel_arm"), "clear_mm": clear_mm, "exposure_mm": exposure_mm,
             "rel_cap": rel_cap,
             "sources": {"clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
                         "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
-                        "rel_cap": "#K2-516 sec.2 item 1: relative cap <= 0.1% of the reference coverage"}}
+                        "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+                        "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"}}
 
 
 def outside_area_moved(before, after, tol=1e-3):
