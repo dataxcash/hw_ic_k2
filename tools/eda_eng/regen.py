@@ -1752,6 +1752,26 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                           "exit": _run8.returncode, "out": os.path.basename(resolved)})
     except Exception as _e8:                                    # noqa: BLE001
         chain.append({"stage": "copper_dangling_audit", "err": type(_e8).__name__})
+    # ── #K2-507 (ENG): JOIN HALF - one-end-dangling stubs are STITCHED (bounded, same-net, true-shape clearance)
+    #    instead of being left dangling. The chain's own endpoint_stitch below may only DROP (a blind straight
+    #    stitch is forbidden by #K2-411 sec.2); this stage joins them properly through the in-register CLI verb,
+    #    which validates the dR bound and saves with the registered template. A refusal is NAMED, never silent.
+    try:
+        _jm = os.path.join(work, "join_plan.json")
+        _jr = subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_join_copper_v1.py"),
+                              "--board", resolved, "--rect", ",".join(str(v) for v in rect),
+                              "--out", os.path.join(work, "s2e_joined.kicad_pcb"), "--json-out", _jm],
+                             cwd=ROOT, capture_output=True, text=True, timeout=1800)
+        _jd = json.load(open(_jm, encoding="utf-8")) if os.path.isfile(_jm) else {}
+        chain.append({"stage": "copper_join", "exit": _jr.returncode,
+                      "n_one_end": _jd.get("n_one_end"), "n_planned": _jd.get("n_planned"),
+                      "n_refused": _jd.get("n_refused"), "lay": _jd.get("lay"),
+                      "refused_named": [r.get("net") for r in (_jd.get("refused") or [])]})
+        _jout = os.path.join(work, "s2e_joined.kicad_pcb")
+        if _jr.returncode == 0 and (_jd.get("lay") or {}).get("n_added") and os.path.isfile(_jout):
+            resolved = _jout
+    except Exception as _e9:                                    # noqa: BLE001
+        chain.append({"stage": "copper_join", "err": type(_e9).__name__})
     d2c = os.path.join(work, "s2c_before_stitch_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d2c, resolved])
     st_plans, st_out = [], None
