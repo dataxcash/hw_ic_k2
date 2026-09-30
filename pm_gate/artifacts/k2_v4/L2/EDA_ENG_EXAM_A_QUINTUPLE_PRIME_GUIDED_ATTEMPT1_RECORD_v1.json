@@ -1,0 +1,68 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_guided_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-453 sec.2.4: the ONE authorised fresh N=1 - the first real test of the LANDED soft-guidance means (preference/cost), with the fail-closed gate up and the GND port-goal lever alive again.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "rc": 1,
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "work_dir": "/tmp/opencode/k2ac",
+  "foreground": true,
+  "env": "K2_NO_YIELD=1 + EDA_ENG_PY/EDA_ENG_CLI",
+  "wall_clock": "09:37:44 -> 10:12:34 (~35 min, maze stage ~31 min)"
+ },
+ "means_executed": {
+  "hard_channels": "n_nets=18 (legacy single rect per net) - the multi-slot form is REFUSED by the gate",
+  "soft_guidance": "n_guide=48, guide_source=\"joint-per-corridor\" - the per-corridor allocation REALLY ran as a PREFERENCE (this is the first run ever in which it is consumed as cost, not as a boundary)",
+  "gate": "not tripped (no multi-slot was fed to --channels)"
+ },
+ "nine_rows": {
+  "C1": 2,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": 811,
+  "C6_note": "DECLARED ROW, NOT A GATE (#K2-446 sec.2.2); legacy_diff=2.",
+  "C7": 0,
+  "C7_pass": true,
+  "C8": [],
+  "C9": true,
+  "rows_present": 9
+ },
+ "verdict_vs_branch": "C1=2 => the sec.2.4 branch \"C1>=2 (no improvement) => STOP + name + ban same-cause rerun + bring new mechanism evidence for a ruling\" applies. NOT a net improvement (0<C1<2 is required for that); NOT worse than the R1392 baseline either (same 2).",
+ "residual_named": [
+  {
+   "nets": [
+    "I2C2_SCL"
+   ],
+   "items": [
+    "走线 [I2C2_SCL] (F.Cu), 长度: 9.3000 mm",
+    "F.Cu 上 U1 的焊盘 22 [I2C2_SCL]"
+   ]
+  },
+  {
+   "nets": [
+    "I2C1_SDA"
+   ],
+   "items": [
+    "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+    "走线 [I2C1_SDA] (B.Cu), 长度: 0.2000 mm"
+   ]
+  }
+ ],
+ "same_cause_rerun_ban": "BANNED: this exact configuration (soft guidance over this frame + this board state + the GND port retry alive) is now MEASURED at C1=2. No further run of it without a new authorisation AND a different mechanism.",
+ "new_mechanism_evidence": {
+  "1_exception_class_is_GONE": "exception:KeyError 244 -> 0. The 244 formerly-crashing edges now come back NAMED as no-free-start-node. added stays 68 (identical to the R1392 baseline) => the GND/pour + MCU_VDD port-retry class produces no copper either way: the #K2-452 item-3 fix is C1-NEUTRAL at whole-run level, and the open GND-side question is now MEASURED (closed as neutral), not assumed.",
+  "2_the_binding_constraint_is_START-NODE REACHABILITY, not allocation": "blocked reasons are now a SINGLE class: no-free-start-node 267 of 268 (+1 no-path-coarse(exhausted-5693)). By net: GND 241 / P3V3 21 / MCU_VDD 3 / P3V3_AUX 2. The in-band precheck (s2_ledger.json.precheck.json) says n_failed_edges=281, endpoint_own_cell_hits=23, and its unreachable list carries \"ports_available\": 2, \"ports_tried\": 2, \"reachable_port\": false => these endpoints cannot reach even their OWN net ports. The maze cannot find a free start cell inside maxr=4 of the endpoint.",
+  "3_the_guidance_really_biased_the_router_but_did_not_change_C1": "same candidate edges (336): added 68 (identical), blocked 268 (identical), but geometry changed materially - segs 1152 -> 636, vias 57 -> 60, len 552.93 -> 576.77mm (compare R1392). So the preference WAS consumed (straighter, longer pathing) yet the connectivity count is untouched => the ALLOCATION/ORDER half is NOT the binding constraint for the last two residuals.",
+  "4_the_two_residuals_are_small_local_gaps": "I2C2_SCL: a 9.3mm F.Cu track vs U1 pad 22; I2C1_SDA: a 0.6mm F.Cu track vs a 0.2mm B.Cu track - both LOCAL reach/stitch gaps, not capacity (the frame has ~50x headroom, R1394).",
+  "consequence_for_the_next_ruling": "the lesion has MOVED: it is no longer \"who is served first\" (allocation) but \"why can this endpoint not start at all\" (reachability) - i.e. the in-register M-ENG-PORT-REACHABILITY-DRAWING / the maze occupancy mask vs the endpoint own copper (the D1 relaxation fired only 23 times of 281 failures). This is the evidence the sec.2.4 branch requires before the next means is chosen."
+ },
+ "board": "FROZEN (l14/rev-61, PCB fb07d25ac426ff84); nothing landed.",
+ "OWNER-ITEMS": 0
+}

@@ -30,5 +30,12 @@
   }
  },
  "honest_caveat": "the above proves the exception is GONE and replaced by a NAMED reason, and it shows the 3 MCU_VDD edges were blocked before and after (=> C1-neutral for those 3). For the 241 GND edges the retry now actually runs, so the outcome is NOT yet measured: a lone GND-only diagnostic did not finish inside a 200s bound (each edge builds heavy 0.10mm grids). C1-neutrality is therefore NOT claimed for GND - the authorised run will measure it.",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "measured_read_from_the_authorised_run_K2_453": {
+  "run": "/tmp/opencode/k2ac (the ONE authorised fresh N=1)",
+  "exception_KeyError": "244 -> 0 (gone)",
+  "former_crashes_now_named": "244 x no-free-start-node (the retry now actually executes and reports a reason)",
+  "added": "68 -> 68 (IDENTICAL to the R1392 baseline) => C1-NEUTRAL at whole-run level",
+  "conclusion": "the GND/pour + MCU_VDD port-retry class produces no copper either way: the fix is neutral for C1 and it converts an OPAQUE 244-block crash into a NAMED 244-block reachability reason. The honest caveat of the previous window is therefore RESOLVED: neutrality is now measured, not claimed - and it also proves the capability needed next is endpoint START-NODE REACHABILITY, not another allocator."
+ }
 }
