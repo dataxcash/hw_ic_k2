@@ -2057,6 +2057,36 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C502_escape_clearance_uses_the_true_pad_shape(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-502). RED without it: the escape clearance test modelled a
+        pad as the inscribed capsule, so a pad's rectangular CORNER was invisible and a 45-degree escape step
+        grazed it. GREEN: the true (rounded-rectangle) obstacle refuses the two escape steps that the exam's own
+        DRC reports at 0.1062mm, and reproduces that exact number."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe502", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        # MCU_VDD's 45deg escape from (31.1,62.85) grazes C86:2 [GND] - a 0.6x0.7 RECT pad at (32.0,62.85)
+        a, b = (31.1, 62.85), (31.5, 63.25)
+        rect = m.pad_obstacle_shape("GND", "F.Cu", 32.0, 62.85, 0.6, 0.7)
+        self.assertEqual(rect[7], "rect", "true-shape obstacles are tagged")
+        self.assertFalse(m._leg_clear("MCU_VDD", "F.Cu", a, b, [rect], 0.30), "the pad corner must refuse it")
+        cap = m.pad_obstacle("GND", "F.Cu", 32.0, 62.85, 0.6, 0.7)
+        self.assertTrue(m._leg_clear("MCU_VDD", "F.Cu", a, b, [cap], 0.30),
+                        "the inscribed capsule is what produced the false clear (this is the RED)")
+        d = m._seg_roundrect_dist(a[0] - 32.0, a[1] - 62.85, b[0] - 32.0, b[1] - 62.85, 0.3, 0.35, 0.0)
+        self.assertAlmostEqual(d, 0.2062, places=4, msg="exact centre-line distance")
+        self.assertAlmostEqual(d - 0.10, 0.1062, places=4, msg="edge-to-edge == the DRC's own 0.1062mm reading")
+        # PERSTA#'s 45deg escape grazes R1:2 [P3V3_AUX] the same way
+        self.assertFalse(m._leg_clear("PERSTA#", "F.Cu", (50.05, 39.0), (50.45, 39.4),
+                                      [m.pad_obstacle_shape("P3V3_AUX", "F.Cu", 50.95, 39.0, 0.6, 0.7)], 0.30))
+        # CIRCLE pads must stay exactly a disc (no false refusal introduced by the new model)
+        ci = m.pad_obstacle_shape("X", "F.Cu", 0.0, 0.0, 0.6, 0.6, 0.0, 0.3)
+        self.assertAlmostEqual(m._seg_roundrect_dist(0.5, 0.0, 0.5, 0.0, ci[10], ci[11], ci[12]), 0.2, places=6)
+        # untouched semantics: other layer / same net / far copper are all still clear
+        self.assertTrue(m._leg_clear("MCU_VDD", "In5.Cu", a, b, [rect], 0.30))
+        self.assertTrue(m._leg_clear("GND", "F.Cu", a, b, [rect], 0.30))
+        self.assertTrue(m._leg_clear("MCU_VDD", "F.Cu", (28.0, 62.85), (28.5, 62.85), [rect], 0.30))
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised

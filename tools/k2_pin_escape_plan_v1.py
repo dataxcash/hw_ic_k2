@@ -47,11 +47,45 @@ def _seg_seg(ax, ay, bx, by, cx, cy, dx, dy):
                _pt_seg(cx, cy, ax, ay, bx, by), _pt_seg(dx, dy, ax, ay, bx, by))
 
 
+def _pt_in_rect(px, py, hx, hy):
+    return abs(px) <= hx and abs(py) <= hy
+
+
+def _seg_rect_dist(ax, ay, bx, by, hx, hy):
+    """**精确**线段-轴对齐矩形距离（[-hx,hx]x[-hy,hy]；相交或内含 ⇒ 0）。**有界**（4 条边 · 无循环）。"""
+    if _pt_in_rect(ax, ay, hx, hy) or _pt_in_rect(bx, by, hx, hy):
+        return 0.0
+    e = ((-hx, -hy, hx, -hy), (hx, -hy, hx, hy), (hx, hy, -hx, hy), (-hx, hy, -hx, -hy))
+    return min(_seg_seg(ax, ay, bx, by, q[0], q[1], q[2], q[3]) for q in e)
+
+
+def _seg_roundrect_dist(ax, ay, bx, by, hx, hy, r):
+    """**精确**线段-圆角矩形距离。圆角矩形 ＝ 内矩形 `(hx-r, hy-r)` 与半径 `r` 圆盘之 **Minkowski 和**
+    ⇒ 距离 ＝ `max(0, dist(线段, 内矩形) - r)`。`r=0` ⇒ 直角矩形；`hx=hy=r` ⇒ 圆；`r=min/2` ⇒ 胶囊。"""
+    ix, iy = max(hx - r, 0.0), max(hy - r, 0.0)
+    return max(0.0, _seg_rect_dist(ax, ay, bx, by, ix, iy) - r)
+
+
 def _leg_clear(net, layer, p0, p1, obstacles, clear):
+    """某段是否与**异网同层**障碍保持 `clear` 间距。障碍两形：**胶囊** `(net,layer,ax,ay,bx,by,hw)`（走线/过孔/
+    圆/椭圆盘）与**真形圆角矩形** `(net,layer,bx0,by0,bx1,by1,0.0,"rect",cx,cy,hx,hy,r,rot)`（#K2-502：焊盘之
+    矩形角必须可见，否则 45° 逃逸会擦过邻盘之角 —— R1666 实测 0.1062mm 之两处 `clearance` 即此）。"""
     (x0, y0), (x1, y1) = p0, p1
-    for (onet, olayer, ax, ay, bx, by, hw) in obstacles:
-        if onet == net or olayer != layer:
+    for o in obstacles:
+        if o[0] == net or o[1] != layer:
             continue
+        if len(o) >= 8 and o[7] == "rect":
+            cx, cy, hx, hy, rr, rot = o[8], o[9], o[10], o[11], o[12], o[13]
+            a = math.radians(rot)
+            c_, s_ = math.cos(a), math.sin(a)
+            ux0, uy0 = x0 - cx, y0 - cy
+            ux1, uy1 = x1 - cx, y1 - cy
+            la0, lb0 = ux0 * c_ + uy0 * s_, -ux0 * s_ + uy0 * c_      # 变到焊盘自身坐标系（同 _pad_frame）
+            la1, lb1 = ux1 * c_ + uy1 * s_, -ux1 * s_ + uy1 * c_
+            if _seg_roundrect_dist(la0, lb0, la1, lb1, hx, hy, rr) < clear:
+                return False
+            continue
+        (onet, olayer, ax, ay, bx, by, hw) = o
         dist = _pt_seg(x0, y0, ax, ay, bx, by) if (ax == bx and ay == by) else _seg_seg(x0, y0, x1, y1, ax, ay, bx, by)
         if dist < clear + hw:
             return False
@@ -85,6 +119,27 @@ def pad_obstacle(net, layer, cx, cy, sx, sy, rot_deg=0.0):
     ux, uy = (c_, s_) if sx >= sy else (-s_, c_)          # 局部长轴单位向 → 板坐标
     return (net, layer, round(cx - ux * h, 4), round(cy - uy * h, 4),
             round(cx + ux * h, 4), round(cy + uy * h, 4), round(hw, 4))
+
+
+def pad_obstacle_shape(net, layer, cx, cy, sx, sy, rot_deg=0.0, round_r=0.0):
+    """#K2-502 ENGINE CAPABILITY —— **真形（圆角矩形）焊盘障碍**（`pad_obstacle` 之胶囊**内切**于焊盘 ⇒
+    焊盘**矩形角**对间隙判定**隐形**：45° 逃逸步会擦过邻盘之角；实测 `MCU_VDD` 逃逸擦 `C86:2[GND]` 角，
+    **精确几何 ＝ 0.1062mm ＝ KiCad DRC 自身读数**，而胶囊模型读 0.250 ⇒ 误判为净）。
+
+    圆角矩形 ＝ 内矩形 `(hx-r, hy-r)` 与半径 `r` 圆盘之 **Minkowski 和** ⇒ `_seg_roundrect_dist` 可**精确**
+    算间距；`CIRCLE/OVAL`（`r=min/2`）与 `RECT`（`r=0`）皆为其特例 ⇒ **同一表示精确覆盖全部常见焊盘形**。
+
+    元组：`(net, layer, bx0,by0,bx1,by1, 0.0, "rect", cx, cy, hx, hy, round_r, rot_deg)` —— 2..5 为该矩形
+    之 **AABB**（调用方之局部预筛沿用），7 为形状标签，`_leg_clear` 据 8..13 精确复算。间距口径与胶囊一致：
+    线段到**铜皮**之距 `< clear` 即拒（`clear` 已含走线自身半宽）。**纯函数 · 无循环 · 确定性。**
+    """
+    hx, hy = sx / 2.0, sy / 2.0
+    r = max(0.0, min(min(hx, hy), float(round_r)))
+    a = math.radians(rot_deg)
+    c_, s_ = math.cos(a), math.sin(a)
+    ex, ey = abs(hx * c_) + abs(hy * s_), abs(hx * s_) + abs(hy * c_)
+    return (net, layer, round(cx - ex, 4), round(cy - ey, 4), round(cx + ex, 4), round(cy + ey, 4), 0.0,
+            "rect", cx, cy, hx, hy, r, rot_deg)
 
 
 def _pad_frame(pad_rect):

@@ -57,8 +57,28 @@ def _copper_layers(b, pd, P):
     return lys
 
 
+def _true_corner_radius(P, pd, sx, sy):
+    """#K2-502：焊盘**真形圆角半径**（供 `pad_obstacle_shape` 之圆角矩形）。
+    `CIRCLE/OVAL` 恰为 圆角半径 `min(sx,sy)/2` 之圆角矩形；`ROUNDRECT` 带自身半径；其余（`RECT/TRAPEZOID/
+    CUSTOM`）取 `0` —— **直角矩形是真实形之超集** ⇒ 只会**多拒**、**绝不**假净（R1520 之病根是各向同性
+    `max/2` 造成假拒，本处不取该路）。"""
+    rm = min(sx, sy) / 2.0
+    try:
+        sh = pd.GetShape()
+    except Exception:                                          # noqa: BLE001
+        return 0.0
+    if sh in (P.PAD_SHAPE_CIRCLE, P.PAD_SHAPE_OVAL):
+        return rm
+    if sh == P.PAD_SHAPE_ROUNDRECT:
+        try:
+            return max(0.0, min(rm, P.ToMM(pd.GetRoundRectCornerRadius())))
+        except Exception:                                      # noqa: BLE001
+            return 0.0
+    return 0.0
+
+
 def read_board(board, rect, nets, only, planner, P, margin=5.0, max_pads=200000):
-    """**只读**：把板变成 (obstacles, target_pads)。障碍 ＝ 走线（精确）＋ 过孔（逐跨层）＋ 焊盘（**真形胶囊**）。"""
+    """**只读**：把板变成 (obstacles, target_pads)。障碍 ＝ 走线（精确）＋ 过孔（逐跨层）＋ 焊盘（**真形圆角矩形** · #K2-502）。"""
     b = P.LoadBoard(board)
     x0, y0, x1, y1 = [float(v) for v in rect]
 
@@ -101,8 +121,12 @@ def read_board(board, rect, nets, only, planner, P, margin=5.0, max_pads=200000)
             rot = _angle_deg(pd)
             if not near((cx, cy)):
                 continue
+            _rr = _true_corner_radius(P, pd, sx, sy)
             for ly in _copper_layers(b, pd, P):
-                obst.append(planner.pad_obstacle(nm, ly, cx, cy, sx, sy, rot))
+                # #K2-502: TRUE-shape (rounded rectangle) pad obstacle - a pad's rectangular corners must be
+                # visible to the escape clearance test (R1666: the inscribed capsule cleared two 45-degree
+                # escape steps that the exact geometry puts at 0.1062mm, i.e. real DRC clearance errors).
+                obst.append(planner.pad_obstacle_shape(nm, ly, cx, cy, sx, sy, rot, _rr))
             if inside((cx, cy)) and nm in nets:
                 key = "%s:%s" % (ref, pd.GetNumber())
                 if only and key not in only:
