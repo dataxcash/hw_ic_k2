@@ -1934,6 +1934,18 @@ class T(unittest.TestCase):
         self.assertEqual(len(db), 4000, "2000 lone tracks => 4000 free ends")
         self.assertLess(_el, 5.0, "the bounded detector must not spike the CPU (owner red line): %.2fs" % _el)
 
+    def test_C494_the_engine_reports_its_own_dangling_copper(self):
+        """TIAN TIAO #1 engine asset: board_dangling(path). The ENGINE builds the item list from a real board and
+        names its own floating copper (bounded by R1624's bucket index) - no agent assembling item lists. RED without
+        it. GREEN: a structural result (net/layer/at) over the baseline board."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr494b", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        res = mr.board_dangling(os.path.join(ROOT, verify.BASELINE_BOARD))
+        self.assertIsInstance(res, list)
+        for d in res[:5]:
+            self.assertIn("net", d); self.assertIn("layer", d); self.assertIn("at", d)
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised

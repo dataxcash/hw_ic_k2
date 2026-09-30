@@ -594,6 +594,44 @@ def dangling_ends(items, tol=0.02):
     return out
 
 
+def board_dangling(board_path, tol=0.02):
+    """#K2-494 ENGINE CAPABILITY: build the item list from a real board and return dangling_ends(...).
+
+    The engine - not an agent - assembles every copper item (tracks as centre-line+halfwidth, vias as zero-length
+    segments with their radius on EVERY layer of their span, pads as true-shape capsules on each layer they are on)
+    and then names its own floating copper with the bounded detector. Deterministic; bounded (R1624).
+    """
+    b = pcbnew.LoadBoard(board_path)
+    N2I = {LNAME[L]: L for L in LAYERS}
+    items = []
+    for t in b.GetTracks():
+        s, e = t.GetStart(), t.GetEnd()
+        if t.GetClass() == "PCB_VIA":
+            seq = list(t.GetLayerSet().Seq())
+            for L in seq:
+                items.append(("VIA", L, pcbnew.ToMM(s.x), pcbnew.ToMM(s.y), pcbnew.ToMM(s.x), pcbnew.ToMM(s.y),
+                              pcbnew.ToMM(t.GetWidth(seq[0])) / 2.0, t.GetNetname()))
+        else:
+            L = N2I.get(b.GetLayerName(t.GetLayer()))
+            if L is None:
+                continue
+            items.append(("TRK", L, pcbnew.ToMM(s.x), pcbnew.ToMM(s.y), pcbnew.ToMM(e.x), pcbnew.ToMM(e.y),
+                          pcbnew.ToMM(t.GetWidth()) / 2.0, t.GetNetname()))
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            pos = pd.GetPosition(); x, y = pcbnew.ToMM(pos.x), pcbnew.ToMM(pos.y)
+            sz = pd.GetSize(); sx, sy = pcbnew.ToMM(sz.x), pcbnew.ToMM(sz.y)
+            if sy >= sx:
+                a, c, hw = (x, y - (sy - sx) / 2.0), (x, y + (sy - sx) / 2.0), sx / 2.0
+            else:
+                a, c, hw = (x - (sx - sy) / 2.0, y), (x + (sx - sy) / 2.0, y), sy / 2.0
+            lys = ([N2I["F.Cu"], N2I["B.Cu"]] if pd.GetAttribute() == pcbnew.PAD_ATTRIB_PTH
+                   else ([N2I["F.Cu"]] if pd.IsOnLayer(pcbnew.F_Cu) else [N2I["B.Cu"]]))
+            for L in lys:
+                items.append(("PAD", L, a[0], a[1], c[0], c[1], hw, pd.GetNetname() or ""))
+    return dangling_ends(items, tol)
+
+
 def gap_violations(items, floor):
     """#K2-490/#K2-491 ENGINE CAPABILITY (pure, deterministic): the CLEARANCE AUDIT.
 

@@ -1714,6 +1714,18 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     chain.append({"stage": "endpoint_yield_sequence", "plans": len(yield_plans), "applied_to": resolved,
                   "errors": yield_miss})
 
+    # ── #K2-494 sec.3 ENGINE SELF-REPORT: the dangling-copper audit (bounded, named) ───────────────────────
+    try:
+        _iu8 = __import__("importlib").util
+        _sp8 = _iu8.spec_from_file_location("k2mr494", os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py"))
+        _mr8 = _iu8.module_from_spec(_sp8); _sp8.loader.exec_module(_mr8)
+        _dg8 = _mr8.board_dangling(resolved)
+        _bn8 = {}
+        for _d8 in _dg8:
+            _bn8[_d8["net"]] = _bn8.get(_d8["net"], 0) + 1
+        chain.append({"stage": "copper_dangling_audit", "n": len(_dg8), "by_net": dict(sorted(_bn8.items()))})
+    except Exception as _e8:                                    # noqa: BLE001
+        chain.append({"stage": "copper_dangling_audit", "err": type(_e8).__name__})
     d2c = os.path.join(work, "s2c_before_stitch_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d2c, resolved])
     st_plans, st_out = [], None
