@@ -611,6 +611,28 @@ def dangling_items(items, tol=0.02):
     return out
 
 
+def floating_items(items, tol=0.02):
+    """#K2-501 (narrowing the prune after the R1664 rerun): the CONSERVATIVE prune plan.
+
+    R1664's rerun pruned 40 items and broke 4 connections (C1 0 -> 4): dangling_items lists any item owning ONE
+    dangling end, and an escape stub is exactly that (its far end waits to be connected). This function lists only
+    items whose BOTH ends dangle - a fully floating island that touches neither another same-net item nor a pad.
+    One-ended stubs are PRESERVED (they are escape stubs / pending connections). Pads are never listed.
+    """
+    bad = dangling_ends(items, tol)
+    keys = {(round(d["at"][0], 4), round(d["at"][1], 4), d["layer"], d["net"]) for d in bad}
+    out = []
+    for i, it in enumerate(items):
+        k, l, x1, y1, x2, y2, hw, net = it
+        if k == "PAD":
+            continue
+        end1 = (round(x1, 4), round(y1, 4), l, net) in keys
+        end2 = (round(x2, 4), round(y2, 4), l, net) in keys
+        if end1 and end2:
+            out.append(i)
+    return out
+
+
 def dead_stages(chain):
     """#K2-501 ENGINE CAPABILITY (pure, deterministic): the "a dead segment kills the run" gate.
 

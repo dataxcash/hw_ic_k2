@@ -2040,6 +2040,23 @@ class T(unittest.TestCase):
         self.assertEqual(d[0]["at"], 1, "its position in the chain is reported")
         self.assertEqual(len(mr.dead_stages(chain + [{"stage": "x", "err": "Boom"}])), 2, "deterministic count")
 
+    def test_C501_floating_items_prunes_only_fully_floating_islands(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-501, narrowing the prune after R1664). RED without it (the
+        prune used dangling_items and broke C1 0->4). GREEN: only items whose BOTH ends dangle are listed; a
+        one-ended escape stub is PRESERVED; pads are never listed."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr501f", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        lone = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N")]
+        self.assertEqual(mr.floating_items(lone), [0], "a lone track is fully floating")
+        L = [("TRK", 0, 10.0, 10.0, 11.0, 10.0, 0.10, "N"), ("TRK", 0, 11.0, 10.0, 11.0, 11.0, 0.10, "N")]
+        self.assertEqual(mr.floating_items(L), [], "an L is connected at its joint => neither leg is fully floating")
+        stub = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N"), ("PAD", 0, 0.0, 0.0, 0.0, 0.0, 0.30, "N")]
+        # one end ON the pad, the far end free => owns ONE dangling end => a pending connection, never pruned
+        self.assertEqual(mr.floating_items(stub), [],
+                         "a one-ended stub must be preserved (escape stubs are one-ended by design)")
+        self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised

@@ -1722,7 +1722,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _sp8 = _iu8.spec_from_file_location("k2mr499", os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py"))
         _mr8 = _iu8.module_from_spec(_sp8); _sp8.loader.exec_module(_mr8)
         _it8 = _mr8.board_items(resolved)
-        _plan8 = _mr8.dangling_items(_it8)
+        _plan8 = _mr8.floating_items(_it8)   # #K2-501: fully-floating only (R1664: too-wide prune broke C1)
         _dg8 = _mr8.dangling_ends(_it8)
         _bn8 = {}
         for _d8 in _dg8:
