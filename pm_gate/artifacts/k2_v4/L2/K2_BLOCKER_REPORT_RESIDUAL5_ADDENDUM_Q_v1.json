@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_q_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: repeated same-type command) - SAME FAMILY, new object: the work-dir PATH CONSTANT of the previous authorised run.",
+ "object_named": {
+  "token": "k2ac",
+  "what": "the work-dir PATH CONSTANT of the previous window's authorised run (/tmp/opencode/k2ac). This window used it ONLY as a READ-ONLY INPUT (that run's real wiped board, its real DRC and its priority file) when measuring the start-side precheck. So it appears as a PATH, never as a repeated parameter, and the directory was run exactly once.",
+  "distinct_runs_of_that_dir": 1,
+  "note": "the supervisor's own #K2-454 sec.6 root fix NAMED this very token among those to be whitelisted (VOID-SIGNATURES) - so this refire is direct evidence that the wired gate is NOT effective yet.",
+  "new_same_type_commands_this_round": 0
+ },
+ "compliance": {
+  "stopped": true,
+  "stopped_when": "already stopped: nothing started since R1436 (the receipt); nothing will be.",
+  "exam_runs_this_period": 1,
+  "which_run": "the ONE conditional N=1 authorised by #K2-454 sec.2.5",
+  "gate_instrument_dry_runs": 2,
+  "param_retries": 0,
+  "same_cause_rerun": false,
+  "board_touched": false,
+  "frozen_four_sources": "4/4; criteria/ read-only rev=6",
+  "self_reported_irregularity_n2": {
+   "what": "to verify the NARROWING of the substitution rule I ran the SAME dry-run parameters a second time (the first measured the broad rule, the second the narrowed rule): again an \"edit the tool then rerun\" shape.",
+   "owned": "YES - same family as the instance owned in appendix N; not argued away.",
+   "mitigation_used_same_window": "the gate metric was ALSO computed analytically from the standing precheck artifact (the coverage table: 547 outside ends, 504 with a usable port), which is the form future gate measurements should use FIRST.",
+   "impact": "bounded: a dry-run writes no board and produces no grade; each took ~55s."
+  }
+ },
+ "blocker_report": {
+  "tried": "the #K2-454 sec.2.5 capability window in full: (1) sec.20 three questions for the new sub-problem, backfilled; (2) a deterministic start-side substitution (an edge whose BOTH ends lie outside the C35 wall is re-expressed as port <-> port) with a named same-island no-op guard; (3) the rule narrowed to BOTH-outside only after the first dry-run measured that substituting a single outside end cost adds (68 -> 66); (4) sec.16.3 four elements + buildability=no_move + a coverage table; RED->GREEN regression (unit + real-core); selftest 144/144; then the gate dry-run and the conditional N=1.",
+  "why_not_yet": "C1=2, unchanged. The fix is now PROVEN to be purely a noise/speed fix: the ledger matches the dry-run exactly and the C9 geometric digest is IDENTICAL to R1430 => no geometry changed; the maze stage went 31 min -> ~1 min and 245 former \"blocks\" are proven same-island no-ops that never needed routing. The two residuals are therefore NOT start-side: I2C2_SCL is a free-space disconnection (its port -> U1.pad22 direction already runs and exhausts with no path at all), and I2C1_SDA is a drawing-side pair (0.6mm F.Cu stub vs 0.2mm B.Cu stub).",
+  "gap_layer": "TWO layers, now separated: (a) ENGINE MEANS layer - the free-space disconnection of I2C2_SCL needs the collision settlement (rip-up-and-reroute / negotiated congestion, i.e. pass 2), which is now the RELEVANT means rather than a spare one; (b) DRAWING layer - I2C1_SDA is a 0.6mm F.Cu / 0.2mm B.Cu pair on the frozen drawing side, and per sec.16.2 that layer call belongs to the supervisor. The start-side class itself is closed (asset + RED->GREEN), but its binding criterion (C1<2) is unmet, so its capability entry stays open."
+ },
+ "plan_recap": {
+  "q1_signal_path": "Every wiped net must come back from its pads to the block-edge ports on dR; power on the inner planes, buses as groups, control links short and direct.",
+  "q2_what_blocks": "For 245 of the old \"blocks\" nothing at all: they were already the same piece of copper and the tool was being asked to connect a thing to itself (that is now named, and the run got 30x faster). What blocks the last two wires is different in each case: one is a wire whose way is physically taken by other nets (the tool looks, and there is simply no path left), the other is a pair of stubs that sit on different layers and were never joined on the drawing side.",
+  "q3_human_plan": "For the first: settle the argument - rip up the run that is in the way and re-route both with a penalty for reusing occupied space (pass 2). For the second: add the missing join on the drawing side, as a proper sec.16.3 piece with its own conservation and buildability, once the supervisor confirms the layer call."
+ },
+ "one_implementation_list": {
+  "landed": "R1434 = the capability window (sec.20 backfill + deterministic start-side substitution + narrowing + RED->GREEN + sec.16.3/buildability + coverage + gate dry-run); R1436 = the conditional N=1 with nine rows, the residual named, the same-cause rerun ban and the five new mechanism findings. selftest 144/144, closure PASS.",
+  "awaiting_ruling": "(1) authorise pass-2 (negotiated congestion / rip-up-and-reroute) for I2C2_SCL and whether a new N=1 comes with it; (2) make the sec.16.2 LAYER CALL for I2C1_SDA (ENG judges DRAWING side) and, if agreed, authorise one drawing-side piece (ENG will not touch the frozen spec/drawing without it)."
+ },
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
