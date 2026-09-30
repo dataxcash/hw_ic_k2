@@ -1,0 +1,19 @@
+{
+ "artifact": "k2_snap_node_rule_read_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-484 landing window, read-only diagnosis of the maze's no-free-start-node judgement (the blocker named in R1566 is upstream of the copper).",
+ "source": "tools/k2_p4_mroute_v1.py:530 snap_node(...) / :582 'if s is None: return None, \"no-free-start-node\"'",
+ "rule": "snap_node(grid, ctx, find, comp, net, layer, x, y, maxr=4) returns the first cell within maxr=4 CELL-steps of (x,y) that is BOTH (a) not blocked by the grid (grid.bad[layer]==0) AND (b) ON THE NET'S OWN ISLAND (node_in_island(ctx, find, comp, ...)). If none is found it returns None => the caller returns 'no-free-start-node'.",
+ "consequence": "no-free-start-node does NOT mean 'the endpoint cell is blocked'. It means: within ~4 coarse cells around the ENDPOINT ANCHOR (pa or pb) there is no cell that is simultaneously free AND owned by that endpoint's component. R1566 showed the pad cell and the corridor-end cell ARE free, so the failure must come from (a) the grid used there being MARGINED (_try_margin builds Grid(..., gm) with a positive margin), and/or (b) no free cell of the endpoint's OWN island lying within maxr of the anchor.",
+ "next_deterministic_candidates": [
+  "A. read _try_margin's margin schedule (MARGINS) and the coarse step actually used, then redo the snap_node check for this edge with the in-register Grid - a pure read that names which of (a)/(b) fires.",
+  "B. if it is the margin: the fix is a defence in the margin schedule for the last edge (deterministic, bounded) - NOT a copper change. If it is the island reach within maxr: A's stub may need to lie within maxr of the anchor."
+ ],
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change",
+  "no hardware landing"
+ ],
+ "OWNER-ITEMS": 0
+}
