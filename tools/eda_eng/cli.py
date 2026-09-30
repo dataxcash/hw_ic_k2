@@ -152,6 +152,8 @@ def main(argv=None):
     p.add_argument("--apply", help="apply a ROUTED plan JSON to the board")
     p.add_argument("--apply-batch", help="apply a batch of ROUTED plans (list) to the board")
     p.add_argument("--bound-rect", default=None, help="#K2-380: x0,y0,x1,y1 - refuse any plan that leaves it")
+    p.add_argument("--keep-islands", dest="keep_islands", action="store_true",
+                   help="#K2-513: keep un-anchored zone islands so a pour cannot drop outside-frame fill")
     p.add_argument("--mask-clear-mm", dest="mask_clear_mm", type=float, default=None,
                    help="#K2-385(b): refuse a plan whose copper would bridge the mask to a FOREIGN pad")
     p.add_argument("--out"); p.add_argument("--json-out")
@@ -453,7 +455,8 @@ def main(argv=None):
         if a.apply_batch:
             plans = json.load(open(a.apply_batch, encoding="utf-8"))
             r = route_mod.apply_routes(a.board, plans, a.out, bound_rect=_bound,
-                                       mask_clear_mm=getattr(a, "mask_clear_mm", None))
+                                       mask_clear_mm=getattr(a, "mask_clear_mm", None),
+                                       keep_islands=bool(getattr(a, "keep_islands", False)))
             return _emit(r, None, 0 if r.get("status") == "APPLIED" else 1)
         if a.apply:
             plan = json.load(open(a.apply, encoding="utf-8"))
