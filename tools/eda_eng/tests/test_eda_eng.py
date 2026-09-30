@@ -2057,6 +2057,23 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C513_the_pour_keeps_islands_end_to_end(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-513 sec.2 item 1). RED without it: the filler DROPS un-anchored
+        islands, so a pour after the wipe removes outside-frame fill whose in-frame anchor the wipe deleted - six
+        (net,layer) rows came out BELOW the reference (R1714/R1718). GREEN: the chain's own pour command really runs
+        with --keep-islands and produces a board. BEHAVIOURAL on purpose: R1720's source-string cut let a
+        NameError-before-load wiring bug through and the chain then died with W3_REFILL_FAILED."""
+        import subprocess, tempfile
+        d = tempfile.mkdtemp(prefix="k2c513_")
+        empty = os.path.join(d, "empty.json"); open(empty, "w").write("[]")
+        out = os.path.join(d, "poured.kicad_pcb")
+        cmd = [sys.executable, "-m", "tools.eda_eng", "route", "--apply-batch", empty, "--board", REF,
+               "--out", out, "--bound-rect", "22.95,32.95,51.5,78.0", "--keep-islands"]
+        env = dict(os.environ, PYTHONPATH=os.path.join(ROOT, "tools"))
+        r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=1800, env=env)
+        self.assertEqual(r.returncode, 0, r.stderr[-500:])
+        self.assertTrue(os.path.isfile(out), "the pour really produced a board")
+
     def test_C511_join_obstacles_use_the_true_pad_shape_not_the_inscribed_capsule(self):
         """TIAN TIAO #1 engine asset + regression (#K2-509 sec.2 item 2). RED: the join's foreign-pad obstacles came
         from board_items' INSCRIBED capsule, so a pad's rectangular corner was invisible and a leg could graze it.
