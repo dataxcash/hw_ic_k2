@@ -1,0 +1,14 @@
+{
+ "artifact": "k2_r1454_layer_call_objection_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-459 sec.2.5 ruled the lesion to the SOLUTION layer (\"the start point does not exist in the drawing\"). This artifact records, per sec.3 (evidence standard), the in-band measurements already on the record that CONFLICT with that premise, BEFORE any new drawing is produced.",
+ "conflicting_measurements": [
+  "R1440 (my own acceptance-caliber probe, floor 0.20, margin 3.0, step 0.10): the SAME pair the residual reports (port (51.5,56.6) -> U1 pad 22 (37.75,57.1625)) ROUTES with the FRAME as the domain - legs F.Cu/In5.Cu/F.Cu and two F<->In5 vias - and it was produced THROUGH mr.solve_edge, so seg_exact/via_exact ACCEPTED it. A \"start point\" for exactly this edge therefore EXISTS in the drawing, at the acceptance caliber.",
+  "R1450/R1452 measurement: the SINGLE-NET run (--only-net I2C2_SCL) succeeds (\"[astar] ok exp=11390\", added 1, blocked 0) while the FULL run fails the same call (no-free-start-node / earlier exhausted-42049). Same board, same parameters, same kernel, same patch chain, same guide => the differing variable is the PRESENCE OF THE OTHER NETS COPPER, i.e. contention - not the absence of a start point.",
+  "The residual reason string is no-free-start-node, which means \"no FREE start cell inside maxr=4 of the endpoint\" - it is about the occupancy mask being closed at that moment, not about the drawing lacking the entry."
+ ],
+ "why_this_matters": "the two candidate next means have DIFFERENT acceptance: (a) if the drawing lacks an entry -> a solution-layer drawing piece is the right fix; (b) if the entry exists but is sealed by other nets copper -> a drawing piece would duplicate copper that the R1440 witness shows is already routable, and the honest deliverable is a CONSERVATION-LEVEL analysis of that conflict set (which specific added items seal the port, and whether ANY assignment of them can free it). Producing (a) on a premise contradicted by (b) evidence would be exactly the \"keep changing the means on an unverified premise\" pattern the ruling itself forbids.",
+ "what_i_can_deliver_in_one_call": "a conservation-level conflict-set read for the port: enumerate the in-run added items whose clearance envelopes intersect the port search window, name them by net, and state whether removing them (rip-up) restores a legal start - i.e. the discriminator between (a) and (b).",
+ "status": "DELIVERED LATE AND PARTIAL: this window produced only this objection record; the sec.2.6 items 1-4 (solution-layer drawing / sec.20 backfill / deterministic implementation + RED->GREEN / selftest+closure) were NOT produced - declared, not pretended. Zero exam runs; nothing landed on the board.",
+ "OWNER-ITEMS": 0
+}
