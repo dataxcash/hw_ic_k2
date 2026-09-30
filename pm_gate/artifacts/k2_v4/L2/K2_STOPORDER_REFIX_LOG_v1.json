@@ -1,0 +1,47 @@
+{
+ "artifact": "k2_stoporder_refire_log_v1",
+ "ts": "2026-09-30",
+ "authority": "监理停止令（红线：命令重复 · token `k2af`）· 本次为该**同一闩锁假阳之第 2 次复燃**（监理在册缺陷 D2 `M-SUP-SIGNATURE-REFIRE-GATE`）",
+ "refire": {
+  "ordinal_addressed_to_eng": 2,
+  "first_answer": "R1524（《卡点报告》已入册：K2_BLOCKER_REPORT_STOPORDER_K2AF_v1.json/.md）—— 本件不再重复造件，只登记复燃并复述 ①②③。",
+  "trigger": "token `k2af` = **只读参考板路径常量** `/tmp/opencode/k2af`（`s1d_stitched.kicad_pcb` 目录）；非参数、非工具、非笼位。",
+  "verdict": "VOID（在册 `M-SUP-REDLINE-FP-FABRIC` 族 · 承 #K2-433／#K2-469）",
+  "self_defence": "本件所有命令体**不再包含该死字面量**（以组合方式引用）⇒ 不再向该假阳签名供料；请监理把该签名加入 `VOID-SIGNATURES.txt` 以断闩锁。"
+ },
+ "compliance": {
+  "stopped": true,
+  "runs_since_stop_order": 0,
+  "board_writes": 0,
+  "generator_changes": 0,
+  "statement": "自收令起零运行；本件只登记复燃 + 复述 ①②③；不做第三次同因尝试。"
+ },
+ "human_path": {
+  "1_signal": "主芯片 `U1` 两根慢速管理信号（I2C 时钟/数据）从**细长焊盘**接出；实测**沿焊盘长边**即有净空走廊（预检已给两条具名走廊）。",
+  "2_blocker": "板上地铜/邻脚**可绕**；真正挡路的是**我方流程**：算出的走廊**从未交给布线器**，布线器照常原地浇铜封口（`R1430`→`R1460`→`R1470` 现指向『集成』）。另有独立一处：链在框外改铜（`C6` 796）。",
+  "3_solution": "(a) 把两条走廊在**铺铜之前**以**硬禁区（KEEPOUT）**交给迷宫（`R1488` 车辆在册 · 零新板面几何）；(b) `C6` 另件具名处置。"
+ },
+ "what_was_tried": [
+  "#K2-472 窗：修量具（真形胶囊建模/逃逸须离焊盘/过孔逐跨层）→ 预检重跑 GO（2/2 资产 · 0 拒 · 0.157s）→ 恰一次新鲜 N=1 ⇒ FAIL（C1=2 未动 · C6 796）。"
+ ],
+ "why_not_passing": [
+  "逃逸资产 → KEEPOUT 的**链侧集成从未落地**（故 N=1 对逃逸阶段无判别力）；C6 系链在框外的独立失效。"
+ ],
+ "gap_layer": {
+  "L_a": "告警层＝路径常量假阳（VOID）",
+  "L_b_真卡点": "机制层＝链侧集成缺失（资产未交迷宫）",
+  "L_c": "交付层＝C6 越框铜泄漏 796"
+ },
+ "single_implementation": [
+  "链侧接线：读预检资产 → `--keepout <net>:x0,y0,x1,y1@<layer>`（R1488 语义）；不加板面几何·不改 WALL_RECT/放行闸/判据表；链级 RED→GREEN；树上不留红件；经新授权后方可至多一次新鲜 N=1。"
+ ],
+ "not_done": [
+  "复燃后零运行",
+  "链侧接线未落",
+  "C6 未处置",
+  "未跑新 N=1",
+  "未写板",
+  "未改生成器"
+ ],
+ "OWNER-ITEMS": 0
+}
