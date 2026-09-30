@@ -1,0 +1,14 @@
+{
+ "artifact": "k2_forced_start_substitution_regression_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-478 sec.3.3(1) (extend the substitution to starved IN-WALL endpoints) + sec.3.4 (the N=1 is conditional on the strict machine evidence) + the standing rule RED => revert in-window.",
+ "attempt": "force the escape port in as the anchor when the endpoint is starved (no-free-start-node / no-free-goal-node), inside the wall too; escape ports re-keyed 'p:x:y' so the maze's find() resolves them; _port_substitute gained force=True.",
+ "result": "REGRESSION - C1_connectivity 1 -> 5 (NRST, PERSTA#, P3V3_AUX, GND, I2C2_SCL); C6 diff 710. The strict machine evidence for I2C2_SCL is still span=False (17 objects, pad_comp None).",
+ "why_it_regressed": "a substitution REPLACES the edge's endpoint with an alias. The maze then routes from the ALIAS and the REAL endpoint is left unconnected BY CONSTRUCTION - it did not help I2C2_SCL and it broke four nets that were previously fine. So the substitution mechanism cannot express 'keep the real endpoint AND start from a free cell'.",
+ "conclusion": "B and every substitution variant are STRUCTURALLY WRONG for this job: they change the edge's identity. The mechanism that keeps the real endpoint while giving the net a free start cell is #K2-467 sec.2.1 item 4 / #K2-475 sec.3.2(3) option A: LAY THE ESCAPE COPPER (pre-approved). A fixed stub extends the net's ISLAND to a free cell, so the real endpoint stays the endpoint.",
+ "disposition": "reverted in-window (git checkout); tree back to the R1544 state; no red piece left.",
+ "candidate_after_A": {
+  "note": "with A, C6 (outside-frame copper) must be handled as the separate piece (#K2-475 sec.3.2(3) already requires it)."
+ },
+ "OWNER-ITEMS": 0
+}
