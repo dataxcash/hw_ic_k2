@@ -194,6 +194,10 @@ RIPUP = 0                 # #K2-456 sec.2.5: pass-2 rounds (0 = off; the chain s
 #   **但永远可以离开**（⇒ 引导**不可能**造成「构造性无解」—— 这正是 `R1420` 把 0.40mm 带当**硬域**踩到的坑：
 #   `C1 2→47`，`no-path-coarse(exhausted-1)=47`）。`None` ⇒ 无引导 ⇒ 既有调用**行为不变**。
 GUIDE = None
+# #K2-458 sec.2.5 teaching item 2 —— **逐格拥塞代价（present 部分）**：`AVOID = {"rects":[...], "penalty":f}`；
+#   落在这些矩形内的**格**每步 ×(1+penalty)（与 `GUIDE` 反向：GUIDE 奖励引导内、AVOID 惩罚已拥塞区）。
+#   `None` ⇒ 无代价（既有调用**行为不变**）。确定性（格掩码由矩形集合唯一确定）。
+AVOID = None
 
 
 class Grid:
@@ -230,6 +234,21 @@ class Grid:
                     for _j in range(_j0, _j1 + 1):
                         gf[_i * self.ny + _j] = 1
             self.gflag = gf
+        # #K2-458：逐格拥塞代价掩码（惩罚区）
+        self.aflag = None
+        self.apen = 0.0
+        if AVOID:
+            self.apen = float(AVOID.get("penalty") or 0.0)
+            af = bytearray(self.nx * self.ny)
+            for (_ax0, _ay0, _ax1, _ay1) in (AVOID.get("rects") or []):
+                _ai0 = max(0, int(math.floor((_ax0 - self.x0) / self.step)))
+                _ai1 = min(self.nx - 1, int(math.ceil((_ax1 - self.x0) / self.step)))
+                _aj0 = max(0, int(math.floor((_ay0 - self.y0) / self.step)))
+                _aj1 = min(self.ny - 1, int(math.ceil((_ay1 - self.y0) / self.step)))
+                for _ai in range(_ai0, _ai1 + 1):
+                    for _aj in range(_aj0, _aj1 + 1):
+                        af[_ai * self.ny + _aj] = 1
+            self.aflag = af
         if os.environ.get("K2MR_DBG"):
             sys.stderr.write("[grid] step=%.2f %dx%d cells=%d mark=%.1fs\n" %
                              (step, self.nx, self.ny, self.nx * self.ny, _t.time() - _t0))
@@ -442,6 +461,8 @@ def astar(grid, ctx, net, s, g, sl, gl, fine=False):
             if grid.bad[L][ni * ny + nj]: continue
             if di and dj and (grid.bad[L][i * ny + nj] or grid.bad[L][ni * ny + j]): continue
             _gc = 1.0 if (grid.gflag is None or grid.gflag[ni * ny + nj]) else (1.0 + grid.gpen)
+            if grid.aflag is not None and grid.aflag[ni * ny + nj]:
+                _gc = _gc * (1.0 + grid.apen)                 # #K2-458: present-cost on congested cells
             nd = d + step * (math.sqrt(2) if di and dj else 1.0) * _gc
             nn = nid(L, ni, nj)
             if nd < dist[nn] - 1e-9:
@@ -621,7 +642,7 @@ EDGE_IN = (0.0, 0.0, 0.0, 0.0)
 
 
 def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist_asc", order_list=None):
-    global EDGE_IN
+    global EDGE_IN, AVOID
     b = pcbnew.LoadBoard(src)
     ctx = f3.Ctx(b)
     holes = []
@@ -809,9 +830,24 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         _hist = {}                                        # 每网：历轮**被阻断次数**＝history 代价
         _best = (len(blocked), added, blocked, blocks)
         _order = list(edges)
+        _CELL = 2.0                                            # 粗格 2mm（固定 · 非试探）
+        _x0f, _y0f, _x1f, _y1f = EDGE_IN
         for _r in range(int(RIPUP)):
             _unwind()
             _a, _b, _k = _pass(_order)
+            # #K2-458 sec.2.5 教令 ②（present）：由**本轮已加入的真铜**统计粗格占用（≥2 件＝拥塞），
+            # 作为**下一轮**的逐格惩罚区 ⇒ 下一轮 A* 会**主动避让**已拥塞区（present 代价），
+            # 与每网 history 排序合为 present+history 协商。
+            _occ = {}
+            for _t in ctx.tracks[_b_tr:]:
+                _cx = int((_t["x1"] - _x0f) // _CELL); _cy = int((_t["y1"] - _y0f) // _CELL)
+                for _c in {(_cx, _cy), (int((_t["x2"] - _x0f) // _CELL), int((_t["y2"] - _y0f) // _CELL))}:
+                    _occ[_c] = _occ.get(_c, 0) + 1
+            _avoid = [(_x0f + _k0 * _CELL, _y0f + _k1 * _CELL,
+                       _x0f + (_k0 + 1) * _CELL, _y0f + (_k1 + 1) * _CELL)
+                      for (_k0, _k1), _c in _occ.items() if _c >= 2]
+            mr_avoid = {"rects": _avoid, "penalty": 2.0} if _avoid else None
+            AVOID = mr_avoid
             _nb = len(_b)
             _trail = {"round": _r, "blocked": _nb, "best": _best[0],
                       "adopted": None, "history_nets": sorted(_hist)}
