@@ -448,22 +448,11 @@ def dispose_isolated_copper(board_path, drc_json, out_path, rect=None):
                     "is reloaded so the disposal stands alone) - outside-frame copper must not change."}
 
 
-def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None, keep_islands=False):
+def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):
     """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。
     `bound_rect`（#K2-380 §二.3 收尾道 · **新增可选参数，默认不改老行为**）：落板前**框外坐标检查** ——
     任何折线/过孔越出声明域 ⇒ **fail-closed 拒收并具名**，绝不落板。"""
     import pcbnew as P
-    if keep_islands:
-        # #K2-513 sec.2 item 1 (ENG): the filler DROPS "un-anchored" islands, so a pour after the wipe removes
-        # outside-frame fill whose in-frame anchor the wipe deleted (R1714/R1718: six rows below the reference).
-        # Keeping the islands preserves the outside coverage by construction; anything genuinely isolated is still
-        # named by the DRC and judged by the chain's own isolated-copper gate.
-        _never = getattr(P, "ISLAND_REMOVAL_MODE_NEVER", 1)
-        for _z in b.Zones():
-            try:
-                _z.SetIslandRemovalMode(_never)
-            except Exception:                                      # noqa: BLE001
-                pass
     if bound_rect:
         _x0, _y0, _x1, _y1 = [float(v) for v in bound_rect]
         _eps = 1e-6
