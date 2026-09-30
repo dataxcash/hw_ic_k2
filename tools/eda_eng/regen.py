@@ -1714,16 +1714,42 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     chain.append({"stage": "endpoint_yield_sequence", "plans": len(yield_plans), "applied_to": resolved,
                   "errors": yield_miss})
 
-    # ── #K2-494 sec.3 ENGINE SELF-REPORT: the dangling-copper audit (bounded, named) ───────────────────────
+    # ── #K2-494/#K2-499 ENGINE: audit the dangling copper AND prune it with the in-register CLI verb ───────
+    #    IN-FRAME ONLY: pruning outside-frame copper would move C6 (outside-copper-unchanged), which is a
+    #    separate caliber - so the prune is restricted to items whose both ends are inside the block rect.
     try:
         _iu8 = __import__("importlib").util
-        _sp8 = _iu8.spec_from_file_location("k2mr494", os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py"))
+        _sp8 = _iu8.spec_from_file_location("k2mr499", os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py"))
         _mr8 = _iu8.module_from_spec(_sp8); _sp8.loader.exec_module(_mr8)
-        _dg8 = _mr8.board_dangling(resolved)
+        _it8 = _mr8.board_items(resolved)
+        _plan8 = _mr8.dangling_items(_it8)
+        _dg8 = _mr8.dangling_ends(_it8)
         _bn8 = {}
         for _d8 in _dg8:
             _bn8[_d8["net"]] = _bn8.get(_d8["net"], 0) + 1
-        chain.append({"stage": "copper_dangling_audit", "n": len(_dg8), "by_net": dict(sorted(_bn8.items()))})
+        chain.append({"stage": "copper_dangling_audit", "n": len(_dg8), "n_items": len(_it8),
+                      "by_net": dict(sorted(_bn8.items()))})
+        _rx0, _ry0, _rx1, _ry1 = [float(v) for v in rect]
+        _spec8 = []
+        for _i8 in _plan8:
+            _k8 = _it8[_i8]
+            if _k8[0] != "TRK":
+                continue
+            if not (_rx0 <= _k8[2] <= _rx1 and _ry0 <= _k8[3] <= _ry1 and _rx0 <= _k8[4] <= _rx1 and _ry0 <= _k8[5] <= _ry1):
+                continue                                       # in-frame only (C6-safe)
+            _spec8.append({"layer": _mr8.LNAME[_k8[1]], "net": _k8[7],
+                           "a": [round(_k8[2], 4), round(_k8[3], 4)], "b": [round(_k8[4], 4), round(_k8[5], 4)]})
+        if _spec8:
+            _spj8 = os.path.join(work, "dangling_items.json")
+            json.dump(_spec8, open(_spj8, "w", encoding="utf-8"))
+            _pr8 = os.path.join(work, "s2d_pruned.kicad_pcb")
+            _run8 = subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_remove_copper_v1.py"),
+                                    "--board", resolved, "--items", _spj8, "--out", _pr8],
+                                   cwd=ROOT, capture_output=True, text=True, timeout=1800)
+            if _run8.returncode == 0 and os.path.isfile(_pr8):
+                resolved = _pr8
+            chain.append({"stage": "copper_dangling_prune", "n_planned": len(_spec8),
+                          "exit": _run8.returncode, "out": os.path.basename(resolved)})
     except Exception as _e8:                                    # noqa: BLE001
         chain.append({"stage": "copper_dangling_audit", "err": type(_e8).__name__})
     d2c = os.path.join(work, "s2c_before_stitch_drc.json")
