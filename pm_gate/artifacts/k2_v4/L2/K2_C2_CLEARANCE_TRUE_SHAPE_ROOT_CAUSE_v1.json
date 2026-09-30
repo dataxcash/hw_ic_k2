@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_c2_clearance_true_shape_root_cause_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-493 sec.2 item 2 required the two `clearance` items to be adjudicated with the item's OWN recorded geometry: real violation (fix the obstacle model) vs measurement-model difference (name + archive). The previous read (K2_C2_CLEARANCE_MEASUREMENT_MODEL_DIFFERENCE_v1) took the ENGINE'S capsule model as the arbiter and concluded 'measurement-model difference'. This read takes KiCad's OWN pad geometry as the arbiter and REVERSES that disposition.",
+ "method": "load the chain's own board (k2i1/s2_resolved.kicad_pcb) with pcbnew, read each DRC item's real pad shape (GetShape/GetSize/GetPosition and the exact track start/end/width), and compute the exact segment-to-rounded-rectangle distance with the same geometry KiCad uses.",
+ "result": {
+  "item_A": {
+   "drc": "clearance 间距 0.2000 实际 0.1062 走线 [MCU_VDD] (F.Cu) 0.5657mm @(31.1,62.85)  <->  F.Cu 上 C86 的焊盘 2 [GND] @(32.0,62.85)",
+   "pad": "C86:2 [GND] shape=RECT size=0.6x0.7 at (32.0,62.85) rot=0 -> half-extents (0.3,0.35), r=0",
+   "track": "MCU_VDD F.Cu width 0.2 from (31.1,62.85) to (31.5,63.25) (a 45-degree escape step)",
+   "exact_centreline_to_pad_edge_mm": 0.2062,
+   "exact_edge_to_edge_with_a_0.2mm_leg_mm": 0.1062,
+   "drc_reading_mm": 0.1062,
+   "verdict": "REAL VIOLATION (the engine's own exact geometry reproduces the DRC's number to 4 decimals)"
+  },
+  "item_B": {
+   "drc": "clearance 间距 0.2000 实际 0.1062 走线 [PERSTA#] (F.Cu) 0.5657mm @(50.05,39.0)  <->  F.Cu 上 R1 的焊盘 2 [P3V3_AUX] @(50.95,39.0)",
+   "pad": "R1:2 [P3V3_AUX] shape=RECT size=0.6x0.7 at (50.95,39.0) rot=0",
+   "track": "PERSTA# F.Cu width 0.2 from (50.05,39.0) to (50.45,39.4) (a 45-degree escape step)",
+   "exact_edge_to_edge_with_a_0.2mm_leg_mm": 0.1062,
+   "verdict": "REAL VIOLATION (same geometry, same number)"
+  },
+  "why_the_previous_read_was_wrong": "the engine's obstacle model represented every pad as the INSCRIBED CAPSULE (long-axis stadium, hw = min(size)/2). An inscribed capsule is a SUBSET of the pad, so the pad's rectangular CORNER lies outside the obstacle and is invisible to the clearance test. At (31.1,62.85) the tested flank is the pad corner: the capsule read 0.250, the exact rect reads 0.1062."
+ },
+ "fix_landed": {
+  "asset": "k2_pin_escape_plan_v1.pad_obstacle_shape() = TRUE rounded-rectangle pad obstacle + exact segment-to-rounded-rectangle distance in _leg_clear; k2_pin_escape_precheck_v1._true_corner_radius maps KiCad's pad shape onto r",
+  "shape_coverage": "one representation is exact for ALL common pads: CIRCLE/OVAL (r = min/2), RECT (r = 0), ROUNDRECT (its own radius); TRAPEZOID/CUSTOM fall back to r = 0 (a superset -> can only refuse more, never falsely clear)",
+  "prevention_not_cleanup": "the offending copper is never laid (rather than pruned afterwards), so connectivity cannot be traded away for clearance"
+ },
+ "evidence_read_only": {
+  "board": "k2i1/s1e_stitched_addendum.kicad_pcb (exactly the board the chain hands to the escape stage)",
+  "before_assets": 27, "before_go": true,
+  "after_assets": 27, "after_go": true, "after_refused": 0,
+  "unchanged": 24,
+  "changed": [
+   {"net": "MCU_VDD", "old": [31.1, 62.85, 31.5, 63.25], "new": [31.1, 62.85, 31.1, 63.25], "why": "was the DRC offender at C86:2"},
+   {"net": "PERSTA#", "old": [50.05, 39.0, 50.45, 39.4], "new": [50.05, 39.0, 50.05, 39.4], "why": "was the DRC offender at R1:2"},
+   {"net": "NRST", "old": [27.55, 51.9, 27.95, 52.3], "new": [27.55, 51.9, 27.55, 52.3], "why": "latent third case of the same grazing geometry"}
+  ],
+  "reading": "no pad loses its escape and no connectivity is given up; the three 45-degree steps that grazed a neighbour pad's corner become orthogonal steps that clear it by construction."
+ },
+ "regression": "test_C502_escape_clearance_uses_the_true_pad_shape (RED: the capsule model clears the step; GREEN: the true shape refuses both DRC offenders, reproduces 0.1062mm to 4 decimals, CIRCLE pads remain exactly a disc, other-layer/same-net/far copper untouched). Suite via the in-register shell: 163/163 PASS (EXIT=0).",
+ "caliber_note": "the clearance floor used by the escape planner is the frozen value (clear=0.30 = the 0.20 DRC clearance + the 0.10 leg half-width); criteria rev=6 and the judging table are untouched. Nothing here changes a criterion - it changes whether the engine's own copper obeys it.",
+ "not_done": ["no board write", "no exam run", "no criteria/threshold change", "no frozen-source change"],
+ "OWNER-ITEMS": 0
+}
