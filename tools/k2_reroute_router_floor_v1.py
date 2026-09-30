@@ -170,6 +170,38 @@ def _set_step(mode):
         _FINE, _FINE_NUM = False, float(mode)
 
 
+def _outside_wall(pt, wall, eps=1e-9):
+    """#K2-454：点是否落在 C35 墙（框图）**之外**。墙 = `--bound-rect`（`mr.WALL_RECT`）。"""
+    if not wall:
+        return False
+    return not (wall[0] - eps <= pt[0] <= wall[2] + eps and wall[1] - eps <= pt[1] <= wall[3] + eps)
+
+
+def _port_substitute(pt, layer, wall, ports):
+    """#K2-454 sec.2.4/2.5 —— **起点侧替换**（确定性 · 零搜索 · 不改迷宫本体／墙／放行闸）。
+
+    **病灶**（`R1430` 实测）：端点的代表锚**落在 C35 框外**时，迷宫**永远起不了步** —— 墙被刻意下在**搜索环路内**
+    （#K2-378／R1020：事后恢复框外铜已被实测否决），框外每一格都是 `bad` ⇒ `snap_node` 找不到自由起点格 ⇒
+    `no-free-start-node`。268 条阻断里 **265 条两端皆在框外**、`endpoint_own_cell_hits=0`。
+
+    **正解**：框外铜**是本链刻意保留的**（`outside_halves_kept=15` · `n_ports=15`）—— 它的 **∂R 端口就是接点**。
+    故把「框外端点」**换成该网最近的 ∂R 端口**（L1 距离；平手按 `(x, y, layer, uuid)` 定序取最小）。
+    **框内端点原样返回**（`None`）· **无端口可用 ⇒ 原样返回**（退回今日行为 · 由既有重试兜底）。
+
+    返回 `(pt2, layer2, port_uuid_or_None)`。
+    """
+    if not _outside_wall(pt, wall):
+        return pt, layer, None
+    best = None
+    for (_pl, _px, _py, _tpu) in sorted(ports, key=lambda z: (z[1], z[2], z[0], str(z[3]))):
+        d = (_px - pt[0]) ** 2 + (_py - pt[1]) ** 2
+        if best is None or d < best[0]:
+            best = (d, (_px, _py), _pl, _tpu)
+    if best is None:
+        return pt, layer, None
+    return best[1], best[2], best[3]
+
+
 def _norm_layer(layer, lname2id):
     """#K2-452 sec.2.4 item 3 —— **根因修复**：迷宫的 `grid.bad` 以 **pcbnew 层 ID**（int）为键，而端口焊盘表
     `mr._PORT_PADS` 存的是**层名**（'F.Cu'）。层名直接透传 ⇒ 每次「端口回退」都在 `snap_node` 的
@@ -279,6 +311,28 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
         h0 = OWN_CELL["hits"]
         # ── #K2-452 sec.2.4 item 2：**软引导**（偏好/代价）—— 在**不改域**的前提下给迷宫一个偏好 ────────────
         # 引导只改 `astar` 的**步代价**（引导外 ×(1+penalty)），**绝不堵格** ⇒ 永远可离开 ⇒ **不可能饿死**。
+        # ── #K2-454 sec.2.4/2.5：**起点侧替换**（框外端点 → 该网 ∂R 端口）· 在任何求解之前 ──────────────
+        # 确定性 · 零搜索 · 不动 `WALL_RECT`/放行闸/迷宫本体；两个端点皆被替换且落到**同一铜岛** ⇒ 具名 no-op（不加铜）。
+        if _saved is not None:
+            _prts = _ports(ctx, net)
+            # #K2-454 refinement (measured by the dry-run precheck): substitute ONLY when BOTH ends are outside the wall.
+            # Substituting a single outside end REPLACED working retry formulations (R1430 had 13 edges that only
+            # succeeded through the retry: reachable_via_port) and collapsed them into same-island no-ops, costing adds
+            # (68 -> 66). The both-outside case is the one the retry can NEVER fix, because both of its directions still
+            # pass one outside end.
+            if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved):
+                _pa, _la2, _tpa = _port_substitute(pa, la, _saved, _prts)
+                _pb, _lb2, _tpb = _port_substitute(pb, lb, _saved, _prts)
+                if _tpa is not None:
+                    _ca = find(_tpa) if str(_tpa).startswith("p:") else find("t:" + str(_tpa))
+                    if _ca is not None:
+                        pa, la, compa = _pa, _la2, _ca
+                if _tpb is not None:
+                    _cb = find(_tpb) if str(_tpb).startswith("p:") else find("t:" + str(_tpb))
+                    if _cb is not None:
+                        pb, lb, compb = _pb, _lb2, _cb
+                if compa == compb:
+                    return None, "no-op-after-port-substitution(same-island)"
         _GD = getattr(mr, "_GUIDES", {})
         _gsaved = getattr(mr, "GUIDE", None)
         if net in _GD:

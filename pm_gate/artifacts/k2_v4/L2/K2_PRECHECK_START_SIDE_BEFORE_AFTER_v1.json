@@ -1,0 +1,62 @@
+{
+ "artifact": "k2_precheck_start_side_before_after_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-454 sec.2.5 gate: the conditional N=1 may only run if the IN-BAND PRECHECK shows a significant drop in the no-free-start-node blocks relative to the 281 failures. This is that measurement: a --dry-run of the SAME wrapper on the SAME wiped board with the SAME channels/guide (no board written, no grading).",
+ "inputs": {
+  "board": "/tmp/opencode/k2ac/s1d_stitched.kicad_pcb",
+  "board_sha256_16": "d7363e3a6ed04bb5",
+  "drc": "/tmp/opencode/k2ac/s1_wiped_drc.json",
+  "drc_sha256_16": "8dc495a240e0500e",
+  "channels_args": "identical to the R1430 run (hard n_nets=18 + soft n_guide=48, guide_source=joint-per-corridor)",
+  "note": "a dry-run stops after the ledger is written (k2_p4_mroute_v1.py:792) => no board, no grading, and it is the very instrument the ruling names."
+ },
+ "before_R1430": {
+  "added": 68,
+  "blocked": 268,
+  "segs": 636,
+  "vias": 60,
+  "len": 576.7708,
+  "reasons": {
+   "no-free-start-node": 267,
+   "no-path-coarse(exhausted-5693)": 1
+  },
+  "precheck_n_failed_edges": 281,
+  "precheck_unreachable": 268,
+  "precheck_via_port": 13,
+  "precheck_endpoint_own_cell_hits": 23
+ },
+ "after_start_side_substitution": {
+  "added": 67,
+  "blocked": 269,
+  "segs": 636,
+  "vias": 60,
+  "len": 576.7708,
+  "reasons": {
+   "no-free-start-node": 23,
+   "no-op-after-port-substitution(same-island)": 245,
+   "no-path-coarse(exhausted-5693)": 1
+  },
+  "precheck_n_failed_edges": 36,
+  "precheck_unreachable": 24,
+  "precheck_via_port": 12,
+  "precheck_endpoint_own_cell_hits": 21
+ },
+ "gate_verdict": {
+  "metric": "no-free-start-node blocks",
+  "before": 267,
+  "after": 23,
+  "drop_pct": 91.4,
+  "unreachable_list": {
+   "before": 268,
+   "after": 24
+  },
+  "significant": "YES - the class the ruling names collapses by 91%."
+ },
+ "three_mechanism_findings": [
+  "245 of the former no-free-start-node blocks are, once expressed correctly (port <-> port), SAME-ISLAND NO-OPS: they never needed routing at all. They were pure noise that cost two doomed retry solves each - which is why the maze stage took ~31 min in R1430 and ~1 min now.",
+  "The remaining 23 are genuinely start-blocked: P3V3 x21, P3V3_AUX x2 (plus I2C2_SCL x1 which is the R1430 residual and fails with no-path-coarse(exhausted-5693) instead: a free-space disconnection, NOT a start problem).",
+  "Geometry is UNCHANGED where it matters: segs 636, vias 60, len 576.7708 - byte-identical to R1430. The only count change is added 68 -> 67, and that one is a PHANTOM: with the correct formulation it becomes a named no-op, i.e. the previous run counted an add that produced no copper (consistent with I2C1_SDA still being unconnected on the final board)."
+ ],
+ "honest_scope": "class A (both ends outside the wall) is fixed and the gate is met. It does NOT target the two R1430 residuals: I2C2_SCL is a free-space disconnection inside the frame, and I2C1_SDA is a drawing-side pair. So C1 may well stay 2 - the conditional run measures that, it does not promise a win.",
+ "OWNER-ITEMS": 0
+}

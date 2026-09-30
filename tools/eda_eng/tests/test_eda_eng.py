@@ -1571,6 +1571,59 @@ class T(unittest.TestCase):
         self.assertIn("_norm_layer(_l, _LNAME2ID)", src, "the port table must be normalised at the source")
         self.assertIn("_LNAME2ID = {mr.LNAME[L]: L for L in mr.LAYERS}", src)
 
+    def test_C454_an_endpoint_OUTSIDE_the_wall_must_start_from_its_dR_port(self):
+        """#K2-454 sec.2.4/2.5 RED->GREEN (the next means: endpoint start-node reachability). MEASURED lesion (R1430):
+        265 of 268 blocked edges had BOTH representative ends OUTSIDE the C35 wall, endpoint_own_cell_hits=0, and the
+        port retry still passed the outside point as one of the two ends - so both directions were doomed. RED = an
+        endpoint outside the wall cannot obtain a start cell (snap_node returns None => no-free-start-node). GREEN =
+        the outside copper is KEPT by construction and its dR port IS the connection point: substitute the net's nearest
+        port for that endpoint and the maze starts legally (wall, exact gates and the maze core untouched)."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2floor454",
+                                                    os.path.join("tools", "k2_reroute_router_floor_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        wall = (0.0, 0.0, 5.0, 2.0)
+        # the substitution itself (pure, deterministic; zero search)
+        ports = [(11, 3.5, 2.0, "t:uB"), (11, 0.5, 2.0, "t:uA")]
+        self.assertTrue(m._outside_wall((0.5, 3.5), wall)); self.assertFalse(m._outside_wall((0.5, 2.0), wall))
+        self.assertEqual(m._port_substitute((0.5, 3.5), 11, wall, ports), ((0.5, 2.0), 11, "t:uA"),
+                         "an OUTSIDE endpoint must be replaced by the NEAREST same-net dR port")
+        self.assertEqual(m._port_substitute((4.5, 1.0), 11, wall, ports), ((4.5, 1.0), 11, None),
+                         "an INSIDE endpoint must pass through untouched")
+        self.assertEqual(m._port_substitute((0.5, 3.5), 11, None, ports), ((0.5, 3.5), 11, None),
+                         "no wall => nothing to substitute")
+        self.assertEqual(m._port_substitute((0.5, 3.5), 11, wall, []), ((0.5, 3.5), 11, None),
+                         "no port => fall back to today's behaviour (the existing retry)")
+        # the lesion itself, at unit scale, on the REAL maze core
+        sp2 = importlib.util.spec_from_file_location("k2mr454", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp2); sp2.loader.exec_module(mr)
+
+        class _Ctx:
+            pads, vias = {}, {}
+            holes, edge, keep_t, keep_v = [], [], [], []
+            # the net's OWN copper crosses the wall: a kept outside stub that ends exactly ON the port cell
+            tracks = [{"net": "N", "layer": mr.F_CU, "x1": 0.5, "y1": 3.5, "x2": 0.5, "y2": 1.0,
+                       "hw": 0.1, "uuid": "u1"}]
+
+        ctx = _Ctx(); find = lambda k: "R"      # one island; node_in_island only needs the root to match
+        mr.WALL_RECT = wall
+        g = mr.Grid(ctx, "N", 0.25, 0.0, 0.0, 5.0, 5.0, 0.0)
+        self.assertIsNone(mr.snap_node(g, ctx, find, "R", "N", mr.F_CU, 0.5, 3.5),
+                          "RED: an endpoint outside the wall gets NO start cell")
+        s = mr.snap_node(g, ctx, find, "R", "N", mr.F_CU, 0.5, 2.0)
+        self.assertIsNotNone(s, "GREEN: the dR port cell (on the wall, on the net's own copper) IS a legal start")
+        path, why = mr.astar(g, ctx, "N", s, (18, 4), mr.F_CU, mr.F_CU)
+        mr.WALL_RECT = None
+        self.assertEqual(why, "ok", "from the substituted port the maze solves normally (no-new-permission: gates unchanged)")
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("_port_substitute(pa, la, _saved, _prts)", src, "the substitution must be wired BEFORE the solve")
+        self.assertIn("if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved):", src,
+                      "ONLY the both-outside case may be substituted: a single outside end is already handled by the "
+                      "retry, and re-formulating it (measured in the #K2-454 dry-run) collapsed 13 working retry routes "
+                      "into same-island no-ops and cost adds (68 -> 66)")
+        self.assertIn("no-op-after-port-substitution(same-island)", src,
+                      "two substituted ends landing on one island must be a NAMED no-op, never phantom copper")
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python

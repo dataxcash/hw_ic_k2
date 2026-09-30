@@ -157,5 +157,35 @@
    "consequence": "the expansion = ADD a bounded soft cost surface to the in-register maze (+ wrapper --guide / --guide-penalty plumbing + a loud refusal of multi-slot HARD channels) and COPY the PF2 cost shape and in5_ripup calibration lessons; the rip-up-and-reroute LOOP itself is the next step and needs its own authorisation."
   },
   "OWNER-ITEMS": 0
+ },
+ "M_ENG_PORT_REACHABILITY_DRAWING": {
+  "ts": "2026-09-30",
+  "authority": "#K2-454 sec.2.4/2.5: the next means is ruled to be ENDPOINT START-NODE REACHABILITY, so the product three questions must be answered and backfilled for THIS sub-problem BEFORE code is touched.",
+  "scope": "an edge whose representative endpoint lies OUTSIDE the C35 frame cannot obtain a start cell: the wall is applied INSIDE the search loop (#K2-378/R1020, kept deliberately), and R1430 measured 265 of 268 blocks with BOTH ends outside and endpoint_own_cell_hits=0. The sub-problem = give such an endpoint a LEGAL start without letting the router wander outside the frame.",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES - three in-repo mechanisms already exist for exactly this: (a) the wipe deliberately KEEPS the outside halves and names 15 dR PORTS (chain stage wipe: \"outside_halves_kept\": 15, \"n_ports\": 15) - i.e. the product decision \"the outside stub is the connection point\" is already made; (b) the port-aware-goal lever (#K2-393/#K2-431, --port-refs) makes an in-region connector pad or a dR port a legitimate GOAL; R1430 showed it WORKING for every edge that has an inside end (13 x reachable_via_port); (c) the D1 endpoint-own-cell relaxation (#K2-412 sec.4.3) is the same idea one step further: a bounded, exact-gated relaxation that lets a legal start exist on the net OWN copper. Plus tools/k2_reroute_affected_v2.py (C17 v1) = the clip -> island-MST stitch -> snap -> bounded repair product.",
+   "external": "YES for shape only (licence-blocked for copying): every real autorouter has an ESCAPE/FANOUT pass that treats \"get the pad (or the stub) out to a legal routing grid\" as its own stage (KiCad interactive router + fanout tooling, FreeRouting, commercial tools); the classic literature frames it as escape routing on a grid outside the pad.",
+   "reading": "the same-kind product EXISTS in-repo and the missing half is only the START side of it: the outside stub is already the designated connection point, but the maze is still asked to start from the endpoint anchor OUTSIDE the wall."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/eda_eng/regen.py (wipe_resolve_chain): COPY the dR-port ledger semantics - the 15 kept outside halves with their ports ARE the endpoints of the inside route.",
+    "tools/k2_reroute_router_floor_v1.py::_ports() / the port-goal retry: COPY the mechanism wholesale, but call it as the PRIMARY formulation (substitute the port for an outside endpoint) instead of as a retry that still passes the outside point.",
+    "tools/k2_reroute_router_floor_v1.py::_own_copper_cell / _lift_prune (D1): COPY the discipline - bounded radius, C35 wall still held, seg_exact/via_exact release gates unchanged, one cell relaxed at a time.",
+    "tools/k2_reroute_affected_v2.py (C17 v1): COPY the bounded-repair shape if a second stage is ever needed."
+   ],
+   "reference_library": "P6_execution/P6_OPEN_READINESS/ (TI DS320PR1601 EVM anchors) + this ledger; backfilled here for the new sub-problem. The standing honest note: no file literally named REF-CASE-LIBRARY exists.",
+   "reading": "the copy target is unambiguous and small: substitute the net dR port for an outside endpoint, deterministically and BEFORE the solve, reusing _ports(). No new algorithm."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "START SIDE: --port-refs makes a port a GOAL; nothing makes an outside endpoint START from its port. R1430: 267 of 268 blocks were the start side (no-free-start-node) and every retry still passed the OUTSIDE point as one of the two ends, so both retry directions were doomed.",
+    "NO RULE for \"the anchor is outside the wall\": the wall is applied inside the search loop and the outside half is kept, but no component ever re-expresses the edge as \"port <-> the other end\".",
+    "The D1 relaxation only helps an endpoint that IS inside the frame and masked over; it deliberately refuses out-of-wall cells."
+   ],
+   "consequence": "the expansion = ADD a deterministic START-side substitution (outside endpoint -> the net dR port, nearest by L1 with a fixed tie-break) in front of the solve, with a RED->GREEN regression; the wall, the exact gates and the maze core stay untouched, and nothing lands on the board until an authorised run.",
+   "NOT_in_scope": "the R1430 residuals I2C2_SCL and I2C1_SDA are NOT of this class end to end: I2C2_SCL IS a port edge but the port->U1.pad22 search EXHAUSTED with no path at all (a free-space disconnection), and I2C1_SDA is not a maze edge at all (a 0.6mm F.Cu stub vs a 0.2mm B.Cu stub = a DRAWING-side pair). Both are named in the sec.16.3 artifact for the supervisor to rule on."
+  },
+  "OWNER-ITEMS": 0
  }
 }
