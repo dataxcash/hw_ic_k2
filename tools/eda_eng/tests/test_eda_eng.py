@@ -1861,6 +1861,11 @@ class T(unittest.TestCase):
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn("_ko = [", r); self.assertIn('"stage": "band_keepout"', r)
         self.assertIn("*_ko, *_charg])", r)
+        # #K2-473 sec.3.3: the ESCAPE assets are wired into the SAME hard-keepout argument (one --keepout, ';'-joined),
+        # computed on the board the maze reads, with a loud chain record.
+        self.assertIn('"stage": "escape_keepout"', r)
+        self.assertIn("assets_to_keepouts(_ed.get(\"assets\") or [], _enets)", r)
+        self.assertIn("_ko = [\"--keepout\", \";\".join(_ko_items)]", r)
 
     def test_C467_the_pin_escape_planner_is_deterministic_bounded_and_fail_closed(self):
         """#K2-467 (owner chose A; the lesion was re-characterised as the MISSING STANDARD STAGE): a pin access / escape
@@ -1902,6 +1907,11 @@ class T(unittest.TestCase):
         self.assertEqual((ob[2], ob[3], ob[4], ob[5]), (-0.5875, 0.0, 0.5875, 0.0), "capsule along the long axis")
         self.assertEqual(m.pad_obstacle('N', 'F.Cu', 0.0, 0.0, 0.30, 1.475)[2:6], (0.0, -0.5875, 0.0, 0.5875))
         self.assertEqual(m.pad_obstacle('N', 'F.Cu', 0.0, 0.0, 0.40, 0.40), ('N', 'F.Cu', 0.0, 0.0, 0.0, 0.0, 0.2))
+        # R1488 HARD-KEEPOUT WIRING (#K2-473 sec.3.3): an escape asset becomes one keepout entry per OTHER target net
+        # (the corridor is reserved FOR its owner). Deterministic, arithmetic only.
+        kz = m.assets_to_keepouts([{"net": "N", "layer": "F.Cu", "a": [0.0, 0.0], "b": [0.0, 1.0]}], ["N", "M"], clear=0.30)
+        self.assertEqual(kz, ["M:-0.3,-0.3,0.3,1.3@F.Cu"], "the owner must NOT be kept out; every other net must be")
+        self.assertTrue(all(not s.startswith("N:") for s in kz), "a net must never be kept out of its own corridor")
         self.assertTrue(m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], three, clear=C)["go"], "GREEN: precheck GO")
         # (A) LONG THIN PAD, short axis enclosed, long axis open => the TRUE shape escapes along its LONG axis.
         longpad = ('N', 'F.Cu', 0.0, 0.0, 0.15, 0.7375)

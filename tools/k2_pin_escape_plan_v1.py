@@ -58,6 +58,21 @@ def _leg_clear(net, layer, p0, p1, obstacles, clear):
     return True
 
 
+def assets_to_keepouts(assets, kept_out_nets, clear=0.30):
+    """把逃逸资产变成**硬保留**串（`R1488` `KEEPOUT` 语义：具名网**不得**使用该格 · 非代价 · 非偏好）。
+    每个资产 ⇒ 对**除其自身外**的每个 `kept_out_nets` 出一条 ⇒ 该走廊**为该网独占预留**。
+    保护矩形 ＝ 资产段外扩 `clear`（＝冻结判据里的间距，含走线半宽）。**确定性**（排序）· 纯算术（无 `while`）。
+    返回 `["net:x0,y0,x1,y1@layer", ...]`。"""
+    out = []
+    for a in sorted(assets, key=lambda x: (x["net"], x["layer"], x["a"][0], x["a"][1], x["b"][0], x["b"][1])):
+        x0, x1 = sorted((a["a"][0], a["b"][0]))
+        y0, y1 = sorted((a["a"][1], a["b"][1]))
+        r = (round(x0 - clear, 4), round(y0 - clear, 4), round(x1 + clear, 4), round(y1 + clear, 4))
+        for n in sorted(set(kept_out_nets) - {a["net"]}):
+            out.append("%s:%s,%s,%s,%s@%s" % (n, r[0], r[1], r[2], r[3], a["layer"]))
+    return out
+
+
 def pad_obstacle(net, layer, cx, cy, sx, sy, rot_deg=0.0):
     """**焊盘真形建模**（#K2-472 §3.4(1)）：细长焊盘 ⇒ **沿长轴之胶囊**（段半长 `(max-min)/2` · 半宽 `min/2`）。
     方形/圆形焊盘 ⇒ **退化为点 ＋ 半径 `min/2`** —— **绝不**用各向同性 `max/2`（R1520 之病根：细长脚被当圆盘 ⇒ 短边肥 4.92× ⇒ **造出假拒绝**）。

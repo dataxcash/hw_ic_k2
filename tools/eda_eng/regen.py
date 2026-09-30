@@ -1547,17 +1547,43 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                           else "W1B_CHANNELS_FAILED"), "chain": chain}
     _charg = _cr["args"]
     # #K2-465 sec.2.4 item 2: the chain reads the machine-readable v4 piece and passes a HARD keepout
-    _ko = []
+    _ko_items = []
     try:
         _kr = os.path.join(os.path.dirname(stitch_spec or ""), "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json")
         if stitch_spec and os.path.isfile(_kr):
             _draw = json.load(open(_kr, encoding="utf-8"))["sec16_3_four_elements"]["3_corrected_complete_construction_drawing"]
             _br, _kn, _kl = _draw.get("band_rect_mm"), _draw.get("kept_out_net"), (_draw.get("layer") or "F.Cu")
             if _br and _kn:
-                _ko = ["--keepout", "%s:%s,%s,%s,%s@%s" % (_kn, _br[0], _br[1], _br[2], _br[3], _kl)]
+                _ko_items.append("%s:%s,%s,%s,%s@%s" % (_kn, _br[0], _br[1], _br[2], _br[3], _kl))
     except Exception:                                          # noqa: BLE001
-        _ko = []
-    chain.append({"stage": "band_keepout", "args": _ko, "source": "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json"})
+        pass
+    # -- #K2-473 sec.3.3 CHAIN WIRING: hand the PIN-ESCAPE assets to the maze as HARD keepouts (in effect BEFORE the
+    #    pour). The precheck is computed on the SAME board the maze will read (wiped) => every corridor is reserved
+    #    against the OTHER target nets (R1488 semantics: the named net may not use those cells). No new board
+    #    geometry; WALL_RECT / release gate / criteria untouched; arithmetic only (no while-loop). A failure is
+    #    recorded LOUDLY in the chain, never a silent no-op.
+    _esc_rec = {"stage": "escape_keepout", "source": "k2_pin_escape_precheck_v1.py", "go": None, "n_assets": 0, "n_args": 0}
+    try:
+        _iu3 = __import__("importlib").util
+        _sp3 = _iu3.spec_from_file_location("k2pe473", os.path.join(ROOT, "tools", "k2_pin_escape_plan_v1.py"))
+        _pe = _iu3.module_from_spec(_sp3); _sp3.loader.exec_module(_pe)
+        _eout = os.path.join(work, "escape_precheck.json")
+        _enets = list(GAP_NETS) + ["I2C2_SCL"]
+        _er = subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_pin_escape_precheck_v1.py"),
+                              "--board", wiped, "--rect", ",".join(str(x) for x in rect),
+                              "--nets", ",".join(_enets), "--out", _eout],
+                             cwd=ROOT, capture_output=True, text=True, timeout=1800)
+        _ed = json.load(open(_eout, encoding="utf-8"))["reading"] if os.path.isfile(_eout) else {}
+        _kols = _pe.assets_to_keepouts(_ed.get("assets") or [], _enets)
+        _ko_items += _kols
+        _esc_rec.update({"go": bool(_ed.get("go")), "n_assets": len(_ed.get("assets") or []),
+                         "n_refused": len(_ed.get("refused") or []), "n_args": len(_kols), "exit": _er.returncode})
+    except Exception as _e4:                                    # noqa: BLE001
+        _esc_rec["err"] = type(_e4).__name__
+    chain.append(_esc_rec)
+    _ko = ["--keepout", ";".join(_ko_items)] if _ko_items else []
+    chain.append({"stage": "band_keepout", "args": _ko,
+                  "source": "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json + escape assets (#K2-473 sec.3.3)"})
     resolved = os.path.join(work, "s2_resolved.kicad_pcb")
     led = os.path.join(work, "s2_ledger.json")
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
