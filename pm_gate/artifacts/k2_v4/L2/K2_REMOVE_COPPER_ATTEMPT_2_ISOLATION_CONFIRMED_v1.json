@@ -1,0 +1,20 @@
+{
+ "artifact": "k2_remove_copper_attempt_2_isolation_confirmed_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-495 (add the remove-copper engine op + regression, then wire the prune). Two attempts, both reverted; R7 (same sub-problem, 2nd non-closure => source-level only, no third mechanism).",
+ "attempt_1_R1634": "the regression called the board-mutating op IN the test process => 22 errors (mine + 21 collateral). DIAGNOSIS: the testsuite-isolation doctrine - board mutation must never run in-process.",
+ "attempt_2_R1636": "same asset, regression moved into a SUBPROCESS. Result: the 21 collateral errors VANISHED (the isolation diagnosis is CONFIRMED), but my own test still FAILED (1 failure) - the child subprocess did not satisfy the assertions (child stderr not surfaced in the run I could see; no budget left to iterate).",
+ "confirmed_findings": [
+  "board-mutating code in the test process poisons ~21 unrelated tests (isolation doctrine confirmed by experiment)",
+  "the subprocess form removes the collateral damage entirely"
+ ],
+ "engine_code_status": [
+  "board_items(board_path) and remove_items(board_in, board_out, items) are written and syntax-clean but are NOT landed (reverted with the tests) - they are the right shape and only their regression/first-run behaviour is unproven."
+ ],
+ "disposition": "reverted in-window (zero damage; the green point R1630 stands). Per R7 this sub-problem now goes back to the supervisor instead of a third mechanism attempt.",
+ "next_if_authorised": [
+  "surface the child stderr (the one missing read) and fix the child script/assertion, then land the asset",
+  "only then wire dangling_items -> remove_items/stitch into the chain and close C2.track_dangling against the reference caliber (<= ref, not absolute zero)."
+ ],
+ "OWNER-ITEMS": 0
+}
