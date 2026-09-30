@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_exam_a_n1_r1552_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-480 sec.3.3/3.4 (run A for real; strict machine evidence; one fresh N=1; the same piece must output the C6 attribution reading).",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "work": "/tmp/opencode/k2f1",
+  "verdict": "FAIL"
+ },
+ "A_executed": {
+  "stage": "escape_layer_stitch",
+  "n_lines": 27,
+  "n_added": 27,
+  "n_refused": 0,
+  "note": "A is NOT inert this time - 27 fixed escape stubs were laid before the maze."
+ },
+ "result": {
+  "C1_connectivity": {
+   "unconnected": 1,
+   "pass": false
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 768,
+   "pass": false
+  },
+  "remaining_residual": "I2C2_SCL: U1 pad 22 (37.75,57.1625) <-> its 9.3mm frame-port track (51.5,56.6)"
+ },
+ "conclusion": "A EXECUTED and the residual did NOT close: C1 stayed 1. The pad's island now reaches the corridor end (0.8mm), but the ~13.76mm haul to the frame port is still not routed. So the remaining cause is NOT the start cell (now provided) but the long-haul route itself. Per #K2-480 sec.3.4's termination clause (A also failing => no more variants => sec.15.3 supervisor-domain deliberation, NOT owner), no further variant is attempted.",
+ "C6_attribution_reading": {
+  "diff": 768,
+  "reading": "the outside-frame differences are dominated by GND copper on In1.Cu at the frame edge (x ~= 51.5), e.g. ('GND','In1.Cu',51.5,39.951,89.6,39.951). The 27 escape stubs are all INSIDE the frame and are not the C6 driver."
+ },
+ "discipline": "selftest 152/152 before the run (explicit exit code); closure PASS; no same-cause rerun; a C6 fix is a separate piece.",
+ "OWNER-ITEMS": 0
+}
