@@ -1909,6 +1909,22 @@ class T(unittest.TestCase):
         D = ("TRK", 4, 0.0, 0.306, 2.0, 0.306, 0.10, "N2")        # another layer => never reported
         self.assertEqual(mr.gap_violations([A, D], 0.200), [])
 
+    def test_C493_the_dangling_ends_detector_names_a_free_end(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-493 sec.2.3): the 'a short end must not dangle' detector.
+        RED (pre-fix: the engine has no dangling_ends, so it cannot name floating copper). GREEN: a lone track has
+        two free ends; an L made of two touching tracks has none; a track ending ON a same-net pad has none there."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr493", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        lone = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N")]
+        self.assertEqual(len(mr.dangling_ends(lone)), 2, "a lone track has two free ends")
+        L = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N"), ("TRK", 0, 1.0, 0.0, 1.0, 1.0, 0.10, "N")]
+        self.assertEqual(len(mr.dangling_ends(L)), 2, "the L joint is connected; only its two far ends dangle")
+        onpad = [("TRK", 0, 0.0, 0.0, 1.0, 0.0, 0.10, "N"), ("PAD", 0, 0.0, 0.0, 0.0, 0.0, 0.30, "N")]
+        d = mr.dangling_ends(onpad)
+        self.assertEqual(len(d), 1, "only the end away from the pad dangles")
+        self.assertEqual(d[0]["at"], [1.0, 0.0])
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
