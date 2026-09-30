@@ -2057,6 +2057,26 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C504_outside_copper_is_compared_geometrically_not_by_zone_vertices(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-503 sec.3.1). RED without it: C6 compared zone fill by its
+        VERTEX SET, so a re-polygonisation of the SAME copper was reported as a change (817 of 819). GREEN: zone
+        copper is compared by OUTSIDE COVERAGE AREA, which is invariant under re-polygonisation."""
+        sq = [(0, 0), (10, 0), (10, 10), (0, 10)]
+        inA = block._poly_area_mm2(block._clip_poly_rect(sq, [2, 2, 8, 8]))
+        self.assertAlmostEqual(inA, 36.0, places=6, msg="clipped area is exact")
+        self.assertAlmostEqual(block._poly_area_mm2(sq) - inA, 64.0, places=6, msg="outside area is exact")
+        # the same square enumerated as two different polygonisations must be area-equivalent
+        two_tri = [[(0, 0), (10, 0), (10, 10)], [(0, 0), (10, 10), (0, 10)]]
+        four_quad = [[(0, 0), (5, 0), (5, 5), (0, 5)], [(5, 0), (10, 0), (10, 5), (5, 5)],
+                     [(0, 5), (5, 5), (5, 10), (0, 10)], [(5, 5), (10, 5), (10, 10), (5, 10)]]
+        a = [block._poly_area_mm2(p) for p in two_tri]; b = [block._poly_area_mm2(p) for p in four_quad]
+        outside_a = sum(block._poly_area_mm2(p) - block._poly_area_mm2(block._clip_poly_rect(p, [2, 2, 8, 8])) for p in two_tri)
+        outside_b = sum(block._poly_area_mm2(p) - block._poly_area_mm2(block._clip_poly_rect(p, [2, 2, 8, 8])) for p in four_quad)
+        self.assertAlmostEqual(outside_a, outside_b, places=6, msg="re-polygonisation does NOT move the coverage")
+        rect = [22.95, 32.95, 51.5, 78.0]
+        self.assertTrue(block.outside_copper_equivalent(REF, REF, rect)["equivalent"], "a board against itself")
+        self.assertEqual(block.zone_outside_area(REF, rect), block.zone_outside_area(REF, rect), "deterministic")
+
     def test_C503_the_outside_copper_delta_is_named_not_a_single_number(self):
         """TIAN TIAO #1 engine asset + regression (#K2-503). RED without it: the C6 read is ONE number (819) that
         cannot be acted on - R1676 showed 817 of it was zone-fill edge churn and only 2 were real copper. GREEN:

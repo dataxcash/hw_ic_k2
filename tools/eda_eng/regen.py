@@ -1889,8 +1889,15 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     dj = os.path.join(work, "s4_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final])
     # #K2-444 sec.2.4: this C6 row uses the ZONE-AWARE outside-copper read (#K2-442 sec.2.7 / #K2-443 sec.2.2).
-    c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect, include_zones=True),
-                             _blk.outside_geometry(B0, rect, include_zones=True))
+    # #K2-503 sec.3.1 (ENG): the C6 read is now the GEOMETRIC-EQUIVALENT caliber - real copper (segments/vias)
+    # stays an EXACT multiset compare, zone fill is compared by OUTSIDE COVERAGE AREA per (net,layer), so a
+    # re-polygonisation of the SAME copper is no longer reported as a change (R1676: 817 of the 819 were that).
+    # The judging-table semantics and thresholds are untouched; "outside copper unchanged" is still exactly
+    # "no real copper change AND the zone coverage is unchanged".
+    _c6eq = _blk.outside_copper_equivalent(final, B0, rect)
+    c6 = {"diff": _c6eq["real_diff"], "equal": _c6eq["equivalent"],
+          "zone_area_delta": _c6eq["zone_area_delta"], "n_zone_delta": _c6eq["n_zone_delta"],
+          "tol_area_mm2": _c6eq["tol_area_mm2"], "caliber": "geometric-equivalent (zone by coverage area)"}
     c6_legacy = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
     # C36（#K2-388 §七.2）：A″ 链必须在**实际执行的路径**上逐行读数 —— 补 C8（成员零越框）

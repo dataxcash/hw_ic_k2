@@ -980,6 +980,101 @@ def attribute_delta(cur, ref, zone_keys=()):
                     "copper change are different findings and must never be reported as one number."}
 
 
+def _poly_area_mm2(pts):
+    """鞋带公式之**绝对**面积（mm²）。确定性 · 有界。"""
+    a = 0.0
+    n = len(pts)
+    for i in range(n):
+        x1, y1 = pts[i]; x2, y2 = pts[(i + 1) % n]
+        a += x1 * y2 - x2 * y1
+    return abs(a) / 2.0
+
+
+def _clip_poly_rect(pts, rect):
+    """Sutherland–Hodgman：简单多边形 × 凸矩形（4 半平面 · 固定次数 · 无 while）。返回多边形点列（可空）。"""
+    x0, y0, x1, y1 = [float(v) for v in rect]
+    planes = ((lambda p: p[0] >= x0, 0, x0), (lambda p: p[0] <= x1, 0, x1),
+              (lambda p: p[1] >= y0, 1, y0), (lambda p: p[1] <= y1, 1, y1))
+    for (inside, axis, lim) in planes:
+        if not pts:
+            return []
+        out = []
+        n = len(pts)
+        for i in range(n):
+            a, b = pts[i], pts[(i + 1) % n]
+            ia, ib = inside(a), inside(b)
+            if ia:
+                out.append(a)
+            if ia != ib:
+                da, db = a[axis], b[axis]
+                t = 0.0 if abs(db - da) < 1e-15 else (lim - da) / (db - da)
+                out.append((a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])))
+        pts = out
+    return pts
+
+
+def zone_outside_area(board, rect):
+    """#K2-504 ENGINE CAPABILITY：zone 填充在 rect **之外**的**铜面积**（mm² · 按 `(net,layer)` 聚合）。
+
+    **为什么是面积**：灌铜**重多边形化**会换掉顶点集而**覆盖域不变**；`zone_fill_segments` 的逐边比对
+    会把这种**非变更**报成变更（R1676：819 里 817 是这种）。面积是覆盖域之**不变量**（重分解不变），
+    因此是「框外铜不变」的正确读数。**只读 · 确定性 · 有界**（无搜索 · 无 while）。
+    """
+    import pcbnew as P
+    _b = board
+    if isinstance(_b, str):
+        _b = P.LoadBoard(_b)
+    acc = collections.defaultdict(float)
+    for z in _b.Zones():
+        try:
+            net = z.GetNetname()
+            for lid in z.GetLayerSet().CuStack():
+                layer = _b.GetLayerName(lid)
+                if not layer.endswith(".Cu"):
+                    continue
+                lid = _b.GetLayerID(layer)                # 与 zone_fill_segments 同注：必须用 GetLayerID
+                poly = z.GetFilledPolysList(lid)
+                for i in range(poly.OutlineCount()):
+                    ch = poly.Outline(i)
+                    n = ch.PointCount()
+                    pts = [(P.ToMM(ch.CPoint(j).x), P.ToMM(ch.CPoint(j).y)) for j in range(n)]
+                    tot = _poly_area_mm2(pts) - _poly_area_mm2(_clip_poly_rect(pts, rect))
+                    try:
+                        for h in range(poly.HoleCount(i)):
+                            hc = poly.Hole(i, h)
+                            hn = hc.PointCount()
+                            hp = [(P.ToMM(hc.CPoint(j).x), P.ToMM(hc.CPoint(j).y)) for j in range(hn)]
+                            tot -= _poly_area_mm2(hp) - _poly_area_mm2(_clip_poly_rect(hp, rect))
+                    except Exception:                     # noqa: BLE001
+                        pass
+                    acc[(net, layer)] += tot
+        except Exception:                                 # noqa: BLE001
+            continue                                      # per-zone: one bad zone must not void the rest
+    return {k: round(v, 6) for k, v in acc.items() if abs(v) > 1e-9}
+
+
+def outside_copper_equivalent(final, ref, rect, tol_area=1e-3, nd=3):
+    """#K2-504 ENGINE CAPABILITY：C6「框外铜不变」的**几何等价口径**（#K2-503 §三.1 执行令）。
+
+    `真实铜`（段＋孔）＝ **精确多重集**比对（不变）；`灌铜` ＝ **框外面积按 (net,layer) 等价**（容差
+    `tol_area` mm²）—— 灌铜**重多边形化**（同覆盖域 · 异顶点集）**不再**被误报为变更。
+    判据表语义与阈值**零触碰**："框外铜不变"仍严格＝**无真实铜变更** ∧ **灌铜覆盖不变**。
+    """
+    real = geometry_equal(outside_geometry(final, rect, nd=nd), outside_geometry(ref, rect, nd=nd))
+    af, ar = zone_outside_area(final, rect), zone_outside_area(ref, rect)
+    rows = {}
+    for k in sorted(set(af) | set(ar), key=lambda t: (str(t[0]), str(t[1]))):
+        d = round(af.get(k, 0.0) - ar.get(k, 0.0), 6)
+        if abs(d) > tol_area:
+            rows["%s|%s" % k] = {"final": af.get(k, 0.0), "ref": ar.get(k, 0.0), "delta": d}
+    return {"equivalent": (real["diff"] == 0) and (not rows),
+            "real_diff": real["diff"], "real_only_in_final": real["only_in_a"], "real_only_in_ref": real["only_in_b"],
+            "zone_area_delta": rows, "n_zone_delta": len(rows), "tol_area_mm2": tol_area,
+            "rule": "#K2-504 / #K2-503 sec.3.1: 'outside copper unchanged' is GEOMETRIC - a zone fill covering the "
+                    "same domain is unchanged even when re-filling enumerates different vertices (C6's vertex-set "
+                    "read reported 817 such non-changes). Real segments/vias stay an EXACT multiset compare."}
+
+
 def outside_copper_delta(final, ref, rect, nd=3):
     """#K2-503 ENGINE CAPABILITY：C6「块外铜零改动」读数的**具名分解**（zone-aware 口径，判据不动）。
 
