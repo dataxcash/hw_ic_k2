@@ -1,0 +1,78 @@
+{
+ "artifact": "k2_sec16_3_contention_resolution_i2c2scl_v2",
+ "ts": "2026-09-30",
+ "supersedes": "K2_SEC16_3_CONTENTION_RESOLUTION_I2C2SCL_v1.json (R1462, fail-closed by #K2-462 sec.2.3; not edited in place)",
+ "authority": "#K2-462 sec.2.5 (bounded completion) + sec.16.3 (four elements) + sec.13",
+ "sec16_3_four_elements": {
+  "1_one_line_cause_of_death": "On the pass-1 board the F.Cu free space between the dR port (51.5,56.6) and U1 pad 22 (37.75,57.1625) is CUT: the port component holds 3757 cells and the pad is NOT in it. The only SEALER is GND on F.Cu (102 boundary cells over the band x=[46.75,50.35], y=[53.6,60.1]); PCIE_DN_OUT4_P_MCIO (10) sits at the window edge only. No routing assignment on that layer can free the channel: the sealing copper must YIELD.",
+  "2_verified_fact_list": [
+   "R1460 (K2_CONTENTION_CUT_READ_v1): pad_reachable=false; port component 3757 cells; 73 boundary obstacle cells; sealers GND (F.Cu) 66 then PCIE_DN_OUT4_P_MCIO 7 (BLOCKER-CELL caliber).",
+   "K2_START_CELL_DISCRIMINATOR_v1 (R1456): the start cell exists and nothing seals it => NOT a missing drawing entry.",
+   "R1440 witness: with the corridor free the same pair routes (F.Cu/In5.Cu/F.Cu + two F<->In5 vias), accepted by seg_exact/via_exact at floor 0.20.",
+   "R1462 ZONE CENSUS (NEW, this v2): inside the relocation band the F.Cu copper belongs to GND 19 items BUT ALSO MCU_VDD 17 and I2C1_SDA 14 => clearing the whole box would cut two other nets; the relocation must target the GND SEAL ONLY.",
+   "R1462 ZONE CENSUS (NEW): zero pads of any net inside the band and zero vias within 0.4mm of it => no other-net reference transition sits in the band."
+  ],
+  "3_corrected_complete_construction_drawing": {
+   "kind": "RELOCATION LIST (buildability = relocation_listed) - v2, bounded completion of the R1462 piece",
+   "band_geometry": "F.Cu band x=[46.75, 50.35], y=[53.6, 60.1] (3.6 x 6.5 mm = 23.4 mm2), derived from the sealing cells. CALIBERS (one each, named): sealer COUNT = boundary-obstacle cells of the free-space component (GND 66, PCIE 7); EXTENT = per-net bounding box of those cells (GND above; PCIE x=[53.95,54.45], y=[59.8,60.1]).",
+   "items_to_yield": [
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "sealer_cells": 66,
+     "items_in_band": 19,
+     "bbox_mm": [
+      46.75,
+      53.6,
+      50.35,
+      60.1
+     ],
+     "from_where": "the GND F.Cu copper inside the band above (its 19 items) - it is the SEAL that disconnects the port from the pad",
+     "to_where": "nowhere new is added for GND: GND is a POUR/PLANE net, so the band is declared a GND relocation zone and the continuity is restored by the zone stages the chain already runs (pour_aware_unfill -> refill -> pour_islands_repair). The freed area is handed to the I2C2_SCL route exactly along the R1440 witness (F.Cu/In5.Cu + two F<->In5 vias near x=48.05,y=56.7 and x=37.75,y=56.2)."
+    },
+    {
+     "net": "PCIE_DN_OUT4_P_MCIO",
+     "layer": "F.Cu",
+     "sealer_cells": 7,
+     "items_in_band": 0,
+     "bbox_mm": [
+      53.95,
+      59.8,
+      54.45,
+      60.1
+     ],
+     "from_where": "outside the corridor (x>=53.95)",
+     "to_where": "no move required; listed for completeness only"
+    }
+   ],
+   "preserve_list": [
+    {
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "items_in_band": 17,
+     "why": "NOT part of the seal (its copper is not on the reached component boundary) - it must be kept; the refill/route must respect its clearance, which the existing seg_exact/via_exact gates already enforce"
+    },
+    {
+     "net": "I2C1_SDA",
+     "layer": "F.Cu",
+     "items_in_band": 14,
+     "why": "same: keep; it is the very net of the already-filed cross-layer addendum"
+    }
+   ],
+   "authority_for_the_move": "L2 in-domain re-route under #K2-461 sec.2.7 item 2 (the authorised solution-layer deliverable) as bounded-completed by #K2-462 sec.2.5; executed through the chain own drawing/zone path (no frozen source is edited; the revision is this versioned addendum _v2). No topology / interface / pin-map change (not L1).",
+   "ref_plane_continuity": "DECIDABLE FACT, not a policy: the band is sealed by GND ALONE (R1460) and contains no pad of any net and no via within 0.4mm (R1462 zone census). The two other nets crossing the band (MCU_VDD, I2C1_SDA) are F.Cu SIGNALS whose reference is the adjacent INNER plane, not the F.Cu pour - so removing GND F.Cu copper in the band creates NO reference/return transition for them. Therefore ZERO NEW STITCHING HOLES are required for this move; if the final route or refill ever needs GND re-stitching, the already-landed via class (F<->In5 / F<->B, span-aware, via_exact-gated) is the mechanism, and any such hole must appear in the item list before landing.",
+   "per_corridor_conservation": "CORRIDOR-LEVEL (not domain-level): the band offers 23.4 mm2 of F.Cu area; the I2C2_SCL route needs, per the R1440 witness, ~14mm of 0.20mm trace plus two vias => ~0.35 mm2 of copper plus its clearance envelope (0.20mm floor => envelope well under 3 mm2). Capacity >= demand WITHIN THE BAND with margin. Per-net account inside the band: GND 19 items yield (seal), MCU_VDD 17 and I2C1_SDA 14 are preserved. The frame-level ~50x headroom (R1394) is cited only as context, NOT as this item's justification."
+  },
+  "4_buildability": "relocation_listed",
+  "buildability_plain": "the piece moves GND F.Cu copper out of a NAMED band and lets the existing pour stages restore it, with an explicit preserve-list for the two nets that merely pass through. No new topology, no interface change; every moved and preserved item is listed with net, layer, item count and bbox."
+ },
+ "completion_of_the_four_named_gaps": {
+  "2_from_where_to_where": "DONE: from the named GND F.Cu items inside the band; to_where = pour refill (no new GND copper); and a PRESERVE LIST for MCU_VDD/I2C1_SDA (the new zone census showed they also sit in the box).",
+  "3_authority": "DONE: L2 in-domain re-route under #K2-461 sec.2.7 item 2 / #K2-462 sec.2.5, executed via the chain own drawing/zone path; versioned addendum, no frozen edit.",
+  "4_ref_plane_continuity": "DONE and DECIDED: zero stitching holes needed, with the reason (sealed by GND alone; no other-net pad/via in the band; the two crossing nets reference the inner plane, not the F.Cu pour).",
+  "5_per_corridor_conservation": "DONE at CORRIDOR level (23.4 mm2 vs ~0.35 mm2 + envelope), with the domain-level 50x figure explicitly demoted to context only.",
+  "caliber": "DONE: two calibers named and separated (boundary-obstacle cell counts vs per-net bbox extents)."
+ },
+ "verification_pending": "still a relocation list: the pour refill of GND in the band and the re-solve of the I2C2_SCL edge must be MEASURED by the conditional N=1 (gate not met this window). Declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
