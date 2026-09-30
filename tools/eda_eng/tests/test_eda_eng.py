@@ -2057,6 +2057,20 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C507_disposal_refills_only_the_zones_it_could_have_invalidated(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-507). RED without it: disposal refilled EVERY kept zone,
+        so an untouched zone was re-polygonised and its OUTSIDE-FRAME copper coverage was rewritten (R1684
+        measured the MCU_VDD|In4 outside fill growing by 10.9 mm^2). GREEN: only zones sharing a copper layer
+        AND overlapping a disposed zone are refilled; an empty disposal refills nothing."""
+        keep = [{"id": "A", "layers": ("In4.Cu",), "bbox": (0, 0, 10, 10)},
+                {"id": "B", "layers": ("In4.Cu",), "bbox": (100, 100, 110, 110)},
+                {"id": "C", "layers": ("F.Cu",), "bbox": (0, 0, 10, 10)},
+                {"id": "D", "layers": ("In4.Cu",), "bbox": None}]
+        gone = [{"id": "G", "layers": ("In4.Cu",), "bbox": (5, 5, 6, 6)}]
+        self.assertEqual(route.refill_targets(keep, gone), ["A", "D"],
+                         "same layer + overlapping bbox (or unknown = conservative); far/other-layer stay untouched")
+        self.assertEqual(route.refill_targets(keep, []), [], "an empty disposal refills NOTHING (zero churn)")
+
     def test_C505_authorised_dr_crossings_are_named_not_reported_as_leaks(self):
         """TIAN TIAO #1 engine asset + regression (#K2-505 sec.2.1). RED without it: copper that an in-register
         drawing explicitly authorises (allow_outside_dR) counted as an outside-copper CHANGE, i.e. a leak. GREEN:

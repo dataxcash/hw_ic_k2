@@ -325,6 +325,34 @@ def isolated_copper_items(drc_json):
     return out
 
 
+margin_eps = 1e-6
+
+
+def refill_targets(keep, gone):
+    """#K2-507 ENGINE CAPABILITY（**纯函数** · 确定性 · 有界）：孤岛处置后**该重填哪些保留 zone**。
+
+    旧行为 ＝ **重填全部保留 zone** ⇒ 未被触碰之 zone 亦被**重多边形化** ⇒ 其**框外**灌铜覆盖被改写
+    （R1684 实测：`dispose-islands` 令框外 `MCU_VDD|In4` 灌铜 **+10.9 mm²`）。本函数把重填面**收窄**到
+    「**处置可能使之失效**」者：与该被处置 zone **共享至少一铜层** ∧ **包围盒相交**（含 `margin`）。
+    `gone` 为空 ⇒ **一个也不填**（无处置 ⇒ 零扰动）。未定者（bbox 不可得）**保守纳入**（宁可多填，不静默漏填）。
+    """
+    out = []
+    for k in keep:
+        hit = False
+        for g in gone:
+            if not (set(k.get("layers") or ()) & set(g.get("layers") or ())):
+                continue
+            kb, gb = k.get("bbox"), g.get("bbox")
+            if kb is None or gb is None:
+                hit = True; break
+            if not (kb[2] < gb[0] - margin_eps or kb[0] > gb[2] + margin_eps
+                    or kb[3] < gb[1] - margin_eps or kb[1] > gb[3] + margin_eps):
+                hit = True; break
+        if hit:
+            out.append(k.get("id"))
+    return out
+
+
 def dispose_isolated_copper(board_path, drc_json, out_path):
     """**孤岛的确定性处置（#K2-390 §七步① · 子进程专用）**：DRC 点名的每个 `isolated_copper`
     按其 **zone UUID** 定位该 zone ⇒ **移除其填充**（`UnFill`）⇒ 仅**其余** zone 重填 ⇒ 落盘。
@@ -335,31 +363,57 @@ def dispose_isolated_copper(board_path, drc_json, out_path):
     want = {it.get("uuid") for it in items if it.get("uuid")}
     b = P.LoadBoard(board_path)
     zones = list(b.Zones())
-    disposed, keep, seen = [], [], set()
-    for z in zones:
+
+    def _meta(z):
         try:
-            u = z.m_Uuid.AsString()
+            lys = tuple(b.GetLayerName(L) for L in z.GetLayerSet().CuStack())
         except Exception:                                          # noqa: BLE001
-            u = None
+            lys = ()
+        try:
+            bb = z.GetBoundingBox()
+            bbox = (P.ToMM(bb.GetX()), P.ToMM(bb.GetY()),
+                    P.ToMM(bb.GetX() + bb.GetWidth()), P.ToMM(bb.GetY() + bb.GetHeight()))
+        except Exception:                                          # noqa: BLE001
+            bbox = None
+        try:
+            uid = z.m_Uuid.AsString()
+        except Exception:                                          # noqa: BLE001
+            uid = None
+        return {"id": uid, "layers": lys, "bbox": bbox}
+
+    disposed, keep, seen, gone = [], [], set(), []
+    for z in zones:
+        m = _meta(z)
+        u = m["id"]
         if u and u in want:
             try:
                 z.UnFill()
                 disposed.append({"uuid": u, "net": z.GetNetname()})
                 seen.add(u)
+                gone.append(m)
             except Exception as exc:                               # noqa: BLE001
                 disposed.append({"uuid": u, "net": z.GetNetname(), "error": str(exc)})
         else:
             keep.append(z)
+    # #K2-507: refill ONLY the kept zones the disposal could have invalidated - an untouched zone keeps its fill
+    # (and therefore its OUTSIDE-FRAME coverage) exactly. An empty disposal refills nothing.
+    _keep_meta = [_meta(z) for z in keep]
+    _want_ids = set(refill_targets(_keep_meta, gone))
+    _targets = [z for z, m in zip(keep, _keep_meta) if m["id"] in _want_ids]
     try:
-        P.ZONE_FILLER(b).Fill(keep)
+        if _targets:
+            P.ZONE_FILLER(b).Fill(_targets)
     except Exception:                                              # noqa: BLE001
         pass
     P.SaveBoard(out_path, b)
     return {"artifact": "eda_eng_dispose_isolated_copper", "board": board_path, "out": out_path,
             "disposed": disposed, "n_disposed": len(disposed),
             "unresolved": [it for it in items if it.get("uuid") not in seen],
-            "rule": "#K2-390 sec.7 step 1: dispose of the DRC-named orphan zone fill deterministically "
-                    "(zone UUID -> UnFill), refill only the rest; one pass, no search."}
+            "n_refilled": len(_targets), "n_kept_untouched": (len(keep) - len(_targets)),
+            "rule": "#K2-390 sec.7 step 1 + #K2-507: dispose of the DRC-named orphan zone fill deterministically "
+                    "(zone UUID -> UnFill) and refill ONLY the kept zones the disposal could have invalidated "
+                    "(shared copper layer AND overlapping bbox); an untouched zone keeps its fill, so its "
+                    "OUTSIDE-FRAME coverage cannot be rewritten by a re-polygonisation."}
 
 
 def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):
