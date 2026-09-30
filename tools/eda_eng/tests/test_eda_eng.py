@@ -1876,6 +1876,31 @@ class T(unittest.TestCase):
         w2 = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
         self.assertIn('"--escape-port"', w2); self.assertIn("mr._PORT_PADS = _PP", w2)
 
+    def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
+        """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
+        ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised
+        ValueError and the registered gauge was unusable (R1556/R1564). RED (pre-fix) = the 4-tuple shape raises;
+        GREEN = both shapes build, and a hole carrying no layer data conservatively blocks EVERY copper layer."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr483", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+
+        class _Ctx:
+            pads, vias = {}, {}
+            tracks = []
+            edge, keep_t, keep_v = [], [], []
+            holes = [(2.5, 2.5, 0.2, "GND")]                 # the in-register 4-tuple shape (f3.Ctx)
+        mr.KEEPOUT = None
+        g4 = mr.Grid(_Ctx(), "N", 0.10, 0.0, 0.0, 5.0, 5.0, 0.0)
+        i, j = g4.cell(2.5, 2.5)
+        self.assertEqual(g4.bad[mr.F_CU][i * g4.ny + j], 1,
+                         "a hole with no layer data must conservatively block every copper layer")
+
+        class _Ctx5(_Ctx):
+            holes = [(2.5, 2.5, 0.2, "GND", (mr.F_CU,))]    # the original 5-tuple shape
+        g5 = mr.Grid(_Ctx5(), "N", 0.10, 0.0, 0.0, 5.0, 5.0, 0.0)
+        self.assertEqual(g5.bad[mr.F_CU][i * g5.ny + j], 1, "the 5-tuple shape keeps its original behaviour")
+
     def test_C467_the_pin_escape_planner_is_deterministic_bounded_and_fail_closed(self):
         """#K2-467 (owner chose A; the lesion was re-characterised as the MISSING STANDARD STAGE): a pin access / escape
         planner. Every target pad must own a deterministic escape asset, otherwise the precheck FAILS and names it. Bounds
