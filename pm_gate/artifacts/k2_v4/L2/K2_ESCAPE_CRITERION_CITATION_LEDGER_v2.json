@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_escape_criterion_citation_ledger_v2",
+ "ts": "2026-09-30",
+ "authority": "#K2-469 appendix B (every escape-planner parameter must cite REF-CASE-LIBRARY sec.E; anything uncited is named 'maintain current value' with a one-time reason, sec.20.5) + #K2-472 sec.3.4 (fix the gauge: true-shape pad model, escape must leave the pad, pin the bound literal, close the fixture on every layer, rerun the precheck).",
+ "params": {
+  "dirs_8_incl_45deg": {
+   "value": "8 fixed directions: (1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)",
+   "citation": "REF-CASE-LIBRARY sec.E: industry fanout/escape passes (KiCad fanout, FreeRouting, commercial tools) route pin escapes at 45 degrees, not only orthogonally; the book puts the 45-degree practice in the same entry that names the in-repo mechanism anchors."
+  },
+  "dogleg_two_segments": {
+   "value": "two segments: seg1 <= 5 steps (<=0.5mm), turn +/-45 deg, seg2 <= 5 steps (<=0.5mm)",
+   "citation": "REF-CASE-LIBRARY sec.E: the same industry practice - dense fields are escaped with a dogleg/offset rather than one straight leg; the limits are kept deliberately SHORT (0.5mm each) so the corridor stays inside the pad neighbourhood, which is what a fanout/escape pass does.",
+   "one_time_note": "the exact split (5/5) is a first implementation choice with no product citation for the split itself; it is declared here rather than presented as product-derived. It is conservative (shorter legs = less freedom consumed) and bounded."
+  },
+  "max_escape_len_2p0mm": {
+   "value": "2.0mm",
+   "citation": "NONE - inherited from the supervisor prescription (#K2-467 sec.2.1).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it was the commissioning parameter and it has not been shown to be the binding cause (the census shows the refusals come from obstacles within ~1mm, not from the 2.0mm cut-off). Changing it before the scheme-layer decision would be ad-hoc tuning (sec.20.5).",
+   "supervisor_self_correction": "M-SUP-PRESCRIPTION-UNGROUNDED +1 (the value was prescribed without product grounding)."
+  },
+  "step_0p1mm": {
+   "value": "0.1mm",
+   "citation": "NONE - inherited from the same prescription.",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: consistent with the maze fine step (FINE_STEP=0.10) already in the register, so it is at least coherent with the engine; changing it is a relaxation nobody asked for."
+  },
+  "clear_0p30mm": {
+   "value": "0.30mm (escape segment clearance to foreign copper)",
+   "citation": "PARTIAL: the chain acceptance caliber is floor 0.20 (wrapper --floor) plus the 0.10 trace half-width, i.e. 0.30 is DERIVED from the registered acceptance model rather than invented - see the R1434-era notes on the caliber divergence (M-ENG-CLEARANCE-MODEL-DIVERGENCE).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it equals acceptance floor + own half-width, which is the strictest coherent reading of the register."
+  },
+  "local_filter_radius_3p5mm": {
+   "value": "3.5mm",
+   "citation": "NONE - implementation detail (a performance bound, not a geometry rule).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it is >= max_escape_len + dogleg reach, so it cannot change any decision; it exists only to honour the owner red line (no CPU spike)."
+  },
+  "verdict_ge_the_unconnected_ends_only": {
+   "value": "escape assets are required for UNCONNECTED endpoints only; connected ends PASS-by-route",
+   "citation": "#K2-468 sec.3.2 (the gate-scope self-correction) + the in-repo arithmetic: C1=2 has been stable for many windows with the same two named residuals, and the census matched 2 refusals to those 2 ends exactly."
+  },
+  "pad_shape_model": {
+   "value": "obstacles: each pad is a CAPSULE along its long axis (segment half-length (max-min)/2, hw = min(size)/2); a square pad degenerates to a point with hw = min/2",
+   "citation": "REF-CASE-LIBRARY sec.E + IPC-7351 land patterns: pads are rounded rectangles; the long-axis capsule is the standard faithful representation of their copper extent.",
+   "one_time_note": "a rectangular land is modelled by its long-axis capsule: the SHORT-axis extent is exact (that is the binding dimension at pin pitch); the long-axis ENDS are rounded, a small declared under-estimate. This replaces the isotropic max(size)/2 disc (R1498) which over-sized a 0.300x1.475 pad by 4.92x in the short direction and MANUFACTURED the two refusals (R1520).",
+   "provenance_of_the_correction": "R1520 (decisive read: same board, same criterion, only the pad model changed => go False -> True)"
+  },
+  "escape_must_leave_the_pad": {
+   "value": "a candidate escape is accepted only if its ENDPOINT lies OUTSIDE the pad rect (pad_rect = cx,cy,hx,hy[,rot_deg])",
+   "citation": "#K2-472 sec.3.4(2) (issue of this window).",
+   "one_time_reason": "MAINTAIN: without it, a 0.1mm leg that never leaves the pad's own copper is counted as an asset - a stub, not an escape. The endpoint is the maze's start cell, which is exactly the R1430 no-free-start-node lesion."
+  },
+  "vias_are_obstacles": {
+   "value": "a via contributes an obstacle (point + via_diameter/2) on EVERY copper layer of its layer span",
+   "citation": "R1358 lesson + tests/test_eda_eng.py::test_C448 (a clearance check MUST enumerate every layer a via covers) - in-repo doctrine.",
+   "one_time_note": "the R1498/R1506 harness SKIPPED vias entirely; v2 includes them (46 vias on the stitched board). Declared change."
+  },
+  "via_escape_branch": {
+   "value": "CLOSED - not implemented",
+   "citation": "#K2-472 sec.3.2 (supervisor self-correction), on the strength of R1520 finding 1.",
+   "one_time_reason": "PROOF OF SUBSUMPTION: _leg_clear needs clear+hw; a via disc needs clear+via_r+hw (strictly larger) and, for r>0, also a clear in-plane prefix. If the in-plane ladder refuses, the k=1 leg is blocked in EVERY direction => an obstacle lies within 0.25+hw of the pad centre => the r=0 via (needs 0.475+hw) is blocked; and for r>=step that obstacle lies within 0.15+hw of a sub-segment of the required prefix => the r>0 candidate is skipped. So the branch can never flip a refusal - landing it would be false completeness."
+  },
+  "cands_max_560": {
+   "value": "560 candidates per pad = 8 dirs x 20 steps (160) + 8 x 5 x 2 x 5 dogleg (400); pinned as a literal in code (CANDS_MAX_LITERAL) and asserted as a literal in the test",
+   "citation": "#K2-472 sec.3.4(3): the literal must be re-derived and pinned; binding it to the symbol under test makes the owner-bound regression a tautology (the R1516 failure).",
+   "one_time_note": "the via term (960) recorded during R1514/R1516 is GONE with the closed branch - 560 is again the complete bound."
+  }
+ },
+ "status_pending": "appendix A (sec.16.3 dead-exit/relocation) is NOT produced and is NOT APPLICABLE to the two target ends (go=TRUE under the corrected gauge).",
+ "OWNER-ITEMS": 0,
+ "supersedes": "v1 (R1510, #K2-469 appendix B). v2 adds the #K2-472 sec.3.4 model corrections: the TRUE-shape pad model, the 'escape must leave the pad' rule, vias as per-layer obstacles, and the CLOSURE of the via-escape branch with its reason. v1 is left byte-identical (version bump discipline); all v1 entries remain in force."
+}

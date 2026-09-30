@@ -7,17 +7,24 @@
 **owner 硬约束（绝对红线 · 写入门内）**：**禁死循环 · 禁 CPU 狂飙** ——
 · 方向 **8**（正交＋45°）· 直段步梯 **20**（0.1…2.0mm）· 折线（dogleg）seg1 ≤5 步、seg2 ≤5 步、转弯 ±45°；
 · **每盘候选上限 ＝ 8×20 ＋ 8×5×2×5 ＝ 560**（固定 · 无 `while` · 纯算术）；
+· **逃逸须离焊盘自身铜皮**（#K2-472 §3.4(2)）：给定 `pad_rect` 时，候选**终点**须落在焊盘矩形**之外** —— 盘内短线不计；
 · **局部障碍预筛（±3.5mm）** ⇒ 每候选只测邻域件 ⇒ **无 CPU 狂飙**；无外部进程 · 无后台；
 · 确定性：固定方向序 ＋ 首中即取。**无候选 ⇒ 具名拒绝**（网/层/位置/已试候选数），绝不静默。
 """
 from __future__ import annotations
+
+import math
 
 DIRS = ((1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1))
 NSTEPS = 20
 DSEG1 = 5
 DSEG2 = 5
 LOCAL_R = 3.5
+# 面内直段 8×20=160 ＋ 面内折线 8×5×2×5=400 ⇒ 560。
+# 过孔分支经 #K2-472 §3.2 **据实关闭**（R1520 可证：其恒被面内分支包住 ⇒ 无判定力）。
 CANDS_MAX = len(DIRS) * NSTEPS + len(DIRS) * DSEG1 * 2 * DSEG2      # 560
+CANDS_MAX_LITERAL = 560        # 钉死（#K2-472 §3.4(3)：字面量入码，禁绑被测符号）
+assert CANDS_MAX == CANDS_MAX_LITERAL, "CANDS_MAX 重导漂移（#K2-472 §3.4(3)）"
 
 
 def _pt_seg(px, py, ax, ay, bx, by):
@@ -51,8 +58,38 @@ def _leg_clear(net, layer, p0, p1, obstacles, clear):
     return True
 
 
-def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
-    """返回 `{"asset":{...}|None, "refused":{...}|None}`。**有界 · 确定性**。"""
+def pad_obstacle(net, layer, cx, cy, sx, sy, rot_deg=0.0):
+    """**焊盘真形建模**（#K2-472 §3.4(1)）：细长焊盘 ⇒ **沿长轴之胶囊**（段半长 `(max-min)/2` · 半宽 `min/2`）。
+    方形/圆形焊盘 ⇒ **退化为点 ＋ 半径 `min/2`** —— **绝不**用各向同性 `max/2`（R1520 之病根：细长脚被当圆盘 ⇒ 短边肥 4.92× ⇒ **造出假拒绝**）。
+    `rot_deg` ＝ 焊盘自身取向（度）。返回障碍元组 `(net, layer, x1,y1, x2,y2, hw)`。"""
+    long_, short_ = (sx, sy) if sx >= sy else (sy, sx)
+    hw = short_ / 2.0
+    h = (long_ - short_) / 2.0
+    a = math.radians(rot_deg)
+    c_, s_ = math.cos(a), math.sin(a)
+    ux, uy = (c_, s_) if sx >= sy else (-s_, c_)          # 局部长轴单位向 → 板坐标
+    return (net, layer, round(cx - ux * h, 4), round(cy - uy * h, 4),
+            round(cx + ux * h, 4), round(cy + uy * h, 4), round(hw, 4))
+
+
+def _pad_frame(pad_rect):
+    cx, cy, hx, hy = float(pad_rect[0]), float(pad_rect[1]), float(pad_rect[2]), float(pad_rect[3])
+    rot = float(pad_rect[4]) if len(pad_rect) > 4 else 0.0
+    a = math.radians(rot)
+    return cx, cy, hx, hy, math.cos(a), math.sin(a)
+
+
+def _outside_pad(pad_rect, px, py, tol=1e-9):
+    """**逃逸须离焊盘自身铜皮**（#K2-472 §3.4(2)）：终点须在焊盘矩形（其自身坐标系）**之外**。"""
+    cx, cy, hx, hy, c, s = _pad_frame(pad_rect)
+    ux, uy = px - cx, py - cy
+    u, v = ux * c + uy * s, -ux * s + uy * c
+    return abs(u) > hx + tol or abs(v) > hy + tol
+
+
+def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, step=0.1, pad_rect=None):
+    """返回 `{"asset":{...}|None, "refused":{...}|None}`。**有界 · 确定性**。
+    `pad_rect=(cx,cy,hx,hy[,rot_deg])`：给定时，候选**终点**须落在焊盘自身铜皮**之外**（#K2-472 §3.4(2)）。"""
     x0, y0 = float(pad[0]), float(pad[1])
     lim = LOCAL_R + max_escape_len
     loc = [o for o in obstacles
@@ -64,7 +101,7 @@ def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, s
             tried += 1
             d = k * step
             p1 = (x0 + dx * d, y0 + dy * d)
-            if _leg_clear(net, layer, (x0, y0), p1, loc, clear):
+            if _leg_clear(net, layer, (x0, y0), p1, loc, clear) and (pad_rect is None or _outside_pad(pad_rect, p1[0], p1[1])):
                 return {"asset": {"net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
                                   "b": [round(p1[0], 4), round(p1[1], 4)], "dir": [dx, dy], "d": round(d, 4),
                                   "dogleg": False}, "refused": None}
@@ -80,7 +117,8 @@ def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, s
                     p2 = (m[0] + tx * d2, m[1] + ty * d2)
                     if abs(p2[0] - x0) > max_escape_len or abs(p2[1] - y0) > max_escape_len:
                         continue
-                    if _leg_clear(net, layer, (x0, y0), m, loc, clear) and _leg_clear(net, layer, m, p2, loc, clear):
+                    if (_leg_clear(net, layer, (x0, y0), m, loc, clear) and _leg_clear(net, layer, m, p2, loc, clear)
+                            and (pad_rect is None or _outside_pad(pad_rect, p2[0], p2[1]))):
                         return {"asset": {"net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
                                           "b": [round(p2[0], 4), round(p2[1], 4)],
                                           "bend": [round(m[0], 4), round(m[1], 4)],
@@ -91,12 +129,17 @@ def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, s
 
 
 def plan_escapes(pads, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
-    """`pads` **应仅含未连通端**（#K2-468 §3.2）。`go` ＝ 预检门（每端点皆有逃逸资产）。"""
+    """`pads` **应仅含未连通端**（#K2-468 §3.2）。`go` ＝ 预检门（每端点皆有逃逸资产）。
+    每条 pad ＝ `(net, layer, x, y)` 或 `(net, layer, x, y, hx, hy[, rot_deg])`（后三者＝焊盘真形半宽/半长/旋转）。"""
     assets, refused = [], []
-    for (net, layer, x, y) in pads:
-        r = escape_for_pad(net, layer, (x, y), obstacles, clear, max_escape_len, step)
+    for pad in pads:
+        net, layer, x, y = pad[0], pad[1], pad[2], pad[3]
+        rect = (float(x), float(y), float(pad[4]), float(pad[5]),
+                (float(pad[6]) if len(pad) > 6 else 0.0)) if len(pad) >= 6 else None
+        r = escape_for_pad(net, layer, (x, y), obstacles, clear, max_escape_len, step, rect)
         (assets.append(r["asset"]) if r["asset"] else refused.append(r["refused"]))
     return {"assets": assets, "refused": refused, "go": not refused,
             "rule": "#K2-468: escape assets are required for UNCONNECTED endpoints only; connected ones pass by route",
             "bounds": {"dirs": len(DIRS), "max_steps": NSTEPS, "dogleg": [DSEG1, DSEG2],
-                       "candidates_per_pad_max": CANDS_MAX, "local_filter_radius_mm": LOCAL_R}}
+                       "candidates_per_pad_max": CANDS_MAX, "local_filter_radius_mm": LOCAL_R,
+                       "escape_must_leave_pad": True}}

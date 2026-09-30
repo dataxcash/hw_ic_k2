@@ -1,0 +1,101 @@
+{
+ "artifact": "k2_pin_escape_precheck_real_board_v2",
+ "ts": "2026-09-30",
+ "authority": "#K2-467 sec.2.1(3) precheck, re-run under #K2-472 sec.3.4 with the TRUE-shape pad model",
+ "reading": {
+  "board": "s1d_stitched.kicad_pcb",
+  "rect": [
+   22.95,
+   32.95,
+   51.5,
+   78.0
+  ],
+  "target_nets": [
+   "I2C1_SDA",
+   "I2C2_SCL"
+  ],
+  "target_endpoints": [
+   "I2C1_SDA@33.25,48.8375",
+   "I2C2_SCL@37.75,57.1625"
+  ],
+  "n_target_pads": 2,
+  "n_pads_on_board": 666,
+  "n_vias": 46,
+  "n_obstacles": 6187,
+  "go": true,
+  "n_assets": 2,
+  "n_refused": 0,
+  "assets": [
+   {
+    "net": "I2C1_SDA",
+    "layer": "F.Cu",
+    "a": [
+     33.25,
+     48.8375
+    ],
+    "b": [
+     33.25,
+     49.6375
+    ],
+    "dir": [
+     0,
+     1
+    ],
+    "d": 0.8,
+    "dogleg": false
+   },
+   {
+    "net": "I2C2_SCL",
+    "layer": "F.Cu",
+    "a": [
+     37.75,
+     57.1625
+    ],
+    "b": [
+     37.75,
+     57.9625
+    ],
+    "dir": [
+     0,
+     1
+    ],
+    "d": 0.8,
+    "dogleg": false
+   }
+  ],
+  "refused": [],
+  "bounds": {
+   "dirs": 8,
+   "max_steps": 20,
+   "dogleg": [
+    5,
+    5
+   ],
+   "candidates_per_pad_max": 560,
+   "local_filter_radius_mm": 3.5,
+   "escape_must_leave_pad": true
+  },
+  "elapsed_s": 0.143,
+  "model": {
+   "pads": "TRUE anisotropic capsule (long axis), hw = min(size)/2 - NOT an isotropic max(size)/2 disc (R1520)",
+   "tracks": "exact segment + half-width",
+   "vias": "circle on every layer of their layer-span (R1358)",
+   "escape": "the asset ENDPOINT must lie outside the pad rect (#K2-472 sec.3.4(2))"
+  },
+  "gate_scope": "UNCONNECTED endpoints only (#K2-468 sec.3.2)"
+ },
+ "interpretation": {
+  "what_changed_vs_v1": "R1498/R1506 modelled each pad as a POINT with an ISOTROPIC half-width max(size.x,size.y)/2 (0.7375mm for these 0.300x1.475 pads - 4.92x the true short half-axis), which MANUFACTURED the refusals (R1520). v2 models the true anisotropic capsule (hw = min(size)/2 = 0.150) and requires the escape endpoint to leave the pad rect.",
+  "v1_reading_for_contrast": {
+   "go": false,
+   "refused": [
+    "I2C2_SCL@(37.75,57.1625)",
+    "I2C1_SDA@(33.25,48.8375)"
+   ],
+   "model": "point + isotropic max(size)/2 disc"
+  },
+  "why_these_escapes_are_consistent_with_the_R1440_witness": "both pads are 0.300x1.475 long pads; the corridor runs along the LONG axis and leaves the pad at its end - exactly the short F.Cu run north to a via at ~(37.75,56.2) that the R1440 witness uses.",
+  "margin_note": "the first legal endpoint is reached at the 0.1mm step granularity, so the endpoint sits ~0.06mm beyond the pad edge; the criterion is the literal #K2-472 sec.3.4(2) rule (outside the pad rect).",
+  "no_appendix_A": "with go=TRUE there is NO dead exit for these two ends => appendix A (sec.16.3 relocation) must not be used."
+ }
+}

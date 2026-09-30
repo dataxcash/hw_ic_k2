@@ -1865,11 +1865,12 @@ class T(unittest.TestCase):
     def test_C467_the_pin_escape_planner_is_deterministic_bounded_and_fail_closed(self):
         """#K2-467 (owner chose A; the lesion was re-characterised as the MISSING STANDARD STAGE): a pin access / escape
         planner. Every target pad must own a deterministic escape asset, otherwise the precheck FAILS and names it. Bounds
-        are an OWNER RED LINE (no infinite loop, no CPU spike): 4 fixed directions x a fixed 20-step ladder => at most 80
-        candidates per pad, no while-loop. RED = a fully enclosed pad => named refusal, go=False. GREEN = three sides
-        blocked, one open => the open direction is chosen deterministically and the asset (which becomes a HARD KEEPOUT
-        through the R1488 mechanism) is returned. The criterion is an EXACT segment-segment distance, because the first
-        draft's min(point-to-segment) approximation MISSED a crossing obstacle (caught by this very test)."""
+        are an OWNER RED LINE (no infinite loop, no CPU spike): a fixed 8-direction ladder + a fixed dogleg => at most 560
+        candidates per pad, no while-loop. The criterion is an EXACT segment-segment distance (the first draft's
+        min(point-to-segment) approximation MISSED a crossing obstacle - caught by this very test). #K2-472 raises two:
+        (1) the asset must LEAVE the pad's own copper (pad_rect) - an in-pad stub is NOT an escape; (2) the precheck must
+        model each pad by its TRUE anisotropic shape - a point with an isotropic max(size)/2 half-width over-sizes a long
+        thin pad ~5x and MANUFACTURES refusals (R1520: two real pads were wrongly called dead exits)."""
         import importlib.util
         sp = importlib.util.spec_from_file_location("k2pe467", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
         m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
@@ -1881,14 +1882,46 @@ class T(unittest.TestCase):
         self.assertIsNotNone(r["asset"], "GREEN: the OPEN side must yield an escape asset: %s" % r)
         self.assertEqual(r["asset"]["dir"], [1, 0], "the open (east) direction must be chosen first")
         self.assertEqual(r["asset"]["a"], [0.0, 0.0])
+        # RED: a pad closed on EVERY reachable layer. The via branch was closed by #K2-472 sec.3.2 (R1520 proved it is
+        # subsumed by the in-plane branch), so for an SMD pad the reachable layer set IS its own layer => closing F.Cu
+        # (four walls) closes them all.
         four = three + [('OTHER', 'F.Cu', 0.20, -1.0, 0.25, 1.0, HW)]
         p = m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], four, clear=C)
         self.assertFalse(p["go"], "RED: a fully enclosed pad must FAIL the precheck")
         self.assertEqual(len(p["refused"]), 1); self.assertEqual(p["refused"][0]["net"], "N")
         self.assertIn("no free escape candidate", p["refused"][0]["why"], "the refusal must be NAMED, never silent")
-        self.assertEqual(p["bounds"]["candidates_per_pad_max"], 560, "OWNER bound (#K2-468): 8 dirs x 20 + 8x5x2x5 dogleg = 560, no while-loop")
+        # BOUND: hard-coded literal (#K2-472 sec.3.4(3)); the derivation is 8x20 + 8x5x2x5 = 160 + 400 = 560.
+        # NEVER bind this to m.CANDS_MAX - that makes the owner-bound regression a tautology (the R1516 failure).
+        self.assertEqual(p["bounds"]["candidates_per_pad_max"], 560, "OWNER bound (#K2-472): 160 + 400 = 560, no while-loop")
         self.assertEqual(p["bounds"]["max_steps"], m.NSTEPS)
+        self.assertTrue(p["bounds"]["escape_must_leave_pad"], "#K2-472 sec.3.4(2) must be ON")
+        # TRUE-SHAPE MODELLING (#K2-472 sec.3.4(1)): a long thin pad is a capsule of half-width min/2, NOT a disc of
+        # max/2. The old isotropic disc (R1498) is the defect that MANUFACTURED the R1520 refusals.
+        ob = m.pad_obstacle('N', 'F.Cu', 0.0, 0.0, 1.475, 0.30)
+        self.assertEqual(ob[6], 0.15, "the long pad's half-width must be min/2 = 0.15, never max/2 = 0.7375")
+        self.assertEqual((ob[2], ob[3], ob[4], ob[5]), (-0.5875, 0.0, 0.5875, 0.0), "capsule along the long axis")
+        self.assertEqual(m.pad_obstacle('N', 'F.Cu', 0.0, 0.0, 0.30, 1.475)[2:6], (0.0, -0.5875, 0.0, 0.5875))
+        self.assertEqual(m.pad_obstacle('N', 'F.Cu', 0.0, 0.0, 0.40, 0.40), ('N', 'F.Cu', 0.0, 0.0, 0.0, 0.0, 0.2))
         self.assertTrue(m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], three, clear=C)["go"], "GREEN: precheck GO")
+        # (A) LONG THIN PAD, short axis enclosed, long axis open => the TRUE shape escapes along its LONG axis.
+        longpad = ('N', 'F.Cu', 0.0, 0.0, 0.15, 0.7375)
+        short_closed = [('OTHER', 'F.Cu', -0.33, -1.0, -0.28, 1.0, HW),
+                        ('OTHER', 'F.Cu', 0.28, -1.0, 0.33, 1.0, HW)]
+        q = m.plan_escapes([longpad], short_closed, clear=C)
+        self.assertTrue(q["go"], "the long-axis corridor must be found: %s" % q)
+        a = q["assets"][0]
+        self.assertIn(a["dir"], ([0, 1], [0, -1]), "the escape must run along the LONG axis")
+        self.assertGreater(abs(a["b"][1]), 0.7375, "the asset must LEAVE the pad (#K2-472 sec.3.4(2))")
+        # the SAME pad, neighbours modelled as ISOTROPIC discs (the R1498/R1520 defect) => a MANUFACTURED refusal
+        iso = [('OTHER', 'F.Cu', -0.5, 0.0, -0.5, 0.0, 0.7375), ('OTHER', 'F.Cu', 0.5, 0.0, 0.5, 0.0, 0.7375)]
+        self.assertFalse(m.plan_escapes([longpad], iso, clear=C)["go"],
+                         "the isotropic max(size)/2 disc model MANUFACTURES a refusal (R1520) - it must not be used")
+        # (B) an in-pad stub is NOT an escape: clear space that never reaches the pad edge must be refused
+        stub = ('N', 'F.Cu', 0.0, 0.0, 0.15, 0.60)
+        stub_walls = [('OTHER', 'F.Cu', -1.0, 0.50, 1.0, 0.55, HW), ('OTHER', 'F.Cu', -1.0, -0.55, 1.0, -0.50, HW),
+                      ('OTHER', 'F.Cu', 0.30, -1.0, 0.35, 1.0, HW), ('OTHER', 'F.Cu', -0.35, -1.0, -0.30, 1.0, HW)]
+        self.assertFalse(m.plan_escapes([stub], stub_walls, clear=C)["go"],
+                         "an in-pad stub must NOT count as an escape (#K2-472 sec.3.4(2))")
 
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean

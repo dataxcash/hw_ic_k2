@@ -1,0 +1,115 @@
+{
+ "artifact": "k2_exam_a_n1_r1522_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-472 sec.3.5: after the corrected gauge is GO, take exactly ONE fresh N=1. This is that run.",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "work": "/tmp/opencode/k2esc",
+  "gate_c34": "PASS",
+  "stdout": "/tmp/opencode/k2esc_stdout.txt"
+ },
+ "nine_line_coverage": {
+  "C1_connectivity": false,
+  "C2_drc_no_new_increase": true,
+  "C3_skew": true,
+  "C4_chamfer_preserved": true,
+  "C5_routing_changed": true,
+  "C6_outside_copper_unchanged": false,
+  "C7_hs_fanout_untouched": true,
+  "C8_members_inside_frame": true,
+  "C9_geometric_digest": true
+ },
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 2,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 135,
+   "ref_total": 148,
+   "raw_total": 186,
+   "raw_ref_total": 168,
+   "new_classes": [],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pinned_caliber": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "pass": true
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 3035,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 2083,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 796,
+   "pass": false,
+   "legacy_diff": 2,
+   "scope": "tracks+vias outside the wiped block frame"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  },
+  "C8_members_inside_frame": {
+   "violations": [],
+   "pass": true,
+   "authority": "#K2-388 sec.7.2: the A-double-prime chain must read all nine ECO rows"
+  },
+  "C9_geometric_digest": {
+   "before": "1cf4d39614491ccc",
+   "after": "b09fdb8529bda983",
+   "pass": true
+  }
+ },
+ "verdict": "FAIL",
+ "named_failures": {
+  "C1_connectivity": "unconnected=2 (UNCHANGED: the residual pair I2C2_SCL/I2C1_SDA is still unconnected)",
+  "C6_outside_copper_unchanged": "diff=796 vs legacy_diff=2 (zone-aware check) - FAIL"
+ },
+ "consequence": "C1>=2 => STOP; name it; no same-cause rerun; a conservation-grade infeasibility certificate (L1) is required to escalate to owner (#K2-472 sec.3.5).",
+ "note": "the pin-escape assets are NOT wired into the chain (that integration was never landed); the run used the register chain only.",
+ "OWNER-ITEMS": 0
+}
