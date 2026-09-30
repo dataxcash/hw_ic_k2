@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_longanchor_audit_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-480 sec.3.4 termination clause (A also failing => no more variants => sec.15.3 supervisor-domain deliberation). This is the evidence that deliberation needs. Read-only; zero board writes; zero exam runs; no variant attempted.",
+ "input": {
+  "run": "R1552 (/tmp/opencode/k2f1)",
+  "final_board": "/tmp/opencode/k2f1/s3c_disposed.kicad_pcb"
+ },
+ "finding_1_A_extended_the_island_but_the_maze_STILL_reports_no_free_start_node": {
+  "ledger": "s2b_ledger.json blocked = [{'net':'I2C2_SCL','dist':45.553,'why':'no-free-start-node'}] ; reasons={'no-free-start-node':1}",
+  "correction_of_R1552": "R1552 said 'the pad's island now reaches the corridor end, so the start cell is provided'. The maze's own ledger says otherwise: it STILL reports no-free-start-node for I2C2_SCL. The 27 stubs did extend the copper, but the maze's FREE-CELL TEST still fails there - the laid stub is a thin 0.8mm strip between 0.5mm-pitch neighbours and contains no cell that passes the maze's clearance model."
+ },
+ "finding_2_the_long_haul_is_obstructed_by_several_nets": {
+  "path": "U1 pad 22 (37.75,57.1625) -> (51.5,56.6), length 13.762mm, F.Cu",
+  "census_277_samples_blocked_by": {
+   "GND": 35,
+   "PWR_CTRL_OUT": 26,
+   "<none> pads": 25,
+   "I2C2_SCL": 15,
+   "I2C2_SDA": 10
+  },
+  "reading": "no straight run exists; a weave is required, and the first-steps are inside the dense pin field."
+ },
+ "what_this_means_for_the_deliberation": [
+  "start-freedom is NOT solved by a 0.8mm stub: the maze needs a cell that is free under ITS grid+clearance model, which the dense 0.5mm-pitch neighbourhood does not offer at the pad.",
+  "the alternative is that the escape must reach genuinely OPEN space (further than 0.8mm) - but that is 'more of A' (a longer laid corridor), which is a variant, so it is NOT attempted here per the termination clause.",
+  "the long haul itself is occupied by GND / PWR_CTRL_OUT / unnamed pads / I2C2_SDA, so even a freed start must weave."
+ ],
+ "not_done": [
+  "no exam run",
+  "no board write",
+  "no generator change",
+  "no new variant"
+ ],
+ "OWNER-ITEMS": 0
+}
