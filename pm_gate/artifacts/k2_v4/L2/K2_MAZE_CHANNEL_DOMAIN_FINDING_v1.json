@@ -1,0 +1,25 @@
+{
+ "artifact": "k2_maze_channel_domain_finding_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-450 sec.2.4 (adopted means). READ-ONLY: reading the consumer corrected my own R1414 hand-off. Zero exam runs.",
+ "what_the_consumer_actually_does": {
+  "file": "tools/k2_reroute_router_floor_v1.py",
+  "lines": "236-248",
+  "code": "if net in _CH: _c = _CH[net]; for _w in (0, ...): mr.WALL_RECT = (_c[0]-_w, _c[1]-_w, _c[2]+_w, _c[3]+_w); sol, why = orig(...)",
+  "meaning": "the channel is applied as the solve DOMAIN (a single WALL_RECT) for that net - it is NOT a per-point check."
+ },
+ "correction_to_R1414": "R1414 said the consumer edit is 'treat _CH[net] as a list; a point in corridor k may only use slot k'. That was too optimistic: there is no per-point check to amend - the solve domain is ONE rect, so 'one net = one rect' is baked into the SOLVER's domain interface.",
+ "therefore_per_corridor_requires_one_of": [
+  {
+   "option": "(i) domain = rect LIST",
+   "detail": "make the maze's domain model accept a list of rects (or a polygon) so a net's domain can be the union of its corridor slots; the maze's inside-test must consult all rects."
+  },
+  {
+   "option": "(ii) call per (net, corridor)",
+   "detail": "keep the single-rect interface and invoke the solve once per (net, corridor) with that corridor's slot as WALL_RECT, stitching the pieces; the chain issues N extra calls."
+  }
+ ],
+ "recommendation": "option (ii) is the smaller change to the frozen maze internals: it reuses the existing single-rect domain verbatim and only changes the CALLER's loop (the chain), at the price of more solve calls. Option (i) touches the maze's core inside-test.",
+ "status": "the allocator half is complete and green (R1406/R1408/R1410/R1412); the maze-side half needs one of the two options above, which is a design decision plus a bounded implementation.",
+ "OWNER-ITEMS": 0
+}
