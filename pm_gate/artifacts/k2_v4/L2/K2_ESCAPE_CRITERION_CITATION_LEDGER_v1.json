@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_escape_criterion_citation_ledger_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-469 appendix B (bound to the #K2-468 window, fail-closed): every parameter of the escape planner must cite REF-CASE-LIBRARY sec.E; anything uncited must be named \"maintain current value\" with a one-time reason (sec.20.5). The extension shipped as R1506; this is its citation ledger.",
+ "params": {
+  "dirs_8_incl_45deg": {
+   "value": "8 fixed directions: (1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)",
+   "citation": "REF-CASE-LIBRARY sec.E: industry fanout/escape passes (KiCad fanout, FreeRouting, commercial tools) route pin escapes at 45 degrees, not only orthogonally; the book puts the 45-degree practice in the same entry that names the in-repo mechanism anchors."
+  },
+  "dogleg_two_segments": {
+   "value": "two segments: seg1 <= 5 steps (<=0.5mm), turn +/-45 deg, seg2 <= 5 steps (<=0.5mm)",
+   "citation": "REF-CASE-LIBRARY sec.E: the same industry practice - dense fields are escaped with a dogleg/offset rather than one straight leg; the limits are kept deliberately SHORT (0.5mm each) so the corridor stays inside the pad neighbourhood, which is what a fanout/escape pass does.",
+   "one_time_note": "the exact split (5/5) is a first implementation choice with no product citation for the split itself; it is declared here rather than presented as product-derived. It is conservative (shorter legs = less freedom consumed) and bounded."
+  },
+  "max_escape_len_2p0mm": {
+   "value": "2.0mm",
+   "citation": "NONE - inherited from the supervisor prescription (#K2-467 sec.2.1).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it was the commissioning parameter and it has not been shown to be the binding cause (the census shows the refusals come from obstacles within ~1mm, not from the 2.0mm cut-off). Changing it before the scheme-layer decision would be ad-hoc tuning (sec.20.5).",
+   "supervisor_self_correction": "M-SUP-PRESCRIPTION-UNGROUNDED +1 (the value was prescribed without product grounding)."
+  },
+  "step_0p1mm": {
+   "value": "0.1mm",
+   "citation": "NONE - inherited from the same prescription.",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: consistent with the maze fine step (FINE_STEP=0.10) already in the register, so it is at least coherent with the engine; changing it is a relaxation nobody asked for."
+  },
+  "clear_0p30mm": {
+   "value": "0.30mm (escape segment clearance to foreign copper)",
+   "citation": "PARTIAL: the chain acceptance caliber is floor 0.20 (wrapper --floor) plus the 0.10 trace half-width, i.e. 0.30 is DERIVED from the registered acceptance model rather than invented - see the R1434-era notes on the caliber divergence (M-ENG-CLEARANCE-MODEL-DIVERGENCE).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it equals acceptance floor + own half-width, which is the strictest coherent reading of the register."
+  },
+  "local_filter_radius_3p5mm": {
+   "value": "3.5mm",
+   "citation": "NONE - implementation detail (a performance bound, not a geometry rule).",
+   "one_time_reason": "MAINTAIN CURRENT VALUE: it is >= max_escape_len + dogleg reach, so it cannot change any decision; it exists only to honour the owner red line (no CPU spike)."
+  },
+  "verdict_ge_the_unconnected_ends_only": {
+   "value": "escape assets are required for UNCONNECTED endpoints only; connected ends PASS-by-route",
+   "citation": "#K2-468 sec.3.2 (the gate-scope self-correction) + the in-repo arithmetic: C1=2 has been stable for many windows with the same two named residuals, and the census matched 2 refusals to those 2 ends exactly."
+  }
+ },
+ "status_pending": "appendix A (the FAIL branch -> scheme-layer dead-exit/relocation drawing per sec.16.3) is NOT produced yet; the precheck reading (go=FALSE, two named refusals) is the input it needs. Declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
