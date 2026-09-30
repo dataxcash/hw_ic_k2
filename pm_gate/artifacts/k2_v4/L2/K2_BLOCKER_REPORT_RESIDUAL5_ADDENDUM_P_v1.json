@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_p_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: repeated same-type command) - SAME OBJECT as appendices N/O; the latch re-fired.",
+ "object_named": {
+  "token": "k2ab",
+  "what": "the work-dir PATH CONSTANT of an earlier window's authorised run - identical to appendices N and O. Already VOID per #K2-452 sec.5 and #K2-453 sec.2.3 (a path constant, never a repeated parameter or a repeated run).",
+  "new_same_type_commands_this_round": 0,
+  "reading": "this round produced no shell command containing that token at all (the run used a NEW work dir and read only its own inputs); the count reflects the detector re-scanning the same session history.",
+  "self_disclosure": "this window DID execute one router/exam run - but it was the ONE run authorised by #K2-453 sec.2.4, declared upfront, foreground, run_count 1/1, quota consumed, ledger under /tmp. That is an authorised run, not a violation; zero parameter retries, zero same-cause reruns."
+ },
+ "compliance": {
+  "stopped": true,
+  "stopped_when": "already stopped: nothing started since R1430 (the receipt); nothing will be.",
+  "exam_runs_this_period": 1,
+  "which_run": "the ONE fresh N=1 authorised by #K2-453 sec.2.4",
+  "param_retries": 0,
+  "same_cause_rerun": false,
+  "board_touched": false,
+  "frozen_four_sources": "4/4; criteria/ read-only rev=6"
+ },
+ "blocker_report": {
+  "tried": "#K2-453 sec.2.4 authorised exactly one fresh N=1 to TEST the landed soft-guidance means (instead of stacking pass-2). It ran: chain[..] channels_computed {n_nets:18, n_guide:48, guide_source:\"joint-per-corridor\"} - the per-corridor allocation was consumed as a PREFERENCE for the first time. Nine rows complete; the gate did not trip.",
+  "why_not_yet": "C1=2: same as the R1392 baseline => not improved (and not worse). The two residuals are I2C2_SCL (a 9.3mm F.Cu track vs U1 pad 22) and I2C1_SDA (0.6mm F.Cu vs 0.2mm B.Cu). The mechanism is now NAMED: 267 of 268 blocks are no-free-start-node, and the in-band precheck shows those endpoints cannot reach even their OWN net ports (ports_available 2 / ports_tried 2 / reachable_port false) - the maze finds no free start cell within maxr=4 of the endpoint. The guidance demonstrably bit (segs 1152->636, vias 57->60, len 552.93->576.77mm) yet C1 did not move, so the allocation/order half is NOT the binding constraint.",
+  "gap_layer": "ENGINE MEANS LAYER, and specifically ENDPOINT START-NODE REACHABILITY: why an endpoint that sits on its own copper cannot obtain a legal start cell in the maze occupancy mask (the D1 endpoint-own-cell relaxation fired only 23 times out of 281 failures). Registered as M-ENG-PORT-REACHABILITY-DRAWING. NOT the drawing layer (98 anchored pieces, padless=0), NOT the construction layer (zero board edits), NOT L1, NOT the criteria.",
+  "also_measured": "the #K2-452 item-3 fix is C1-neutral at whole-run level: exception:KeyError 244 -> 0 and added stays 68, so the GND/pour + MCU_VDD port-retry class produces no copper either way - the GND-side neutrality left honestly open last window is now MEASURED, not assumed."
+ },
+ "plan_recap": {
+  "q1_signal_path": "Every wiped net must come back from its pads to the block-edge ports on dR; power on the inner planes, buses as groups, control links short and direct (the 98 anchored drawing pieces).",
+  "q2_what_blocks": "Not space and not the drawing, and - now measured - not the allocation either. What blocks the last two connections is that THOSE endpoints cannot start: the router cannot find a free cell on their own copper to leave from, and their own net ports do not help.",
+  "q3_human_plan": "Make the start work: when an endpoint sits on its own copper, it must be allowed to start from there (the existing D1 relaxation is the right idea but fires for only 23 of 281 failures), and its own net ports must be usable as goals. Plain words: the last two wires are not a planning problem - the tool cannot get out of the starting gate."
+ },
+ "one_implementation_list": {
+  "landed": "R1430 = the authorised run + nine rows + the verdict/record artifacts + the same-cause rerun ban + the measured GND read (selftest 143/143).",
+  "awaiting_ruling": "the next means: ENDPOINT START-NODE REACHABILITY (fix/extend the D1 endpoint-own-cell relaxation and the port-goal path so the 267 no-free-start-node endpoints can legally start), plus whether a new N=1 is granted; and whether M-ENG-POUR-EDGE-KEYERROR may be closed (asset + regression + measured C1-neutrality)."
+ },
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
