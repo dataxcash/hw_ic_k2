@@ -1,0 +1,199 @@
+{
+ "artifact": "K2_SEC16_3_DRAWING_LONGSEGMENT_I2C2SCL_v1",
+ "ts": "2026-09-30",
+ "action_board_state": "SOLVE-TIME",
+ "buildability": "no_move",
+ "authority_for_the_move": "#K2-482 sec.2.3 (the deterministic layer-change route for the last long segment) + R1556 (reachability: F.Cu free space cut; a layer change is required) + R1440 (witness geometry: short F.Cu run + F->In5 via + inner-layer continuation)",
+ "sec16_3_four_elements": {
+  "1_one_line_cause": "I2C2_SCL's last ~13.76mm run (U1.22 corridor end -> frame port (51.5,56.6)) cannot be made on F.Cu alone: the F.Cu free space is CUT (source cell free, destination cell free, but disconnected); the first blocker on the straight run is I2C2_SDA at (37.849,57.953), 0.099mm from the corridor end.",
+  "2_proven_facts": [
+   "R1556: F.Cu src_free=True, dst_free=True, path_exists(F.Cu alone)=False",
+   "R1556: first blocker on the straight run = I2C2_SDA @ (37.849,57.953), 0.099mm off the corridor end",
+   "R1440 witness: the pad's residual is routed by a short F.Cu run + an F->In5 via + inner-layer continuation",
+   "R1552: the 27 fixed escape stubs are laid (the pad's island reaches the corridor end)"
+  ],
+  "3_corrected_complete_construction_drawing": {
+   "lines": [
+    {
+     "n": 1,
+     "kind": "track",
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "a": [
+      37.75,
+      57.1625
+     ],
+     "b": [
+      37.75,
+      57.9625
+     ],
+     "note": "already laid by A (R1552)"
+    },
+    {
+     "n": 2,
+     "kind": "via",
+     "net": "I2C2_SCL",
+     "at": [
+      37.75,
+      57.9625
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ],
+     "note": "the corridor end drops to In5"
+    },
+    {
+     "n": 3,
+     "kind": "lane",
+     "net": "I2C2_SCL",
+     "layer": "In5.Cu",
+     "waypoints": [
+      [
+       38.4,
+       58.0
+      ],
+      [
+       39.0,
+       58.0
+      ],
+      [
+       39.6,
+       58.0
+      ],
+      [
+       40.2,
+       58.0
+      ],
+      [
+       40.8,
+       58.0
+      ],
+      [
+       41.4,
+       58.0
+      ],
+      [
+       42.0,
+       58.0
+      ],
+      [
+       42.6,
+       58.0
+      ],
+      [
+       43.2,
+       58.0
+      ],
+      [
+       43.8,
+       58.0
+      ],
+      [
+       44.4,
+       58.0
+      ],
+      [
+       45.0,
+       58.0
+      ],
+      [
+       45.6,
+       58.0
+      ],
+      [
+       46.2,
+       58.0
+      ],
+      [
+       46.8,
+       58.0
+      ],
+      [
+       47.4,
+       58.0
+      ],
+      [
+       48.0,
+       58.0
+      ],
+      [
+       48.6,
+       58.0
+      ],
+      [
+       49.2,
+       58.0
+      ],
+      [
+       49.8,
+       58.0
+      ],
+      [
+       50.4,
+       58.0
+      ],
+      [
+       51.0,
+       58.0
+      ],
+      [
+       51.45,
+       57.85
+      ],
+      [
+       51.45,
+       57.25
+      ],
+      [
+       51.45,
+       56.65
+      ]
+     ],
+     "note": "In5 corridor; waypoints are the deterministic shortest free path on the maze-style grid"
+    },
+    {
+     "n": 4,
+     "kind": "via",
+     "net": "I2C2_SCL",
+     "at": [
+      51.5,
+      56.6
+     ],
+     "layers": [
+      "In5.Cu",
+      "F.Cu"
+     ],
+     "note": "re-emerge to the frame port track"
+    },
+    {
+     "n": 5,
+     "kind": "track",
+     "net": "I2C2_SCL",
+     "layer": "F.Cu",
+     "a": [
+      51.5,
+      56.6
+     ],
+     "b": [
+      51.5,
+      56.6
+     ],
+     "note": "join the existing 9.3mm frame-port track"
+    }
+   ],
+   "in5_side_occupancy": {
+    "bfs_path_exists": true,
+    "n_waypoints": 25
+   },
+   "per_corridor_conservation": {
+    "demand_mm": 14.274,
+    "capacity": "the In5 free path is a machine-found free corridor; capacity >= demand by construction"
+   },
+   "relocation_required": [],
+   "ref_plane_continuity": "no new stitching vias beyond the two listed; the F<->In5 pair is the route itself"
+  },
+  "4_buildability": "no_move"
+ },
+ "OWNER-ITEMS": 0
+}
