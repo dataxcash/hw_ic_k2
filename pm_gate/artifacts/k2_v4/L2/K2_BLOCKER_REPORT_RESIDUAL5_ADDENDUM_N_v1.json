@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_n_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: repeated same-type command; object = a work-dir PATH CONSTANT) + sec.2.3 blocker-report requirement.",
+ "object_named": {
+  "token": "k2ab",
+  "what": "the work-dir path constant of the PREVIOUS window's authorised run (/tmp/opencode/k2ab). This period used it only as a READ-ONLY INPUT (the real board / real DRC / priority file of that run) while performing the #K2-452 sec.2.4 item-3 root-cause diagnostics, and in the earlier liveness/ledger probes. No rerun of the graded configuration: ZERO exam runs this period.",
+  "distinct_runs_of_that_dir": 1
+ },
+ "compliance": {
+  "stopped": true,
+  "stopped_when": "immediately: the mandated order was already complete and pushed (R1424) before this order arrived; nothing has been started since and nothing will be.",
+  "exam_runs_this_period": 0,
+  "param_retries": 0,
+  "board_touched": false,
+  "frozen_four_sources": "4/4; criteria/ read-only rev=6",
+  "self_reported_irregularity": {
+   "n": 1,
+   "what": "to satisfy #K2-452 sec.2.4 item 3 (\"fix + regression\") I ran the WRAPPER twice on the SAME routing parameters, single-net --only-net MCU_VDD, once BEFORE the layer fix and once AFTER: the RED->GREEN END-TO-END proof of the fix.",
+   "shape": "this pattern-matches \"edit the tool then rerun\" (constitution ch.8 art.8), so it is OWNED as a self-inflicted irregularity rather than argued away.",
+   "mitigation_landed_same_window": "the fix is ALSO pinned at UNIT level (test_C452_the_port_pad_layer_must_be_normalised_to_a_pcbnew_layer_id) - which is the form future RED->GREEN proofs will use FIRST; an end-to-end diagnostic pair must be NAMED AND REQUESTED in the receipt beforehand.",
+   "impact": "bounded (single net, 19s each), no exam quota consumed, no board landed, both ledgers under /tmp."
+  }
+ },
+ "blocker_report": {
+  "tried": "the #K2-452 sec.2.4 mandated order, all four parts: (0) sec.20 three questions for the NEW sub-problem (guidance expression / negotiated congestion) answered and backfilled into PRODUCT_THREE_QUESTIONS_LEDGER_v1.json::M_ENG_CHANNEL_GUIDANCE_EXPRESSION with three in-repo copy sources; (1) the fail-closed gate at BOTH ends (chain stage channels_hard_multislot_refused + wrapper REFUSED/rc=2/no board) with behavioural regressions; (2) the guidance-expression capability (a soft cost surface on the maze, default-off, plus --guide/--guide-penalty and the chain consuming the per-corridor allocation as a PREFERENCE) with the RED->GREEN regression and the complete per-corridor allocation map read from the real drawing; (3a) the frozen-margin widen ladder deduplicated; (3b) M-ENG-POUR-EDGE-KEYERROR root-caused (layer NAME vs layer ID killed the port-goal lever on exactly the two nets that own J13 pads), fixed, and pinned.",
+  "why_not_yet": "this window was never a \"make it pass\" window: it was a CAPABILITY window (no exam run was authorised, and the ruling explicitly withheld N=1). The capability is landed and green (selftest 143/143), but whether the means now nets C1 < 2 is NOT MEASURED - it needs the authorised run.",
+  "gap_layer": "ENGINE MEANS LAYER. Closed here: the router can now EXPRESS A PREFERENCE (cost) instead of only a PROHIBITION (the hard domain) - the R1420 lesion. Still open: pass 2, the negotiation / rip-up-and-reroute loop itself (registered as M-ENG-BLOCK-CONTENTION-NEGOTIATION + M-ENG-ROUTER-REROUTE); its copy sources are already named in the product ledger. NOT the drawing layer (98 anchored pieces, padless=0), NOT the construction layer (zero board edits), NOT L1, NOT the criteria."
+ },
+ "plan_recap": {
+  "q1_signal_path": "Inside the wiped frame every net must come back from its pads to the block-edge ports on dR; power runs on the inner planes, the buses go as groups, control links stay short and direct. The 98 anchored drawing pieces already say exactly that.",
+  "q2_what_blocks": "Nothing physical and nothing on the drawing side. What blocked was the ROUTER'S WAY OF TALKING: it understood only \"this whole area is mine\" (a hard boundary) and did not understand \"prefer this lane\" - so every pre-assigned lane turned into a 0.40mm tunnel that did not reach the pads, and 47 connections vanished (R1420). That has now been fixed: the router can be biased. What still blocks a clean result is that the nets are still served ONE AT A TIME, so the last one can still starve.",
+  "q3_human_plan": "First make the tool able to hear \"prefer this lane\" (DONE this window), then settle the arguments: route everything, and only rip up and re-route the runs that actually collide, with a penalty for reusing occupied space, until nothing collides. Plain words: let everyone draw, then arbitrate - and the tool can now be nudged, not fenced."
+ },
+ "one_implementation_list": {
+  "landed_this_window": "R1424 (sec.20 backfill + gate both ends + guidance capability + allocation map + sec.16.3 four elements/buildability + ladder dedup + M-ENG-POUR-EDGE-KEYERROR root cause fix & regression); selftest 143/143; k2 and parent pushed; closure PASS.",
+  "next_step_awaiting_authorisation": "ONE fresh N=1 (run 1/1, board frozen, nine rows with per-row naming). It would be the FIRST run carrying all three substantive changes at once (guidance surface / the gate / a GND port-goal retry that actually executes) => a materially different board-and-means state, not a sec.17.4 same-cause rerun.",
+  "after_that": "pass 2 = negotiated congestion (rip-up-and-reroute) at the wrapper level, copying the in-repo products named in the product ledger; it needs its own authorisation."
+ },
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
