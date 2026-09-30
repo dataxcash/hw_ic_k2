@@ -2057,6 +2057,22 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C516_the_zone_row_tolerance_is_derived_and_bites_both_ways(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-516 sec.2 item 1/2). The tolerance must be DERIVED (each number
+        has a source) and must BITE: a within-tolerance sample passes, an over-tolerance sample fails. No hand-picked
+        mm^2, and the registered tracks+vias row stays an exact zero-diff compare."""
+        tv = block.zone_area_tolerance(4003.2521)
+        self.assertAlmostEqual(tv["geom_bound_mm2"], 0.30 * 147.2, places=6, msg="clear x frame perimeter")
+        self.assertAlmostEqual(tv["rel_cap_mm2"], 0.001 * 4003.2521, places=6, msg="0.1% of the reference area")
+        self.assertEqual(tv["binding"], "rel_cap", "the relative arm binds on a 4000mm^2 plane")
+        self.assertAlmostEqual(tv["tol_mm2"], 4.0032521, places=6, msg="min(geom, rel)")
+        small = block.zone_area_tolerance(169.374132)
+        self.assertAlmostEqual(small["tol_mm2"], 0.169374, places=6, msg="a small plane gets a tight cap")
+        self.assertTrue(block.zone_area_tolerance(4003.2521)["tol_mm2"] > 0.913609, "GND In1's 0.914 passes")
+        self.assertFalse(0.756946 <= small["tol_mm2"], "MCU_VDD In4's 0.757 does NOT fit its 0.169 cap")
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn("zone_area_tolerance", open(os.path.join("tools", "eda_eng", "block.py"), encoding="utf-8").read())
+
     def test_C513_the_pour_keeps_islands_end_to_end(self):
         """TIAN TIAO #1 engine asset + regression (#K2-513 sec.2 item 1). RED without it: the filler DROPS un-anchored
         islands, so a pour after the wipe removes outside-frame fill whose in-frame anchor the wipe deleted - six
