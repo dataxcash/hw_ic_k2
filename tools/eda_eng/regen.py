@@ -1763,12 +1763,17 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                               "--out", os.path.join(work, "s2e_joined.kicad_pcb"), "--json-out", _jm],
                              cwd=ROOT, capture_output=True, text=True, timeout=1800)
         _jd = json.load(open(_jm, encoding="utf-8")) if os.path.isfile(_jm) else {}
-        chain.append({"stage": "copper_join", "exit": _jr.returncode,
+        # #K2-509 sec.2 item 1 MUST-HOLD: the first run of the join produced REAL cross-net shorts
+        # (P3V3_AUX via F.Cu-In5 @(51.4,39.0) shorting a PWR_BTN_OUT In2.Cu track) - so the safety gate has NOT
+        # passed and, by the supervisor's order, the join is DISABLED (fail-closed). It still PLANS and REPORTS
+        # (evidence for the fix) but its board is NOT adopted unless K2_JOIN_ENABLE=1 is set explicitly.
+        _join_ok = (os.environ.get("K2_JOIN_ENABLE") == "1")
+        chain.append({"stage": "copper_join", "enabled": _join_ok, "exit": _jr.returncode,
                       "n_one_end": _jd.get("n_one_end"), "n_planned": _jd.get("n_planned"),
                       "n_refused": _jd.get("n_refused"), "lay": _jd.get("lay"),
                       "refused_named": [r.get("net") for r in (_jd.get("refused") or [])]})
         _jout = os.path.join(work, "s2e_joined.kicad_pcb")
-        if _jr.returncode == 0 and (_jd.get("lay") or {}).get("n_added") and os.path.isfile(_jout):
+        if _join_ok and _jr.returncode == 0 and (_jd.get("lay") or {}).get("n_added") and os.path.isfile(_jout):
             resolved = _jout
     except Exception as _e9:                                    # noqa: BLE001
         chain.append({"stage": "copper_join", "err": type(_e9).__name__})
