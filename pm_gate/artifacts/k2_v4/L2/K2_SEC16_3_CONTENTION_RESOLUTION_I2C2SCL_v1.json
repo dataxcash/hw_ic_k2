@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_sec16_3_contention_resolution_i2c2scl_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-461 sec.2.7 item 2 (authorised solution-layer deliverable) + sec.16.3 (four elements) + sec.13.",
+ "sec16_3_four_elements": {
+  "1_one_line_cause_of_death": "On the pass-1 board the F.Cu free space between the dR port (51.5,56.6) and U1 pad 22 (37.75,57.1625) is CUT: the port component holds 3757 cells and the pad is NOT in it. The cut is owned by GND on F.Cu (102 sealing cells spanning x=[46.75,50.35], y=[53.6,60.1]) with PCIE_DN_OUT4_P_MCIO only at the window edge. No routing assignment on that layer can free the channel: the sealing copper belongs to other nets and MUST YIELD.",
+  "2_verified_fact_list": [
+   "K2_CONTENTION_CUT_READ_v1.json (R1460): pad_reachable=false, port component 3757 cells, 73 boundary obstacle cells, sealed by GND (F.Cu) then PCIE_DN_OUT4_P_MCIO.",
+   "K2_START_CELL_DISCRIMINATOR_v1.json (R1456): the start cell EXISTS and nothing seals it => NOT a missing drawing entry (the earlier layer call was vacated and acknowledged).",
+   "R1440 witness: with the corridor free the SAME pair routes (F.Cu/In5.Cu/F.Cu + 2 F<->In5 vias) and seg_exact/via_exact accept it at floor 0.20.",
+   "R1450/R1452: single-net succeeds while the full run fails the same call => the binding variable is the OTHER NETS COPPER (contention).",
+   "R1394 / K2-450 sec.2.3: frame capacity 12862 line-mm vs demand 257.3 line-mm (~50x) => shifting a few mm of GND copper is affordable: an ALLOCATION problem, not a capacity problem."
+  ],
+  "3_corrected_complete_construction_drawing": {
+   "kind": "RELOCATION LIST (buildability = relocation_listed)",
+   "relocation_zone": "F.Cu, x=[46.75, 50.35], y=[53.6, 60.1] (the wall between the port at x=51.5 and the pad at x=37.75, derived from the sealing cells)",
+   "items_to_yield": [
+    {
+     "net": "GND",
+     "layer": "F.Cu",
+     "cells": 102,
+     "bbox_mm": [
+      46.75,
+      53.6,
+      50.35,
+      60.1
+     ],
+     "why": "it forms the cut that disconnects the port from U1 pad 22",
+     "destination_policy": "GND is a POUR/PLANE net: its continuity is provided by the zone stages the chain already runs (pour_aware_unfill -> refill -> pour_islands_repair). Declaring this zone a relocation zone and letting the pour re-fill restores GND without adding a routed trunk through the I2C2_SCL corridor."
+    },
+    {
+     "net": "PCIE_DN_OUT4_P_MCIO",
+     "layer": "F.Cu",
+     "cells": 10,
+     "bbox_mm": [
+      53.95,
+      59.8,
+      54.45,
+      60.1
+     ],
+     "why": "sits at the window edge (x>=53.95); it does not touch the corridor between port and pad",
+     "destination_policy": "no move required unless the final route reaches that corner"
+    }
+   ],
+   "per_corridor_conservation": "the zone is 3.6 x 6.5 mm; freeing it hands the I2C2_SCL route the 3757-cell free component around the port (the R1440 witness fits inside it); the frame keeps ~50x headroom (R1394) so no net capacity is consumed.",
+   "layers": "F.Cu for the yielding item; the route itself uses F.Cu/In5.Cu with two F<->In5 vias (R1440 witness) - span classes and release gates unchanged."
+  },
+  "4_buildability": "relocation_listed",
+  "buildability_plain": "the piece MOVES existing GND copper out of a declared zone and lets the existing pour stages restore it; no new topology, no interface change, no pin-map change. Every moved item is listed with net, layer and bbox."
+ },
+ "sec13_human_sentence": "Can the crew just connect it? YES, once the zone named above is vacated: the wire already has a verified route (R1440) and a legal start (R1456); what blocks it is a wall of GND copper in the corridor. The drawing therefore says \"clear this box - GND will be restored by the copper pour\", which a crew can follow with no searching.",
+ "verification_pending": "this is a RELOCATION LIST (the sec.16.3 form the ruling names), not a verified per-segment geometry: the pour re-fill of GND inside the zone and the re-solve of the I2C2_SCL edge must be MEASURED - that needs the conditional N=1, whose precheck gate is not met this window. Declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
