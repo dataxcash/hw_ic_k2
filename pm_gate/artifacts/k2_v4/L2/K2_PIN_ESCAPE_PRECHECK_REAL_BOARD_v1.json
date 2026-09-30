@@ -1,0 +1,164 @@
+{
+ "artifact": "k2_pin_escape_precheck_real_board_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-467 sec.2.1 item 3: the precheck must be machine-decidable - \"does every target endpoint OWN an escape asset?\" - and its refusals must be NAMED. This is that reading, run read-only on the real (stitched) board with the landed planner.",
+ "reading": {
+  "board": "s1d_stitched",
+  "target_nets": [
+   "I2C1_SCL",
+   "I2C1_SDA",
+   "I2C2_SCL",
+   "MCU_VDD",
+   "NRST",
+   "P3V3",
+   "P3V3_AUX",
+   "PERSTA#"
+  ],
+  "n_pads": 27,
+  "n_obstacles": 5942,
+  "go": false,
+  "n_assets": 19,
+  "n_refused": 8,
+  "refused_by_net": {
+   "PERSTA#": 2,
+   "MCU_VDD": 1,
+   "NRST": 1,
+   "P3V3_AUX": 1,
+   "I2C2_SCL": 1,
+   "I2C1_SCL": 1,
+   "I2C1_SDA": 1
+  },
+  "bounds": {
+   "dirs": 4,
+   "max_steps": 20,
+   "candidates_per_pad_max": 80
+  },
+  "elapsed_s": 5.016,
+  "sample_assets": [
+   {
+    "net": "PERSTA#",
+    "layer": "F.Cu",
+    "a": [
+     43.65,
+     39.0
+    ],
+    "b": [
+     43.75,
+     39.0
+    ],
+    "dir": [
+     1,
+     0
+    ],
+    "d": 0.1
+   },
+   {
+    "net": "P3V3_AUX",
+    "layer": "F.Cu",
+    "a": [
+     29.65,
+     53.5
+    ],
+    "b": [
+     29.75,
+     53.5
+    ],
+    "dir": [
+     1,
+     0
+    ],
+    "d": 0.1
+   },
+   {
+    "net": "NRST",
+    "layer": "F.Cu",
+    "a": [
+     27.55,
+     51.9
+    ],
+    "b": [
+     27.65,
+     51.9
+    ],
+    "dir": [
+     1,
+     0
+    ],
+    "d": 0.1
+   },
+   {
+    "net": "MCU_VDD",
+    "layer": "F.Cu",
+    "a": [
+     42.05,
+     60.365
+    ],
+    "b": [
+     42.15,
+     60.365
+    ],
+    "dir": [
+     1,
+     0
+    ],
+    "d": 0.1
+   }
+  ],
+  "sample_refused": [
+   {
+    "net": "MCU_VDD",
+    "layer": "F.Cu",
+    "at": [
+     31.8375,
+     52.75
+    ],
+    "n_dirs_tried": 4,
+    "n_steps_tried": 20,
+    "why": "no free escape candidate within max_escape_len"
+   },
+   {
+    "net": "NRST",
+    "layer": "F.Cu",
+    "at": [
+     31.8375,
+     54.75
+    ],
+    "n_dirs_tried": 4,
+    "n_steps_tried": 20,
+    "why": "no free escape candidate within max_escape_len"
+   },
+   {
+    "net": "PERSTA#",
+    "layer": "F.Cu",
+    "at": [
+     31.8375,
+     55.25
+    ],
+    "n_dirs_tried": 4,
+    "n_steps_tried": 20,
+    "why": "no free escape candidate within max_escape_len"
+   }
+  ]
+ },
+ "interpretation": {
+  "go": "FALSE: 19 endpoints own a deterministic escape asset; 8 do NOT (named below). Per sec.2.2 the gate FAILS => NO N=1 was run.",
+  "refused_named": {
+   "PERSTA#": 2,
+   "MCU_VDD": 1,
+   "NRST": 1,
+   "P3V3_AUX": 1,
+   "I2C2_SCL": 1,
+   "I2C1_SCL": 1,
+   "I2C1_SDA": 1
+  },
+  "cluster": "all sampled refusals sit at x ~ 31.8375 (e.g. (31.8375, 52.75/54.75/55.25)) => one DENSE PIN FIELD with no orthogonal escape within 2.0mm at clearance 0.30.",
+  "why_the_refusals_are_ROBUST_without_a_polygon_rerun": "INVARIANT ARGUMENT: this run modelled each PAD obstacle as a POINT with its half-size, which is SMALLER than the pad TRUE SHAPE, i.e. the MOST PERMISSIVE pad model. A more faithful (larger) obstacle can only REDUCE escape freedom, so refusals found under the permissive model cannot be artifacts of an over-sized model - they are conservative-real. (Tracks were modelled exactly.)",
+  "bounds_owner_red_line": "elapsed 5.016s for 27 pads x 5942 obstacles; 4 fixed directions x 20 fixed steps => <=80 candidates per pad; no while-loop; no external process; no background worker."
+ },
+ "consequence": {
+  "no_run": "no N=1 (gate FAIL).",
+  "next_layer": "the 8-name list IS the contention-resolution input the ruling named: a dense pin field at x~31.8 needs the SCHEME layer to give exits/relocations, or the escape criterion (2.0mm / 0.30) must be re-derived from the product paradigm (TI EVM pin-field practice) rather than changed ad hoc.",
+  "not_yet_done": "chain integration (escape assets -> KEEPOUT before the maze) and the precheck wiring were NOT landed this window; the planner + this reading are the assets."
+ },
+ "OWNER-ITEMS": 0
+}
