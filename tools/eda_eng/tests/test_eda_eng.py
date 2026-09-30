@@ -1890,6 +1890,25 @@ class T(unittest.TestCase):
         self.assertIsNone(mr.retry_start([1.0, 1.0], "F.Cu", "c:port", "c:port"),
                           "both endpoints at the port => nothing to try")
 
+    def test_C490_the_gap_audit_names_a_too_close_foreign_pair(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-490/#K2-491): the clearance AUDIT. RED (pre-fix: the engine has
+        no gap_violations, so it cannot name a too-close pair from the geometry - the DRC report's object positions are
+        not the closest points, R1614). GREEN: two same-layer foreign tracks whose edge-to-edge gap is 0.106mm are
+        NAMED at floor 0.200 and NOT at floor 0.100; same-net or cross-layer pairs are never reported."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr490g", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        A = ("TRK", 0, 0.0, 0.0, 2.0, 0.0, 0.10, "N1")            # layer 0 = F.Cu; hw 0.10
+        B = ("TRK", 0, 0.0, 0.306, 2.0, 0.306, 0.10, "N2")        # centre 0.306 => edge gap 0.106
+        v = mr.gap_violations([A, B], 0.200)
+        self.assertEqual(len(v), 1, "a 0.106mm edge gap must be NAMED at floor 0.200")
+        self.assertAlmostEqual(v[0]["gap"], 0.106, places=3)
+        self.assertEqual(mr.gap_violations([A, B], 0.100), [], "0.106 is fine at floor 0.100")
+        C = ("TRK", 0, 0.0, 0.306, 2.0, 0.306, 0.10, "N1")        # same net => never reported
+        self.assertEqual(mr.gap_violations([A, C], 0.200), [])
+        D = ("TRK", 4, 0.0, 0.306, 2.0, 0.306, 0.10, "N2")        # another layer => never reported
+        self.assertEqual(mr.gap_violations([A, D], 0.200), [])
+
     def test_C483_the_grid_accepts_both_ctx_hole_shapes(self):
         """TIAN TIAO #1 (engine asset + regression): the registered gauge interface. Grid._mark expected 5-tuples in
         ctx.holes while the in-register ctx builder f3.Ctx yields 4-tuples, so ANY Grid over a board with holes raised

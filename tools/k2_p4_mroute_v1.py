@@ -527,6 +527,50 @@ def simplify(pts):
     return res
 
 
+def _pt_seg_dist(px, py, ax, ay, bx, by):
+    vx, vy = bx - ax, by - ay
+    L2 = vx * vx + vy * vy
+    t = 0.0 if L2 <= 0 else max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / L2))
+    return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
+
+
+def _seg_seg_dist(ax, ay, bx, by, cx, cy, dx, dy):
+    """Exact segment-segment distance (0.0 when they cross)."""
+    def _cr(o, p, q):
+        return (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0])
+    d1 = _cr((ax, ay), (bx, by), (cx, cy)); d2 = _cr((ax, ay), (bx, by), (dx, dy))
+    d3 = _cr((cx, cy), (dx, dy), (ax, ay)); d4 = _cr((cx, cy), (dx, dy), (bx, by))
+    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)):
+        return 0.0
+    return min(_pt_seg_dist(cx, cy, ax, ay, bx, by), _pt_seg_dist(dx, dy, ax, ay, bx, by),
+               _pt_seg_dist(ax, ay, cx, cy, dx, dy), _pt_seg_dist(bx, by, cx, cy, dx, dy))
+
+
+def gap_violations(items, floor):
+    """#K2-490/#K2-491 ENGINE CAPABILITY (pure, deterministic): the CLEARANCE AUDIT.
+
+    `items` = [(kind, layer, x1, y1, x2, y2, halfwidth), ...]; a via is a zero-length segment whose halfwidth is its
+    radius. Returns the list of violations "edge_gap < floor" between DIFFERENT nets on the SAME layer, each as
+    {"gap","a","b"} with the edge-to-edge distance (the DRC's own measure), sorted deterministically. This makes the
+    engine able to NAME a too-close pair itself - the object positions in a DRC report are NOT the closest points
+    (R1614), so the closest pair must be computed from the geometry.
+    """
+    out = []
+    for i in range(len(items)):
+        ka, la, ax1, ay1, ax2, ay2, a_hw, a_net = (items[i][0], items[i][1], items[i][2], items[i][3],
+                                                   items[i][4], items[i][5], items[i][6], items[i][7])
+        for j in range(i + 1, len(items)):
+            kb, lb, bx1, by1, bx2, by2, b_hw, b_net = (items[j][0], items[j][1], items[j][2], items[j][3],
+                                                       items[j][4], items[j][5], items[j][6], items[j][7])
+            if la != lb or a_net == b_net:
+                continue
+            gap = _seg_seg_dist(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) - a_hw - b_hw
+            if gap < floor:
+                out.append({"gap": round(gap, 4), "a": [ka, la, a_net], "b": [kb, lb, b_net]})
+    out.sort(key=lambda r: (r["gap"], str(r["a"]), str(r["b"])))
+    return out
+
+
 def retry_start(pb, lb, compb, cport):
     """#K2-486/#K2-490 ENGINE CAPABILITY (pure, deterministic): pick the START for a port-directed retry.
     The (out,in) substitution can replace the outside endpoint with the VERY port used as the goal, making
