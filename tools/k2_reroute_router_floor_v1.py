@@ -75,7 +75,10 @@ def main():
     CH = {}
     for _it in [x for x in (a.channels or "").split(";") if x.strip()]:
         _n, _r = _it.split(":", 1)
-        CH[_n] = tuple(float(v) for v in _r.split(","))
+        _r = _r.split("@")[0]                             # #K2-451 (ii): tolerate the "@corridor/@layer" tag
+        # #K2-451 (ii): a net may appear MANY times (one slot per corridor) => net -> [rect, ...] (backward
+        # compatible: a single-rect input yields a one-element list, so legacy behaviour is unchanged).
+        CH.setdefault(_n, []).append(tuple(float(v) for v in _r.split(",")))
     _GLOBAL_WALL = mr.WALL_RECT
     mr._CHANNELS = CH                                 # the channel map must live on `mr` (see solve)
     mr._CH_MARGIN = 0.0
@@ -237,12 +240,15 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
         h0 = OWN_CELL["hits"]
         if net in _CH:                                    # MODULE-LEVEL function (main()'s locals are NOT in scope)
-            _c = _CH[net]
+            _cs = _CH[net] if isinstance(_CH[net], list) else [_CH[net]]   # #K2-451 (ii): per-corridor slots
             _m = float(getattr(mr, "_CH_MARGIN", 0.5))
             sol, why = None, "no-attempt"
-            for _w in (_m, _m * 2, _m * 4):               # BOUNDED deterministic ladder (not a search): a wider
-                mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)   # channel must not cut the net's
-                sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)   # reachable cell
+            for _c in _cs:                                # try each of the net's corridor slots (legacy = one)
+                for _w in (_m, _m * 2, _m * 4):           # BOUNDED deterministic ladder (not a search): a wider
+                    mr.WALL_RECT = (_c[0] - _w, _c[1] - _w, _c[2] + _w, _c[3] + _w)   # channel must not cut the net's
+                    sol, why = orig(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step)   # reachable cell
+                    if sol is not None:
+                        break
                 if sol is not None:
                     break
         else:

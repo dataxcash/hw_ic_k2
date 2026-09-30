@@ -1391,7 +1391,15 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
             _sp5 = _iu4.spec_from_file_location("kd4", os.path.join(ROOT, "tools", "k2_deviation_gen_v1.py"))
             _dev = _iu4.module_from_spec(_sp5); _sp5.loader.exec_module(_dev)
             _pairs = _dev.pairs(json.load(open(drc, encoding="utf-8")))
-            _chj, _unsat = _jca.channels_from_pairs(_pairs, list(rect))
+            _per = {}
+            for _pr in _pairs:                                 # #K2-451 (ii): per-corridor slots (not whole-net bands)
+                _n2 = _pr["net"]
+                for _p2 in (_pr["p1"], _pr["p2"]):
+                    _x2 = min(max(_p2[0], rect[0]), rect[2]); _y2 = min(max(_p2[1], rect[1]), rect[3])
+                    _b2 = _per.setdefault(_n2, [_x2, _y2, _x2, _y2])
+                    _b2[0] = min(_b2[0], _x2); _b2[1] = min(_b2[1], _y2)
+                    _b2[2] = max(_b2[2], _x2); _b2[3] = max(_b2[3], _y2)
+            _chj, _unsat = _jca.channels_string_corridor(_per, list(rect))
             if _chj and not _unsat:
                 ch = _chj
         except Exception:                                          # noqa: BLE001

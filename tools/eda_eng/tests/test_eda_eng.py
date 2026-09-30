@@ -1427,7 +1427,8 @@ class T(unittest.TestCase):
         # and the chain must PREFER this joint source
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         h = src[src.index("def channels_for_maze("):src.index("def wipe_resolve_chain(")]
-        self.assertIn("channels_from_pairs(", h, "the chain must prefer the one-shot joint allocation")
+        self.assertIn("channels_string_corridor(", h,
+                      "the chain must prefer the one-shot JOINT allocation (per-corridor since R1418)")
         # R1408/R1410 correct GRANULARITY: per-corridor packing must place EVERY crossing net (zero unsat),
         # whereas whole-net y-banding provably cannot (two independent refutations on the record).
         rect2 = [22.95, 32.95, 51.5, 78.0]
@@ -1454,7 +1455,20 @@ class T(unittest.TestCase):
         self.assertEqual(sorted(set(names)), sorted(per2), "every net must appear")
         self.assertGreater(len(names), len(set(names)), "a net repeats when it crosses several corridors")
 
-    def test_C449_anchor_audit_fails_LOUD_on_a_padless_added_piece(self):
+    def test_C451_the_maze_keeps_every_per_corridor_slot_of_a_repeated_net(self):
+        """#K2-451 sec.2.4 option (ii): --channels may carry the SAME net many times (one slot per corridor). The
+        parser must keep ALL of them (net -> [rect,...]) instead of overwriting, and must tolerate the '@tag' suffix;
+        the consumer must iterate the slots. RED = today a repeated net survives only as its LAST rect."""
+        src = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("CH.setdefault(_n, []).append(", src, "a repeated net must ACCUMULATE its rects")
+        self.assertIn('_r.split("@")[0]', src, "the @corridor/@layer tag must be tolerated")
+        self.assertIn("_cs = _CH[net] if isinstance(_CH[net], list) else [_CH[net]]", src,
+                      "the consumer must iterate the net's slots (legacy single rect still works)")
+        self.assertIn("for _c in _cs:", src)
+        # a legacy single-rect string still yields exactly one rect (backward compatibility)
+        self.assertIn("CH.setdefault(_n, []).append(", src)
+
+
         """#K2-449 sec.2.4 (M-ENG-ORPHAN-BRIDGE-DISPOSAL closure): every ADDED drawing piece must be anchored to a pad
         or to existing copper, otherwise the chain's isolated-copper disposal removes it (proved twice: the R-g zone
         and the I2C1_SDA joint). RED = a pad-less piece is flagged; GREEN = a pad-touching piece passes."""
