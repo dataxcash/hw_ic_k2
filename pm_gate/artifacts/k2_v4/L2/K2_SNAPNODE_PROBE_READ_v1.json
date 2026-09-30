@@ -1,0 +1,22 @@
+{
+ "artifact": "k2_snapnode_probe_read_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-485 sec.3.2 (K2MR_DBG2 read-only probe of the I2C2_SCL edge). Zero board writes; not an exam run.",
+ "probe": {
+  "cmd": "K2MR_DBG2=1 k2_reroute_router_floor_v1.py --in <R1552 final board> --drc <its DRC> --order-list <I2C2_SCL only>",
+  "ledger": "blocked=[{net I2C2_SCL, dist 45.553, why no-free-start-node}]"
+ },
+ "debug_dump_two_anchors": {
+  "anchor_A_outside": "(82.910, 51.190) F.Cu cell=(482,30) margin=0.00: EVERY probed cell (r=0..4) is own=True bad=1 - the whole neighbourhood is BLOCKED. Note x=82.91 is ~31mm EAST of the frame (the wall is x<=51.5): this anchor is OUTSIDE the wall.",
+  "anchor_B_the_pad": "(37.750, 57.163) F.Cu cell=(30,90) margin=0.00: r=0 d=(0,0) xy=(37.750,57.190) own=True bad=0 - the pad anchor IS free and on the island. So the pad side is NOT the problem."
+ },
+ "named_cause": "the maze's edge for I2C2_SCL runs from the pad (37.75,57.163) to (82.910,51.190) - i.e. its far endpoint lies OUTSIDE the wall (~31mm east of the frame). Outside the wall every cell is bad=1, so snap_node finds nothing and the caller reports no-free-start-node. The port substitution that exists for exactly this case is gated in the maze's own source (k2_reroute_router_floor_v1.py:369) on BOTH endpoints being outside the wall: `if _prts and _outside_wall(pa, _saved) and _outside_wall(pb, _saved)`. This edge has exactly ONE endpoint outside (the (out,in) class) - which the maze's own comment at :425-431 already flags as structurally unfixable by that gate ('旧重试两方向都会带上框外端点 ⇒ (out,in) 类结构上修不了 ... 代码级 :343 只覆盖两端皆框外').",
+ "why_the_ledger_distance_matches": "|(82.910,51.190) - (37.750,57.163)| = 45.55mm, which is exactly the ledger's recorded dist 45.553 - confirming that this is the failing edge.",
+ "next_deterministic_action": "extend the port substitution to the (out,in) class: allow the substitution to fire when AT LEAST ONE endpoint is outside the wall (the other endpoint then stays as-is), i.e. relax the gate at :369 from AND to OR - deterministic, bounded, zero board geometry, zero criteria change.",
+ "not_done": [
+  "no board write",
+  "no exam run",
+  "no generator change"
+ ],
+ "OWNER-ITEMS": 0
+}
