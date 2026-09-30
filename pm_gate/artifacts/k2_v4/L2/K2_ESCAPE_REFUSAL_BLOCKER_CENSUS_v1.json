@@ -1,0 +1,114 @@
+{
+ "artifact": "k2_escape_refusal_blocker_census_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-468 sec.3.4: when the precheck still FAILS, the NAMED list is the scheme-layer input. This census turns \"no escape\" into \"blocked by WHOM, in WHICH direction\" - read-only, bounded (8 directions x 20 steps x local obstacles; 0.34s wall clock).",
+ "reading": {
+  "I2C2_SCL@37.75,57.1625": {
+   "layer": "F.Cu",
+   "per_direction_blocker": {
+    "1,0": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "1,1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "0,1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,0": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,-1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "0,-1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "1,-1": {
+     "net": "GND",
+     "at_mm": 0.1,
+     "d": 1.0
+    }
+   },
+   "blocking_nets": [
+    "GND"
+   ],
+   "first_contact_mm_min": 0.1
+  },
+  "I2C1_SDA@33.25,48.8375": {
+   "layer": "F.Cu",
+   "per_direction_blocker": {
+    "1,0": {
+     "net": "I2C1_SCL",
+     "at_mm": 0.1,
+     "d": 0.4
+    },
+    "1,1": {
+     "net": "I2C1_SCL",
+     "at_mm": 0.1,
+     "d": 0.4
+    },
+    "0,1": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,1": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,0": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "-1,-1": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "0,-1": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    },
+    "1,-1": {
+     "net": "",
+     "at_mm": 0.1,
+     "d": 1.0
+    }
+   },
+   "blocking_nets": [
+    "",
+    "I2C1_SCL"
+   ],
+   "first_contact_mm_min": 0.1
+  }
+ },
+ "interpretation": {
+  "U1_pad22": "I2C2_SCL @ (37.75,57.1625) on F.Cu: every one of the 8 directions is first-blocked by GND (the nearest foreign object in each ray is GND copper/pads). So this pad sits inside a GND-dense neighbourhood and has no free ray within the 2.0mm / 0.30mm criterion - independent of direction choice.",
+  "I2C1_SDA_pad": "I2C1_SDA @ (33.25,48.8375) on F.Cu: the nearest blocker is I2C1_SCL (0.4mm) in the E/NE rays and an unnamed pad (net=\"\") in the others - i.e. a tightly packed pin field, not a pour.",
+  "caveat_READ_THIS": "DISTANCES ARE APPROXIMATE IN THIS CENSUS: pads are modelled as POINTS with half their size (the same permissive model used by the planner), so the per-direction \"first contact\" identifies the NEAREST FOREIGN OBJECT ROBUSTLY but its distance is only indicative. For a scheme-layer decision, the pad TRUE SHAPES must be used.",
+  "what_it_means": "neither refusal is an artifact of the direction set or of the candidate ladder: even the extended set (8 dirs + dogleg, 560 candidates) finds nothing, and the census shows the pads are hemmed in from every side. The choice is therefore a SCHEME-LAYER one: (A) re-derive the escape criterion from the product practice (TI EVM / SNLA425 / IPC-7351 - anchors already in REF-CASE-LIBRARY sec.E), or (B) give these two pads explicit exits/relocations in the drawing."
+ },
+ "status": "no N=1 was run (precheck user gate FAILS, #K2-468 sec.3.4); board frozen; nothing landed.",
+ "OWNER-ITEMS": 0
+}
