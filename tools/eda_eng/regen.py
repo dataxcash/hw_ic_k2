@@ -1939,6 +1939,20 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
 
     chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": d["total_delta"],
                           "C8": not _inside})
+    # ── #K2-501 sec.2.2 **段亡即卷亡**：链上任何一段带 err ⇒ **拒判**并**具名该段**（禁带死段出判）──────────
+    try:
+        _iu9 = __import__("importlib").util
+        _sp9 = _iu9.spec_from_file_location("k2mr501g", os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py"))
+        _mr9 = _iu9.module_from_spec(_sp9); _sp9.loader.exec_module(_mr9)
+        _dead9 = _mr9.dead_stages(chain)
+    except Exception as _e9:                                    # noqa: BLE001
+        _dead9 = [{"at": -1, "stage": "dead_stage_gate", "err": type(_e9).__name__}]
+    if _dead9:
+        chain.append({"stage": "dead_stage_gate", "pass": False,
+                      "dead": [str(d.get("stage")) for d in _dead9]})
+        return {"state": "FAILED_DEAD_STAGE", "chain": chain, "dead_stages": _dead9, "method": "wipe_resolve",
+                "rule": "#K2-501: a run whose chain carries a dead segment must NOT be graded (fail-closed, named)."}
+    chain.append({"stage": "dead_stage_gate", "pass": True, "dead": []})
     return {"state": "GRADED", "chain": chain, "method": "wipe_resolve", "wipe": {
                 "deleted_segments": mp["deleted_segments"], "deleted_vias": mp["deleted_vias"],
                 "outside_halves_kept": mp["outside_halves_kept"], "n_ports": sum(len(x) for x in mp["ports"].values())},
