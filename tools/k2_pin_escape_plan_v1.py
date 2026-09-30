@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
-"""k2_pin_escape_plan_v1.py —— #K2-467 **引脚逃逸（pin access / escape）规划器**（纯函数 · 无 pcbnew · 零搜索）。
+"""k2_pin_escape_plan_v1.py —— #K2-467／#K2-468 **引脚逃逸（pin access / escape）规划器**（纯函数 · 无 pcbnew · 零搜索）。
 
-**补的是标准阶段**：任何布线器在布线前都要先给每个端点**预留一条确定性的出线通道**（escape），我仓此前从未有过。
-三证据收敛（`R1430` 267/268 `no-free-start-node`；`R1460` 端口通道被他网切断；`R1470` 封口铜系迷宫自加）
-⇒ 「事前撤铜」必扑空；**正解 ＝ 布线前正向推导并保留逃逸通道**。
+**补的是标准阶段**（业界每家布线器都有）：布线前给每个**未连通**端点**预留一条确定性的出线通道**（escape），
+该通道随后以 `KEEPOUT`（`R1488`）**硬保留**给该网。已连通端**以其既有走线为逃逸**（`PASS-by-route` · #K2-468 §3.2）。
 
-**owner 硬约束（绝对红线）写入门内**：**禁死循环 · 禁 CPU 狂飙** ——
-· 方向固定 **4** 个、步梯固定 **20** 档（0.1…2.0mm）⇒ 每端点候选 **≤80**，**无 `while`**；
-· 纯算术判据（点-线段距离）· 无外部进程 · 无后台。
-判据：候选段**全程**离**异网**铜/焊盘 ≥ `clear`，且终点为自由点；**首中即取**（方向序固定 ⇒ 确定性）。
-**无候选 ⇒ 具名拒绝**（端点/层/阻挡网/阻挡点），绝不静默。
+**owner 硬约束（绝对红线 · 写入门内）**：**禁死循环 · 禁 CPU 狂飙** ——
+· 方向 **8**（正交＋45°）· 直段步梯 **20**（0.1…2.0mm）· 折线（dogleg）seg1 ≤5 步、seg2 ≤5 步、转弯 ±45°；
+· **每盘候选上限 ＝ 8×20 ＋ 8×5×2×5 ＝ 560**（固定 · 无 `while` · 纯算术）；
+· **局部障碍预筛（±3.5mm）** ⇒ 每候选只测邻域件 ⇒ **无 CPU 狂飙**；无外部进程 · 无后台；
+· 确定性：固定方向序 ＋ 首中即取。**无候选 ⇒ 具名拒绝**（网/层/位置/已试候选数），绝不静默。
 """
 from __future__ import annotations
 
-DIRS = ((1, 0), (0, 1), (-1, 0), (0, -1))          # 固定方向序（确定性的来源之一）
-NSTEPS = 20                                          # 固定步梯长度 ⇒ 候选数有界（4 * 20 = 80）
+DIRS = ((1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1))
+NSTEPS = 20
+DSEG1 = 5
+DSEG2 = 5
+LOCAL_R = 3.5
+CANDS_MAX = len(DIRS) * NSTEPS + len(DIRS) * DSEG1 * 2 * DSEG2      # 560
+
 
 def _pt_seg(px, py, ax, ay, bx, by):
     vx, vy = bx - ax, by - ay
@@ -23,8 +27,9 @@ def _pt_seg(px, py, ax, ay, bx, by):
     qx, qy = ax + t * vx, ay + t * vy
     return ((px - qx) ** 2 + (py - qy) ** 2) ** 0.5
 
+
 def _seg_seg(ax, ay, bx, by, cx, cy, dx, dy):
-    """**精确**线段-线段距离（相交通 ⇒ 0）—— 修正 R1492 之近似判据弱点（min(点-线) 会漏检横穿）。"""
+    """**精确**线段-线段距离（相交通 ⇒ 0）。"""
     def _cr(o, p, q):
         return (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0])
     d1 = _cr((ax, ay), (bx, by), (cx, cy)); d2 = _cr((ax, ay), (bx, by), (dx, dy))
@@ -35,49 +40,63 @@ def _seg_seg(ax, ay, bx, by, cx, cy, dx, dy):
                _pt_seg(cx, cy, ax, ay, bx, by), _pt_seg(dx, dy, ax, ay, bx, by))
 
 
+def _leg_clear(net, layer, p0, p1, obstacles, clear):
+    (x0, y0), (x1, y1) = p0, p1
+    for (onet, olayer, ax, ay, bx, by, hw) in obstacles:
+        if onet == net or olayer != layer:
+            continue
+        dist = _pt_seg(x0, y0, ax, ay, bx, by) if (ax == bx and ay == by) else _seg_seg(x0, y0, x1, y1, ax, ay, bx, by)
+        if dist < clear + hw:
+            return False
+    return True
+
+
 def escape_for_pad(net, layer, pad, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
-    """`pad = (x,y)`；`obstacles = [(net, layer, x1,y1,x2,y2, halfwidth)]`（**异网**铜/焊盘，含半宽）。
-    返回 `{"asset":{net,layer,a,b,dir,d} | None, "refused":{...} | None}`。**有界 · 确定性**。"""
+    """返回 `{"asset":{...}|None, "refused":{...}|None}`。**有界 · 确定性**。"""
     x0, y0 = float(pad[0]), float(pad[1])
+    lim = LOCAL_R + max_escape_len
+    loc = [o for o in obstacles
+           if (abs(o[2] - x0) <= lim and abs(o[3] - y0) <= lim) or (abs(o[4] - x0) <= lim and abs(o[5] - y0) <= lim)]
     nsteps = min(NSTEPS, int(max_escape_len / step))
-    hit = None
-    for (dx, dy) in DIRS:
+    tried = 0
+    for (dx, dy) in DIRS:                                     # ① 直段（8 向 × ≤20 步）
         for k in range(1, nsteps + 1):
+            tried += 1
             d = k * step
-            x1, y1 = x0 + dx * d, y0 + dy * d
-            ok = True
-            worst = None
-            for (onet, olayer, ax, ay, bx, by, hw) in obstacles:
-                if onet == net or olayer != layer:
-                    continue
-                dist = _pt_seg(x0, y0, ax, ay, bx, by) if (ax == bx and ay == by) else \
-                       _seg_seg(x0, y0, x1, y1, ax, ay, bx, by)
-                if dist < clear + hw:
-                    ok = False
-                    if worst is None or dist < worst[1]:
-                        worst = (onet, round(dist, 4), [ax, ay, bx, by])
-                    break
-            if ok:
-                hit = {"asset": {"net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
-                                 "b": [round(x1, 4), round(y1, 4)], "dir": [dx, dy], "d": round(d, 4)}}
-                break
-        if hit:
-            break
-    if hit:
-        return {"asset": hit["asset"], "refused": None}
+            p1 = (x0 + dx * d, y0 + dy * d)
+            if _leg_clear(net, layer, (x0, y0), p1, loc, clear):
+                return {"asset": {"net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
+                                  "b": [round(p1[0], 4), round(p1[1], 4)], "dir": [dx, dy], "d": round(d, 4),
+                                  "dogleg": False}, "refused": None}
+    for (dx, dy) in DIRS:                                     # ② 两段折线 dogleg（±45° 转）
+        for k1 in range(1, DSEG1 + 1):
+            d1 = k1 * step
+            m = (x0 + dx * d1, y0 + dy * d1)
+            for s in (1, -1):
+                tx, ty = (dx - s * dy, dy + s * dx)
+                for k2 in range(1, DSEG2 + 1):
+                    tried += 1
+                    d2 = k2 * step
+                    p2 = (m[0] + tx * d2, m[1] + ty * d2)
+                    if abs(p2[0] - x0) > max_escape_len or abs(p2[1] - y0) > max_escape_len:
+                        continue
+                    if _leg_clear(net, layer, (x0, y0), m, loc, clear) and _leg_clear(net, layer, m, p2, loc, clear):
+                        return {"asset": {"net": net, "layer": layer, "a": [round(x0, 4), round(y0, 4)],
+                                          "b": [round(p2[0], 4), round(p2[1], 4)],
+                                          "bend": [round(m[0], 4), round(m[1], 4)],
+                                          "dir": [dx, dy], "d": round(d1 + d2, 4), "dogleg": True}, "refused": None}
     return {"asset": None, "refused": {"net": net, "layer": layer, "at": [round(x0, 4), round(y0, 4)],
-                                       "n_dirs_tried": len(DIRS), "n_steps_tried": nsteps,
-                                       "why": "no free escape candidate within max_escape_len"}}
+                                       "candidates_tried": tried,
+                                       "why": "no free escape candidate (8dir + dogleg) within max_escape_len"}}
+
 
 def plan_escapes(pads, obstacles, clear=0.30, max_escape_len=2.0, step=0.1):
-    """`pads = [(net, layer, x, y)]` ⇒ `{"assets":[...], "refused":[...], "go":bool}`。`go` ＝ **预检门**（每端点皆有逃逸资产）。"""
+    """`pads` **应仅含未连通端**（#K2-468 §3.2）。`go` ＝ 预检门（每端点皆有逃逸资产）。"""
     assets, refused = [], []
     for (net, layer, x, y) in pads:
         r = escape_for_pad(net, layer, (x, y), obstacles, clear, max_escape_len, step)
-        if r["asset"]:
-            assets.append(r["asset"])
-        else:
-            refused.append(r["refused"])
+        (assets.append(r["asset"]) if r["asset"] else refused.append(r["refused"]))
     return {"assets": assets, "refused": refused, "go": not refused,
-            "rule": "#K2-467: every targeted pad must own an escape asset; otherwise the precheck FAILS and names them",
-            "bounds": {"dirs": len(DIRS), "max_steps": NSTEPS, "candidates_per_pad_max": len(DIRS) * NSTEPS}}
+            "rule": "#K2-468: escape assets are required for UNCONNECTED endpoints only; connected ones pass by route",
+            "bounds": {"dirs": len(DIRS), "max_steps": NSTEPS, "dogleg": [DSEG1, DSEG2],
+                       "candidates_per_pad_max": CANDS_MAX, "local_filter_radius_mm": LOCAL_R}}

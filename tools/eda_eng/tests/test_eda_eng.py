@@ -1886,7 +1886,7 @@ class T(unittest.TestCase):
         self.assertFalse(p["go"], "RED: a fully enclosed pad must FAIL the precheck")
         self.assertEqual(len(p["refused"]), 1); self.assertEqual(p["refused"][0]["net"], "N")
         self.assertIn("no free escape candidate", p["refused"][0]["why"], "the refusal must be NAMED, never silent")
-        self.assertEqual(p["bounds"]["candidates_per_pad_max"], 80, "OWNER bound: 4 dirs x 20 steps, no while-loop")
+        self.assertEqual(p["bounds"]["candidates_per_pad_max"], 560, "OWNER bound (#K2-468): 8 dirs x 20 + 8x5x2x5 dogleg = 560, no while-loop")
         self.assertEqual(p["bounds"]["max_steps"], m.NSTEPS)
         self.assertTrue(m.plan_escapes([('N', 'F.Cu', 0.0, 0.0)], three, clear=C)["go"], "GREEN: precheck GO")
 
