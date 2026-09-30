@@ -1,0 +1,37 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_s_v1",
+ "ts": "2026-09-30",
+ "authority": "stop order (red line: TWO CONSECUTIVE ERRORS - the \"two errors => stop and return to Plan\" rule).",
+ "errors_owned": {
+  "count": 2,
+  "what": "two consecutive FAILED script invocations while GENERATING the appendix-R artifacts: first an IndentationError and then a SyntaxError, both from the same authoring slip - long multi-line strings written as adjacent-literal continuations inside a call, whose second line is not indented/accepted as a continuation.",
+  "classification": "ISSUES WITH MY OWN AUTHORING TOOLING, not with the engine: no k2 file was touched by them, no board was written, no run was made, and the artifacts were rewritten correctly and VALIDATED as JSON before commit (the third attempt succeeded).",
+  "impact": "zero on the product; the cost was two wasted invocations.",
+  "remedy_fixed_same_window": "long strings are now built as NAMED VARIABLES (helper) and assembled by reference instead of inline adjacent-literal continuations; and every generated artifact is json.load-ed before it is committed (which is how the failure was caught)."
+ },
+ "compliance": {
+  "stopped": true,
+  "stopped_when": "already stopped: nothing started since R1440 (the receipt); nothing will be.",
+  "exam_runs_this_period": 0,
+  "param_retries": 0,
+  "tool_edits_this_period": 0,
+  "board_touched": false,
+  "frozen_four_sources": "4/4; criteria/ read-only rev=6"
+ },
+ "blocker_report": {
+  "tried": "the convergence order demanded a binary; it was produced READ-ONLY (the frozen maze used as a measurement device, chain parameters + the chain acceptance caliber cv._req>=0.20): a FEASIBILITY WITNESS for BOTH residuals (I2C2_SCL: F.Cu -> In5.Cu -> F.Cu with two F<->In5 vias, from the dR port (51.5,56.6) to U1 pad 22; I2C1_SDA: one F<->B via plus a short B.Cu run), each produced THROUGH mr.solve_edge so the seg_exact/via_exact release gates accepted them. A means-scoped certificate accompanies it: the SAME geometry with the net legacy WHOLE-NET hard channel as the domain FAILS (no-free-goal-node) - the domain alone flips the outcome.",
+  "why_not_yet": "C1=2 is unchanged, and the reason is now pinned to a single leftover: R1424 softened the GUIDANCE half of the channel machinery but the HARD half (--channels as a solve domain) is still in force, and it is what starves I2C2_SCL. The second residual is not an engine edge at all (it only exists on the final board, created by the chain drawing/stitch stages and left unjoined).",
+  "gap_layer": "(a) ENGINE MEANS layer: the last hard domain; (b) DRAWING layer: the I2C1_SDA cross-layer join. NOT a resource problem - the venue is not occupied by copper or area (witness passes the acceptance gates; ~50x frame headroom), it is occupied by the TOOL OWN hard band."
+ },
+ "plan_recap": {
+  "q1_signal_path": "Every wiped net must come back from its pads to the block-edge ports on dR; power on the inner planes, buses as groups, control links short and direct.",
+  "q2_what_blocks": "Nothing physical. For the I2C2_SCL wire the tool is still told \"you may only move inside this 0.96mm band\" - and inside that band there is no legal place to land, so it gives up; the moment the fence is removed the same wire routes fine (witness in hand). The I2C1_SDA wire is not an engine wire at all: its two stubs sit on different layers and the drawing never joined them.",
+  "q3_human_plan": "Take the last fence away: let the assigned lanes be ADVICE (as they already are for guidance) rather than a fence, then measure once. And add the one missing cross-layer join on the drawing side, once the layer call is confirmed."
+ },
+ "one_implementation_list": {
+  "landed": "R1440 = the binary (two acceptance-verified witnesses + the means-scoped certificate + addendum R).",
+  "awaiting_ruling": "(A) engine means layer: soften the LAST hard half (make the legacy whole-net --channels a guidance too, or drop it) and, if granted, one fresh N=1 to measure it; (B) drawing layer: the sec.16.2 layer call for I2C1_SDA and, if agreed, one drawing-side piece with its own sec.16.3 package."
+ },
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
