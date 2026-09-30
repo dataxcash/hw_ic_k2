@@ -1669,6 +1669,55 @@ class T(unittest.TestCase):
         self.assertEqual(w["witness_1_I2C2_SCL"]["buildability"], "no_move")
         self.assertEqual(w["witness_2_I2C1_SDA"]["buildability"], "relocation_listed")
 
+    def test_C456_pass2_is_a_bounded_atomic_ripup_with_the_blocked_nets_promoted(self):
+        """#K2-456 sec.2.5: the binding lesion is the SERVICE ORDER - every successful edge appends its copper into ctx
+        (k2_p4_mroute_v1.py:771-780), so a later net is starved by copper that did not exist when the run started (measured
+        this window: --only-net I2C2_SCL solves with "[astar] ok exp=11390" while the full run logs no-path-coarse
+        (exhausted-42049) on the SAME call). RED = that greedy order. GREEN = pass-2 rips the whole run's copper and
+        re-routes ONCE with the blocked nets promoted, adopting only if the block count strictly drops (atomic rollback
+        otherwise). The unit level below pins the MECHANISM the pass exploits: the same edge fails while a barrier piece is
+        present and solves once it is ripped."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr456", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        self.assertIn("RIPUP = 0", src); self.assertIn("def _pass(eorder):", src)
+        self.assertIn("_prio_net = {b[\"net\"] for b in blocked}", src, "the blocked nets must be promoted")
+        self.assertIn('"adopted": ("round2" if len(b2) < len(blocked) else "round1")', src,
+                      "the round is adopted ONLY if the block count strictly drops (else roll back - atomic)")
+        self.assertIn("def _unwind():", src)
+        self.assertIn("_pass(_p1 + _p2)", src, "one re-route: blocked first, the rest in the original order")
+        r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        self.assertIn('"--ripup", "1"', r, "the chain must enable exactly one pass-2 round")
+        w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("mr.RIPUP = int(a.ripup or 0)", w)
+        # the MECHANISM, at unit level on the real core: a barrier blocks the edge; ripping it frees the edge
+        class _Ctx:
+            pads, vias = {}, {}
+            holes, edge, keep_t, keep_v = [], [], [], []
+            tracks = []
+            def _bb_hit(self, rb, x1, y1, x2, y2, rad): return True     # conservative: always test the item
+        ctx = _Ctx()
+        ctx.tracks.append({"net": "N", "layer": mr.F_CU, "x1": 0.5, "y1": 2.0, "x2": 0.5, "y2": 1.0,
+                           "hw": 0.1, "uuid": "own1"})
+        ctx.tracks.append({"net": "N", "layer": mr.F_CU, "x1": 4.5, "y1": 2.0, "x2": 4.5, "y2": 1.0,
+                           "hw": 0.1, "uuid": "own2"})
+        # a VERTICAL barrier on EVERY routing layer: no way round it and no layer hop can escape => genuinely blocked
+        # (this is why one layer is not enough: the router is multi-layer and would simply hop to In5.Cu)
+        barriers = [{"net": "OTHER", "layer": L, "x1": 2.5, "y1": -1.0, "x2": 2.5, "y2": 6.0, "hw": 0.25,
+                     "uuid": "bar%d" % L} for L in mr.LAYERS]
+        for _b in barriers: ctx.tracks.append(_b)
+        mr.WALL_RECT = (0.0, 0.0, 5.0, 2.0)
+        _saved_edge_in = mr.EDGE_IN
+        mr.EDGE_IN = (0.0, 0.0, 5.0, 5.0)               # the release-caliber clip must be a no-op here
+        find = lambda k: "R"
+        sol, why = mr.solve_edge(ctx, find, "R", "R", "N", mr.F_CU, (0.5, 2.0), mr.F_CU, (4.5, 2.0), 1.0, 0.25)
+        self.assertIsNone(sol, "RED: with the barrier copper present the edge cannot be routed")
+        for _b in barriers: ctx.tracks.remove(_b)        # <- the RIP
+        sol2, why2 = mr.solve_edge(ctx, find, "R", "R", "N", mr.F_CU, (0.5, 2.0), mr.F_CU, (4.5, 2.0), 1.0, 0.25)
+        mr.WALL_RECT = None; mr.EDGE_IN = _saved_edge_in
+        self.assertIsNotNone(sol2, "GREEN: after ripping the blocker the SAME edge solves: %s" % why2)
+
     def test_C448_via_aware_clearance_and_interpreter_gate(self):
         """#K2-448 sec.2.5: (1) a clearance check MUST enumerate every layer a via covers - R1358 found a false clean
         because a single GetLayer() filter missed a via; (2) a pcbnew-using tool must fail LOUDLY under a python

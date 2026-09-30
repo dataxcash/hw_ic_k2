@@ -49,6 +49,9 @@ def main():
                          "them, so guidance can never make an edge unsolvable (unlike a hard --channels domain).")
     ap.add_argument("--guide-penalty", dest="guide_penalty", type=float, default=3.0,
                     help="#K2-452: cost multiplier-1 for steps outside the guided cells (default 3.0).")
+    ap.add_argument("--ripup", type=int, default=0,
+                    help="#K2-456 sec.2.5 pass-2: bounded rip-up & reroute (whole-run rip, ONE re-route with the "
+                         "blocked nets promoted; adopted only if the block count strictly drops - atomic).")
     ap.add_argument("--order-list", dest="order_list", default=None,
                     help="#K2-415 lever 'order': a file with one net name per line (priority order, first = first)")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"],
@@ -59,6 +62,7 @@ def main():
     cv = mr.cv
     orig = cv._req
     cv._req = lambda x, y: max(orig(x, y), a.floor)
+    mr.RIPUP = int(a.ripup or 0)                       # #K2-456 sec.2.5: pass-2 rounds (0 = off)
     if a.bound_rect:                                  # C35：把域作为**搜索约束**注入（不改迷宫本体）
         mr.WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))
     # ── #K2-414 §二.1 **B1 敷铜重分类**：可回流网（默认 GND）的铜**不入障碍模型** ──────────────

@@ -188,6 +188,7 @@ def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
 # **C35 环路内框界**（#K2-378 §三.1）：把作业域**作为搜索约束**传入 —— 域外格一律不可选。
 # 事后恢复框外铜已被实测否决（R1020：得 C6=0 但坏连通 C1 14->17 · C2 249->1237）；界必须下在**搜索环路里**。
 WALL_RECT = None          # (x0, y0, x1, y1) mm；None = 不设界
+RIPUP = 0                 # #K2-456 sec.2.5: pass-2 rounds (0 = off; the chain sets 1). Deterministic and bounded.
 # #K2-452 sec.2.4 item 2 —— **软引导（偏好/代价）**：`GUIDE = {"rects":[(x0,y0,x1,y1),...], "penalty":f}`。
 #   引导矩形**不是**边界（绝不改 `bad`）：只把**引导之外**的每一步代价乘以 `(1+penalty)` ⇒ 迷宫**偏好**走引导，
 #   **但永远可以离开**（⇒ 引导**不可能**造成「构造性无解」—— 这正是 `R1420` 把 0.40mm 带当**硬域**踩到的坑：
@@ -735,53 +736,84 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
     else:
         edges.sort(key=lambda z: (z[0], z[1], z[2]))
 
-    added, blocked, blocks = [], [], []
-    for dist, net, ua, ub, la, lb, pa, pb in edges:
-        # #K2-452 sec.2.4 item 3 —— 端点 uuid **不在 pads/vias/tracks 任一处**时必须**具名**成阻断原因，
-        # 绝不静默成 `exception:KeyError`（`R1420` 实测 244/316 条以 `exception:KeyError` 记盘 · 无法定位）。
-        _trk = {_t["uuid"] for _t in ctx.tracks}
-        def _lk(uu):
-            if uu in ctx.pads: return find("p:" + uu)
-            if uu in ctx.vias: return find("v:" + uu)
-            if uu in _trk: return find("t:" + uu)
-            return None
-        ca, cb = _lk(ua), _lk(ub)
-        if ca is None or cb is None:
-            led["blocked"].append({"net": net, "dist": dist,
-                                   "why": "endpoint-absent-from-ctx(%s)" % ("a" if ca is None else "b")})
-            continue
-        if ca == cb: continue
-        try:
-            sol, why = solve_edge(ctx, find, ca, cb, net, la, pa, lb, pb, margin, 0.25)
-        except Exception as ex:
-            if os.environ.get("K2MR_EXC_TRACE"):
-                import traceback as _tb; _tb.print_exc()
-            # #K2-452 sec.2.4 item 3：异常必须**带名字**（类型 ＋ 摘要）入盘，否则无法定位（承 R1420 教训）。
-            sol, why = None, "exception:%s(%s)" % (type(ex).__name__, str(ex)[:60])
-        if sol is None:
-            blocked.append({"net": net, "dist": dist, "why": why}); continue
-        nseg = 0; nvia = 0; ln = 0.0
-        for (L, pl) in sol["legs"]:
-            for k in range(len(pl) - 1):
-                x1, y1 = pl[k]; x2, y2 = pl[k + 1]
-                if math.hypot(x2 - x1, y2 - y1) < 0.001: continue
-                blocks.append(SEG_BLOCK.format(x1=_fmt(x1), y1=_fmt(y1), x2=_fmt(x2), y2=_fmt(y2),
-                                               layer=LNAME[L], net=net,
-                                               u=seg_uuid(net, L, x1, y1, x2, y2)))
-                ctx.tracks.append(dict(uuid=seg_uuid(net, L, x1, y1, x2, y2), net=net, layer=L,
-                                       x1=x1, y1=y1, x2=x2, y2=y2, hw=HW))
-                nseg += 1; ln += math.hypot(x2 - x1, y2 - y1)
-        for (x, y, span, l1, l2) in sol["vias"]:
-            u = via_uuid(net, l1, l2, x, y)
-            blind = "" if span == SPAN_OF[frozenset((F_CU, B_CU))] else " blind"
-            blocks.append(VIA_BLOCK.format(blind=blind, x=_fmt(x), y=_fmt(y),
-                                           l1=LNAME[l1], l2=LNAME[l2], net=net, u=u))
-            ctx.vias[u] = dict(net=net, x=x, y=y, r=VIA_R, hole=HOLE_R, lay=set(span))
-            ctx.holes.append((x, y, HOLE_R, net, span))
-            nvia += 1
-        added.append({"net": net, "dist": dist, "segs": nseg, "vias": nvia, "len": round(ln, 4),
-                      "via_xy": [[round(v[0], 3), round(v[1], 3)] for v in sol["vias"]],
-                      "layers": sorted({LNAME[L] for L, _ in sol["legs"]})})
+    # ── #K2-456 (pass-2) **协商式消解：整轮拆线重排（rip-up & reroute · 有界 · 确定性 · 原子回滚）** ────────
+    # 病根（本窗对照实验钉死）：主线贪心「先到先得、只进不退」——`ctx` 在每条成功边后**即刻**吸收其新铜，
+    # 后服务者被自己人的铜堵死（`I2C2_SCL`：单网 `[astar] ok` / 全网 `exhausted`）。
+    # 处置（**最小**、**无搜索**、**无参数试探**、**无回溯爆炸**）：主线跑完后若有阻断边，则
+    #   ① **整轮拆线**（把本跑加入 ctx 的铜全撤）；② **重排一次**：阻断边**优先**（其余保原序）；
+    #   ③ 只跑**这一次**；④ **取更优者**（阻断数更少才采纳 · 平手回主线）⇒ **原子**，绝不留半成品。
+    def _pass(eorder):
+        _added, _blocked, _blocks = [], [], []
+        for dist, net, ua, ub, la, lb, pa, pb in eorder:
+            _trk = {_t["uuid"] for _t in ctx.tracks}
+
+            def _lk(uu):
+                if uu in ctx.pads: return find("p:" + uu)
+                if uu in ctx.vias: return find("v:" + uu)
+                if uu in _trk: return find("t:" + uu)
+                return None
+            ca, cb = _lk(ua), _lk(ub)
+            if ca is None or cb is None:
+                _blocked.append({"net": net, "dist": dist,
+                                 "why": "endpoint-absent-from-ctx(%s)" % ("a" if ca is None else "b")})
+                continue
+            if ca == cb: continue
+            try:
+                sol, why = solve_edge(ctx, find, ca, cb, net, la, pa, lb, pb, margin, 0.25)
+            except Exception as ex:
+                if os.environ.get("K2MR_EXC_TRACE"):
+                    import traceback as _tb; _tb.print_exc()
+                sol, why = None, "exception:%s(%s)" % (type(ex).__name__, str(ex)[:60])
+            if sol is None:
+                _blocked.append({"net": net, "dist": dist, "why": why}); continue
+            nseg = 0; nvia = 0; ln = 0.0
+            for (L, pl) in sol["legs"]:
+                for k in range(len(pl) - 1):
+                    x1, y1 = pl[k]; x2, y2 = pl[k + 1]
+                    if math.hypot(x2 - x1, y2 - y1) < 0.001: continue
+                    _blocks.append(SEG_BLOCK.format(x1=_fmt(x1), y1=_fmt(y1), x2=_fmt(x2), y2=_fmt(y2),
+                                                   layer=LNAME[L], net=net,
+                                                   u=seg_uuid(net, L, x1, y1, x2, y2)))
+                    ctx.tracks.append(dict(uuid=seg_uuid(net, L, x1, y1, x2, y2), net=net, layer=L,
+                                           x1=x1, y1=y1, x2=x2, y2=y2, hw=HW))
+                    nseg += 1; ln += math.hypot(x2 - x1, y2 - y1)
+            for (x, y, span, l1, l2) in sol["vias"]:
+                u = via_uuid(net, l1, l2, x, y)
+                blind = "" if span == SPAN_OF[frozenset((F_CU, B_CU))] else " blind"
+                _blocks.append(VIA_BLOCK.format(blind=blind, x=_fmt(x), y=_fmt(y),
+                                                l1=LNAME[l1], l2=LNAME[l2], net=net, u=u))
+                ctx.vias[u] = dict(net=net, x=x, y=y, r=VIA_R, hole=HOLE_R, lay=set(span))
+                ctx.holes.append((x, y, HOLE_R, net, span))
+                nvia += 1
+            _added.append({"net": net, "dist": dist, "segs": nseg, "vias": nvia, "len": round(ln, 4),
+                           "via_xy": [[round(v[0], 3), round(v[1], 3)] for v in sol["vias"]],
+                           "layers": sorted({LNAME[L] for L, _ in sol["legs"]})})
+        return _added, _blocked, _blocks
+
+    _b_tr, _b_vi, _b_ho = len(ctx.tracks), set(ctx.vias), len(ctx.holes)
+
+    def _unwind():
+        del ctx.tracks[_b_tr:]
+        for _u in [u for u in ctx.vias if u not in _b_vi]: del ctx.vias[_u]
+        del ctx.holes[_b_ho:]
+
+    added, blocked, blocks = _pass(edges)
+    led["ripup"] = []
+    if RIPUP > 0 and blocked:
+        _prio_net = {b["net"] for b in blocked}
+        _p1 = [e for e in edges if e[1] in _prio_net]
+        _p2 = [e for e in edges if e[1] not in _prio_net]
+        _unwind()
+        a2, b2, k2 = _pass(_p1 + _p2)                     # ① 阻断边优先 ② 其余保原序 ③ 一次
+        led["ripup"].append({"round": 0, "r1_blocked": len(blocked), "r2_blocked": len(b2),
+                             "promoted_nets": sorted(_prio_net), "adopted": ("round2" if len(b2) < len(blocked) else "round1")})
+        if len(b2) < len(blocked):                        # ④ 取更优（平手回主线 ⇒ 确定性 · 原子）
+            added, blocked, blocks = a2, b2, k2
+        else:
+            _unwind()
+            added, blocked, blocks = _pass(edges)
+    if not blocks:                                        # 无新铜 ⇒ 无需整轮拆线（保兜底）
+        pass
     led.update({"added": added, "blocked": blocked,
            "summary": {"added": len(added), "blocked": len(blocked),
                        "segs": sum(a["segs"] for a in added), "vias": sum(a["vias"] for a in added),
@@ -825,6 +857,9 @@ def main(argv=None):
     ap.add_argument("--ledger"); ap.add_argument("--margin", type=float, default=14.0)
     ap.add_argument("--only-net"); ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"])
+    ap.add_argument("--ripup", type=int, default=0,
+                    help="#K2-456 sec.2.5: bounded pass-2 = rip the whole run's copper and re-route ONCE with the "
+                         "blocked nets promoted to the front; adopt only if the block count strictly drops (atomic).")
     ap.add_argument("--order-list", dest="order_list")
     ap.add_argument("--bound-rect", dest="bound_rect", default=None,
                     help="C35 in-loop work-domain wall: x0,y0,x1,y1 (mm) - cells outside are NOT selectable")
@@ -833,7 +868,8 @@ def main(argv=None):
         return _fill(a.fill[0], a.fill[1])
     if not (a.src and a.drc and a.out and a.ledger):
         ap.error("--in/--drc/--out/--ledger 必填")
-    global WALL_RECT
+    global WALL_RECT, RIPUP
+    RIPUP = int(a.ripup or 0)
     if a.bound_rect:
         WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))
     print(json.dumps(run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run,

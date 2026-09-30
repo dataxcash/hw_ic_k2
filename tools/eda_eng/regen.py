@@ -1551,7 +1551,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
                "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
                "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "1", *_charg])
     led_j = None
     if os.path.isfile(led):
         try:
@@ -1572,7 +1572,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
               "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-              "--port-refs", PORT_REFS, *_charg])
+              "--port-refs", PORT_REFS, "--ripup", "1", *_charg])
         if os.path.isfile(second):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,
@@ -1629,7 +1629,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                     _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", _yout,
                           "--drc", _d3, "--out", _r3, "--ledger", _l3, "--margin", "3.0", "--floor", "0.20",
                           "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "1", *_charg])
                     if os.path.isfile(_r3):
                         resolved = _r3
         except Exception as _e:                                        # noqa: BLE001
