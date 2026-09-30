@@ -1,0 +1,247 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_percorridor_attempt1_record_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-451 sec.2.4/2.5: the ONE fresh N=1 authorised after the maze side adopts option (ii) (per-(net,corridor) solve call reusing the single WALL_RECT domain). The adopted means therefore GENUINELY RAN this time (source=joint) - R1402 silent fallback is gone.",
+ "run": {
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "rc": 1,
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "env": "K2_NO_YIELD=1 + EDA_ENG_PY/EDA_ENG_CLI (foreground, never backgrounded)",
+  "work_dir": "/tmp/opencode/k2ab",
+  "foreground": true,
+  "wall_clock": "~36 min total; the maze stage alone 08:16:42Z -> 08:49:55Z (~33 min)",
+  "timeout_guard": "timeout 3000 (not hit)"
+ },
+ "means_executed": {
+  "source": "joint",
+  "evidence": "route.chain[7] = {\"stage\":\"channels_computed\",\"n_nets\":48,\"err\":null,\"source\":\"joint\"} - in-band, not self-reported",
+  "n_entries": 48,
+  "n_distinct_nets": 18,
+  "tag": "every entry carries the @corridor suffix emitted only by channels_string_corridor()",
+  "silent_fallback": false,
+  "widen_ladder_degenerate": "mr._CH_MARGIN is frozen to 0.0 (R1252/#K2-430 sec.2.4), so the bounded widen ladder (_m,_m*2,_m*4) collapses to (0.0,0.0,0.0) = three IDENTICAL attempts per slot: the band was never actually widened (and the solve cost was tripled)."
+ },
+ "nine_rows": {
+  "C1": 47,
+  "C1_pass": false,
+  "C2_new_classes": [],
+  "C2_pass": true,
+  "C3": true,
+  "C4": true,
+  "C5": true,
+  "C6": 831,
+  "C6_note": "DECLARED ROW, NOT A GATE (#K2-446 sec.2.2); legacy_diff=2.",
+  "C7": 0,
+  "C7_pass": true,
+  "C8": [],
+  "C9": true,
+  "rows_present": 9
+ },
+ "decisive_negative_means": {
+  "what": "The adopted means (per-corridor joint allocation) made board connectivity STRICTLY WORSE: C1 2 -> 47.",
+  "baseline_R1392_anchored": {
+   "channels": "n_nets=18 (whole-net band); no source field (pre-R1406)",
+   "edges": 336,
+   "added": 68,
+   "blocked": 268,
+   "C1": 2
+  },
+  "this_run_percorridor": {
+   "channels": "source=joint, n_nets=48 (per-corridor slots over 18 nets)",
+   "edges": 336,
+   "added": 20,
+   "blocked": 316,
+   "C1": 47
+  },
+  "R1402_had_no_evidence": "R1402 (the silent fallback run) reproduced the R1392 ledger EXACTLY (added 68 / blocked 268 / identical reasons) => it carried no information about the means; THIS run is the first real one.",
+  "delta": "added -48 (68 -> 20); blocked +48; C1 +45 (2 -> 47); same 336 candidate edges."
+ },
+ "blocked_reasons": {
+  "exception:KeyError": 244,
+  "no-free-start-node": 22,
+  "no-path-coarse(exhausted-1)": 47,
+  "no-path-coarse(start-blocked)": 3
+ },
+ "residual_named": [
+  {
+   "nets": "GND",
+   "unconnected_items": 21,
+   "examples": [
+    [
+     "J13 的PTH 焊盘 3 [GND]",
+     "F.Cu 上 C88 的焊盘 2 [GND]"
+    ],
+    [
+     "F.Cu 上 C85 的焊盘 2 [GND]",
+     "F.Cu 上 C86 的焊盘 2 [GND]"
+    ]
+   ]
+  },
+  {
+   "nets": "MCU_VDD",
+   "unconnected_items": 5,
+   "examples": [
+    [
+     "J13 的PTH 焊盘 4 [MCU_VDD]",
+     "F.Cu 上 U1 的焊盘 6 [MCU_VDD]"
+    ],
+    [
+     "F.Cu 上 C86 的焊盘 1 [MCU_VDD]",
+     "F.Cu 上 C85 的焊盘 1 [MCU_VDD]"
+    ]
+   ]
+  },
+  {
+   "nets": "NRST",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "F.Cu 上 C73 的焊盘 1 [NRST]",
+     "F.Cu 上 U1 的焊盘 10 [NRST]"
+    ]
+   ]
+  },
+  {
+   "nets": "PERSTA#",
+   "unconnected_items": 3,
+   "examples": [
+    [
+     "F.Cu 上 U1 的焊盘 11 [PERSTA#]",
+     "F.Cu 上 U1 的焊盘 12 [PERSTA#]"
+    ],
+    [
+     "F.Cu 上 C87 的焊盘 1 [PERSTA#]",
+     "F.Cu 上 U1 的焊盘 11 [PERSTA#]"
+    ]
+   ]
+  },
+  {
+   "nets": "GPIO_LED",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "F.Cu 上 U1 的焊盘 14 [GPIO_LED]",
+     "F.Cu 上 R21 的焊盘 1 [GPIO_LED]"
+    ]
+   ]
+  },
+  {
+   "nets": "P3V3_AUX",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "走线 [P3V3_AUX] (In5.Cu), 长度: 0.2000 mm",
+     "走线 [P3V3_AUX] (B.Cu), 长度: 2.0000 mm"
+    ]
+   ]
+  },
+  {
+   "nets": "SWDIO",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "J13 的PTH 焊盘 1 [SWDIO]",
+     "F.Cu 上 U1 的焊盘 35 [SWDIO]"
+    ]
+   ]
+  },
+  {
+   "nets": "SWCLK_BOOT0",
+   "unconnected_items": 2,
+   "examples": [
+    [
+     "J13 的PTH 焊盘 2 [SWCLK_BOOT0]",
+     "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]"
+    ],
+    [
+     "F.Cu 上 U1 的焊盘 36 [SWCLK_BOOT0]",
+     "F.Cu 上 R28 的焊盘 1 [SWCLK_BOOT0]"
+    ]
+   ]
+  },
+  {
+   "nets": "I2C1_SDA",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "走线 [I2C1_SDA] (F.Cu), 长度: 0.6000 mm",
+     "走线 [I2C1_SDA] (B.Cu), 长度: 0.1414 mm"
+    ]
+   ]
+  },
+  {
+   "nets": "FB_U2",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "F.Cu 上 R41 的焊盘 1 [FB_U2]",
+     "F.Cu 上 R40 的焊盘 2 [FB_U2]"
+    ]
+   ]
+  },
+  {
+   "nets": "12V_IN",
+   "unconnected_items": 4,
+   "examples": [
+    [
+     "J12 的PTH 焊盘 1 [12V_IN]",
+     "F.Cu 上 C88 的焊盘 1 [12V_IN]"
+    ],
+    [
+     "走线 [12V_IN] (F.Cu), 长度: 0.0400 mm",
+     "F.Cu 上 U2 的焊盘 4 [12V_IN]"
+    ]
+   ]
+  },
+  {
+   "nets": "P3V3",
+   "unconnected_items": 3,
+   "examples": [
+    [
+     "F.Cu 上 R40 的焊盘 1 [P3V3]",
+     "F.Cu 上 U2 的焊盘 5 [P3V3]"
+    ],
+    [
+     "F.Cu 上 U4 的焊盘 2 [P3V3]",
+     "F.Cu 上 U2 的焊盘 5 [P3V3]"
+    ]
+   ]
+  },
+  {
+   "nets": "SW_U2",
+   "unconnected_items": 2,
+   "examples": [
+    [
+     "F.Cu 上 U2 的焊盘 1 [SW_U2]",
+     "F.Cu 上 L1 的焊盘 2 [SW_U2]"
+    ],
+    [
+     "F.Cu 上 D2 的焊盘 2 [SW_U2]",
+     "F.Cu 上 U2 的焊盘 1 [SW_U2]"
+    ]
+   ]
+  },
+  {
+   "nets": "LED_A",
+   "unconnected_items": 1,
+   "examples": [
+    [
+     "F.Cu 上 R21 的焊盘 2 [LED_A]",
+     "F.Cu 上 D1 的焊盘 2 [LED_A]"
+    ]
+   ]
+  }
+ ],
+ "mechanism_evidence": {
+  "fact_1_slot_is_a_thin_strip": "Every channel slot is a 0.40 mm-tall horizontal trunk strip, e.g. GND:26.6700,33.3500,51.5000,33.7500 -> y in [33.35, 33.75].",
+  "fact_2_slot_is_the_search_domain": "tools/k2_reroute_router_floor_v1.py:244-250 sets mr.WALL_RECT = the slot rect (+_w) then calls the maze: WALL_RECT is the solve DOMAIN (the region the whole connection must lie inside), NOT a preferred lane (pinned read-only by R1416).",
+  "fact_3_consequence": "A domain that must contain BOTH endpoints but is a 0.40 mm-tall strip excludes the pads in y => the edge is unsolvable by construction. The run reports exactly that: no-path-coarse(exhausted-1)=47 and no-free-start-node=22, versus 1 such reason in the unconstrained baseline.",
+  "fact_4_preexisting_invariant": "exception:KeyError = 244 in ALL THREE runs (R1392 244 / R1402 244 / this run 244; 241 on GND). Site: tools/k2_p4_mroute_v1.py:722 - an edge endpoint uuid present in neither ctx.pads/vias/tracks (GND is a POUR net, filtered by _ctx_no_pour). => NOT caused by the means; a standing engine defect on the GND/pour edge path.",
+  "conclusion_layer": "ENGINE MEANS LAYER (the router allocation/order vehicle). NOT the drawing layer (98 anchored pieces, padless=0, stitched-field DRC zero short/cross/clearance), NOT the construction layer, NOT L1 (no topology/interface/pin-map change needed; #K2-450 sec.2.3)."
+ },
+ "board": "FROZEN (l14/rev-61, PCB fb07d25ac426ff84); nothing landed.",
+ "rerun_ban": "SAME-CAUSE RERUN BANNED: feeding per-corridor slots to WALL_RECT is now PROVEN to starve the router. No further run of this configuration without a new authorisation and a different mechanism.",
+ "OWNER-ITEMS": 0
+}

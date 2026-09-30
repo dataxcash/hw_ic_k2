@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_blocker_report_residual5_addendum_l_v1",
+ "ts": "2026-09-30",
+ "authority": "#K2-451 sec.2.5 hard gate (C1>=2 => stop + name + ban same-cause rerun + bring new mechanism evidence for a ruling) + the standing blocker-report requirement.",
+ "object_named": {
+  "token": "k2v",
+  "what": "a work-dir path constant of an earlier run (latched stop-order family, voided repeatedly). THIS period used work dir /tmp/opencode/k2ab only."
+ },
+ "compliance": {
+  "stopped": true,
+  "exam_runs_this_period": 1,
+  "which_run": "the ONE fresh N=1 authorised by #K2-451 sec.2.5 (run_count 1/1, foreground, K2_NO_YIELD=1)",
+  "param_or_tool_edits": 1,
+  "which_edit": "R1418 - the maze-side half of the adopted option (ii), exactly as authorised",
+  "param_retries": 0,
+  "reruns": 0,
+  "backgrounded": false,
+  "board_touched": false,
+  "frozen_four_sources": "4/4 untouched; criteria/ read-only rev=6"
+ },
+ "blocker_report": {
+  "tried": "#K2-450 sec.2.4 means = joint (grouped) channel allocation. R1396 allocator core (sequential=starves / joint=does not) -> R1400 wiring -> R1402 first run (INVALID: silent fallback) -> R1404 diagnosis (whole-net band 239.92mm >> corridor 45.05mm = constructively infeasible) -> R1406 loud source gate -> R1408/R1410 per-corridor packing (RED->GREEN) -> R1412 emitter -> R1414 edit points -> R1416 read-only correction (the channel IS the solve domain) -> R1418 landed option (ii) (per-(net,corridor) solve call, core untouched). Then the authorised N=1 ran FOR REAL: chain[7] channels_computed source=joint, n_nets=48.",
+  "why_not_yet": "C1 went 2 -> 47. The per-corridor channel is a 0.40 mm-tall horizontal trunk strip and it is fed as mr.WALL_RECT, which is the solve DOMAIN (the region that must contain BOTH endpoints), not a preferred lane. A 0.40 mm-tall domain cannot contain pads that are millimetres away in y, so the edges die by construction: no-path-coarse(exhausted-1)=47 and no-free-start-node=22, against 1 such reason in the unconstrained baseline (68 added -> 20 added). The intent \"use trunk lane k\" is inexpressible through the only lever this maze exposes (the domain rect).",
+  "gap_layer": "ENGINE MEANS LAYER (the router allocation/order vehicle: who gets to go where, and in what order). NOT the drawing layer (98 anchored pieces, anchor audit padless=0, stitched-field DRC zero short/cross/clearance), NOT the construction layer, NOT L1 (no topology/interface/pin-map change is needed - #K2-450 sec.2.3 conserved-capacity proof stands: 12862 >> 257 line-mm, ~50x headroom). It is also NOT the criteria (read-only rev=6).",
+  "preexisting_defect_named": "exception:KeyError = 244 in ALL THREE runs (R1392 244 / R1402 244 / this run 244; 241 on GND; identical baseline ledgers for R1392 and R1402). Site tools/k2_p4_mroute_v1.py:722: an edge endpoint uuid present in neither ctx.pads/vias/tracks, because GND is a POUR net filtered by _ctx_no_pour. NOT caused by this means - a standing engine defect on the GND/pour edge path. Named here, not fixed here (no tool edits beyond the authorised one)."
+ },
+ "plan_recap": {
+  "q1_signal_path": "The block frame (x 22.95-51.5, y 32.95-78.0) holds the MCU cluster; every wiped net must get from its pads back to the block-edge ports on dR. Power runs on the inner planes, the buses go as groups, control links go short and direct. 98 anchored pieces already draw exactly that.",
+  "q2_what_blocks": "Nothing physical and nothing on the drawing side. What blocks is the router way of deciding: it routes each edge independently and in order, so whoever is served last starves (the residual rotates). Every attempt to PRE-ASSIGN the answer (whole-net band, layered y-bands, per-corridor slots) is expressed through the one knob the maze has - the solve domain - and a hard domain can only forbid, never prefer. That is why the last attempt turned 2 residuals into 47.",
+  "q3_human_plan": "A human layout engineer would not fence each net into a 0.4 mm strip. They would route the whole bundle, then fix only the collisions: rip up the conflicting runs and re-route them with a penalty for reusing occupied space, repeating a bounded number of times until nothing conflicts. In plain words: let everyone draw first, then settle the arguments, instead of handing out lanes that nobody can reach."
+ },
+ "one_implementation_list_TO_BE_APPROVED": [
+  "REFUSED THIS WINDOW (sec.17.4 / convergence order: no \"one more tool version\" to occupy a round). Proposing, for the next authorisation:",
+  "means change (same goal, C1 -> 0): negotiated congestion / rip-up-and-reroute at the wrapper level - pass 1 routes the 336 edges unconstrained (the known-good 68-added state), pass 2 detects conflicting additions, rips up and re-routes them with a congestion cost, bounded iteration, keep the accepted copper; this is the registered capability M-ENG-ROUTER-REROUTE and the sec.2.6 algorithm family, with the in-repo product paradigm (grouped fan-out / shared trunk) as the reference anchor.",
+  "fail-closed guard to land WITH that means: the chain must REFUSE to feed multi-slot (per-corridor) channels to WALL_RECT - the starvation is now proven, so a silent re-feed must be impossible (asset + RED->GREEN regression per sec.22.3).",
+  "optional in the same window: the maze widen ladder is degenerate at the frozen margin 0.0 (three identical attempts; tripled cost) - either restore a non-zero bounded margin or drop the ladder.",
+  "named but out of scope here: the standing GND/pour edge defect (244 x exception:KeyError) starves a whole class of edges; it needs its own diagnosis."
+ ],
+ "no_new_asset_this_window": true,
+ "LEGAL-ESCALATION": "none",
+ "OWNER-ITEMS": 0
+}
