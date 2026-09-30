@@ -1,0 +1,44 @@
+{
+ "artifact": "k2_sec16_3_band_reservation_i2c2scl_v3",
+ "ts": "2026-09-30",
+ "supersedes": "v2 (invalidated as an action plan by R1470) and v1 (fail-closed by #K2-462 sec.2.3)",
+ "authority": "#K2-464 sec.2.6 item A (routing-side reservation) + sec.16.3 + sec.13",
+ "sec16_3_four_elements": {
+  "1_one_line_cause_of_death": "The maze lays GND copper into the band WHILE IT RUNS, and that self-added copper seals the port->pad channel (R1460 cut read on the pass-1 board: pad_reachable=false, 3757-cell port component; R1470: the band holds ZERO GND items BEFORE the run => the sealer is self-inflicted).",
+  "2_verified_fact_list": [
+   "R1470 / K2_SEAL_RIP_REAL_BOARD_READ_v1: stitched board, band GND items = 0 (MCU_VDD 0, I2C1_SDA 14 drawn) => pre-solve rip is a no-op.",
+   "R1460 cut read (pass-1 board): the F.Cu free space port->pad is CUT, sealed by GND (66 boundary cells) then PCIE (7).",
+   "R1408/R1440: the same pair routes when the corridor is free (witness accepted by seg_exact/via_exact at floor 0.20).",
+   "R1450/R1452: single-net succeeds, full run fails => the binding variable is the other nets copper, here the run own GND.",
+   "R1394: ~50x frame headroom => allocation, not capacity (context only)."
+  ],
+  "3_corrected_complete_construction_drawing": {
+   "kind": "ROUTING-SIDE BAND RESERVATION (buildability = no_move) - v3, supersedes the v2 no-op action plan",
+   "action_board_state": "SOLVE-TIME (during the maze run). VERIFIED BY READING (R1470): on the stitched board - i.e. BEFORE any routing - the band contains ZERO GND F.Cu items, so a pre-solve rip has nothing to act on (the v2 plan was a constructive no-op). The yielder is SELF-ADDED copper: the maze lays GND into the band while it runs.",
+   "band_geometry": "F.Cu x=[46.75, 50.35], y=[53.6, 60.1] (3.6 x 6.5 mm)",
+   "reservation": {
+    "rule": "while the I2C2_SCL edge is served, GND must NOT claim cells inside the band on F.Cu: the band is reserved for that edge. The reservation is a ROUTING-SIDE constraint (a cell the engine may not use for GND), NOT a board edit.",
+    "named_yielder": "GND (self-added copper laid by the run itself - R1460/R1470)",
+    "preserve_list": [
+     {
+      "net": "MCU_VDD",
+      "why": "passes through the band; never the sealer; must be kept"
+     },
+     {
+      "net": "I2C1_SDA",
+      "why": "passes through the band (14 drawn items); never the sealer; must be kept"
+     }
+    ]
+   },
+   "deliverable_of_the_rule": "the I2C2_SCL route then uses the 3757-cell free component around the port exactly as the R1440 witness does (F.Cu/In5.Cu + two F<->In5 vias); no new copper is required for GND (it re-fills by the existing pour stages), and nothing is moved on the board.",
+   "per_corridor_conservation": "CORRIDOR level: the reserved band is 23.4 mm2 of F.Cu and is withheld from GND only for the duration of serving one edge; the I2C2_SCL route needs ~0.35 mm2 of copper plus its clearance envelope inside that band. GND continuity is restored by the pour stages (pour_aware_unfill -> refill -> pour_islands_repair, island fail-closed). Frame headroom (R1394) is context only, NOT this item justification.",
+   "authority_for_the_move": "L2 in-domain routing-side reservation under #K2-464 sec.2.6 (item A); executed through the chain own path; versioned addendum (_v3), no frozen source edited; no topology/interface/pin-map change (not L1).",
+   "ref_plane_continuity": "unchanged from v2 and still decided: the band is sealed by GND alone, holds no pad of any net and no via within 0.4mm; the two crossing nets are F.Cu signals referencing the adjacent inner plane, not the F.Cu pour, so withholding GND F.Cu in the band creates no return-path transition for them. ZERO new stitching holes required."
+  },
+  "4_buildability": "no_move",
+  "buildability_note": "the piece adds NO board geometry: it changes which cells the routing engine may claim for GND while serving one edge. Nothing is moved, nothing retired."
+ },
+ "sec13_human_sentence": "Can the crew just connect it? YES, and they do not even have to move anything: just do not let the ground copper pour into that little box while this one wire is being routed. The wire already has a proven route and a legal start; the pour comes back by itself.",
+ "verification_pending": "a reservation declaration: making it chain-visible (the four authorised items 1-4) and the conditional run are still outstanding. Declared, not pretended.",
+ "OWNER-ITEMS": 0
+}
