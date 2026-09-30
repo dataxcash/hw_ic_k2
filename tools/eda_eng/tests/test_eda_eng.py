@@ -1860,12 +1860,17 @@ class T(unittest.TestCase):
         self.assertIn("mr.KEEPOUT = _KO or None", w); self.assertIn('"--keepout"', w)
         r = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
         self.assertIn("_ko = [", r); self.assertIn('"stage": "band_keepout"', r)
-        self.assertIn("*_ko, *_charg])", r)
+        self.assertIn("*_ko, *_esc_args, *_charg])", r)
         # #K2-473 sec.3.3: the ESCAPE assets are wired into the SAME hard-keepout argument (one --keepout, ';'-joined),
         # computed on the board the maze reads, with a loud chain record.
         self.assertIn('"stage": "escape_keepout"', r)
         self.assertIn("assets_to_keepouts(_ed.get(\"assets\") or [], _enets)", r)
         self.assertIn("_ko = [\"--keepout\", \";\".join(_ko_items)]", r)
+        # #K2-475 sec.3.2 B: the corridor far endpoints are registered as EXPLICIT maze ports (a mask cannot create
+        # a free start cell), passed as one ';'-joined --escape-port argument.
+        self.assertIn('"--escape-port"', r); self.assertIn("_epps", r)
+        w2 = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn('"--escape-port"', w2); self.assertIn("mr._PORT_PADS = _PP", w2)
 
     def test_C467_the_pin_escape_planner_is_deterministic_bounded_and_fail_closed(self):
         """#K2-467 (owner chose A; the lesion was re-characterised as the MISSING STANDARD STAGE): a pin access / escape

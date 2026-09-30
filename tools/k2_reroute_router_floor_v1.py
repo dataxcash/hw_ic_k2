@@ -38,6 +38,10 @@ def main():
     ap.add_argument("--port-refs", dest="port_refs", default="",
                     help="#K2-431 sec.2.6 fix 1: footprints whose pads are FIXED PORTS (e.g. J13) - their pads become "
                          "extra goals for their nets (the in-region connector must be terminated ON, not around)")
+    ap.add_argument("--escape-port", dest="escape_port", default="",
+                    help="#K2-475 sec.3.2 B: pin-escape corridor FAR ENDPOINTS registered as EXPLICIT ports "
+                         "'net:x,y@layer;...' - they give the net a free start/goal cell. A --keepout MASK can only "
+                         "remove cells from other nets; it cannot CREATE one (R1534). No board geometry.")
     ap.add_argument("--channels", default="",
                     help="#K2-429 (A): per-net HARD channel constraints 'net:x0,y0,x1,y1;...' - each edge is routed with "
                          "mr.WALL_RECT set to that net's channel (the maze's EXISTING bound-rect vehicle). "
@@ -146,6 +150,16 @@ def main():
                                 _lay or "F.Cu"))
         except Exception:                                            # noqa: BLE001
             _PP = []
+    for _it in [x for x in (a.escape_port or "").split(";") if x.strip()]:   # #K2-475 sec.3.2 B
+        try:
+            _en, _er = _it.split(":", 1)
+            _lay2 = "F.Cu"
+            if "@" in _er:
+                _er, _lay2 = _er.split("@", 1)
+            _ex, _ey = [float(v) for v in _er.split(",")]
+            _PP.append((_en, round(_ex, 4), round(_ey, 4), _lay2))
+        except Exception:                                      # noqa: BLE001
+            pass
     mr._PORT_PADS = _PP                               # #K2-430 sec.2.4: FROZEN - the channel already includes
                                                       # the reach; ZERO runtime freedom (no ladder)
     recs = []

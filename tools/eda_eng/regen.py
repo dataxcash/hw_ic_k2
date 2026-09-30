@@ -1562,6 +1562,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     #    against the OTHER target nets (R1488 semantics: the named net may not use those cells). No new board
     #    geometry; WALL_RECT / release gate / criteria untouched; arithmetic only (no while-loop). A failure is
     #    recorded LOUDLY in the chain, never a silent no-op.
+    _epps = []                                                 # #K2-475 sec.3.2 B: corridor far endpoints as ports
     _esc_rec = {"stage": "escape_keepout", "source": "k2_pin_escape_precheck_v1.py", "go": None, "n_assets": 0, "n_args": 0}
     try:
         _iu3 = __import__("importlib").util
@@ -1575,6 +1576,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                              cwd=ROOT, capture_output=True, text=True, timeout=1800)
         _ed = json.load(open(_eout, encoding="utf-8"))["reading"] if os.path.isfile(_eout) else {}
         _kols = _pe.assets_to_keepouts(_ed.get("assets") or [], _enets)
+        _epps = ["%s:%s,%s@%s" % (a["net"], a["b"][0], a["b"][1], a["layer"]) for a in (_ed.get("assets") or [])]
         _ko_items += _kols
         _esc_rec.update({"go": bool(_ed.get("go")), "n_assets": len(_ed.get("assets") or []),
                          "n_refused": len(_ed.get("refused") or []), "n_args": len(_kols), "exit": _er.returncode})
@@ -1582,6 +1584,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _esc_rec["err"] = type(_e4).__name__
     chain.append(_esc_rec)
     _ko = ["--keepout", ";".join(_ko_items)] if _ko_items else []
+    _esc_args = (["--escape-port", ";".join(_epps)] if _epps else [])
+    _esc_rec["n_escape_ports"] = len(_epps)
     chain.append({"stage": "band_keepout", "args": _ko,
                   "source": "K2_SEC16_3_BAND_RESERVATION_I2C2SCL_v4.json + escape assets (#K2-473 sec.3.3)"})
     resolved = os.path.join(work, "s2_resolved.kicad_pcb")
@@ -1589,7 +1593,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
                "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
                "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_esc_args, *_charg])
     led_j = None
     if os.path.isfile(led):
         try:
@@ -1610,7 +1614,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
               "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
               "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-              "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
+              "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_esc_args, *_charg])
         if os.path.isfile(second):
             resolved = second
             chain.append({"stage": "resolve_residual_second_pass", "out": second,
@@ -1667,7 +1671,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
                     _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", _yout,
                           "--drc", _d3, "--out", _r3, "--ledger", _l3, "--margin", "3.0", "--floor", "0.20",
                           "--bound-rect", ",".join(str(x) for x in rect), "--order", "list", "--order-list", _prio,
-               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_charg])
+               "--port-refs", PORT_REFS, "--ripup", "3", *_ko, *_esc_args, *_charg])
                     if os.path.isfile(_r3):
                         resolved = _r3
         except Exception as _e:                                        # noqa: BLE001
