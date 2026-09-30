@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_blocker_report_consecutive2_v1",
+ "ts": "2026-09-30",
+ "authority": "停止令（红线：连续错误 2 次 ⇒ 停转 Plan 报卡点）＋ 宪法第八章第 8 条。自令起零运行；本件只做「停＋报告」。",
+ "the_two_errors": [
+  {
+   "id": "R1548",
+   "what": "force the escape port in as the start anchor for a starved IN-WALL endpoint (option from #K2-478)",
+   "red": "C1 regressed 1 -> 5 (NRST, PERSTA#, P3V3_AUX, GND, I2C2_SCL)",
+   "disposition": "reverted in-window (git checkout); zero damage",
+   "lesson": "a substitution REPLACES the edge's endpoint with an alias, so the real endpoint is left unconnected BY CONSTRUCTION => all substitution variants are structurally wrong for this job."
+  },
+  {
+   "id": "R1574",
+   "what": "relax the port-substitution gate at reroute_router_floor:369 from AND to OR (the (out,in) class)",
+   "red": "selftest 152 -> 2 failures (test_C454, test_C460)",
+   "disposition": "reverted in-window; the probe and the N=1 were NOT run (explicit exit-code guard held)",
+   "lesson": "a shared gate must not be relaxed; the codebase already has a test (test_C460) pinning that the (out,in) class is covered IN THE RETRY ONLY. The fix must be limited to that path."
+  }
+ ],
+ "root_cause_of_the_two": "both were attempts to fix the SAME remaining cause (the I2C2_SCL edge's far endpoint lies OUTSIDE the wall and its dR port cannot be resolved) from the WRONG surface: R1548 from the copper/start side, R1574 from the shared gate.",
+ "layer_of_the_gap": "ENG implementation layer (two reverted attempts, zero product impact). NOT the scheme layer, NOT the engine capability, NOT the criteria, NOT L1.",
+ "plan_human_path": {
+  "1_how_the_signal_flows": "I2C2_SCL must leave U1 pad 22 (a long thin pad) and run to the frame port at (51.5,56.6); on F.Cu the free space is CUT, so the route would change layer (F->In5) exactly as the R1440 witness does.",
+  "2_what_blocks": "the maze builds an edge from the pad to the FAR END of a ~45mm track that extends ~31mm OUTSIDE the frame (x goes to 82.867 while the wall is at 51.5). Outside the wall every grid cell is bad, so snap_node finds nothing => no-free-start-node. The built-in rescue (substitute the outside endpoint with its dR port) never fires, because the port lookup find(\"t:\"+uuid) returns None: the island index (f1.islands, core :682) does not contain that cross-frame track.",
+  "3_the_human_solution": "make the rescue able to reach the port WITHOUT touching the shared index or the shared gate - i.e. resolve the dR port by its coordinates inside the retry-only _fit path (option (b) of R1580). That is one bounded, path-limited change."
+ },
+ "one_implementation_proposed": "(b) resolve the dR port by coordinates in the retry _fit path only (no change to f1.islands, no change to the :369 gate); selftest first (carrying the C454/C460 non-regression proof); K2MR_DBG2 re-read must show the substituted dR anchor; strict machine evidence span_pad_to_frame_port=True; then exactly one fresh N=1.",
+ "open_question_before_implementing": "find's key space must be confirmed (does it accept a coordinate key for a track end, as 'p:x:y' does for port pads?) - one bounded read of f1.islands. Without it, (b) cannot be written safely; I will NOT blind-patch a third time.",
+ "not_done": [
+  "no run since the stop order",
+  "no board write",
+  "no generator change"
+ ],
+ "OWNER-ITEMS": 0
+}
