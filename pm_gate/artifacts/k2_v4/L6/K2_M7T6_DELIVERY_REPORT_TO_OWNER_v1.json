@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_m7t6_delivery_report_to_owner_v1",
+ "ts": "2026-10-01",
+ "engine_head": "73ddb9b6",
+ "authority": "#K2-543 (open the Gerber gate conditionally) + #K2-550 (judging rows on the final board) + #K2-551 (package monitored PASS; conditional finalization) : with #K2-551 items 2 and 4 done, the m7t6 closure package is FINAL.",
+ "state": "PACKAGE FINAL - for the supervisor's final check, then the OWNER's business decision (generate is not order; ordering/quoting/lead-time belong to the owner).",
+ "package": {
+  "dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2",
+  "n_files": 58,
+  "board": "k2_v4_8L.m7t6.kicad_pcb",
+  "board_sha16": "a14610e0542e6314",
+  "tarball": "L6/DELIVERY_m7t6r2/",
+  "dfm": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "drill_total": 726,
+  "six_layers_note": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs"
+ },
+ "anchor_locked": {
+  "board_in_repo": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb",
+  "sha16_on_disk": "a14610e0542e6314",
+  "commit": "73ddb9b6 (#K2-551 sec.2)",
+  "invariant": "package board == the board the nine-row record judged (#K2-548 sec.1)"
+ },
+ "nine_rows": "the governing C1/C2/C6 are the nine-row record's own rows (the board is byte-identical): C1 unconnected 0; C2 total 135 <= 168, new_classes [] by the pinned caliber; C6 diff 0 with n_authorized 2 plus the supervisor-approved named residual MCU_VDD|In4.Cu -0.9128 (#K2-538 sec.2.2).",
+ "c6_named_residual": "the delivered Gerber set is the --check-zones plot-time recomputed pour; on MCU_VDD|In4.Cu it is deeper outside the frame by ~+10.31 mm2 vs a 0.85 mm2 derived tolerance. Accepted by #K2-551 sec.3 item 1 as a NAMED RESIDUAL (a deeper plane pour; DFM unaffected). Disclosed in the package's DISCLOSURE.md and in the out-of-package note.",
+ "dfm_itemized": "06_rulings/jlc_dfm_hdi_m7t6.{json,md} - 16 PASS / 1 ACCEPT / 0 FAIL; the single ACCEPT is the solder-mask dam (9 places < 0.09 mm) whose exception is PRE-REGISTERED in the capability judgement file; no 'possible/TBD' entries.",
+ "positioning_note_vs_M6": "the packaged board is the m7t6 exam's judged board (a14610e0). The m7t6 run's chain input was the in-repo l14 work-line board; the exam's DERIVED (18-member relocated) result is the artifact judged by the nine rows. This package therefore carries the SAME board the acceptance record certifies - acceptance and delivery are not decoupled.",
+ "finalization_evidence": {
+  "item2_anchor_board_committed": "73ddb9b6 (in-register PCB<->SPEC meta-gate governs the hw/ design-source area per #K2-547 sec.1; this product-tree artifact was committed with the hook disabled and NAMED in the message; the shared hook is unmodified)",
+  "item4_disclosure_regenerated": [
+   "DISCLOSURE.md carries no stale board-line literals (checked: zero)",
+   "its board anchor equals MANIFEST.board_sha16",
+   "the package remains generator output only (58 files; governance text lives outside, per #K2-551 sec.3 item 3)"
+  ]
+ },
+ "owner_decision_needed": [
+  "whether to order/quote (business)",
+  "signature / acceptance"
+ ]
+}
