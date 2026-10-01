@@ -1261,6 +1261,12 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
                            "layers": sorted({LNAME[L] for L, _ in sol["legs"]})})
         return _added, _blocked, _blocks
 
+    # #K2-557 (R1852 STEP 4b): the rip-up ADOPTION CRITERION counts REAL blocks only. A
+    # `connected_via_port` refusal is not a block (the edge is already connected through the frame's port), so
+    # counting it washed the criterion out (measured: 268 counted / ~23 real; three rounds never adopted).
+    def _real(_bs):
+        return sum(1 for _x in _bs if _x.get("class") != "connected_via_port")
+
     _b_tr, _b_vi, _b_ho = len(ctx.tracks), set(ctx.vias), len(ctx.holes)
 
     def _unwind():
@@ -1278,7 +1284,7 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
     led["ripup"] = []
     if RIPUP > 0 and blocked:
         _hist = {}                                        # 每网：历轮**被阻断次数**＝history 代价
-        _best = (len(blocked), added, blocked, blocks)
+        _best = (_real(blocked), added, blocked, blocks)
         _order = list(edges)
         _CELL = 2.0                                            # 粗格 2mm（固定 · 非试探）
         _x0f, _y0f, _x1f, _y1f = EDGE_IN
@@ -1298,8 +1304,9 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
                       for (_k0, _k1), _c in _occ.items() if _c >= 2]
             mr_avoid = {"rects": _avoid, "penalty": 2.0} if _avoid else None
             AVOID = mr_avoid
-            _nb = len(_b)
-            _trail = {"round": _r, "blocked": _nb, "best": _best[0],
+            _nb_raw = len(_b)
+            _nb = _real(_b)                          # #K2-557 STEP 4b: the criterion's count is the REAL one
+            _trail = {"round": _r, "blocked": _nb_raw, "blocked_real": _nb, "best": _best[0],
                       "adopted": None, "history_nets": sorted(_hist)}
             if _nb < _best[0]:
                 _best = (_nb, _a, _b, _k); _trail["adopted"] = "round%d" % _r
@@ -1312,7 +1319,7 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
             _pos = {_i: _e for _i, _e in enumerate(edges)}
             _order = [_e for _i, _e in sorted(_pos.items(),
                                               key=lambda t: (-_hist.get(t[1][1], 0), t[0]))]
-        if _best[0] < len(blocked):                       # **原子取优**：只在严格更优时替换
+        if _best[0] < _real(blocked):                   # #K2-557 STEP 4b: strictly-better on REAL blocks
             added, blocked, blocks = _best[1], _best[2], _best[3]
         else:
             _unwind()
