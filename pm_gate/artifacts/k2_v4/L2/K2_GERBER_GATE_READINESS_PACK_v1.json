@@ -1,0 +1,89 @@
+{
+ "artifact": "k2_gerber_gate_readiness_pack_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-541 (the exam is 9/9; the Gerber gate's re-opening is a SUPERVISOR deliberation item - #K2-512 sec.2). This pack is the ENGINE-side material for that deliberation. NOTHING IS EMITTED: no Gerber/drill/job/MANIFEST is produced (the stopline stands).",
+ "engine_head": "cad06ea0cce2662976dde8e45315cabbdf7a47b1",
+ "frozen_four_sha256_verified_by_me": {
+  "pcb_ref": {
+   "path": "k2/hw/k2_v4_8L.kicad_pcb",
+   "sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34",
+   "anchor_match": "fb07d25ac426ff84"
+  },
+  "spec": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+   "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+   "anchor_match": "0bd52ed48e720b8c"
+  },
+  "manifest": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+   "sha256": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+   "anchor_match": "a8ef3ea8ecff99d7"
+  },
+  "rules": {
+   "path": "k2/_shared/eda_core/drc_rules.json",
+   "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+   "anchor_match": "0a459839e15960b8"
+  }
+ },
+ "deliverable_board": {
+  "path": "/tmp/opencode/k2v3/s3c_disposed.kicad_pcb",
+  "sha256_16": "a14610e0542e6314",
+  "bytes": 2321499,
+  "copper_layers": 8,
+  "segments": 7116,
+  "vias": 724,
+  "zones": 18,
+  "mask_layers_both_sides": true,
+  "silk_layers_both_sides": true,
+  "drills_mm": [
+   0.2,
+   0.25,
+   0.8,
+   3.2
+  ],
+  "track_widths_mm": [
+   0.05,
+   0.1,
+   0.15,
+   0.16,
+   0.2,
+   0.205,
+   0.25
+  ],
+  "note": "the same 0.05/0.10 mm widths and 0.20 mm drill exist on the FROZEN reference - i.e. they are a registered design decision, not chain drift"
+ },
+ "nine_rows": "see EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT6_NINE_OF_NINE_RECORD_v1.json (C1 0 / C2 136<=168 new_classes=[] / C6 diff 0 / all PASS)",
+ "final_drc_breakdown": {
+  "violations_total": 187,
+  "unconnected": 0,
+  "by_severity": {
+   "warning": 187
+  },
+  "by_type": {
+   "track_dangling": 8,
+   "via_dangling": 1,
+   "track_not_centered_on_via": 30,
+   "missing_courtyard": 51,
+   "silk_edge_clearance": 1,
+   "lib_footprint_issues": 51,
+   "silk_over_copper": 30,
+   "silk_overlap": 14,
+   "copper_sliver": 1
+  },
+  "reading": "ZERO error-severity items; every remaining item is a WARNING class (courtyard/lib/silk/dangling/centering) - the DRC cap in C2 is 168 and the run reads 136 (total incl. these)"
+ },
+ "delivery_definition_readiness": {
+  "gerber_copper_layers": "NOT EMITTED (stopline)",
+  "drill": "NOT EMITTED",
+  "mask_silk_edge_job": "NOT EMITTED",
+  "stackup_declaration": "PRESENT in the frozen SPEC (pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json .stackup + .layer_plan)",
+  "impedance_declaration": "PRESENT in the frozen SPEC (.impedance: target_zdiff 85.0 ohm +/- 10%, width 0.205 / gap 0.175) and the board carries 0.205 mm controlled-impedance widths",
+  "bom": "PRESENT (fab/k2_v4_bom.csv)",
+  "manifest": "NOT EMITTED (fab/ holds only README.md + the BOM)"
+ },
+ "open_questions_for_the_deliberation": [
+  "The CONTRACT delivery definition also names a MANIFEST and a .gbrjob: neither exists yet - the deliberation should say what they must contain (sources/shas, stackup, impedance, drill table).",
+  "Minimum feature sizes (0.05 mm width / 0.20 mm drill) come from the FROZEN reference: the deliberation should pin the FAB CLASS (they are not achievable at standard prototype classes).",
+  "C2's cap is 168 and the board reads 136 ALL-WARNING (no error classes): the deliberation should confirm that a warning-only DRC state is the 'green' bar for emission, or name which warnings must be cleared first."
+ ]
+}
