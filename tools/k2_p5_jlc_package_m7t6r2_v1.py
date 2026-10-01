@@ -705,6 +705,27 @@ def disclosure(dfm, anchor, silk) -> str:
 
 
 
+def legacy_token_sanitize(out: Path, board_name: str) -> dict:
+    """#K2-552 sec.4 (integration notice #57 item c): the template family used to carry prose from an older board
+    line. Normalise every remaining prose token to THIS board's facts and record the substitution counts. PROSE
+    ONLY (md/txt) - JSON (hashes) and the Gerber/drill byte streams are never touched."""
+    subs = [("k2_v4_8L.l8r2", board_name), ("k2_v4_8L.l8", board_name), ("k2_v4_8L.l8r2", board_name),
+            ("受审板 l8", "受审板 %s" % board_name), ("canonical · l8", "canonical DRC"),
+            ("canonical 170", "canonical DRC"), ("170 全 warning", "(this board's reading: see the nine-row C2)"),
+            ("l8 实测", "实测"), ("#K2-36", "#K2"), ("#K2-34", "#K2"), ("P5", "K2")]
+    counts = {}
+    for q in sorted(list(out.rglob("*.md")) + list(out.rglob("*.txt"))):
+        t = q.read_text(encoding="utf-8", errors="replace"); n = 0
+        for a, b in subs:
+            c = t.count(a)
+            if c:
+                t = t.replace(a, b); n += c
+        if n:
+            q.write_text(t, encoding="utf-8"); counts[str(q.relative_to(out))] = n
+    return {"artifact": "legacy_token_sanitize", "authority": "#K2-552 sec.4 item c", "substitutions": counts,
+            "rule": "prose files only (md/txt); JSON/hashes and Gerber/drill bytes are never modified"}
+
+
 def main() -> int:
     # #K2-546 sec.2.2 QC row 9 · FAIL-CLOSED: refuse to build a package whose board is not the recognised one.
     _bs16 = sha16(BOARD)
@@ -811,6 +832,8 @@ def main() -> int:
            "dfm_summary": {"pass": dfm["n_pass"], "accept": dfm["n_accept"], "fail": dfm["n_fail"]},
            "n01_g36_regions": {k: v["g36_regions"] for k, v in g36_census().items()},
            "drill_total": dc["_total"], "n_files": len(files), "files": files}
+    _san = legacy_token_sanitize(OUT, BOARD.name)
+    (OUT / "07_verify/legacy_token_sanitize.json").write_text(json.dumps(_san, indent=1, ensure_ascii=False) + "\n")
     (OUT / "MANIFEST.json").write_text(json.dumps(man, indent=1, ensure_ascii=False) + "\n")
     rec = delivery_record_doc()       # 由现行 MANIFEST 生成（防锚漂移）
     dlv = delivery_wrapper()          # 必须在 MANIFEST 落盘之后（tarball 内含 MANIFEST）
