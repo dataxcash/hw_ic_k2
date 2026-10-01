@@ -141,7 +141,7 @@ def build_zone_polys(board_path, rect, P):
 
 
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
-               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None, zone_polys=None):
+               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None, zone_polys=None, span_names=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
     one-end 桩（恰好一端悬空）⇒ 同层直线腿优先，其次跨层过孔；**零搜索之外的定步长枚举**；确定性。
     """
@@ -222,7 +222,10 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             if _bb[0] - local_r <= ex <= _bb[2] + local_r and _bb[1] - local_r <= ey <= _bb[3] + local_r:
                 obs2.append((_z[0], _z[1], "poly", _z[3]))
         for (dd, ol, qx, qy) in cand:
-            span = [mr.LNAME[z] for z in mr.LAYERS]
+            # #K2-534/FIX: the spanned layers MUST come from the BOARD's own copper stack; deriving them from
+            # mr.LAYERS/mr.LNAME silently produced a list that did not contain the real layer names, so the per-layer
+            # check was skipped for those layers and pour conflicts went unseen (R1798's empty result was the tell).
+            span = span_names or [b.GetLayerName(L) for L in b.GetLayerSet().CuStack()]
             rv = planner.via_join_for_end(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                           clear=clear, via_r=via_r, step=0.05, tol=tol,
                                           existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
@@ -259,7 +262,10 @@ def main(argv=None):
     # (k2_port_plane_stitch_v1: L.get("size", 0.45)); the old 0.175 assumption was 0.05mm smaller than the laid
     # 0.225, which systematically widened the clearance verdict and let an edge-case pair (0.1967 vs 0.200) through.
     _VIA_SIZE = 0.45
+    _b = _P.LoadBoard(a.board)
+    _span_names = [_b.GetLayerName(L) for L in _b.GetLayerSet().CuStack()]
     pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len, via_r=_VIA_SIZE / 2.0,
+                    span_names=_span_names,
                     pad_rects=build_pad_rects(a.board, planner, pcmod, _P),
                     hole_walls=build_hole_walls(a.board, _P),
                     zone_polys=build_zone_polys(a.board, rect, _P))
