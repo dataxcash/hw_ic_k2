@@ -206,8 +206,7 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             if _h[0] != net and _h[1] == mr.LNAME[l] and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
                 obsg.append(_h)
         for _e in (edge_walls or []):                              # #K2-534: the board edge is an obstacle too
-            if _e[1] == mr.LNAME[l] and (abs(_e[2] - ex) <= local_r or abs(_e[4] - ex) <= local_r) \
-                    and (abs(_e[3] - ey) <= local_r or abs(_e[5] - ey) <= local_r):
+            if planner._pt_seg(ex, ey, _e[2], _e[3], _e[4], _e[5]) <= local_r:
                 obsg.append(_e)
         for _z in (zone_polys or []):                              # #K2-528: foreign POURS are obstacles too
             if _z[0] == net or _z[1] != mr.LNAME[l]:
