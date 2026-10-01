@@ -2089,6 +2089,40 @@ class T(unittest.TestCase):
         self.assertTrue(m._leg_clear("MCU_VDD", "In5.Cu", (23.33, 46.54), (23.33, 46.54), [edge], 0.30),
                         "other layer is skipped")
 
+    def test_C538b_the_start_anchor_accepts_this_nets_own_laid_copper_endpoint(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-538, the third naming of the start-point-window family
+        R1568/R1570). RED: snap_node only accepted ring cells satisfying bad==0 AND node_in_island within maxr=4
+        (0.4mm) - so the endpoint of the net's OWN laid escape leg was rejected with no-free-start-node (R1828).
+        GREEN: that anchor is a legal start whenever its own cell is free; a blocked anchor cell is still refused."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr538", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+
+        class G(object):
+            margin = 0.0
+            nx = 5
+            ny = 5
+            def __init__(self, bad):
+                self.bad = {0: bad}
+            def cell(self, x, y):
+                return (2, 2)
+            def inside(self, i, j):
+                return 0 <= i < 5 and 0 <= j < 5
+            def pt(self, i, j):
+                return (float(i), float(j))
+
+        class C(object):
+            pass
+        orig = m.node_in_island
+        m.node_in_island = lambda *a, **k: False            # the ring search can never qualify a cell
+        try:
+            self.assertEqual(m.snap_node(G([0] * 25), C(), None, None, "N", 0, 2.0, 2.0), (2, 2),
+                             "the net's own copper endpoint is a legal start when its cell is free")
+            self.assertIsNone(m.snap_node(G([1] * 25), C(), None, None, "N", 0, 2.0, 2.0),
+                              "a blocked anchor cell is still refused")
+        finally:
+            m.node_in_island = orig
+
     def test_C534b_hole_to_hole_is_gated(self):
         """TIAN TIAO #1 engine asset + regression (#K2-534). Values taken from the PRINTED real case (penalty clause):
         J13.4's PTH drill_r 0.400 @(24.13,46.54) vs the join-placed via drill_r 0.125 @(24.63,46.54) -> centre

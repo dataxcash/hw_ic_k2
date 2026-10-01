@@ -794,6 +794,11 @@ def snap_node(grid, ctx, find, comp, net, layer, x, y, maxr=4):
             if not grid.inside(i, j) or grid.bad[layer][i * grid.ny + j]: continue
             px, py = grid.pt(i, j)
             if node_in_island(ctx, find, comp, net, layer, px, py): return i, j
+    # #K2-538 (order): the ANCHOR is the endpoint of this net's OWN laid copper (an escape leg / port stub end,
+    # i.e. an extension of the net's island), so it is a LEGAL start whenever its own cell is free. `maxr` is a
+    # SEARCH RADIUS, never a legality gate. This fallback only fires when the bounded ring search found nothing.
+    if grid.bad[layer][ci * grid.ny + cj] == 0:
+        return ci, cj
     return None
 
 
