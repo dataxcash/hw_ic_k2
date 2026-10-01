@@ -37,8 +37,49 @@ def build_pad_rects(board_path, planner, pcmod, P):
     return out
 
 
+def build_hole_walls(board_path, P):
+    """#K2-528: every existing DRILL as an obstacle on EVERY layer it passes (radius = drill/2). Layers come from the
+    board's own CuStack order - no integer-id assumption. Covers buried/blind vias (whose drill crosses layers with no
+    annulus) and PTH pads (modelled on F.Cu/B.Cu only, yet their drill crosses every layer)."""
+    b = P.LoadBoard(board_path)
+    stack = [b.GetLayerName(L) for L in b.GetLayerSet().CuStack()]
+    idx = {n: i for i, n in enumerate(stack)}
+    out = []
+    for t in b.GetTracks():
+        if t.GetClass() != "PCB_VIA":
+            continue
+        ids = list(t.GetLayerSet().Seq())
+        if not ids:
+            continue
+        try:
+            r = P.ToMM(t.GetDrill()) / 2.0
+        except Exception:                                          # noqa: BLE001
+            continue
+        if r <= 0:
+            continue
+        pos = t.GetPosition(); x, y = P.ToMM(pos.x), P.ToMM(pos.y)
+        a, c = idx.get(b.GetLayerName(ids[0])), idx.get(b.GetLayerName(ids[-1]))
+        if a is None or c is None:
+            continue
+        for i in range(min(a, c), max(a, c) + 1):
+            out.append((t.GetNetname(), stack[i], x, y, x, y, r))
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            try:
+                ds = pd.GetDrillSize()
+            except Exception:                                      # noqa: BLE001
+                continue
+            if ds.x <= 0:
+                continue
+            r = P.ToMM(ds.x) / 2.0
+            pos = pd.GetPosition(); x, y = P.ToMM(pos.x), P.ToMM(pos.y)
+            for n in stack:
+                out.append((pd.GetNetname() or "", n, x, y, x, y, r))
+    return out
+
+
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
-               via_r=0.175, local_r=3.5, pad_rects=None):
+               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
     one-end 桩（恰好一端悬空）⇒ 同层直线腿优先，其次跨层过孔；**零搜索之外的定步长枚举**；确定性。
     """
@@ -72,6 +113,9 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         # capsule that board_items still yields; tracks/vias stay as exact capsules.
         obsg = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6])
                 for o in loc if o[7] != net and o[0] != "PAD"]
+        for _h in (hole_walls or []):
+            if _h[0] != net and _h[1] == mr.LNAME[l] and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
+                obsg.append(_h)
         for _r in (pad_rects or []):
             if _r[0] == net or _r[1] != mr.LNAME[l]:
                 continue
@@ -102,6 +146,9 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             obs2 = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in osp
                     if (abs(o[2] - ex) <= local_r or abs(o[4] - ex) <= local_r)
                     and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
+            for _h in (hole_walls or []):
+                if _h[0] != net and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
+                    obs2.append(_h)
             for _r in (pad_rects or []):                       # true-shape pads, every layer the via may touch
                 if _r[0] == net:
                     continue
@@ -141,7 +188,8 @@ def main(argv=None):
     pcmod = _mod("k2pcjoin", os.path.join(_HERE, "k2_pin_escape_precheck_v1.py"))
     import pcbnew as _P
     pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len,
-                    pad_rects=build_pad_rects(a.board, planner, pcmod, _P))
+                    pad_rects=build_pad_rects(a.board, planner, pcmod, _P),
+                    hole_walls=build_hole_walls(a.board, _P))
     lines = []
     for n, j in enumerate(pj["joins"]):
         if j["_kind"] == "track":

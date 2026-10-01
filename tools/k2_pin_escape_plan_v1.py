@@ -86,7 +86,11 @@ def _leg_clear(net, layer, p0, p1, obstacles, clear):
                 return False
             continue
         (onet, olayer, ax, ay, bx, by, hw) = o
-        dist = _pt_seg(x0, y0, ax, ay, bx, by) if (ax == bx and ay == by) else _seg_seg(x0, y0, x1, y1, ax, ay, bx, by)
+        if ax == bx and ay == by:
+            # #K2-528: a POINT obstacle (via / drill hole wall) is measured against the WHOLE leg, not its start.
+            dist = _pt_seg(ax, ay, x0, y0, x1, y1)
+        else:
+            dist = _seg_seg(x0, y0, x1, y1, ax, ay, bx, by)
         if dist < clear + hw:
             return False
     return True

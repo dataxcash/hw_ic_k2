@@ -2057,6 +2057,30 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C528_the_gate_sees_hole_walls_of_existing_vias_and_pth_pads(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-528). R1764 named the missing ENTITY (a drill is a conductive
+        wall) and R1766 found the deeper root: _leg_clear measured a POINT obstacle against the leg's START only, so a
+        leg crossing a hole mid-span was silently clear. Every expected value below is computed by hand first."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe528", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        hole = ("P3V3_AUX", "In5.Cu", 50.95, 37.0, 50.95, 37.0, 0.125)      # existing buried via's drill wall (drill 0.25)
+        # (1) the R1764 item-1 leg passes 0.0354mm from the hole => refused (required 0.30+0.125=0.425)
+        self.assertFalse(m._leg_clear("PERSTA#", "In5.Cu", (51.5, 37.5), (50.5, 36.5), [hole], 0.30))
+        self.assertTrue(m._leg_clear("PERSTA#", "In5.Cu", (51.5, 37.5), (50.5, 36.5), [], 0.30),
+                        "with no entity the same leg is clear - that is the false green R1764 named")
+        # (2) MID-SPAN: start 2.28mm away, the leg still passes 0.305mm from the hole (hand-computed)
+        far = (53.0, 36.0)
+        self.assertGreater(((far[0] - 50.95) ** 2 + (far[1] - 37.0) ** 2) ** 0.5, 2.0, "start really is far")
+        self.assertFalse(m._leg_clear("PERSTA#", "In5.Cu", far, (50.0, 38.0), [hole], 0.30),
+                         "the WHOLE leg counts, not only its start")
+        # (3) a PTH pad's hole wall on In2, crossed by a leg (hand-computed distance 0)
+        ph = ("12V_IN", "In2.Cu", 29.21, 42.85, 29.21, 42.85, 0.40)
+        self.assertFalse(m._leg_clear("P3V3", "In2.Cu", (29.71, 42.85), (28.71, 42.85), [ph], 0.30))
+        # (4) GREEN: the owner-ordered site's legs (52.35,39.0) are 2.0mm / layer-away from both walls
+        self.assertTrue(m._leg_clear("P3V3_AUX", "F.Cu", (51.35, 39.0), (52.35, 39.0), [hole], 0.30))
+        self.assertTrue(m._leg_clear("P3V3_AUX", "In5.Cu", (51.35, 39.0), (52.35, 39.0), [hole], 0.30))
+
     def test_C525_the_chain_records_its_own_timing(self):
         """TIAN TIAO #1 engine asset + regression (#K2-525 sec.2 item 1). RED without it: where the chain's time goes
         could only be reconstructed by mtime archaeology (a 5min04s run whose 84% was one stage). GREEN: every record
