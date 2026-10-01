@@ -2,7 +2,7 @@
  "artifact": "k2_m7t6_delivery_report_to_owner_v1",
  "ts": "2026-10-01",
  "engine_head": "e6bb6a88",
- "generated": "#K2-552 item 2 / M-ENG-REPORT-READING-DRIFT: this report is GENERATED - every reading below is copied programmatically from the in-register artifacts (never hand-typed).",
+ "generated": "#K2-552 item 2 / M-ENG-REPORT-READING-DRIFT: this report is GENERATED - every reading below is copied programmatically from the in-register artifacts (never hand-typed). Re-synced after #K2-553 item 2 (the MANIFEST now self-describes and lists every file; n_files is disk-derived).",
  "source_artifacts": {
   "nine_row_record": "pm_gate/artifacts/k2_v4/L2/EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT6_NINE_OF_NINE_RECORD_v1.json",
   "package_manifest": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2/MANIFEST.json",
@@ -11,7 +11,7 @@
  "state": "PACKAGE FINAL (supervisor terminal check PASS on the package body, #K2-552 sec.5 item 1). Remaining: the owner's business decision/signature.",
  "package": {
   "dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2",
-  "n_files": 58,
+  "n_files": 60,
   "board": "k2_v4_8L.m7t6.kicad_pcb",
   "board_sha16": "a14610e0542e6314",
   "dfm": {
@@ -20,7 +20,13 @@
    "fail": 0
   },
   "drill_total": 726,
-  "layers": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs"
+  "layers": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs",
+  "manifest_identity": {
+   "artifact": "k2_p5_jlc_fab_package_m7t6r2",
+   "revision": "M7T6R2",
+   "nature": "K2 m7t6 closure package - JLC HDI channel, process A frozen; packaged board k2_v4_8L.m7t6.kicad_pcb"
+  },
+  "manifest_files_listed": 60
  },
  "anchor_locked": {
   "board_in_repo": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb",

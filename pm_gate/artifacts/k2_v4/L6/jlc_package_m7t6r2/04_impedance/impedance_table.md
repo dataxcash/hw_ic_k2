@@ -3,7 +3,7 @@
 - 目标 **85.0Ω ±10%** ⇒ 窗口 76.5–93.5Ω
 - board `a14610e0542e6314` · SPEC `f3a48b866983c8db` · 判据锚 rev=6
 - 模型：M1 = IPC-2141 族（复现 SPEC 一阶）；M2 = Hammerstad–Jensen + Cohn（独立交叉）
-- 几何源 = SPEC rev-54 `impedance.per_layer`；**l8 as-built 复验见下表末**
+- 几何源 = SPEC rev-54 `impedance.per_layer`；**m7t6 as-built 复验见下表末**
 
 | 层 | 类型 | w (mm) | 对内净距 (mm) | h/b (mm) | er | Zdiff M1 (Ω) | Zdiff M2 (Ω) | ±10% |
 |---|---|---|---|---|---|---|---|---|
@@ -12,7 +12,7 @@
 | In5.Cu | symmetric_stripline | 0.16 | [0.34, 0.44] | 0.5 | 3.99 | [84.56, 89.48] | [84.39, 86.27] | ✓ |
 | B.Cu | microstrip | 0.205 | [0.295, 0.395] | 0.1164 | 4.16 | [88.43, 90.61] | [92.65, 94.94] | ✓ |
 
-## l8 as-built **耦合主 run** 几何复验（pcbnew 直测）
+## m7t6 as-built **耦合主 run** 几何复验（pcbnew 直测）
 
 口径：仅计 P/N 平行段对（夹角 ≤10°）且投影重叠 ≥0.10mm（剔换层/jog 端点伪影）。
 

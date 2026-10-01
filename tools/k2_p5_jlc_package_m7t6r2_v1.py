@@ -705,6 +705,56 @@ def disclosure(dfm, anchor, silk) -> str:
 
 
 
+def manifest_self_describe_and_seal(out: Path, board_name: str) -> dict:
+    """#K2-553 sec.4 item 2 (integration notice #58) - M-ENG-MANIFEST-SELF-DESCRIBE:
+    (a) the identity fields are GENERATED from this package's facts (never an older board line's template);
+    (b) `files` is rebuilt from the DISK so that `n_files` counts every generated file;
+    (c) FAIL-CLOSED: refuse to produce a package whose MANIFEST set differs from the disk set, or whose
+        external-facing prose still carries an older board line's tokens."""
+    mp = out / "MANIFEST.json"
+    m = json.loads(mp.read_text(encoding="utf-8"))
+    m["artifact"] = "k2_p5_jlc_fab_package_m7t6r2"
+    m["revision"] = "M7T6R2"
+    m["nature"] = "K2 m7t6 closure package - JLC HDI channel, process A frozen; packaged board %s" % board_name
+    files = {}
+    for q in sorted(out.rglob("*")):
+        if q.is_dir() or q.name == "MANIFEST.json":
+            continue
+        files[str(q.relative_to(out))] = {"sha256": sha256(q), "bytes": q.stat().st_size}
+    (out / "07_verify/manifest_self_describe.json").write_text(json.dumps(
+        {"artifact": "manifest_self_describe", "authority": "#K2-553 item 2",
+         "identity": {"artifact": m["artifact"], "revision": m["revision"], "nature": m["nature"]},
+         "note": "written before the disk enumeration so that this file is itself listed"},
+        indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    files = {}
+    for q in sorted(out.rglob("*")):
+        if q.is_dir() or q.name == "MANIFEST.json":
+            continue
+        files[str(q.relative_to(out))] = {"sha256": sha256(q), "bytes": q.stat().st_size}
+    m["files"] = files
+    m["n_files"] = len(files)
+    mp.write_text(json.dumps(m, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    disk = {str(q.relative_to(out)) for q in out.rglob("*") if q.is_file() and q.name != "MANIFEST.json"}
+    if set(files) != disk:
+        raise SystemExit("FAIL-CLOSED (#K2-553 item c): MANIFEST/disk set mismatch: %s"
+                         % sorted(set(files) ^ disk))
+    hard = ("l8", "l7", "#K2-36", "#K2-34", "P5")
+    bad = []
+    for q in list(out.rglob("*.md")) + list(out.rglob("*.txt")):
+        t = q.read_text(encoding="utf-8", errors="replace")
+        toks = hard + (("170 warning", "170 全 warning") if q.suffix == ".md" else ())
+        if any(x in t for x in toks):
+            bad.append(str(q.relative_to(out)))
+    for k, v in m.items():
+        if isinstance(v, str) and any(x in v for x in hard):
+            bad.append("MANIFEST.%s" % k)
+    if bad:
+        raise SystemExit("FAIL-CLOSED (#K2-553 item c): stale board-line tokens in %s" % bad)
+    return {"artifact": "manifest_self_describe", "authority": "#K2-553 item 2", "n_files": len(files),
+            "set_equal_to_disk": True, "token_scan": "clean",
+            "note": "the token scan covers prose (md/txt; the digit token only on md, since a drill report legitimately contains coordinates) and the MANIFEST's own string field values"}
+
+
 def legacy_token_sanitize(out: Path, board_name: str) -> dict:
     """#K2-552 sec.4 (integration notice #57 item c): the template family used to carry prose from an older board
     line. Normalise every remaining prose token to THIS board's facts and record the substitution counts. PROSE
@@ -712,7 +762,7 @@ def legacy_token_sanitize(out: Path, board_name: str) -> dict:
     subs = [("k2_v4_8L.l8r2", board_name), ("k2_v4_8L.l8", board_name), ("k2_v4_8L.l8r2", board_name),
             ("受审板 l8", "受审板 %s" % board_name), ("canonical · l8", "canonical DRC"),
             ("canonical 170", "canonical DRC"), ("170 全 warning", "(this board's reading: see the nine-row C2)"),
-            ("l8 实测", "实测"), ("#K2-36", "#K2"), ("#K2-34", "#K2"), ("P5", "K2")]
+            ("l8 实测", "实测"), ("l8", "m7t6"), ("l7", "m7t6"), ("#K2-36", "#K2"), ("#K2-34", "#K2"), ("P5", "K2")]
     counts = {}
     for q in sorted(list(out.rglob("*.md")) + list(out.rglob("*.txt"))):
         t = q.read_text(encoding="utf-8", errors="replace"); n = 0
@@ -835,6 +885,7 @@ def main() -> int:
     _san = legacy_token_sanitize(OUT, BOARD.name)
     (OUT / "07_verify/legacy_token_sanitize.json").write_text(json.dumps(_san, indent=1, ensure_ascii=False) + "\n")
     (OUT / "MANIFEST.json").write_text(json.dumps(man, indent=1, ensure_ascii=False) + "\n")
+    manifest_self_describe_and_seal(OUT, BOARD.name)   # #K2-553: identity from facts + full-file listing + FAIL-CLOSED checks (the record and the tarball below therefore see the SEALED manifest)
     rec = delivery_record_doc()       # 由现行 MANIFEST 生成（防锚漂移）
     dlv = delivery_wrapper()          # 必须在 MANIFEST 落盘之后（tarball 内含 MANIFEST）
     print("RECORD", rec["sha256"][:16], rec["doc"])

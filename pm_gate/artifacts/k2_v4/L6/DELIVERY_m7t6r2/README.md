@@ -2,7 +2,7 @@
 
 | 件 | 说明 |
 |---|---|
-| `k2_v4_8L.m7t6r2_gerber_package.tar.gz` | 完整交付包（= `../jlc_package_m7t6r2/`，58 件 + MANIFEST.json） |
+| `k2_v4_8L.m7t6r2_gerber_package.tar.gz` | 完整交付包（= `../jlc_package_m7t6r2/`，60 件 + MANIFEST.json） |
 | `SHA256SUMS.txt` | 逐件 sha256（相对 `L6/`） |
 | `../jlc_package_m7t6r2/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |
 | `../jlc_package_m7t6r2/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |
