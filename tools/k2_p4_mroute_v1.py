@@ -1173,8 +1173,6 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
         edges.append((round(d, 3), na, ra[1], rb[1], la, lb, pa, pb))
     led = {"stage": "M15", "edges": len(edges), "added": [], "blocked": [], "summary": {}}
-    led["blocked_real"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") != "connected_via_port")
-    led["connected_via_port"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") == "connected_via_port")
     if order == "list" and not order_list:
         order_list = None
     if order == "list":
@@ -1333,6 +1331,11 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
                        "len": round(sum(a["len"] for a in added), 4),
                        "reasons": {k: sum(1 for x in blocked if x["why"] == k)
                                    for k in sorted({x["why"] for x in blocked})}}})
+    # #K2-557 (R1852 STEP 4b, placement fixed): these two derived counts MUST be taken AFTER the passes
+    # have filled `blocked`. An earlier placement read an empty list and silently reported 0/0 (caught by the
+    # bounded probe, not by the suite - run()'s ledger path is not covered there). Same expressions; new position.
+    led["blocked_real"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") != "connected_via_port")
+    led["connected_via_port"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") == "connected_via_port")
     json.dump(led, open(ledger_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     if dry or not blocks:
         return led["summary"]
