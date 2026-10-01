@@ -2057,6 +2057,22 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C528b_foreign_pours_are_obstacles(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-528, R1772's named gap). RED without it: the gate had no zone
+        entity, so new copper landed inside a foreign pour (gap 0.0000). GREEN: the polygon form refuses it, and the
+        owner-ordered site is clear because no foreign pour covers it."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe528b", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        sq = ((0.0, 0.0), (2.0, 0.0), (2.0, 2.0), (0.0, 2.0))          # a foreign pour
+        poly = ("GND", "In1.Cu", "poly", sq)
+        self.assertFalse(m._leg_clear("X", "In1.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "inside the pour => REFUSED")
+        self.assertFalse(m._leg_clear("X", "In1.Cu", (-1.0, 1.0), (3.0, 1.0), [poly], 0.30), "crossing it => REFUSED")
+        self.assertFalse(m._leg_clear("X", "In1.Cu", (-1.0, 2.1), (0.0, 2.1), [poly], 0.30), "0.1mm away => REFUSED")
+        self.assertTrue(m._leg_clear("X", "In1.Cu", (-2.0, 1.0), (-1.0, 1.0), [poly], 0.30), "1mm away => clear")
+        self.assertTrue(m._leg_clear("GND", "In1.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "own net is skipped")
+        self.assertTrue(m._leg_clear("X", "In2.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "other layer is skipped")
+
     def test_C538_the_planners_via_radius_equals_what_stitch_actually_lays(self):
         """TIAN TIAO #1 engine asset + regression (#K2-528 / R1788). RED without it: the planner assumed via_r=0.175
         while the registered stitch() lays size 0.45 => r=0.225, a 0.05mm optimistic error that let the edge-case pair

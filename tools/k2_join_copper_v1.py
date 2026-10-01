@@ -109,8 +109,39 @@ def declared_geom(spec_path, rect, mr):
     return out
 
 
+def build_zone_polys(board_path, rect, P):
+    """#K2-528: every zone FILL as a true-shape polygon obstacle per (net, layer).
+
+    R1772 named it: 24 of 25 probe items were new copper landing inside a foreign GND/MCU_VDD pour (gap 0.0000)
+    because the gate had no zone entity at all. Outlines are used as SOLID copper (holes ignored => conservative:
+    the obstacle can only be larger, never smaller than the real pour). Deterministic; local prefilter is by bbox.
+    """
+    b = P.LoadBoard(board_path)
+    out = []
+    for z in b.Zones():
+        net = z.GetNetname()
+        for lid in z.GetLayerSet().CuStack():
+            layer = b.GetLayerName(lid)
+            if not layer.endswith(".Cu"):
+                continue
+            try:
+                lid = b.GetLayerID(layer)
+                poly = z.GetFilledPolysList(lid)
+            except Exception:                                      # noqa: BLE001
+                continue
+            for i in range(poly.OutlineCount()):
+                ch = poly.Outline(i)
+                n = ch.PointCount()
+                if n < 3:
+                    continue
+                pts = tuple((P.ToMM(ch.CPoint(j).x), P.ToMM(ch.CPoint(j).y)) for j in range(n))
+                xs = [q[0] for q in pts]; ys = [q[1] for q in pts]
+                out.append((net, layer, "poly", pts, (min(xs), min(ys), max(xs), max(ys))))
+    return out
+
+
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
-               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None):
+               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None, zone_polys=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
     one-end 桩（恰好一端悬空）⇒ 同层直线腿优先，其次跨层过孔；**零搜索之外的定步长枚举**；确定性。
     """
@@ -147,6 +178,12 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         for _h in (hole_walls or []):
             if _h[0] != net and _h[1] == mr.LNAME[l] and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
                 obsg.append(_h)
+        for _z in (zone_polys or []):                              # #K2-528: foreign POURS are obstacles too
+            if _z[0] == net or _z[1] != mr.LNAME[l]:
+                continue
+            _bb = _z[4]
+            if _bb[0] - local_r <= ex <= _bb[2] + local_r and _bb[1] - local_r <= ey <= _bb[3] + local_r:
+                obsg.append((_z[0], _z[1], "poly", _z[3]))
         for _r in (pad_rects or []):
             if _r[0] == net or _r[1] != mr.LNAME[l]:
                 continue
@@ -180,6 +217,12 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             for _h in (hole_walls or []):
                 if _h[0] != net and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
                     obs2.append(_h)
+            for _z in (zone_polys or []):
+                if _z[0] == net:
+                    continue
+                _bb = _z[4]
+                if _bb[0] - local_r <= ex <= _bb[2] + local_r and _bb[1] - local_r <= ey <= _bb[3] + local_r:
+                    obs2.append((_z[0], _z[1], "poly", _z[3]))
             for _r in (pad_rects or []):                       # true-shape pads, every layer the via may touch
                 if _r[0] == net:
                     continue
@@ -225,7 +268,8 @@ def main(argv=None):
     _VIA_SIZE = 0.45
     pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len, via_r=_VIA_SIZE / 2.0,
                     pad_rects=build_pad_rects(a.board, planner, pcmod, _P),
-                    hole_walls=build_hole_walls(a.board, _P))
+                    hole_walls=build_hole_walls(a.board, _P),
+                    zone_polys=build_zone_polys(a.board, rect, _P))
     lines = []
     for n, j in enumerate(pj["joins"]):
         if j["_kind"] == "track":

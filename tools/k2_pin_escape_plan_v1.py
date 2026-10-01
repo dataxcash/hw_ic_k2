@@ -66,6 +66,35 @@ def _seg_roundrect_dist(ax, ay, bx, by, hx, hy, r):
     return max(0.0, _seg_rect_dist(ax, ay, bx, by, ix, iy) - r)
 
 
+def _pt_in_poly(px, py, pts):
+    """#K2-528: ray casting (deterministic, no randomness). For OBSTACLE use an outline counts as solid copper."""
+    inside = False
+    n = len(pts)
+    for i in range(n):
+        x1, y1 = pts[i]; x2, y2 = pts[(i + 1) % n]
+        if (y1 > py) != (y2 > py):
+            xin = x1 + (py - y1) * (x2 - x1) / (y2 - y1)
+            if px < xin:
+                inside = not inside
+    return inside
+
+
+def _seg_poly_dist(ax, ay, bx, by, pts):
+    """Segment-to-solid-polygon distance: 0 if either end is inside or any edge is crossed, else the min edge gap."""
+    if _pt_in_poly(ax, ay, pts) or _pt_in_poly(bx, by, pts):
+        return 0.0
+    n = len(pts)
+    best = None
+    for i in range(n):
+        x1, y1 = pts[i]; x2, y2 = pts[(i + 1) % n]
+        d = _seg_seg(ax, ay, bx, by, x1, y1, x2, y2)
+        if d <= 0.0:
+            return 0.0
+        if best is None or d < best:
+            best = d
+    return 0.0 if best is None else best
+
+
 def _leg_clear(net, layer, p0, p1, obstacles, clear):
     """某段是否与**异网同层**障碍保持 `clear` 间距。障碍两形：**胶囊** `(net,layer,ax,ay,bx,by,hw)`（走线/过孔/
     圆/椭圆盘）与**真形圆角矩形** `(net,layer,bx0,by0,bx1,by1,0.0,"rect",cx,cy,hx,hy,r,rot)`（#K2-502：焊盘之
@@ -73,6 +102,11 @@ def _leg_clear(net, layer, p0, p1, obstacles, clear):
     (x0, y0), (x1, y1) = p0, p1
     for o in obstacles:
         if o[0] == net or o[1] != layer:
+            continue
+        if len(o) == 4 and o[2] == "poly":
+            # #K2-528: ZONE FILL as a true polygon - new copper must not land inside a foreign pour.
+            if _seg_poly_dist(x0, y0, x1, y1, o[3]) < clear:
+                return False
             continue
         if len(o) >= 8 and o[7] == "rect":
             cx, cy, hx, hy, rr, rot = o[8], o[9], o[10], o[11], o[12], o[13]
