@@ -1,0 +1,102 @@
+{
+ "artifact": "k2_maze_kernel_profile_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-525 sec.2 item 2: profile the maze kernel BEFORE optimising (no blind tuning); read-only, /tmp copy, no exam run, ZERO kernel changes",
+ "method": "python3 -m cProfile -s cumtime tools/k2_reroute_router_floor_v1.py --in <k2q1 s1e_stitched_addendum copy> --drc <s1_wiped_drc copy> --out /tmp/... --ledger /tmp/... --margin 3.0 --floor 0.20 --bound-rect 22.95,32.95,51.5,78.0 --order list --order-list prio --ripup 3",
+ "total_s_under_cprofile": 681.415,
+ "top": [
+  {
+   "ncalls": "1",
+   "tottime_s": 0.0,
+   "cumtime_s": 681.415,
+   "func": "k2_reroute_router_floor_v1.py:1(<module>)"
+  },
+  {
+   "ncalls": "1",
+   "tottime_s": 0.005,
+   "cumtime_s": 681.41,
+   "func": "k2_reroute_router_floor_v1.py:19(main)"
+  },
+  {
+   "ncalls": "1",
+   "tottime_s": 0.017,
+   "cumtime_s": 681.192,
+   "func": "k2_p4_mroute_v1.py:903(run)"
+  },
+  {
+   "ncalls": "4",
+   "tottime_s": 0.17,
+   "cumtime_s": 674.686,
+   "func": "k2_p4_mroute_v1.py:1025(_pass)"
+  },
+  {
+   "ncalls": "1256",
+   "tottime_s": 0.018,
+   "cumtime_s": 673.795,
+   "func": "k2_reroute_router_floor_v1.py:357(solve)"
+  },
+  {
+   "ncalls": "300",
+   "tottime_s": 0.008,
+   "cumtime_s": 668.003,
+   "func": "k2_p4_mroute_v1.py:800(solve_edge)"
+  },
+  {
+   "ncalls": "732",
+   "tottime_s": 0.127,
+   "cumtime_s": 667.995,
+   "func": "k2_p4_mroute_v1.py:809(_try_margin)"
+  },
+  {
+   "ncalls": "384",
+   "tottime_s": 68.551,
+   "cumtime_s": 321.737,
+   "func": "k2_p4_mroute_v1.py:444(astar)"
+  },
+  {
+   "ncalls": "924",
+   "tottime_s": 7.574,
+   "cumtime_s": 258.014,
+   "func": "k2_p4_mroute_v1.py:208(__init__)"
+  },
+  {
+   "ncalls": "924",
+   "tottime_s": 17.21,
+   "cumtime_s": 250.305,
+   "func": "k2_p4_mroute_v1.py:351(_mark)"
+  },
+  {
+   "ncalls": "4525980",
+   "tottime_s": 17.956,
+   "cumtime_s": 211.253,
+   "func": "k2_p4_mroute_v1.py:279(vbad)"
+  },
+  {
+   "ncalls": "6429042",
+   "tottime_s": 56.027,
+   "cumtime_s": 160.308,
+   "func": "k2_p4_mroute_v1.py:352(cseg)"
+  },
+  {
+   "ncalls": "7554330",
+   "tottime_s": 50.023,
+   "cumtime_s": 129.515,
+   "func": "k2_p4_mroute_v1.py:296(cseg)"
+  },
+  {
+   "ncalls": "20791334",
+   "tottime_s": 19.84,
+   "cumtime_s": 114.88,
+   "func": "k2_reroute_router_floor_v1.py:71(<lambda>)"
+  }
+ ],
+ "named_findings": [
+  "Grid.__init__ is called 924 times and costs 258.0 s = 38% of the run: _try_margin (732 calls) rebuilds the grid per attempt. REUSE/CACHE THE GRID - the single biggest, cheapest item (it is on #K2-525's own candidate list).",
+  "astar: 384 calls, 321.7 s = 47%; its inner loops dominate it: cseg (6.4M/7.5M calls, 160+130 s), vbad (4.5M, 211 s cum), _req/_nc via a lambda (20.8M calls, 115+88 s), and 180.9M max()/137M min() builtins (~111 s combined). Tuning these is inner-loop work - harder, do it only after the grid reuse.",
+  "66.8M str.startswith calls cost 21.9 s inside _req/_nc: the layer-name test can be precomputed once per item instead of per comparison."
+ ],
+ "next": [
+  "(a) grid reuse/caching across _try_margin attempts and passes; (b) precompute the layer-name predicate; (c) inner-loop tuning of astar's cseg/vbad only if the profile still names it after (a)+(b). Each must ship with a SAME-SOLUTION regression (the maze must return the same routes) per #K2-525 sec.2 item 3."
+ ],
+ "OWNER-ITEMS": 0
+}
