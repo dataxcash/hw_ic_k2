@@ -2057,6 +2057,22 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C525_the_chain_records_its_own_timing(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-525 sec.2 item 1). RED without it: where the chain's time goes
+        could only be reconstructed by mtime archaeology (a 5min04s run whose 84% was one stage). GREEN: every record
+        carries t_start/t_end/dur_s, the segments are contiguous, and the records stay ordinary dicts."""
+        import time as _t
+        c = regen._TimedChain()
+        c.append({"stage": "a"}); _t.sleep(0.02); c.append({"stage": "b", "err": None}); _t.sleep(0.01)
+        for r in c:
+            self.assertIn("t_start", r); self.assertIn("t_end", r); self.assertIn("dur_s", r)
+        self.assertAlmostEqual(c[1]["t_start"], c[0]["t_end"], places=6, msg="contiguous segments")
+        self.assertGreaterEqual(c[1]["dur_s"], 0.015, "the sleep is visible in the record")
+        self.assertEqual([r["stage"] for r in c], ["a", "b"], "additive only - the records are untouched otherwise")
+        self.assertTrue(any("_TimedChain()" in l for l in open(os.path.join("tools", "eda_eng", "regen.py"),
+                                                               encoding="utf-8").read().splitlines()),
+                        "the chain actually uses it")
+
     def test_C519_the_two_hop_connector_is_deterministic_and_fail_loud(self):
         """TIAN TIAO #1 engine asset + regression (#K2-519 sec.2 item 1). R1740 proved a single via is IMPOSSIBLE at
         the P3V3_AUX stub (the contact lens' furthest point from the existing via is 0.391mm < the 0.65mm hole gate).

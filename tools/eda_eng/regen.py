@@ -1441,6 +1441,31 @@ def channels_for_maze(wiped, drc, rect, ja_module=None):
                 "args": [], "n_nets": 0, "n_guide": 0}
 
 
+class _TimedChain(list):
+    """#K2-525 sec.2 item 1 ENGINE CAPABILITY: a chain list whose EVERY appended record carries its own timing
+    (t_start / t_end / dur_s, seconds since the chain began), so where the time goes can be READ from the artifact
+    instead of being reconstructed by mtime archaeology. Additive only - no existing key is touched, no gate reads it.
+    """
+
+    def __init__(self):
+        super().__init__()
+        import time as _t
+        self._t = _t
+        self._t0 = _t.time()
+        self._last = 0.0
+
+    def append(self, rec):
+        try:
+            now = self._t.time() - self._t0
+            rec["t_start"] = round(self._last, 3)
+            rec["t_end"] = round(now, 3)
+            rec["dur_s"] = round(now - self._last, 3)
+            self._last = now
+        except Exception:                                          # noqa: BLE001
+            pass
+        super().append(rec)
+
+
 def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, keep_nets=None, stitch_spec=None):
     from . import block as _blk, route as _rt, verify as _vf
     os.makedirs(work, exist_ok=True)
@@ -1452,7 +1477,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
     open(_prio, "w", encoding="utf-8").write("\n".join(GAP_NETS) + "\n")
     B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
-    chain = []
+    chain = _TimedChain()   # #K2-525: every record self-times (additive)
 
     def _cli(*args, timeout=7200):
         r = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), *args], cwd=ROOT,
