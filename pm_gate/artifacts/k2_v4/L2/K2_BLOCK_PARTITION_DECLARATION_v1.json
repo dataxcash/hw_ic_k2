@@ -1,0 +1,128 @@
+{
+ "artifact": "k2_block_partition_declaration_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-555 (R1852 approved) STEP 1 - the DECLARED partition is data; no planner runs here.",
+ "source_scenario": "EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json",
+ "lattice": {
+  "decimals": 4,
+  "note": "quantised outward on the registered frame decimals"
+ },
+ "blocks": [
+  {
+   "name": "B1",
+   "rects": [
+    [
+     22.95,
+     32.95,
+     51.5,
+     78.0
+    ]
+   ],
+   "members": [
+    "C73",
+    "C84",
+    "C85",
+    "C86",
+    "C87",
+    "C88",
+    "C90",
+    "D1",
+    "D2",
+    "E2",
+    "J11",
+    "J12",
+    "J13",
+    "J6",
+    "J9",
+    "L1",
+    "R1",
+    "R21",
+    "R28",
+    "R40",
+    "R41",
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "rect_union": true,
+   "is_rectangle": true
+  }
+ ],
+ "assertions": {
+  "no_pad_via_hole_straddles_rect_edge": false,
+  "checked_readonly_on": "k2_v4_8L.l14.kicad_pcb",
+  "tolerance_mm": 1e-06,
+  "straddling_items": [
+   {
+    "kind": "pad",
+    "ref": "H4",
+    "pad": "",
+    "edge": "y1"
+   },
+   {
+    "kind": "pad",
+    "ref": "H1",
+    "pad": "",
+    "edge": "y1"
+   },
+   {
+    "kind": "via",
+    "at": [
+     131.65,
+     78.069
+    ],
+    "edge": "y1"
+   },
+   {
+    "kind": "via",
+    "at": [
+     93.2,
+     78.069
+    ],
+    "edge": "y1"
+   }
+  ],
+  "count": 4,
+  "raw_machine_verdict": "STRADDLES_PRESENT",
+  "named_exceptions": [
+   {
+    "authority": "#K2-555 step 1: on the K2 TEST CASE the registered frame is a pre-existing legacy boundary that deliberately passes through these items - the chain carries port/escape machinery for exactly this. The construction order's no-straddle rule is a PLANNER constraint for newly declared blocks; the K2 partition therefore DECLARES them.",
+    "items": [
+     {
+      "kind": "pad",
+      "ref": "H4",
+      "pad": "",
+      "edge": "y1"
+     },
+     {
+      "kind": "pad",
+      "ref": "H1",
+      "pad": "",
+      "edge": "y1"
+     },
+     {
+      "kind": "via",
+      "at": [
+       131.65,
+       78.069
+      ],
+      "edge": "y1"
+     },
+     {
+      "kind": "via",
+      "at": [
+       93.2,
+       78.069
+      ],
+      "edge": "y1"
+     }
+    ]
+   }
+  ],
+  "no_unlisted_straddle": true
+ },
+ "member_count": 25,
+ "determinism": "regenerate from the same inputs => byte-identical (proof kept as the double-run compare)",
+ "self_sha16": "6eb2e40edbe1dcc8"
+}
