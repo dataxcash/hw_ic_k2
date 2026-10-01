@@ -78,6 +78,37 @@ def build_hole_walls(board_path, P):
     return out
 
 
+def declared_geom(spec_path, rect, mr):
+    """#K2-532: the AUTHORISED outside-frame geometry of the in-register drawing (lines with allow_outside_dR).
+
+    Returns {(net, layer_or_VIA, *canonical outside geometry)} WITHOUT the width, so the verb can mark ONLY those
+    emitted lines as allow_outside_dR for the registered stitch(). Everything else stays REFUSED by the dR bound.
+    """
+    import json as _j, sys as _s
+    _s.path.insert(0, _HERE)
+    from eda_eng import block as _blk
+    out = set()
+    if not spec_path or not os.path.isfile(spec_path):
+        return out
+    try:
+        d = _j.load(open(spec_path, encoding="utf-8"))
+    except Exception:                                          # noqa: BLE001
+        return out
+    for L in (d.get("lines") or []):
+        if not L.get("allow_outside_dR"):
+            continue
+        if L.get("kind") == "via":
+            at = [float(v) for v in L["at"]]
+            out.add((L.get("net"), "VIA", round(at[0], 3), round(at[1], 3)))
+        elif L.get("kind") == "track":
+            a = tuple(float(v) for v in L["a"]); b = tuple(float(v) for v in L["b"])
+            for (pp, qq) in _blk.clip_iu(a, b, rect)[1]:
+                if (pp[0] - qq[0]) ** 2 + (pp[1] - qq[1]) ** 2 <= 1e-16:
+                    continue
+                out.add((L.get("net"), L.get("layer")) + tuple(round(v, 3) for v in _blk._canon(pp, qq)))
+    return out
+
+
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
                via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
@@ -179,6 +210,7 @@ def main(argv=None):
     ap.add_argument("--board", required=True); ap.add_argument("--rect", required=True)
     ap.add_argument("--out", required=True); ap.add_argument("--json-out")
     ap.add_argument("--clear", type=float, default=0.30); ap.add_argument("--max-len", type=float, default=2.0)
+    ap.add_argument("--declare", default=None, help="#K2-532: drawing whose allow_outside_dR lines authorise emitted geometry")
     a = ap.parse_args(argv)
     mr = _mod("k2mrjoin", os.path.join(_HERE, "k2_p4_mroute_v1.py"))
     planner = _mod("k2pejoin", os.path.join(_HERE, "k2_pin_escape_plan_v1.py"))
@@ -204,8 +236,24 @@ def main(argv=None):
             for _li, _lg in enumerate(j["legs"]):
                 lines.append({"n": "J%db%d" % (n, _li), "kind": "track", "net": j["net"],
                               "layer": _lg["layer"], "a": _lg["a"], "b": _lg["b"]})
+    import sys as _s2
+    _s2.path.insert(0, _HERE)
+    from eda_eng import block as _blk2
+    _dg = declared_geom(a.declare, rect, mr) if getattr(a, "declare", None) else set()
+    _n_auth = 0
+    for _L in lines:
+        if _L["kind"] == "via":
+            if (_L["net"], "VIA", round(float(_L["at"][0]), 3), round(float(_L["at"][1]), 3)) in _dg:
+                _L["allow_outside_dR"] = True; _n_auth += 1
+            continue
+        _a = tuple(float(v) for v in _L["a"]); _b = tuple(float(v) for v in _L["b"])
+        for (_pp, _qq) in _blk2.clip_iu(_a, _b, rect)[1]:
+            if (_pp[0] - _qq[0]) ** 2 + (_pp[1] - _qq[1]) ** 2 <= 1e-16:
+                continue
+            if (_L["net"], _L["layer"]) + tuple(round(v, 3) for v in _blk2._canon(_pp, _qq)) in _dg:
+                _L["allow_outside_dR"] = True; _n_auth += 1
     rep = {"artifact": "k2_join_copper_v1", "board": a.board, "out": a.out,
-           "n_one_end": pj["n_one_end"], "n_planned": len(pj["joins"]), "n_refused": len(pj["refused"]),
+           "n_one_end": pj["n_one_end"], "n_planned": len(pj["joins"]), "n_refused": len(pj["refused"]), "n_authorised": _n_auth,
            "pad_model": "TRUE rounded-rectangle (pad_obstacle_shape) - #K2-509 sec.2 item 2",
            "refused": pj["refused"], "lines": lines}
     if lines:

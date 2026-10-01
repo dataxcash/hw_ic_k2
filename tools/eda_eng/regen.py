@@ -1785,7 +1785,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15, erase_refs=None, 
         _jm = os.path.join(work, "join_plan.json")
         _jr = subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_join_copper_v1.py"),
                               "--board", resolved, "--rect", ",".join(str(v) for v in rect),
-                              "--out", os.path.join(work, "s2e_joined.kicad_pcb"), "--json-out", _jm],
+                              "--out", os.path.join(work, "s2e_joined.kicad_pcb"), "--json-out", _jm]
+                             + (["--declare", stitch_spec] if stitch_spec else []),
                              cwd=ROOT, capture_output=True, text=True, timeout=1800)
         _jd = json.load(open(_jm, encoding="utf-8")) if os.path.isfile(_jm) else {}
         # #K2-509 sec.2 item 1 MUST-HOLD: the first run of the join produced REAL cross-net shorts
