@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_placement_gate_gap_forensics_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-529 sec.1/2: read-only - each new-class DRC item cross-tabled against the placement gate's own model; the missing geometric quantity NAMED per item",
+ "board": "/tmp/opencode/k2r1/w2/s3b_fixed.kicad_pcb (join applied)",
+ "rows": [
+  {
+   "item": "shorting_items #1 - PERSTA# In5 leg x existing P3V3_AUX buried via In4-B.Cu",
+   "real": {
+    "leg_hw_mm": 0.1,
+    "via_layers": [
+     "B.Cu",
+     "In6.Cu"
+    ],
+    "In5_in_via_layer_set": true,
+    "via_pad_r_mm": 0.225,
+    "via_drill_r_mm": 0.125,
+    "centreline_dist_mm": 0.7433
+   },
+   "gate_model": "existing via = capsule of PAD radius on the layers of its layer set (with a fictional capsule on In5)",
+   "gate_verdict": "FALSE GREEN (model PASS)",
+   "missing_entity": "HOLE WALL of the existing via on every layer its drill passes (r=drill/2=0.125mm); In5 carries the drill and no annulus",
+   "model_gap_mm": 0.4183,
+   "true_gap_mm": 0.5183,
+   "required_mm": 0.2,
+   "consequence": "leg copper crosses the drill wall => SHORT"
+  },
+  {
+   "item": "clearance #2 - existing J12 PTH pad x new P3V3 blind via F.Cu-In2",
+   "real": {
+    "pad_size_mm": [
+     1.5,
+     1.5
+    ],
+    "pad_drill_r_mm": 0.4,
+    "via_layers": [
+     "F.Cu",
+     "In2.Cu"
+    ],
+    "centre_dist_mm": 1.1717
+   },
+   "gate_model": "pad = capsule on F.Cu/B.Cu only; new via = annulus capsule on F.Cu and In2",
+   "gate_verdict": "FALSE GREEN (model PASS)",
+   "missing_entity": "PTH HOLE of the pad on every layer its drill passes (r=drill/2=0.400mm), In2 included",
+   "model_gap_mm": 0.1967,
+   "true_gap_mm": 0.5467,
+   "required_mm": 0.2,
+   "consequence": "new annulus 0.1967mm from the pad hole wall => CLEARANCE"
+  }
+ ],
+ "named_gap_list": [
+  "HOLE WALL of existing VIAS - must be an obstacle on EVERY layer the drill passes (a buried In4-B.Cu via exposes its drill on In5 with NO annulus for the model to see)",
+  "PTH HOLE of PADS - must be an obstacle on EVERY layer the drill passes (the model builds a PTH pad only on F.Cu/B.Cu, so In2 was blind)",
+  "TRUE-SHAPE - NOT implicated: both failures are MISSING ENTITIES, not a coarse approximation of an existing one"
+ ],
+ "OWNER-ITEMS": 0
+}
