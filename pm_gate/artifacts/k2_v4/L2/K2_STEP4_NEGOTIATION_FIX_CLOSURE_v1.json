@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_step4_negotiation_fix_closure_v1",
+ "ts": "2026-10-01",
+ "engine_head": "186ceb8e",
+ "authority": "#K2-557 standing continuation + #K2-558 (the stop order is lifted; H is ratified as STEP 4's final proof). R1852 STEP 4 = the MANDATORY negotiation fix.",
+ "scope": "the rip-up adoption criterion counted `no-op-after-port-substitution(same-island)` refusals as blocks; the measured pollution was 245 of 268, so 'block count strictly drops' could never fire (three rounds read 268/268/268).",
+ "lands": {
+  "4a_classification": "each refusal now carries class=connected_via_port | blocked (ADDITIVE; no decision change) - commit 0c48d009",
+  "4b_criterion": "_real() excludes connected_via_port; _best, each round's count and the atomic adoption test all use the REAL count - commit 10ddc910",
+  "placement_fix": "the two derived ledger counts are taken AFTER the passes and BEFORE the dump - commit eab3c196 (read-before-edit: the lines were located and printed before moving; two assertions refused the write, so the tree never held a half-patch)",
+  "process_regression": "a PATH-LEVEL ORDERING regression enters the suite (183->184): the counts' position, the classification, _real() and both criterion uses are pinned - commit 186ceb8e"
+ },
+ "ledger_diff_evidence": {
+  "pre_change_ledger": "/tmp/opencode/rp1840_F_led.json (tag F - after 4a+4b, before the placement fix)",
+  "post_change_ledger": "/tmp/opencode/rp1840_H_led.json (tag H - the ONE run after the placement fix; a new input, not a same-state re-run)",
+  "mainline_route": "IDENTICAL in both: added 66 / blocked(raw) 268 / segs 1212 / vias 63 / len 564.6769 => the criterion change is FAIL-SAFE (it only affects the adoption decision, never the mainline routing)",
+  "per_entry_classes": "post-change: connected_via_port 245 / blocked 23",
+  "top_level_counts": {
+   "pre_change": "0 / 0  <-- my silent wrong value (computed before the passes filled `blocked`)",
+   "post_change": "blocked_real 23 / connected_via_port 245 == the per-entry classes (CONSISTENT: True)"
+  },
+  "ripup_trail": "round0/1/2 -> blocked(raw) 268/268/271, blocked_real 23/23/26, adopted=False (the criterion can now decide honestly: no round strictly beats the mainline on REAL blocks)"
+ },
+ "self_inflicted_defects_and_disposition": [
+  {
+   "defect": "4a's first form raised UnboundLocalError (it referenced a later-bound local)",
+   "caught_by": "the bounded probe (tag E), instantly",
+   "disposition": "fixed in 4a's own commit"
+  },
+  {
+   "defect": "the 'fix' then read an empty list and silently reported 0/0",
+   "caught_by": "the bounded probe (tag F)",
+   "disposition": "placement fixed (eab3c196); the top-level counts now agree with the per-entry classes"
+  },
+  {
+   "defect": "a blind-anchor patch attempt failed (AssertionError) and a wrong verification rule was written",
+   "caught_by": "the assertions, BEFORE any write",
+   "disposition": "tree never held a half-patch; corrected and landed (read-before-edit)"
+  }
+ ],
+ "evidence_scope_honesty": "the raw ledgers above live in /tmp (process artefacts). Their READINGS are what this record carries; the durable evidence of the wiring is the suite regression (186ceb8e) and the commits listed.",
+ "forbidden_from_here": "same-state probes without a changed input; parameter variants (#K2-558 sec.4; the E/F/G lesson is in-register).",
+ "next": "STEP 5 QC: exactly ONE K2 true-model whole-exam run + exactly ONE R6 chain run, each with a two-reading byte comparison; fail-closed C1==0 AND C2 PASS AND new_classes==[] => closure, else name per-item causes and stop; NO second run is pre-authorised. Cost already reported per rule 5.",
+ "OWNER-ITEMS": 0,
+ "self_sha16": "9c2ff5c8960b47b3"
+}
