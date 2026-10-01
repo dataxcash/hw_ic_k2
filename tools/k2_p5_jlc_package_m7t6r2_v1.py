@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-# P5 delivery package builder - **m7t6r2 version** (#K2-546):
+# P5 delivery package builder - **m7t6r2 version** (#K2-546 / #K2-548 / #K2-549).
+# TOOL INPUT CONTRACT (M-ENG-TOOL-INPUT-CONTRACT): the source board must be FRESHLY FILLED and island-free;
+#   the zone gate re-exports the same board to /tmp with --check-zones and demands the delivered Gerber set be
+#   byte-identical on ALL files. READ THAT GATE BEFORE FEEDING A BOARD (the l8 run passed it 14/14).
 #   source board pinned to the 9/9 exam's JUDGED board `a14610e0542e6314` (now in-repo at L6/board/);
 #   the package carries PACKAGE QC ROW 9 = fail-closed delivery-board identity.
 #   Everything else inherits from the l14r1 builder (k2_p5_jlc_package_l14r1_v1.py).
@@ -11,17 +14,27 @@ from pathlib import Path
 ROOT = Path("/home/fila/jqdDev_2025/ic_hw")
 K2 = ROOT / "k2"
 CLI = ROOT / "AppDir/bin/kicad-cli"
-BOARD = K2 / "hw/k2_v4_8L.m7t6.kicad_pcb"
-PRO = K2 / "hw/k2_v4_8L.m7t6.kicad_pro"
+BOARD = K2 / "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6_final.kicad_pcb"
+PRO = K2 / "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pro"
 SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json"
 BOOK = K2 / "pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260921"
 FROZEN_PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"
 OUT = K2 / "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2"
 # #K2-546 sec.2.2 · PACKAGE QC ROW 9 (permanent gate for the "wrong source board" defect, F-GREEN case 8):
 # the package's board sha16 MUST equal the RECOGNISED delivery board (the 9/9 exam's judged board).
-DELIVERY_BOARD_SHA16 = "a14610e0542e6314"
+DELIVERY_BOARD_SHA16 = "66b6553f2677737b"   # #K2-548: the delete-then-refill final board (zero isolated + fresh fill)   # #K2-547 sec.2.2: the re-certified freshly-re-filled delivery board
 assert OUT.name == "jlc_package_m7t6r2", "FAIL-CLOSED: l8r2 生成器不得指向冻结包 l8 (#K2-59 R2-1)"
 CANON_DATE = "2026-09-19T00:00:00+08:00"
+# #K2-548 sec.1.1 (the zone gate's internal semantics are the ENG's call): kicad-cli stamps every .gbr with a
+#   `G04 ... date YYYY-MM-DD HH:MM:SS*` comment line, which TS_PAT does NOT match. Two exports that straddle a
+#   second therefore differ BYTE-WISE while being geometrically identical => a wall-clock race that can randomly
+#   refuse a correct package (the l8 14/14 was a same-second coincidence). Normalise it too, in BOTH arms.
+DATE_LINE_PAT = re.compile(r"(G04[^\n]*?date )[0-9]{4}-[0-9]{2}-[0-9]{2}[ T][0-9]{1,2}:[0-9]{2}:[0-9]{2}")
+
+def canon_text(t: str) -> str:
+    """Single normaliser for every generated file: drop the wall clock, keep the geometry."""
+    return DATE_LINE_PAT.sub(r"\g<1>" + CANON_DATE, TS_PAT.sub(CANON_DATE, t))
+
 TS_PAT = re.compile(r"\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:[+-]\d{2}:\d{2})?")
 COPPER = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]
 PLOT_LAYERS = ",".join(COPPER + ["F.Silkscreen", "B.Silkscreen", "F.Mask", "B.Mask", "Edge.Cuts"])
@@ -53,7 +66,7 @@ def canonicalize(d: Path) -> int:
             t = p.read_text()
         except UnicodeDecodeError:
             continue
-        t2 = TS_PAT.sub(CANON_DATE, t)
+        t2 = canon_text(t)
         if t2 != t:
             p.write_text(t2)
             n += 1
@@ -74,7 +87,11 @@ def export(stage: Path) -> dict:
             shutil.rmtree(x)
     g.mkdir(parents=True)
     d.mkdir(parents=True)
-    run([str(CLI), "pcb", "export", "gerbers", "--board-plot-params", "--no-x2",
+    # #K2-548 sec.1.1 / #K2-549 (ENG's mechanism call, R1882 option A): the DELIVERED set is exported with
+    # `--check-zones` too, so the delivered copper IS the plot-time recomputed fill. kicad-cli re-fills zones on
+    # every plot anyway; the flag adds the zone check. The delivered-vs-recompute invariance row is therefore
+    # satisfied BY CONSTRUCTION, and the package carries the disclosure line below. Nothing else changes.
+    run([str(CLI), "pcb", "export", "gerbers", "--board-plot-params", "--no-x2", "--check-zones",
          "--layers", PLOT_LAYERS, "--output", str(g), str(bcopy)])
     run([str(CLI), "pcb", "export", "drill", "--format", "excellon", "--excellon-units", "mm",
          "--generate-map", "--map-format", "svg", "--generate-report",
@@ -375,7 +392,7 @@ def zone_refill_invariance() -> dict:
     res = {}
     for f in sorted(od.iterdir()):
         t = f.read_text()
-        f.write_text(TS_PAT.sub(CANON_DATE, t))
+        f.write_text(canon_text(t))
         d = OUT / "01_gerber_rs274x" / f.name
         res[f.name] = bool(d.exists() and sha256(d) == sha256(f))
     return {"method": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --check-zones（/tmp 副本）",
