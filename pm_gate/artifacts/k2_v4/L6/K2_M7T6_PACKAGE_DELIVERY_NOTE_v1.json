@@ -1,0 +1,25 @@
+{
+ "artifact": "k2_m7t6_package_delivery_note_v1",
+ "ts": "2026-10-01",
+ "engine_head": "f2dc29a7",
+ "authority": "#K2-548 sec.1 (invariant) + #K2-550 (judging rows). This note records FACTS about the delivered package; it does NOT claim any pending acceptance.",
+ "package": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2",
+ "package_board": "k2_v4_8L.m7t6.kicad_pcb",
+ "package_board_sha16": "a14610e0542e6314",
+ "invariant": "the package board IS the board the nine-row record judged (sha a14610e0542e6314) => the GOVERNING C1/C2/C6 are that record's own rows (C1 unconnected 0; C2 total 135<=168 new_classes [] by the pinned caliber; C6 diff 0, n_authorized 2, plus the supervisor-approved named residual MCU_VDD|In4.Cu -0.9128 per #K2-538 sec.2.2).",
+ "dfm": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0
+ },
+ "drill_total": 726,
+ "n_files": 58,
+ "delivered_copper_disclosure": "the delivered Gerber set is exported with --check-zones, i.e. it is the PLOT-TIME RECOMPUTED pour (the copper any plotter emits). Consequence, MEASURED with the in-register C6 gauge (block.outside_copper_equivalent, ref=B0=l14, declared=block.declared_outside_keys): real copper diff = 0 and n_authorized = 2 (all PASS); one ZONE row differs from the reference's saved (partially filled) state: MCU_VDD|In4.Cu +10.313904 mm2 vs its derived tol 0.846871 mm2 - i.e. a DEEPER pour outside the frame on an inner plane layer. DFM rows are unaffected (16 PASS / 1 ACCEPT / 0 FAIL).",
+ "pending_supervisor_words": [
+  "accept this disclosed plot-time-recompute pour (ENG recommendation, R1910 option A) OR require the zone outline to be clipped so the plot matches the reference's outside coverage",
+  "housekeeping: keep the three diagnostic boards under L6/board/ as detour evidence, or remove them (ENG recommendation: keep)"
+ ],
+ "evidence_in_history": [
+  "R1892/R1898/R1900/R1908 commits hold the judging-rows addendum and the C6 detour readings (they lived inside the package OUT and were consumed when OUT was rebuilt per the tool's own design)"
+ ]
+}
