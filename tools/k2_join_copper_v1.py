@@ -245,6 +245,9 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         for _h in (hole_walls or []):
             if _h[0] != net and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
                 obs2.append(_h)
+            for _e in (edge_walls or []):                # #K2-534: the board edge on the via path too
+                if planner._pt_seg(ex, ey, _e[2], _e[3], _e[4], _e[5]) <= local_r:
+                    obs2.append(_e)
         for _z in (zone_polys or []):
             if _z[0] == net:
                 continue
