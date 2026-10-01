@@ -1,0 +1,160 @@
+{
+ "artifact": "k2_block_planner_score_table_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-555 (R1852 approved) STEP 3b - the position-only enumerator and its score table.",
+ "standard": "K2_BLOCK_PLANNER_STANDARD_v1.json",
+ "standard_self_sha16": "dd0b2bcea7dbae0d",
+ "partition": "K2_BLOCK_PARTITION_DECLARATION_v1.json",
+ "board_readonly": "k2_v4_8L.l14.kicad_pcb",
+ "enumeration": {
+  "positions_only": true,
+  "n_positions_per_block": 8,
+  "n_blocks": 1,
+  "n_combinations": 8,
+  "n_combinations_bound": 8,
+  "caps": {
+   "max_positions_per_block": 8,
+   "max_blocks_per_window": 4,
+   "why": "keeps the enumeration arithmetically bounded: <= 8^4 = 4096 combinations per window worst case, evaluated by the registered objective - no search, no backtracking"
+  },
+  "cap_respected": true
+ },
+ "objective_inputs": {
+  "crossing_nets": {},
+  "w": {
+   "w_blocks_crossed": 1.0,
+   "w_hs": 1.0,
+   "w_power": 1.0,
+   "note": "dimensionless-by-construction: the distance term is in mm and the crossing count is an integer; the weights are 1.0 and are REGISTERED (changing them is a standard revision, not a code edit)"
+  },
+  "single_block_note": "with ONE declared block the cross-block term is structurally 0 - the K2 test case therefore exercises the LAW (positions only, caps, tie-break, determinism) and not the cross-block optimisation; a multi-block K2 case would exercise the latter"
+ },
+ "score_table": [
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 0.0,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1"
+   ]
+  }
+ ],
+ "chosen": {
+  "offsets": [
+   [
+    0.0,
+    0.0
+   ]
+  ],
+  "objective": 0.0,
+  "offsets_abs_sum": 0.0,
+  "blocks": [
+   "B1"
+  ]
+ },
+ "tie_break_used": [
+  "objective_value",
+  "sum_of_absolute_offsets",
+  "block_name",
+  "nx",
+  "ny",
+  "block_sort_key"
+ ],
+ "self_sha16": "9793f7e025594802"
+}

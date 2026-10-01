@@ -31,8 +31,9 @@
   "why": "block permutations are label-symmetric - enumerating them adds no solution, only cost",
   "candidate_positions": {
    "kind": "quantised lattice offsets",
-   "step_mm": "the declared quantisation (4 decimals on the registered frame)",
-   "hard_cap_per_block": 8
+   "step_mm": 0.0001,
+   "hard_cap_per_block": 8,
+   "step_mm_note": "the declared quantisation (4 decimals on the registered frame) -> as a NUMBER this is 10^-4 mm (the standard must be machine-readable; the prose stays here)"
   },
   "hard_caps": {
    "max_positions_per_block": 8,
@@ -80,5 +81,5 @@
   ]
  },
  "OWNER-ITEMS": 0,
- "self_sha16": "98c38805c948cc42"
+ "self_sha16": "dd0b2bcea7dbae0d"
 }
