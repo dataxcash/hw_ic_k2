@@ -1,0 +1,301 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-01T20:51:48",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "PTH inside courtyard",
+            "key": "pth_inside_courtyard"
+        },
+        {
+            "description": "NPTH inside courtyard",
+            "key": "npth_inside_courtyard"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.5",
+    "schematic_parity": [],
+    "source": "r6_out_r2.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "J2 的PTH 焊盘 4 [GND]",
+                    "pos": {
+                        "x": 126.416,
+                        "y": 49.2
+                    },
+                    "uuid": "0538039b-679e-4566-b0f6-d1dca51b81a6"
+                },
+                {
+                    "description": "J1 的PTH 焊盘 6 [GND]",
+                    "pos": {
+                        "x": 141.64,
+                        "y": 97.96
+                    },
+                    "uuid": "8272d694-fde6-4a39-97cb-8b78ea4009b8"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "J1 的PTH 焊盘 6 [GND]",
+                    "pos": {
+                        "x": 141.64,
+                        "y": 97.96
+                    },
+                    "uuid": "8272d694-fde6-4a39-97cb-8b78ea4009b8"
+                },
+                {
+                    "description": "J1 的PTH 焊盘 7 [GND]",
+                    "pos": {
+                        "x": 144.18,
+                        "y": 97.96
+                    },
+                    "uuid": "9c83db76-08e0-40d1-9fa8-00eac7a3fe39"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "J2 的PTH 焊盘 2 [/SDA/A4]",
+                    "pos": {
+                        "x": 121.336,
+                        "y": 49.2
+                    },
+                    "uuid": "8a2a0c3c-afd3-4fc0-8335-c8cdebe19069"
+                },
+                {
+                    "description": "J3 的PTH 焊盘 5 [/SDA/A4]",
+                    "pos": {
+                        "x": 160.96,
+                        "y": 97.46
+                    },
+                    "uuid": "ea5b9dbd-eadf-4ddf-82e3-5d604252f800"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "J2 的PTH 焊盘 1 [/SCL/A5]",
+                    "pos": {
+                        "x": 118.796,
+                        "y": 49.2
+                    },
+                    "uuid": "29fcb139-bd4d-46c2-a1ef-edb27596c197"
+                },
+                {
+                    "description": "J3 的PTH 焊盘 6 [/SCL/A5]",
+                    "pos": {
+                        "x": 163.5,
+                        "y": 97.46
+                    },
+                    "uuid": "d77e5dcd-ccdf-49c3-9f69-d935575c8538"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 163.5,
+                        "y": 46.66
+                    },
+                    "uuid": "a1531b39-8dae-4637-9a8d-49791182f594"
+                },
+                {
+                    "description": "J4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 146.99,
+                        "y": 47.87
+                    },
+                    "uuid": "afabb8c7-2cf9-4107-801f-9a53812760a4"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Edge.Cuts 上的 线段",
+                    "pos": {
+                        "x": 163.5,
+                        "y": 46.66
+                    },
+                    "uuid": "a1531b39-8dae-4637-9a8d-49791182f594"
+                },
+                {
+                    "description": "J4 的 线段, 位于 F.Silkscreen",
+                    "pos": {
+                        "x": 164.83,
+                        "y": 50.53
+                    },
+                    "uuid": "7e4f65c7-e4e4-48f1-83e5-b078ab5cb465"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "封装 'PinSocket_1x08_P2.54mm_Vertical' 与库 'Connector_PinSocket_2.54mm' 中的副本不匹配",
+            "items": [
+                {
+                    "description": "封装 J1",
+                    "pos": {
+                        "x": 128.94,
+                        "y": 97.96
+                    },
+                    "uuid": "00000000-0000-0000-0000-0000551afcfc"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "封装 'PinSocket_1x06_P2.54mm_Vertical' 与库 'Connector_PinSocket_2.54mm' 中的副本不匹配",
+            "items": [
+                {
+                    "description": "封装 J3",
+                    "pos": {
+                        "x": 150.8,
+                        "y": 97.46
+                    },
+                    "uuid": "00000000-0000-0000-0000-0000551afd13"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "封装 'PinSocket_1x10_P2.54mm_Vertical' 与库 'Connector_PinSocket_2.54mm' 中的副本不匹配",
+            "items": [
+                {
+                    "description": "封装 J2",
+                    "pos": {
+                        "x": 118.796,
+                        "y": 49.2
+                    },
+                    "uuid": "00000000-0000-0000-0000-0000551afd43"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "封装 'PinSocket_1x08_P2.54mm_Vertical' 与库 'Connector_PinSocket_2.54mm' 中的副本不匹配",
+            "items": [
+                {
+                    "description": "封装 J4",
+                    "pos": {
+                        "x": 145.72,
+                        "y": 49.2
+                    },
+                    "uuid": "00000000-0000-0000-0000-0000551afd5a"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "当前配置中不包含封装库 'Arduino_MountingHole'",
+            "items": [
+                {
+                    "description": "封装 MH1",
+                    "pos": {
+                        "x": 115.24,
+                        "y": 49.2
+                    },
+                    "uuid": "6e571799-0217-4b63-970e-fdbb6a7139e3"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "当前配置中不包含封装库 'Arduino_MountingHole'",
+            "items": [
+                {
+                    "description": "封装 MH2",
+                    "pos": {
+                        "x": 113.97,
+                        "y": 97.46
+                    },
+                    "uuid": "e37b79bf-98e8-4522-b749-f0e7c6a98bbc"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "当前配置中不包含封装库 'Arduino_MountingHole'",
+            "items": [
+                {
+                    "description": "封装 MH3",
+                    "pos": {
+                        "x": 166.04,
+                        "y": 64.44
+                    },
+                    "uuid": "e9ebf119-598a-41fd-98be-2dbed0b47309"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "当前配置中不包含封装库 'Arduino_MountingHole'",
+            "items": [
+                {
+                    "description": "封装 MH4",
+                    "pos": {
+                        "x": 166.04,
+                        "y": 92.38
+                    },
+                    "uuid": "ee2daf16-2f42-4829-9824-10ca9836b9cd"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

@@ -1,0 +1,122 @@
+{
+ "artifact": "k2_step5_qc_closure_v1",
+ "ts": "2026-10-01",
+ "engine_head": "9cc3650d",
+ "authority": "#K2-555 sec.3 item 3 (the QC window) + #K2-557/#K2-558 (standing continuation) + #K2-559 sec.2 item 2a (a NAMED in-repo closure record; /tmp readings are volatile).",
+ "state": "STEP 5 ACCEPTED by the supervisor (#K2-559 sec.2) => R1852 steps 0..5 all PASS => the capability line is CLOSED.",
+ "shot_1_k2_true_model_whole_exam": {
+  "run_count": "1/1",
+  "verdict": "PASS",
+  "nine_rows": {
+   "C1_connectivity": {
+    "pass": true,
+    "reading": {
+     "unconnected": 0
+    }
+   },
+   "C2_drc_no_new_increase": {
+    "pass": true,
+    "reading": {
+     "total": 136,
+     "new_classes": []
+    }
+   },
+   "C3_skew": {
+    "pass": true,
+    "reading": {}
+   },
+   "C4_chamfer_preserved": {
+    "pass": true,
+    "reading": {}
+   },
+   "C5_routing_changed": {
+    "pass": true,
+    "reading": {}
+   },
+   "C6_outside_copper_unchanged": {
+    "pass": true,
+    "reading": {
+     "diff": 0,
+     "n_authorized": 2
+    }
+   },
+   "C7_hs_fanout_untouched": {
+    "pass": true,
+    "reading": {
+     "diff": 0
+    }
+   },
+   "C8_members_inside_frame": {
+    "pass": true,
+    "reading": {}
+   },
+   "C9_geometric_digest": {
+    "pass": true,
+    "reading": {}
+   }
+  },
+  "closing_witness": [
+   {
+    "stage": "resolve_residual_before",
+    "unconnected": 1
+   },
+   {
+    "stage": "copper_join",
+    "enabled": true,
+    "n_planned": 33,
+    "n_refused": 16
+   },
+   {
+    "stage": "refill_frame_discipline",
+    "adopted": true
+   },
+   {
+    "stage": "per_block_C1_gate",
+    "pass": true
+   },
+   {
+    "stage": "M4_judge",
+    "verdict": "PASS"
+   }
+  ],
+  "freshness": "all work-dir boards carry this run's mtime (20:41) => no stale artefact",
+  "durable_copy": "pm_gate/artifacts/k2_v4/L6/evidence_step5/K2_STEP5_K2_EXAM_NINE_ROWS_v1.json",
+  "raw_stdout": "/tmp/opencode/exam_k2w1.out (process artefact; the extracted readings above are the durable record)"
+ },
+ "shot_2_r6_external_board_rerun": {
+  "board": "/tmp/opencode/r6/r6_in.kicad_pcb (KiCad Arduino template copy - not K2, not another line's repo)",
+  "verb": "eda_eng move-parts --moves J1:1.0:0.5",
+  "rc": 0,
+  "readback_delta_mm": [
+   1.0,
+   0.5
+  ],
+  "declared_delta_mm": [
+   1.0,
+   0.5
+  ],
+  "matches": true,
+  "drc_before": {
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 4,
+   "lib_footprint_issues": 4
+  },
+  "drc_after": {
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 4,
+   "lib_footprint_issues": 4
+  },
+  "new_violation_types": [],
+  "hard_gate": "NO NEW VIOLATION TYPE",
+  "verdict": "PASS",
+  "zero_human_intervention": true,
+  "durable_copies": [
+   "pm_gate/artifacts/k2_v4/L6/evidence_step5/r6_drcb_r2.json",
+   "pm_gate/artifacts/k2_v4/L6/evidence_step5/r6_drca_r2.json"
+  ]
+ },
+ "behaviour_neutrality_of_step4": "the post-fix whole-exam reading is IDENTICAL to the pre-fix 9/9 reading (C1 0 / C2 136 with new_classes [] / C6 diff 0 n_authorized 2) => the negotiation-fix criterion change never disturbs the mainline route",
+ "registration_convention": "THIS file is the named in-repo registration record for STEP 5 (the ENG's receipts R1980/R1982 carry the same readings; the raw stdout stays in /tmp as a process artefact).",
+ "OWNER-ITEMS": 0,
+ "self_sha16": "fa90733fe228466c"
+}

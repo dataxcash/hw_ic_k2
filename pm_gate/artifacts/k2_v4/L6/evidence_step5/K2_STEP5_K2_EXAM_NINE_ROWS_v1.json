@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_step5_k2_exam_nine_rows_v1",
+ "verdict": "PASS",
+ "run_count": "1/1",
+ "criteria": {
+  "C1_connectivity": {
+   "pass": true,
+   "reading": {
+    "unconnected": 0
+   }
+  },
+  "C2_drc_no_new_increase": {
+   "pass": true,
+   "reading": {
+    "total": 136,
+    "new_classes": []
+   }
+  },
+  "C3_skew": {
+   "pass": true,
+   "reading": {}
+  },
+  "C4_chamfer_preserved": {
+   "pass": true,
+   "reading": {}
+  },
+  "C5_routing_changed": {
+   "pass": true,
+   "reading": {}
+  },
+  "C6_outside_copper_unchanged": {
+   "pass": true,
+   "reading": {
+    "diff": 0,
+    "n_authorized": 2
+   }
+  },
+  "C7_hs_fanout_untouched": {
+   "pass": true,
+   "reading": {
+    "diff": 0
+   }
+  },
+  "C8_members_inside_frame": {
+   "pass": true,
+   "reading": {}
+  },
+  "C9_geometric_digest": {
+   "pass": true,
+   "reading": {}
+  }
+ },
+ "closing_witness": [
+  {
+   "stage": "resolve_residual_before",
+   "unconnected": 1
+  },
+  {
+   "stage": "copper_join",
+   "enabled": true,
+   "n_planned": 33,
+   "n_refused": 16
+  },
+  {
+   "stage": "refill_frame_discipline",
+   "adopted": true
+  },
+  {
+   "stage": "per_block_C1_gate",
+   "pass": true
+  },
+  {
+   "stage": "M4_judge",
+   "verdict": "PASS"
+  }
+ ]
+}
