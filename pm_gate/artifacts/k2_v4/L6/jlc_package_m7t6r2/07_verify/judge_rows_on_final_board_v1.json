@@ -56,7 +56,199 @@
   "pass": true
  },
  "C6_outside_copper_unchanged": {
-  "judge_reading": "null (SKIPPED this invocation): the judge's own rule is C6/C7 `when a block chain is graded`, and 'None (skipped) is never a PASS'.",
+  "judge_reading": {
+   "status": "FORMAL ROW - in-register C6 gauge (block.outside_copper_equivalent), the SAME function the chain judge uses (#K2-550 sec.1.1)",
+   "equivalent": false,
+   "real_diff": 1,
+   "n_authorized": 1,
+   "n_unauthorized": 1,
+   "n_removed": 0,
+   "authorized": [
+    {
+     "key": [
+      "P3V3",
+      "In4.Cu",
+      51.5,
+      35.5,
+      58.5,
+      35.5,
+      0.25
+     ],
+     "n": 1,
+     "authority": "K2_P3V3AUX_DECLARATION_SPEC_a_v1.json#allow_outside_dR[2] (P3V3,In4.Cu) + #K2-527 owner (a)"
+    }
+   ],
+   "unauthorized": [
+    {
+     "key": [
+      "P3V3_AUX",
+      "VIA",
+      51.65,
+      39.1,
+      0.25
+     ],
+     "n": 1,
+     "authority": null
+    }
+   ],
+   "removed": [],
+   "zone_area_delta": {
+    "GND|In1.Cu": {
+     "final": 4002.523649,
+     "ref": 4003.252051,
+     "delta": -0.728402,
+     "tol_mm2": 20.01626,
+     "pass": true,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 20.01626,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 20.01626,
+      "rel_cap_mm2": 20.01626,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    },
+    "GND|In3.Cu": {
+     "final": 4012.123447,
+     "ref": 4012.666346,
+     "delta": -0.542899,
+     "tol_mm2": 20.063332,
+     "pass": true,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 20.063332,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 20.063332,
+      "rel_cap_mm2": 20.063332,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    },
+    "GND|In6.Cu": {
+     "final": 4044.264353,
+     "ref": 4044.974727,
+     "delta": -0.710374,
+     "tol_mm2": 20.224874,
+     "pass": true,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 20.224874,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 20.224874,
+      "rel_cap_mm2": 20.224874,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    },
+    "MCU_VDD|In4.Cu": {
+     "final": 179.688036,
+     "ref": 169.374132,
+     "delta": 10.313904,
+     "tol_mm2": 0.846871,
+     "pass": false,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 0.846871,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 0.846871,
+      "rel_cap_mm2": 0.846871,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    },
+    "P3V3|In4.Cu": {
+     "final": 3663.218138,
+     "ref": 3663.573575,
+     "delta": -0.355437,
+     "tol_mm2": 18.317868,
+     "pass": true,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 18.317868,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 18.317868,
+      "rel_cap_mm2": 18.317868,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    },
+    "P3V3_AUX|In4.Cu": {
+     "final": 30.140469,
+     "ref": 30.202143,
+     "delta": -0.061674,
+     "tol_mm2": 0.5,
+     "pass": true,
+     "caliber": "calibrated zone tolerance",
+     "tol_derivation": {
+      "tol_mm2": 0.5,
+      "geom_bound_mm2": 44.16,
+      "rel_arm_mm2": 0.5,
+      "rel_cap_mm2": 0.151011,
+      "floor_mm2": 0.5,
+      "binding": "rel_arm",
+      "clear_mm": 0.3,
+      "exposure_mm": 147.2,
+      "rel_cap": 0.005,
+      "sources": {
+       "clear_mm": "#K2-516: DRC clearance 0.20 + track half-width 0.10 (both in-register)",
+       "exposure_mm": "frame perimeter 2*((51.5-22.95)+(78.0-32.95)) = 147.2 mm (derived upper bound)",
+       "rel_cap": "#K2-517 sec.1: 0.5% of the row's reference coverage (pour is fill copper)",
+       "floor_mm2": "#K2-517 sec.1: 0.5 mm^2 = one avoidance ring, so small planes are not stuck red"
+      }
+     }
+    }
+   },
+   "n_zone_delta": 6,
+   "tol_area_mm2": 0.001,
+   "rule": "#K2-504/#K2-505: 'outside copper unchanged' is GEOMETRIC and DECLARATION-AWARE - a zone fill covering the same domain is unchanged, and copper that an in-register drawing explicitly authorises (allow_outside_dR) is NAMED as authorised rather than reported as a leak. Anything without a declaration match is reported exactly as before (fail-closed).",
+   "declared_source": "pm_gate/artifacts/k2_v4/L2/K2_P3V3AUX_DECLARATION_SPEC_a_v1.json (allow_outside_dR lines), per-item net+layer+endpoint match <=0.35 mm; unmatched => UNauthorised (fail-closed)"
+  },
   "registered_gauge_reading": {
    "gauge": "eda_eng.block.outside_geometry + geometry_equal (in-register)",
    "frame": [
@@ -73,7 +265,7 @@
    },
    "note": "diff=2 = exactly the 2 AUTHORISED declaration items (matches the nine-row record n_authorized=2); no unauthorised outside-frame change. Also machine-proves the delete-then-refill did NOT move outside-frame coverage."
   },
-  "status": "SUBSTANTIVELY PASS by the registered gauge; the FORMAL judge row needs the block-grading context (reported in R1892)."
+  "status": "FAIL"
  },
  "thresholds_used": {
   "drc_total": 168,
