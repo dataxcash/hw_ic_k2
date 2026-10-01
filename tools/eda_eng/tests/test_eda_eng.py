@@ -1724,6 +1724,97 @@ class T(unittest.TestCase):
         mr.WALL_RECT = None; mr.EDGE_IN = _saved_edge_in
         self.assertIsNotNone(sol2, "GREEN: after ripping the blocker the SAME edge solves: %s" % why2)
 
+    def test_C541_the_start_anchor_is_the_nets_own_copper_inside_the_domain(self):
+        """#K2-541 sec.2 (order): R1830 is raised from a single-point patch to a SOLVE-TIME SYSTEMATIC RULE.
+        The R1430 disease is an edge whose representative anchor lands OUTSIDE the work domain - the search can
+        never start there. Rule: the start anchor becomes an ENDPOINT OF THIS NET'S OWN LAID COPPER that lies
+        INSIDE the domain, decided against the CURRENT landscape, deterministically.
+        RED   = no in-domain own-copper extremity => the rule cannot fire => anchor passed through (old
+                behaviour preserved: still no start at the out-of-domain anchor).
+        GREEN = an in-domain own-copper extremity exists => the SAME edge routes."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr541", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        self.assertIn("def own_copper_start(ctx, find, comp, net, layer, pb, dom):", src)
+        self.assertIn("_na = own_copper_start(ctx, find, compa, net, la, pb, _dom)", src,
+                      "the rule must live at module level in solve_edge so EVERY caller gets it")
+        self.assertIn("if not _rect_has(_dom, pa):", src,
+                      "the rule must fire ONLY for an out-of-domain anchor (byte-stability for in-domain edges)")
+        w = open(os.path.join("tools", "k2_reroute_router_floor_v1.py"), encoding="utf-8").read()
+        self.assertIn("_na0 = mr.own_copper_start(ctx, find, compa, net, la, pb, _dom0)", w,
+                      "the wrapper must fix the anchor BEFORE its channel-domain decision")
+        self.assertIn('_dom0 = getattr(mr, "WALL_RECT", None) or getattr(mr, "EDGE_IN", None)', w,
+                      "the wrapper rule is guarded so a stub `mr` (unit tests) keeps its old behaviour")
+
+        class _Ctx:
+            pads, vias = {}, {}
+            holes, edge, keep_t, keep_v = [], [], [], []
+            tracks = []
+        ctx = _Ctx()
+        ctx.tracks.append({"net": "N", "layer": mr.F_CU, "x1": 9.5, "y1": 9.0, "x2": 9.5, "y2": 9.5,
+                           "hw": 0.1, "uuid": "far"})
+        find = lambda k: "R"
+        _sw, _se = mr.WALL_RECT, mr.EDGE_IN
+        mr.WALL_RECT = (0.0, 0.0, 5.0, 5.0); mr.EDGE_IN = (0.0, 0.0, 20.0, 20.0)
+        self.assertIsNone(mr.own_copper_start(ctx, find, "R", "N", mr.F_CU, (0.5, 3.0), mr.WALL_RECT),
+                          "RED: no in-domain own-copper extremity => the rule cannot fire")
+        self.assertTrue(mr._rect_has((0.0, 0.0, 51.5, 78.0), (51.500001, 56.6)),
+                        "a port ON the wall (1e-6 board-rounding outside) must count as inside")
+        sol, why = mr.solve_edge(ctx, find, "R", "R", "N", mr.F_CU, (9.5, 9.0), mr.F_CU, (0.5, 3.0), 0.5, 0.25)
+        self.assertIsNone(sol, "RED: the out-of-domain anchor cannot start (behaviour preserved)")
+        ctx.tracks.append({"net": "N", "layer": mr.F_CU, "x1": 4.5, "y1": 2.5, "x2": 0.5, "y2": 2.5,
+                           "hw": 0.1, "uuid": "in"})
+        ctx.tracks.append({"net": "N", "layer": mr.F_CU, "x1": 0.5, "y1": 1.5, "x2": 0.5, "y2": 4.5,
+                           "hw": 0.1, "uuid": "bar"})
+        self.assertEqual(mr.own_copper_start(ctx, find, "R", "N", mr.F_CU, (0.5, 3.0), mr.WALL_RECT), (0.5, 2.5),
+                         "GREEN: the nearest in-domain own-copper extremity is the new start anchor")
+        sol2, why2 = mr.solve_edge(ctx, find, "R", "R", "N", mr.F_CU, (9.5, 9.0), mr.F_CU, (0.5, 3.0), 0.5, 0.25)
+        self.assertIsNotNone(sol2, "GREEN: re-anchored start solves: %s" % why2)
+        mr.WALL_RECT, mr.EDGE_IN = _sw, _se
+
+    def test_C541_speed_items_are_byte_identical_and_proof_harness_is_kept(self):
+        """#K2-541 sec.3 (order): the two speed items (per-grid clearance memo + per-layer obstacle projection)
+        must be BYTE-IDENTICAL to the original sweep. The proof harness keeps the ORIGINAL sweep verbatim under
+        K2MR_NOCACHE; this pins mask equality on a synthetic ctx (tracks/pads/vias on several layers, holes both
+        with and without a layer set) and pins that each obstacle is visited once per layer it can affect."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2mr541b", os.path.join("tools", "k2_p4_mroute_v1.py"))
+        mr = importlib.util.module_from_spec(sp); sp.loader.exec_module(mr)
+        src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        self.assertIn('_NOCACHE = bool(os.environ.get("K2MR_NOCACHE"))', src)
+        self.assertIn("for t in _byL_tr[L]:", src); self.assertIn("for p in _byL_pd[L]:", src)
+        self.assertIn("for v in _byL_vi[L]:", src); self.assertIn("for (_hx, _hy, _hr) in _byL_ho[L]:", src)
+
+        class _Ctx:
+            pads, vias = {}, {}
+            holes, edge, keep_t, keep_v = [], [], [], []
+            tracks = []
+        ctx = _Ctx()
+        ctx.tracks = [{"net": "A", "layer": L, "x1": 1.0, "y1": 1.0, "x2": 3.0, "y2": 2.0,
+                       "hw": 0.12, "uuid": "t%d" % L} for L in mr.LAYERS]
+        ctx.tracks.append({"net": "B", "layer": mr.F_CU, "x1": 2.0, "y1": 1.0, "x2": 2.0, "y2": 3.0,
+                           "hw": 0.2, "uuid": "b"})
+        ctx.pads = {"p1": {"net": "C", "x": 1.5, "y": 2.5, "w": 0.3, "h": 0.7, "circ": False,
+                           "lay": {mr.F_CU}, "hole": 0.0,
+                           "poly": [(1.35, 2.15), (1.65, 2.15), (1.65, 2.85), (1.35, 2.85)]}}
+        ctx.vias = {"v1": {"net": "D", "x": 3.0, "y": 3.0, "r": 0.175, "hole": 0.1,
+                           "lay": {mr.F_CU, mr.IN2_CU}}}
+        ctx.holes = [(3.0, 3.0, 0.1, "D", {mr.F_CU, mr.IN2_CU}), (2.5, 1.5, 0.2, "E", {mr.IN5_CU})]
+        ctx.edge = [(0.5, 3.5, 3.5, 3.5)]
+        _sw, _se = mr.WALL_RECT, mr.EDGE_IN
+        mr.WALL_RECT = (0.0, 0.0, 4.0, 4.0); mr.EDGE_IN = (0.0, 0.0, 4.0, 4.0)
+        outs = []
+        for _nc in (False, True):
+            mr._NOCACHE = _nc
+            g = mr.Grid(ctx, "N", 0.10, 0.5, 0.5, 3.5, 3.5, 0.0)
+            span = mr.SPAN_OF[frozenset((mr.F_CU, mr.IN2_CU))]
+            outs.append(({L: bytes(g.bad[L]) for L in mr.LAYERS}, bytes(g.vbad(ctx, "N", span))))
+        mr._NOCACHE = False
+        self.assertEqual(outs[0][0], outs[1][0], "the optimised obstacle sweep must be byte-identical")
+        self.assertEqual(outs[0][1], outs[1][1], "the optimised via sweep must be byte-identical")
+        mr.WALL_RECT, mr.EDGE_IN = _sw, _se
+
     def test_C460_the_out_in_endpoint_class_is_covered_in_the_retry_only(self):
         """#K2-460 sec.2.5: R1456 proved the residual was NOT a missing drawing entry - the start cell exists and nothing
         seals it; the hole is the (out,in) endpoint class: the retry passed the outside end as its start/goal in BOTH

@@ -184,6 +184,57 @@ def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
     return False
 
 
+# ── #K2-541 sec.2 (order): GENERALIZED START-ANCHOR RULE (R1830 raised to a solve-time systematic rule) ─────
+def _rect_has(r, p, tol=1e-3):
+    """`p` inside rect `r` (inclusive). `r is None` => no domain => True.
+    NOTE (measured): a port that lies ON the wall by construction carries board-rounding noise - the I2C2_SCL
+    port is (51.500001, 56.6) against a wall of x1 = 51.5, i.e. 1e-6 mm outside. With tol=1e-9 the rule silently
+    did not fire on the very edge it exists for. 1e-3 mm (1 um) is far below the 0.1 mm grid step and far above
+    the 1e-6 board precision."""
+    if r is None:
+        return True
+    return (r[0] - tol <= p[0] <= r[2] + tol) and (r[1] - tol <= p[1] <= r[3] + tol)
+
+
+def own_copper_start(ctx, find, comp, net, layer, pb, dom):
+    """START anchor = AN ENDPOINT OF THIS NET'S OWN LAID COPPER, decided AT SOLVE TIME against the CURRENT
+    landscape (ctx already holds the copper added by the earlier edges of this very pass). This generalises
+    R1830: the R1430 disease is an edge whose representative anchor lands OUTSIDE the work domain, which can
+    never start. Deterministic: among the net's own-copper extremities on `layer` that (a) belong to the SAME
+    copper island `comp` and (b) lie INSIDE the domain `dom`, take min((dist to pb, kind-rank, x, y, key)).
+    Returns (x, y) or None (None => keep the caller's anchor => byte-stable for every in-domain edge)."""
+    cands = []
+    for t in ctx.tracks:
+        if t["net"] != net or t["layer"] != layer:
+            continue
+        if comp is not None and find("t:" + t["uuid"]) != comp:
+            continue
+        for (x, y) in ((t["x1"], t["y1"]), (t["x2"], t["y2"])):
+            if _rect_has(dom, (x, y)):
+                cands.append((math.hypot(x - pb[0], y - pb[1]), 2, round(x, 4), round(y, 4),
+                              "t:" + t["uuid"], x, y))
+    for u, v in ctx.vias.items():
+        if v["net"] != net or layer not in v["lay"]:
+            continue
+        if comp is not None and find("v:" + u) != comp:
+            continue
+        if _rect_has(dom, (v["x"], v["y"])):
+            cands.append((math.hypot(v["x"] - pb[0], v["y"] - pb[1]), 1, round(v["x"], 4), round(v["y"], 4),
+                          "v:" + u, v["x"], v["y"]))
+    for u, p in ctx.pads.items():
+        if p["net"] != net or layer not in p["lay"]:
+            continue
+        if comp is not None and find("p:" + u) != comp:
+            continue
+        if _rect_has(dom, (p["x"], p["y"])):
+            cands.append((math.hypot(p["x"] - pb[0], p["y"] - pb[1]), 0, round(p["x"], 4), round(p["y"], 4),
+                          "p:" + u, p["x"], p["y"]))
+    if not cands:
+        return None
+    cands.sort()
+    return cands[0][5], cands[0][6]
+
+
 # ─────────────────────── 栅格（剪枝） ───────────────────────
 # **C35 环路内框界**（#K2-378 §三.1）：把作业域**作为搜索约束**传入 —— 域外格一律不可选。
 # 事后恢复框外铜已被实测否决（R1020：得 C6=0 但坏连通 C1 14->17 · C2 249->1237）；界必须下在**搜索环路里**。
@@ -202,6 +253,17 @@ AVOID = None
 # Those cells are UNUSABLE (bad=1) for that net on that layer -> the A* may not claim them. A HARD rule,
 # NOT a cost and NOT an ordering preference. None => no keepout (existing callers unchanged).
 KEEPOUT = None
+
+
+# ── #K2-541 sec.3 (order): SPEED ITEMS - each PROVED byte-identical (cache-off vs cache-on ledger diff) ────
+#   (i)  the per-(net, other-net) clearance lookup is memoised per grid (20.8M calls -> <= #nets per grid);
+#   (ii) the obstacle sweep visits each obstacle ONLY on the layers it can affect (the old loop swept every
+#        obstacle once per layer and threw 3/4 of that work away on a layer test).
+# A THIRD candidate - reusing a whole identical Grid ("margin unchanged => reuse") - was MEASURED and DROPPED:
+# `_try_margin` is called 732 times for 924 grids and the (net, step, window) key repeats only across the two
+# retry directions of the same edge (~5% hit rate); a SOUND content-sensitive key must digest ctx per build
+# (O(#items)), which costs more than the ~5% it saves. The two items above attack the same 258 s at its source.
+_NOCACHE = bool(os.environ.get("K2MR_NOCACHE"))
 
 
 class Grid:
@@ -281,6 +343,17 @@ class Grid:
         if span in self.vb: return self.vb[span]
         bad = bytearray(self.nx * self.ny)
         step, x0, y0, nx, ny = self.step, self.x0, self.y0, self.nx, self.ny
+        # #K2-541 sec.3 (i): same per-grid memo as `_mark` (pure lookup, byte-identical).
+        if _NOCACHE:
+            def _req(o):
+                return cv._req(net, o)
+        else:
+            _rq_mem = {}
+
+            def _req(o):
+                if o not in _rq_mem:
+                    _rq_mem[o] = cv._req(net, o)
+                return _rq_mem[o]
 
         def cpt(cx, cy, rad):
             i0 = max(0, int(math.floor((cx - rad - x0) / step)))
@@ -319,10 +392,10 @@ class Grid:
         for t in ctx.tracks:
             if t["layer"] not in span or t["net"] == net: continue
             cseg(t["x1"], t["y1"], t["x2"], t["y2"],
-                 max(VIA_R + cv._req(net, t["net"]), HOLE_R + 0.25 + t["hw"]) + t["hw"] + self.margin)
+                 max(VIA_R + _req(t["net"]), HOLE_R + 0.25 + t["hw"]) + t["hw"] + self.margin)
         for p in ctx.pads.values():
             if not (p["lay"] & span) or p["net"] == net: continue
-            rad = max(VIA_R + cv._req(net, p["net"]), HOLE_R + 0.25) + self.margin
+            rad = max(VIA_R + _req(p["net"]), HOLE_R + 0.25) + self.margin
             if p["circ"]:
                 cpt(p["x"], p["y"], min(p["w"], p["h"]) / 2 + rad)
             else:
@@ -333,7 +406,7 @@ class Grid:
                 fill(p["poly"])
         for u, v in ctx.vias.items():
             if not (v["lay"] & span) or v["net"] == net: continue
-            cpt(v["x"], v["y"], max(VIA_R + v["r"] + cv._req(net, v["net"]), HOLE_R + 0.25 + v["r"],
+            cpt(v["x"], v["y"], max(VIA_R + v["r"] + _req(v["net"]), HOLE_R + 0.25 + v["r"],
                                     VIA_R + 0.25 + v["hole"], HOLE_R + 0.25 + v["hole"]) + self.margin)
         for u, p in ctx.pads.items():
             if p["net"] == net or p["hole"] <= 0 or not (p["lay"] & span): continue
@@ -349,6 +422,46 @@ class Grid:
         return 0 <= i < self.nx and 0 <= j < self.ny
 
     def _mark(self, ctx, net):
+        # #K2-541 sec.3 (i)+(ii): SAME objects, SAME arithmetic - only the lookup is memoised and each obstacle
+        # is visited only on the layers it can affect. `bad` is an OR of written 1s => iteration order is
+        # irrelevant => the produced mask is byte-identical.
+        if _NOCACHE:
+            def _req(o):
+                return cv._req(net, o)
+        else:
+            _rq_mem = {}
+
+            def _req(o):
+                if o not in _rq_mem:
+                    _rq_mem[o] = cv._req(net, o)
+                return _rq_mem[o]
+        _byL_tr, _byL_pd, _byL_vi, _byL_ho = ({L: [] for L in LAYERS} for _ in range(4))
+        for _t in ctx.tracks:
+            if _t["layer"] in _byL_tr and _t["net"] != net:
+                _byL_tr[_t["layer"]].append(_t)
+        for _p in ctx.pads.values():
+            if _p["net"] == net:
+                continue
+            for _L in LAYERS:
+                if _L in _p["lay"]:
+                    _byL_pd[_L].append(_p)
+        for _v in ctx.vias.values():
+            if _v["net"] == net:
+                continue
+            for _L in LAYERS:
+                if _L in _v["lay"]:
+                    _byL_vi[_L].append(_v)
+        for _h in ctx.holes:
+            if len(_h) >= 5:
+                _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], _h[4]
+            else:
+                _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], LAYERS
+            if _hnet == net:
+                continue
+            for _L in LAYERS:
+                if _L in _hlay:
+                    _byL_ho[_L].append((_hx, _hy, _hr))
+
         def cseg(layer, ax, ay, bx, by, rad):
             bad = self.bad[layer]
             i0 = max(0, int(math.floor((min(ax, bx) - rad - self.x0) / self.step)))
@@ -375,13 +488,72 @@ class Grid:
                     if (px - cx) ** 2 + (py - cy) ** 2 <= rad * rad:
                         bad[i * self.ny + j] = 1
 
+        if _NOCACHE:
+            # PROOF HARNESS: the ORIGINAL sweep, verbatim from HEAD (this is the cache-off arm).
+            for L in LAYERS:
+                for t in ctx.tracks:
+                    if t["layer"] != L or t["net"] == net: continue
+                    cseg(L, t["x1"], t["y1"], t["x2"], t["y2"], t["hw"] + HW + cv._req(net, t["net"]) + self.margin)
+                for p in ctx.pads.values():
+                    if L not in p["lay"] or p["net"] == net: continue
+                    r = HW + cv._req(net, p["net"]) + self.margin
+                    if p["circ"]:
+                        cpt(L, p["x"], p["y"], min(p["w"], p["h"]) / 2 + r)
+                    else:
+                        n = len(p["poly"])
+                        for k in range(n):
+                            q1, q2 = p["poly"][k], p["poly"][(k + 1) % n]
+                            cseg(L, q1[0], q1[1], q2[0], q2[1], r)
+                        xa = [q[0] for q in p["poly"]]; ya = [q[1] for q in p["poly"]]
+                        i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                        i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                        j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                        j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                        for i in range(i0, i1 + 1):
+                            for j in range(j0, j1 + 1):
+                                if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, p["poly"]):
+                                    self.bad[L][i * self.ny + j] = 1
+                for u, v in ctx.vias.items():
+                    if L not in v["lay"] or v["net"] == net: continue
+                    cpt(L, v["x"], v["y"], v["r"] + HW + cv._req(net, v["net"]) + self.margin)
+                for _h in ctx.holes:                              # #K2-483: the in-register gauge interface fix.
+                    # f3.Ctx yields 4-tuples (x, y, r, net) while _mark expected 5 (with a layer set) => ValueError.
+                    # A hole with no layer data is conservatively treated as blocking EVERY copper layer.
+                    if len(_h) >= 5:
+                        _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], _h[4]
+                    else:
+                        _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], LAYERS
+                    if _hnet == net or L not in _hlay: continue
+                    cpt(L, _hx, _hy, _hr + 0.25 + HW + self.margin)
+                for e in ctx.edge:
+                    cseg(L, e[0], e[1], e[2], e[3], HW + 0.3 + self.margin)
+                for poly in ctx.keep_t:
+                    xa = [q[0] for q in poly]; ya = [q[1] for q in poly]
+                    i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                    i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                    j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                    j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                    for i in range(i0, i1 + 1):
+                        for j in range(j0, j1 + 1):
+                            if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, poly):
+                                self.bad[L][i * self.ny + j] = 1
+                for poly in ctx.keep_v:
+                    xa = [q[0] for q in poly]; ya = [q[1] for q in poly]
+                    i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                    i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                    j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                    j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                    for i in range(i0, i1 + 1):
+                        for j in range(j0, j1 + 1):
+                            if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, poly):
+                                self.bad[L][i * self.ny + j] = 1
+            return
+
         for L in LAYERS:
-            for t in ctx.tracks:
-                if t["layer"] != L or t["net"] == net: continue
-                cseg(L, t["x1"], t["y1"], t["x2"], t["y2"], t["hw"] + HW + cv._req(net, t["net"]) + self.margin)
-            for p in ctx.pads.values():
-                if L not in p["lay"] or p["net"] == net: continue
-                r = HW + cv._req(net, p["net"]) + self.margin
+            for t in _byL_tr[L]:
+                cseg(L, t["x1"], t["y1"], t["x2"], t["y2"], t["hw"] + HW + _req(t["net"]) + self.margin)
+            for p in _byL_pd[L]:
+                r = HW + _req(p["net"]) + self.margin
                 if p["circ"]:
                     cpt(L, p["x"], p["y"], min(p["w"], p["h"]) / 2 + r)
                 else:
@@ -398,17 +570,11 @@ class Grid:
                         for j in range(j0, j1 + 1):
                             if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, p["poly"]):
                                 self.bad[L][i * self.ny + j] = 1
-            for u, v in ctx.vias.items():
-                if L not in v["lay"] or v["net"] == net: continue
-                cpt(L, v["x"], v["y"], v["r"] + HW + cv._req(net, v["net"]) + self.margin)
-            for _h in ctx.holes:                              # #K2-483: the in-register gauge interface fix.
+            for v in _byL_vi[L]:
+                cpt(L, v["x"], v["y"], v["r"] + HW + _req(v["net"]) + self.margin)
+            for (_hx, _hy, _hr) in _byL_ho[L]:               # #K2-483: the in-register gauge interface fix.
                 # f3.Ctx yields 4-tuples (x, y, r, net) while _mark expected 5 (with a layer set) => ValueError.
                 # A hole with no layer data is conservatively treated as blocking EVERY copper layer.
-                if len(_h) >= 5:
-                    _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], _h[4]
-                else:
-                    _hx, _hy, _hr, _hnet, _hlay = _h[0], _h[1], _h[2], _h[3], LAYERS
-                if _hnet == net or L not in _hlay: continue
                 cpt(L, _hx, _hy, _hr + 0.25 + HW + self.margin)
             for e in ctx.edge:
                 cseg(L, e[0], e[1], e[2], e[3], HW + 0.3 + self.margin)
@@ -803,6 +969,16 @@ def snap_node(grid, ctx, find, comp, net, layer, x, y, maxr=4):
 
 
 def solve_edge(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+    # ── #K2-541 sec.2 (order): solve-time START re-anchor (generalised R1830) ────────────────────────────────
+    # The R1430 disease: an edge whose representative anchor lands OUTSIDE the work domain can never start.
+    # AT SOLVE TIME, against the CURRENT landscape, the start anchor becomes an ENDPOINT OF THIS NET'S OWN LAID
+    # COPPER that lies inside the domain (deterministic; see `own_copper_start`). Fires ONLY when the supplied
+    # anchor is outside the domain => byte-stable for every edge that already anchors inside it.
+    _dom = WALL_RECT or EDGE_IN
+    if not _rect_has(_dom, pa):
+        _na = own_copper_start(ctx, find, compa, net, la, pb, _dom)
+        if _na is not None:
+            pa = _na
     last = "no-attempt"
     for m in MARGINS:
         sol, why = _try_margin(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step, m)

@@ -355,6 +355,16 @@ def _install_port_aware_goals(mr, wall, tol=0.02):
     REC = []
 
     def solve(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+        # ── #K2-541 sec.2 (order): the START anchor must be fixed BEFORE this wrapper decides whether the
+        # registered channel is a HARD domain for the net - otherwise the wrong (out-of-domain) anchor makes the
+        # wrapper REFUSE the net's own registered corridor (`_channel_contains` fails) and the channel degrades to
+        # guidance. Same deterministic rule as `mr.solve_edge` (idempotent: a second call is a no-op).
+        _dom0 = getattr(mr, "WALL_RECT", None) or getattr(mr, "EDGE_IN", None)
+        if (_dom0 is not None and hasattr(mr, "own_copper_start") and hasattr(mr, "_rect_has")
+                and not mr._rect_has(_dom0, pa)):
+            _na0 = mr.own_copper_start(ctx, find, compa, net, la, pb, _dom0)
+            if _na0 is not None:
+                pa = _na0
         _saved = getattr(mr, "WALL_RECT", None)
         _CH = getattr(mr, "_CHANNELS", {})                # NOTE: `CH` lives on `mr` because solve is defined in a
         coarse_step = float(getattr(mr, "FINE_STEP", coarse_step) or coarse_step) if _FINE else float(_FINE_NUM or coarse_step)
