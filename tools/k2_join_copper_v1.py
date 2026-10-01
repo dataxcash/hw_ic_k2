@@ -140,8 +140,35 @@ def build_zone_polys(board_path, rect, P):
     return out
 
 
+def build_edge_walls(board_path, P, edge_clear=0.30, hw=0.10):
+    """#K2-534/R1808 ENGINE CAPABILITY: the BOARD EDGE as an obstacle on EVERY copper layer.
+
+    R1808 printed the real case: the join laid an MCU_VDD F.Cu leg at 0.3300mm from the Edge.Cuts line (0.2300
+    edge-to-edge, DRC exact) and a via there (0.1050, DRC exact) - both below the board's own 0.3000 edge constraint -
+    because the gate had NO Edge.Cuts entity at all. `hw` carries the nominal copper half-width so the existing
+    `dist < clear + hw` test expresses the board's EDGE-TO-EDGE rule (centre distance >= edge_clear + half-width).
+    The edge is a through constraint, so one record per copper layer.
+    """
+    b = P.LoadBoard(board_path)
+    segs = []
+    for dr in b.GetDrawings():
+        try:
+            if b.GetLayerName(dr.GetLayer()) != "Edge.Cuts":
+                continue
+            s, e = dr.GetStart(), dr.GetEnd()
+            segs.append((P.ToMM(s.x), P.ToMM(s.y), P.ToMM(e.x), P.ToMM(e.y)))
+        except Exception:                                          # noqa: BLE001
+            continue
+    out = []
+    for L in b.GetLayerSet().CuStack():
+        nm = b.GetLayerName(L)
+        for (x1, y1, x2, y2) in segs:
+            out.append(("__EDGE__", nm, x1, y1, x2, y2, hw))
+    return out
+
+
 def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=0.02, reach=2.0,
-               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None, zone_polys=None, span_names=None):
+               via_r=0.175, local_r=3.5, pad_rects=None, hole_walls=None, zone_polys=None, span_names=None, edge_walls=None):
     """**纯函数**：给定 item 清单与域，返回 {"joins":[...], "refused":[...], "n_one_end":n}。
     one-end 桩（恰好一端悬空）⇒ 同层直线腿优先，其次跨层过孔；**零搜索之外的定步长枚举**；确定性。
     """
@@ -178,6 +205,10 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
         for _h in (hole_walls or []):
             if _h[0] != net and _h[1] == mr.LNAME[l] and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
                 obsg.append(_h)
+        for _e in (edge_walls or []):                              # #K2-534: the board edge is an obstacle too
+            if _e[1] == mr.LNAME[l] and (abs(_e[2] - ex) <= local_r or abs(_e[4] - ex) <= local_r) \
+                    and (abs(_e[3] - ey) <= local_r or abs(_e[5] - ey) <= local_r):
+                obsg.append(_e)
         for _z in (zone_polys or []):                              # #K2-528: foreign POURS are obstacles too
             if _z[0] == net or _z[1] != mr.LNAME[l]:
                 continue
@@ -270,7 +301,8 @@ def main(argv=None):
                     span_names=_span_names,
                     pad_rects=build_pad_rects(a.board, planner, pcmod, _P),
                     hole_walls=build_hole_walls(a.board, _P),
-                    zone_polys=build_zone_polys(a.board, rect, _P))
+                    zone_polys=build_zone_polys(a.board, rect, _P),
+                    edge_walls=build_edge_walls(a.board, _P))
     lines = []
     for n, j in enumerate(pj["joins"]):
         if j["_kind"] == "track":

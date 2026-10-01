@@ -2073,6 +2073,22 @@ class T(unittest.TestCase):
         self.assertTrue(m._leg_clear("GND", "In1.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "own net is skipped")
         self.assertTrue(m._leg_clear("X", "In2.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "other layer is skipped")
 
+    def test_C534c_the_board_edge_is_gated(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-534/R1808). Values from the PRINTED real case: the join laid an
+        MCU_VDD leg at centre distance 0.3300mm from the Edge.Cuts line at x=23.0 (DRC: 0.2300 edge-to-edge, below the
+        board's 0.3000 rule) and a via there (DRC 0.1050). GREEN: an edge record with the nominal half-width 0.10
+        makes the existing test express the edge-to-edge rule, so 0.33 is REFUSED while 1.5mm away is clear."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe534c", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        edge = ("__EDGE__", "F.Cu", 23.0, 33.0, 23.0, 79.0, 0.10)
+        self.assertFalse(m._leg_clear("MCU_VDD", "F.Cu", (23.33, 46.54), (23.33, 46.54), [edge], 0.30),
+                         "0.3300 < 0.30+0.10 => REFUSED (the real case)")
+        self.assertTrue(m._leg_clear("MCU_VDD", "F.Cu", (24.5, 46.54), (24.5, 46.54), [edge], 0.30),
+                        "1.50 >= 0.40 => clear")
+        self.assertTrue(m._leg_clear("MCU_VDD", "In5.Cu", (23.33, 46.54), (23.33, 46.54), [edge], 0.30),
+                        "other layer is skipped")
+
     def test_C534b_hole_to_hole_is_gated(self):
         """TIAN TIAO #1 engine asset + regression (#K2-534). Values taken from the PRINTED real case (penalty clause):
         J13.4's PTH drill_r 0.400 @(24.13,46.54) vs the join-placed via drill_r 0.125 @(24.63,46.54) -> centre
