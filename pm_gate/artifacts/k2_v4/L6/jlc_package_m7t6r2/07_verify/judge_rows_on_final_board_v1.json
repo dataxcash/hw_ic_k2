@@ -57,7 +57,7 @@
  },
  "C6_outside_copper_unchanged": {
   "judge_reading": {
-   "status": "FORMAL ROW - block.outside_copper_equivalent (the same function the chain judge uses)",
+   "status": "FORMAL ROW with the CHAIN'S OWN caliber: ref = B0 (hw/k2_v4_8L.l14.kicad_pcb) and declared = block.declared_outside_keys([K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json], rect) - exactly as regen.py's judge段 builds it (#K2-550 sec.1.1)",
    "equivalent": false,
    "real_diff": 0,
    "n_authorized": 2,
@@ -75,7 +75,13 @@
       0.25
      ],
      "n": 1,
-     "authority": "K2_P3V3AUX_DECLARATION_SPEC_a_v1.json#allow_outside_dR[2] (P3V3) + #K2-527 owner (a)"
+     "authority": {
+      "source": "K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json",
+      "line": "R-g",
+      "kind": "track",
+      "net": "P3V3",
+      "why": "R-g mechanism D corrected (#K2-447 sec.2.3 / the convergence order): the first bridge sat at y=39.0 and shorted the HS blind via @(58.0,39.3) and my own P3V3_AUX tie via @(51.5,38."
+     }
     },
     {
      "key": [
@@ -86,7 +92,13 @@
       0.25
      ],
      "n": 1,
-     "authority": "K2_P3V3AUX_DECLARATION_SPEC_a_v1.json#allow_outside_dR[1] (P3V3_AUX) + #K2-527 owner (a)"
+     "authority": {
+      "source": "K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json",
+      "line": 3,
+      "kind": "via",
+      "net": "P3V3_AUX",
+      "why": "R1380 fix: this In5-In4 tie via was at (51.5,38.75) - 0.05mm from PWR_BTN_OUT's dR port start (51.5,38.7), i.e. it OCCUPIED that port and starved the net (drawing-side obligation, "
+     }
     }
    ],
    "unauthorized": [],
@@ -244,9 +256,16 @@
     }
    },
    "n_zone_delta": 6,
+   "failing_zone_rows": {
+    "MCU_VDD|In4.Cu": {
+     "delta": 10.313904,
+     "tol_mm2": 0.846871,
+     "binding": "rel_arm"
+    }
+   },
    "tol_area_mm2": 0.001,
    "rule": "#K2-504/#K2-505: 'outside copper unchanged' is GEOMETRIC and DECLARATION-AWARE - a zone fill covering the same domain is unchanged, and copper that an in-register drawing explicitly authorises (allow_outside_dR) is NAMED as authorised rather than reported as a leak. Anything without a declaration match is reported exactly as before (fail-closed).",
-   "declared_source": "pm_gate/artifacts/k2_v4/L2/K2_P3V3AUX_DECLARATION_SPEC_a_v1.json (allow_outside_dR lines incl. via `at`), per-item net + nearest declared endpoint <=0.35 mm; unmatched stays UNauthorised (fail-closed)"
+   "declared_source": "block.declared_outside_keys([L2/K2_SEC16_3_DRAWING_IMPLEMENTATION_SPEC_v1.json], rect) - the in-register constructor (my earlier hand-rolled matcher is retired)"
   },
   "registered_gauge_reading": {
    "gauge": "eda_eng.block.outside_geometry + geometry_equal (in-register)",
@@ -264,7 +283,7 @@
    },
    "note": "diff=2 = exactly the 2 AUTHORISED declaration items (matches the nine-row record n_authorized=2); no unauthorised outside-frame change. Also machine-proves the delete-then-refill did NOT move outside-frame coverage."
   },
-  "status": "FAIL"
+  "status": "FORMAL FAIL (named zone row(s))"
  },
  "thresholds_used": {
   "drc_total": 168,
