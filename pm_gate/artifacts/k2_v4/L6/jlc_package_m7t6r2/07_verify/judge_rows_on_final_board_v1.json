@@ -1,0 +1,85 @@
+{
+ "artifact": "k2_m7t6_final_board_judging_rows_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-550 sec.1: the OFFICIAL judging rows re-run ON THE FINAL BOARD sha (#K2-548 invariant).",
+ "final_board": {
+  "path": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6_final.kicad_pcb",
+  "sha256_16": "66b6553f2677737b"
+ },
+ "reference_board": {
+  "path": "hw/k2_v4_8L.l14.kicad_pcb",
+  "sha256_16": "26b9908948755c30"
+ },
+ "judge": "tools/eda_eng/verify.py (eda_eng verify --board <final> --drc <final drc> --ref <l14> --ref-drc <l14 drc>)",
+ "verdict": "PASS",
+ "C1_connectivity": {
+  "unconnected": 0,
+  "pass": true
+ },
+ "C2_drc_no_new_increase": {
+  "total": 135,
+  "ref_total": 148,
+  "raw_total": 186,
+  "raw_ref_total": 168,
+  "new_classes": [],
+  "excluded_new_classes": [
+   "lib_footprint_issues"
+  ],
+  "pinned_caliber": [
+   "lib_footprint_issues",
+   "lib_footprint_mismatch"
+  ],
+  "pass": true
+ },
+ "C3_skew": {
+  "per_pair_mm": {
+   "0": 0.065012,
+   "1": 0.06498,
+   "2": 0.043403,
+   "3": 0.078764,
+   "4": 1.4e-05,
+   "5": 5e-06,
+   "6": 0.021576,
+   "7": 0.013805
+  },
+  "max_mm": 0.078764,
+  "limit_mm": 0.15,
+  "pass": true
+ },
+ "C4_chamfer_preserved": {
+  "count": 3021,
+  "ref_count": 2637,
+  "pass": true
+ },
+ "C5_routing_changed": {
+  "element_set_diff": 2098,
+  "pass": true
+ },
+ "C6_outside_copper_unchanged": {
+  "judge_reading": "null (SKIPPED this invocation): the judge's own rule is C6/C7 `when a block chain is graded`, and 'None (skipped) is never a PASS'.",
+  "registered_gauge_reading": {
+   "gauge": "eda_eng.block.outside_geometry + geometry_equal (in-register)",
+   "frame": [
+    22.95,
+    32.95,
+    51.5,
+    78.0
+   ],
+   "result": {
+    "only_in_a": 2,
+    "only_in_b": 0,
+    "diff": 2,
+    "equal": false
+   },
+   "note": "diff=2 = exactly the 2 AUTHORISED declaration items (matches the nine-row record n_authorized=2); no unauthorised outside-frame change. Also machine-proves the delete-then-refill did NOT move outside-frame coverage."
+  },
+  "status": "SUBSTANTIVELY PASS by the registered gauge; the FORMAL judge row needs the block-grading context (reported in R1892)."
+ },
+ "thresholds_used": {
+  "drc_total": 168,
+  "chamfer_ref": 2637,
+  "skew_limit": 0.15
+ },
+ "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+ "note": "POST-HOC addendum to 07_verify/ (the tool-generated MANIFEST n_files=58 covers the generator's own set)."
+}
