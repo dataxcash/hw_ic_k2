@@ -1,0 +1,73 @@
+{
+ "artifact": "k2_engine_capability_block_move_construction_order_v1",
+ "ts": "2026-10-01",
+ "engine_head": "6a280c68",
+ "authority": "#K2-544 (PK final ruling): adopts the R1844 revised five answers as the base plus the global negotiation risk; orders ONE merged construction order. DATA ONLY - no code is changed until the supervisor approves this order (#K2-544 sec.2).",
+ "death_cause_one_line": "The engine already OWNS the movers (move-parts multi-part --moves / block.move_block / regen.relocate_relative_chain / block.census / swept) but OWNS NO PLANNER and NO REGISTERED STANDARD: there is no declared partition, the objective is not a data artifact, and the reconnect face it must lean on (the maze) is greedy + order-sensitive with a POLLUTED adoption criterion - so multi-block moves would starve at a rate we have already measured.",
+ "proven_facts": [
+  "STAGE COST (measured, this session's 9/9 chain): maze 235 s = 67% of ~348 s; copper_join 71.5 s = 21%; everything else (unfill/stitch/escape/channels/refill/islands/judge) ~41 s. Any planner that adds maze work pays 67% first.",
+  "MAZE KERNEL (profile, in-register): Grid.__init__ 924 builds ~258 s; astar 384 calls ~321 s (cProfile-inflated; real run 268-281 s for the same maze).",
+  "BOTTLENECK IS RASTERISATION, NOT RAY-CASTING: a frame-sized window Grid build measures 0.15-0.28 s; a point-in-polygon test over 6000 parts is milliseconds. => the block model must REUSE the maze's window/Grid machinery, not add a geometry path.",
+  "REPRESENTATIVE-ANCHOR CLASS (fixed, R1840): an edge whose representative anchor lands outside the work domain can never start (R1430 disease); the rule 'the start anchor is an ENDPOINT OF THIS NET'S OWN LAID COPPER, decided at solve time against the current landscape' closes it - and the boundary predicate needed an explicit tolerance (the port sits 1e-6 outside the wall; 1e-9 silently did NOT fire).",
+  "PROBE FIDELITY (measured): the single-net maze probe is GREEN both before and after the fix while the chain was RED - a single-net probe CANNOT certify this class.",
+  "RE-CONNECT FACE IS A CLOSER BUT WAS A FALSE GREEN TWICE: the hardened join (33 stitches / 16 refusals in the 9/9 run) closed the last unconnected net with ZERO new DRC classes; but its rc=0 was a false green in two prior windows (R1760, R1808) until six named fixes.",
+  "ADOPTION CRITERION IS BLINDED (measured): of 268 'blocked' edges in the 9/9-era maze, 245 are no-op-after-port-substitution(same-island) = ALREADY CONNECTED THROUGH THE FRAME. The rip-up adoption test ('block count strictly drops') therefore can never fire (3 rounds 268/268/268, adopted=False).",
+  "RESERVATION GEOMETRY DRIFTS (measured): the escape reservation derived from the planned asset was ~0.2 mm off the corridor the net actually needed, so another net capped it by 0.04 mm.",
+  "DRC REPRESENTATIVE NONDETERMINISM (in-register note): the DRC names an arbitrary representative item inside an equipotential island => connectivity must be compared as ISLAND PARTITIONS, not as DRC rows.",
+  "C6 GAUGE IS IN-REGISTER: outside_geometry + allow_outside_dR + the calibrated row tolerance tol_row = min(geom ring bound, max(0.5 mm2, 0.5% x ref_area)); reuse it, do not fork a second caliber.",
+  "SUITE = 183/183 (the hard regression net; 181 before R1840's two additions)."
+ ],
+ "corrected_complete_plan": {
+  "A_cleanup": "REUSE block.census (three-way ledger: in-block / crossing / foreign) + block.move_block (one rewrite: move pads, translate in-block copper, CLIP the crossing nets keeping the outside half as a FIXED PORT). The acceptance assertion is 'the OLD region contains no copper of the MOVED nets' - NOT 'the old region is empty' (the clipped outside halves, the fixed ports and foreign copper all legitimately stay). Order is unfill -> move -> refill, reusing pour_aware_unfill / refill_frame_discipline. 'Outside-frame movement = 0' uses the registered outside_geometry.",
+  "B_partition": "Block = a UNION OF RECTANGLES (the domain vehicle the maze already has: WALL_RECT / --channels; a multi-slot channel is refused by construction, R1420). NEVER build a new polygon vehicle. Constraints: the rect must not cut any pad/via/hole (or the three-way split degenerates); expand by courtyard+margin then QUANTISE OUTWARD to the registered frame lattice. DECLARED PARTITION COMES FIRST; automatic partitioning (union-find + clustering) is a later item, never a prerequisite.",
+  "C_standard": "Objective = sum over nets of (number of blocks it crosses x block-centre distance) + HS-length / power-proximity penalties, REGISTERED AS A JSON STANDARD (auditable; never a code constant). Enumeration = positions ONLY (no block permutations - they are label-symmetric), hard caps (<=8 quantised positions per block, <=4 blocks per window), deterministic tie-break tuple.",
+  "D_determinism": "Every predicate carries an EXPLICIT tolerance (the 1e-6 boundary class), every tie is broken by an explicit tuple, every search carries an explicit hard cap. Byte-level reproducibility is PROVEN with the in-register harness: two ledgers must cmp byte-identical (the K2MR_NOCACHE pair pattern) - do not invent a second proof.",
+  "E_qc_nine_rows": "Nine rows, not eight: add 'stitch/placement-gate footprint = zero new DRC classes' as a PRECONDITION (not a post-hoc check). Row C2 copies the registered caliber (total <= cap AND new_classes == []); connectivity is compared as ISLAND PARTITIONS (f1.islands), never as DRC rows; the blocked/refusal counts are taken AFTER removing the same-island no-ops.",
+  "negotiation_fix_MANDATORY": "Because the reconnect face is greedy and order-sensitive (measured: one net sealed by two others' copper), the order MUST include the negotiation fix: drop no-op(same-island) from the blocked set, count REAL blocks, and keep the bounded rip-up. Without it the planner's own quality metric is meaningless."
+ },
+ "construction_sequence": [
+  {
+   "step": 1,
+   "name": "declared partition (data)",
+   "output": "a partition data artifact: rect-union blocks, member lists, quantised to the registered lattice, plus the assertion 'no pad/via/hole straddles any rect edge'",
+   "proof": "the partition file diffed against itself on a re-run = byte-identical (data determinism)"
+  },
+  {
+   "step": 2,
+   "name": "cleanup (reuse)",
+   "output": "the three-way ledger + the old-region assertion, wired to census/move_block + unfill->move->refill",
+   "proof": "ledger diff: board summary before/after, and outside_geometry diff == 0"
+  },
+  {
+   "step": 3,
+   "name": "planner",
+   "output": "the JSON standard + the position-only enumerator + the hard caps",
+   "proof": "the score table is byte-identical on a re-run; the enumeration count is bounded arithmetically (not by search)"
+  },
+  {
+   "step": 4,
+   "name": "negotiation fix (MANDATORY)",
+   "output": "no-op removal, real block counting, bounded rip-up",
+   "proof": "ledger diff with the REAL block counts named before/after"
+  },
+  {
+   "step": 5,
+   "name": "QC nine rows",
+   "output": "the nine-row verdict wired to the registered calibers",
+   "proof": "two readings of the K2 nine rows + the R6 external board, each byte-compared"
+  }
+ ],
+ "acceptance_exams": [
+  "K2 nine rows (true model)",
+  "R6 external board (anti-overfit; already PASS in #K2-524)"
+ ],
+ "buildability": "relocation_listed",
+ "buildability_note": "The engines's movers are registered and the 9/9 exam shows the chain can consume a moved board end-to-end; the missing half is the PLANNER + the registered STANDARD + the negotiation fix. Nothing in this order needs a new geometry vehicle or a new DRC caliber.",
+ "regressions_required": [
+  "suite stays 183/183 (plus one regression per step)",
+  "each step carries its ledger-diff artifact",
+  "no new caliber, no second DRC fork, no new domain vehicle"
+ ],
+ "estimated_cost_first_cut": "maze stage dominates (235 s of 348 s). The planner's own search must therefore be position-only with hard caps; the negotiation fix is expected to also REDUCE rework, because today's blind adoption criterion guarantees the fallback (single pass) is kept.",
+ "OWNER-ITEMS": 0
+}
