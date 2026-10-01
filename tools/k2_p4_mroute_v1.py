@@ -1173,8 +1173,8 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
         edges.append((round(d, 3), na, ra[1], rb[1], la, lb, pa, pb))
     led = {"stage": "M15", "edges": len(edges), "added": [], "blocked": [], "summary": {}}
-    led["blocked_real"] = sum(1 for _b in blocked if _b.get("class") != "connected_via_port")
-    led["connected_via_port"] = sum(1 for _b in blocked if _b.get("class") == "connected_via_port")
+    led["blocked_real"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") != "connected_via_port")
+    led["connected_via_port"] = sum(1 for _b in (led.get("blocked") or []) if _b.get("class") == "connected_via_port")
     if order == "list" and not order_list:
         order_list = None
     if order == "list":
