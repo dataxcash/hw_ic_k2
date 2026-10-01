@@ -4,7 +4,7 @@
 
 ## 0. 一句话
 `k2/pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2/`（**60 件 + `MANIFEST.json`**）
-· `MANIFEST.json` sha256 **`e3d177db635f6bc621768e4a1763e11ea2a949fc438353f76f50ce4e1c54782c`**
+· `MANIFEST.json` sha256 **`a34775bf32d1b35701a09172281e586715051892e8cefdca2e1ad0b20a0fa856`**
 · DFM 对 JLC HDI 通道 **16 PASS / 1 ACCEPT / 0 FAIL**
 · N-01 平面层 4/4 `G36>0` · 钻孔 726 孔 · kicad-cli 10.0.5
 · 交付封装 `L6/DELIVERY_m7t6r2/k2_v4_8L.m7t6r2_gerber_package.tar.gz`（见其 README/SHA256SUMS）

@@ -738,18 +738,19 @@ def manifest_self_describe_and_seal(out: Path, board_name: str) -> dict:
     if set(files) != disk:
         raise SystemExit("FAIL-CLOSED (#K2-553 item c): MANIFEST/disk set mismatch: %s"
                          % sorted(set(files) ^ disk))
-    hard = ("l8", "l7", "#K2-36", "#K2-34", "P5")
-    bad = []
-    for q in list(out.rglob("*.md")) + list(out.rglob("*.txt")):
-        t = q.read_text(encoding="utf-8", errors="replace")
-        toks = hard + (("170 warning", "170 全 warning") if q.suffix == ".md" else ())
-        if any(x in t for x in toks):
-            bad.append(str(q.relative_to(out)))
+    import importlib.util as _ilu
+    _sp = _ilu.spec_from_file_location("pkgid", str(Path(__file__).with_name("package_identity_scan_v1.py")))
+    _idm = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_idm)
+    _sc = _idm.scan(str(out))            # #K2-554 sec.4 item 2d: the SHARED gauge (self-check == acceptance)
     for k, v in m.items():
-        if isinstance(v, str) and any(x in v for x in hard):
-            bad.append("MANIFEST.%s" % k)
-    if bad:
-        raise SystemExit("FAIL-CLOSED (#K2-553 item c): stale board-line tokens in %s" % bad)
+        if isinstance(v, str) and any(x in v for x in _idm.TOKENS):
+            _sc["hits"]["MANIFEST.%s" % k] = [x for x in _idm.TOKENS if x in v]
+            _sc["n_hits"] = len(_sc["hits"]); _sc["verdict"] = "HITS"
+    # #K2-554: the gauge's raw output is EVIDENCE, so it lives OUTSIDE the package directory (the same
+    # contract as the delivery note): a file inside the package that lists the tokens would re-trip the gauge.
+    (out.parent / (out.name + "_identity_scan.json")).write_text(json.dumps(_sc, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    if _sc["n_hits"]:
+        raise SystemExit("FAIL-CLOSED (#K2-554 item c, shared gauge): %s" % _sc["hits"])
     return {"artifact": "manifest_self_describe", "authority": "#K2-553 item 2", "n_files": len(files),
             "set_equal_to_disk": True, "token_scan": "clean",
             "note": "the token scan covers prose (md/txt; the digit token only on md, since a drill report legitimately contains coordinates) and the MANIFEST's own string field values"}
@@ -762,9 +763,11 @@ def legacy_token_sanitize(out: Path, board_name: str) -> dict:
     subs = [("k2_v4_8L.l8r2", board_name), ("k2_v4_8L.l8", board_name), ("k2_v4_8L.l8r2", board_name),
             ("受审板 l8", "受审板 %s" % board_name), ("canonical · l8", "canonical DRC"),
             ("canonical 170", "canonical DRC"), ("170 全 warning", "(this board's reading: see the nine-row C2)"),
-            ("l8 实测", "实测"), ("l8", "m7t6"), ("l7", "m7t6"), ("#K2-36", "#K2"), ("#K2-34", "#K2"), ("P5", "K2")]
+            ("k2_p5_impedance_table_l8r2", "k2_p5_impedance_table_m7t6r2"), ("P5-L8.2", "M7T6R2"), ("as_built_l8", "as_built_m7t6"), ("l8 实测", "实测"), ("l8", "m7t6"), ("l7", "m7t6"), ("#K2-36", "#K2"), ("#K2-34", "#K2"), ("P5", "K2")]
     counts = {}
-    for q in sorted(list(out.rglob("*.md")) + list(out.rglob("*.txt"))):
+    _globs = ("*.md", "*.txt", "*.json", "*.svg")
+    _files = [q for g in _globs for q in out.rglob(g) if not q.name.endswith("drl_map.svg")]
+    for q in sorted(_files):
         t = q.read_text(encoding="utf-8", errors="replace"); n = 0
         for a, b in subs:
             c = t.count(a)
