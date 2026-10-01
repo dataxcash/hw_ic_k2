@@ -1815,6 +1815,25 @@ class T(unittest.TestCase):
         self.assertEqual(outs[0][1], outs[1][1], "the optimised via sweep must be byte-identical")
         mr.WALL_RECT, mr.EDGE_IN = _sw, _se
 
+    def test_C557_step4_ledger_counts_are_taken_after_the_passes_and_use_the_real_count(self):
+        """#K2-557 (R1852 STEP 4, placement regression): the ledger's derived counts MUST be computed AFTER the
+        passes have filled `blocked`, and the rip-up adoption test MUST use the REAL block count (a
+        `connected_via_port` refusal is not a block). This is the pin for the defect the bounded probe caught and
+        the suite missed: an earlier placement read an empty list and silently reported 0/0."""
+        src = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        i_pass = src.index("added, blocked, blocks = _pass(edges)")
+        i_real = src.index('led["blocked_real"] =')
+        i_conn = src.index('led["connected_via_port"] =')
+        i_dump = src.index("json.dump(led, open(ledger_path")
+        self.assertLess(i_pass, i_real, "the derived counts must be taken AFTER the passes")
+        self.assertLess(i_pass, i_conn)
+        self.assertLess(i_real, i_dump, "and BEFORE the ledger is written")
+        self.assertLess(i_conn, i_dump)
+        self.assertIn('"class": ("connected_via_port"', src, "the refusal classification must exist")
+        self.assertIn("def _real(_bs):", src, "the real-count helper must exist")
+        self.assertIn("if _best[0] < _real(blocked):", src, "the adoption test must use the REAL count")
+        self.assertIn("_nb = _real(_b)", src, "each round's criterion count must be the real one")
+
     def test_C460_the_out_in_endpoint_class_is_covered_in_the_retry_only(self):
         """#K2-460 sec.2.5: R1456 proved the residual was NOT a missing drawing entry - the start cell exists and nothing
         seals it; the hole is the (out,in) endpoint class: the retry passed the outside end as its start/goal in BOTH
