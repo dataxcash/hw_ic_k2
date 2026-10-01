@@ -206,35 +206,28 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
                     cand.append((round(dd, 6), mr.LNAME[o[1]], qx, qy))
         cand.sort()
         got = None
+        # #K2-534: build the cross-layer obstacle list ONCE per end and hand the SAME object to BOTH planner
+        # branches (single-via and two-hop). Diagnosis and execution must read one list, not two.
+        osp = [x_ for x_ in items if x_[7] != net]
+        obs2 = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in osp
+                if (abs(o[2] - ex) <= local_r or abs(o[4] - ex) <= local_r)
+                and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
+        for _h in (hole_walls or []):
+            if _h[0] != net and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
+                obs2.append(_h)
+        for _z in (zone_polys or []):
+            if _z[0] == net:
+                continue
+            _bb = _z[4]
+            if _bb[0] - local_r <= ex <= _bb[2] + local_r and _bb[1] - local_r <= ey <= _bb[3] + local_r:
+                obs2.append((_z[0], _z[1], "poly", _z[3]))
         for (dd, ol, qx, qy) in cand:
-            # #K2-509 sec.2 item 2: check EVERY copper layer (a blind via's annulus may reach layers the integer
-            # id ordering mis-suggests). Conservative superset - the ordering assumption is gone.
             span = [mr.LNAME[z] for z in mr.LAYERS]
-            osp = [x_ for x_ in items if x_[7] != net]
-            obs2 = [(o[7], mr.LNAME[o[1]], o[2], o[3], o[4], o[5], o[6]) for o in osp
-                    if (abs(o[2] - ex) <= local_r or abs(o[4] - ex) <= local_r)
-                    and (abs(o[3] - ey) <= local_r or abs(o[5] - ey) <= local_r)]
-            for _h in (hole_walls or []):
-                if _h[0] != net and abs(_h[2] - ex) <= local_r and abs(_h[3] - ey) <= local_r:
-                    obs2.append(_h)
-            for _z in (zone_polys or []):
-                if _z[0] == net:
-                    continue
-                _bb = _z[4]
-                if _bb[0] - local_r <= ex <= _bb[2] + local_r and _bb[1] - local_r <= ey <= _bb[3] + local_r:
-                    obs2.append((_z[0], _z[1], "poly", _z[3]))
-            for _r in (pad_rects or []):                       # true-shape pads, every layer the via may touch
-                if _r[0] == net:
-                    continue
-                cx_, cy_ = (float(_r[2]) + float(_r[4])) / 2.0, (float(_r[3]) + float(_r[5])) / 2.0
-                if abs(cx_ - ex) <= local_r and abs(cy_ - ey) <= local_r:
-                    obs2.append(_r)
             rv = planner.via_join_for_end(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                           clear=clear, via_r=via_r, step=0.05, tol=tol,
                                           existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
             if rv.get("join"):
                 got = rv["join"]; got["_kind"] = "via"; got["_other"] = ol; break
-            # #K2-519: the single-via family is provably infeasible here -> try the TWO-HOP connector (deterministic)
             rh = planner.via_hop_join(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                       clear=clear, via_r=via_r, step=0.1, max_len=max_len,
                                       existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
