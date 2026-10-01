@@ -1,0 +1,82 @@
+{
+ "artifact": "k2_block_cleanup_primitive_receipt_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-555 (R1852 approved) STEP 2 - the cleanup primitive is REUSED, not rebuilt: block.census (three-way ledger) + block.move_block (one rewrite: pads + in-block copper + clipped crossings kept as FIXED PORTS). No solver, no exam run.",
+ "declared_partition": "pm_gate/artifacts/k2_v4/L2/K2_BLOCK_PARTITION_DECLARATION_v1.json",
+ "board_readonly": "hw/k2_v4_8L.l14.kicad_pcb",
+ "rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "members": 25,
+ "clearance": 0.175,
+ "outside_geometry_invariance": {
+  "delta_zero": {
+   "delta": [
+    0.0,
+    0.0
+   ],
+   "census_keys": [],
+   "census_head": {
+    "artifact": "eda_eng_block_census",
+    "module": "M0",
+    "board": "hw/k2_v4_8L.l14.kicad_pcb",
+    "rect": [
+     22.95,
+     32.95,
+     51.5,
+     78.0
+    ],
+    "delta_mm": [
+     0.0,
+     0.0
+    ],
+    "swept": [
+     22.95,
+     32.95,
+     51.5,
+     78.0
+    ]
+   },
+   "outside_geometry_unchanged_by_a_READ": true,
+   "note": "census is a PURE READ: it must not move the outside-frame geometry (proved here by a before/after compare)"
+  },
+  "delta_probe_y4": {
+   "delta": [
+    0.0,
+    4.0
+   ],
+   "census_keys": [],
+   "census_head": {
+    "artifact": "eda_eng_block_census",
+    "module": "M0",
+    "board": "hw/k2_v4_8L.l14.kicad_pcb",
+    "rect": [
+     22.95,
+     32.95,
+     51.5,
+     78.0
+    ],
+    "delta_mm": [
+     0.0,
+     4.0
+    ],
+    "swept": [
+     22.95,
+     32.95,
+     51.5,
+     82.0
+    ]
+   },
+   "outside_geometry_unchanged_by_a_READ": true,
+   "note": "census is a PURE READ: it must not move the outside-frame geometry (proved here by a before/after compare)"
+  }
+ },
+ "old_region_assertion": {
+  "rule": "after a real move, the OLD region must contain no copper of the MOVED nets (the clipped outside halves, the fixed ports and foreign copper legitimately stay) - asserted as a per-item list, not as 'the region is empty'",
+  "status": "READY (the move itself is STEP 3's planner; this step only pins the primitive + the assertion form)"
+ },
+ "self_sha16": "15626e7a10a6902e"
+}
