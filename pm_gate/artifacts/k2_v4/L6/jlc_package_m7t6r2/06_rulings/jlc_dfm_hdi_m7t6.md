@@ -1,9 +1,8 @@
-# K2 P5 · DFM 逐项对 **JLC HDI 通道**（工艺 A 冻结 · 受审板 l8）
-
+# K2 · DFM 逐项对 **JLC HDI 通道**（工艺 A 冻结 · 受审板 k2_v4_8L.m7t6.kicad_pcb）
 - board `a14610e0542e6314` · 判据锚 rev=6 · 源 = 机器实测（kicad-cli 10.0.5；JLC 限地板重跑）
 - 汇总：**16 PASS / 1 ACCEPT / 0 FAIL**（共 17 项）
 
-| # | 项 | JLC 限（HDI 通道） | l8 实测 | 判 |
+| # | 项 | JLC 限（HDI 通道） | 实测 | 判 |
 |---|---|---|---|---|
 | 1 | 板尺寸 | ≤656×586mm 且 ≥3×3mm | 120.1×46.1mm | **PASS** |
 | 2 | 层数 | 1–32 层（阻抗控制支持 4/6/8/10/12/32） | 8 层 | **PASS** |
@@ -23,4 +22,4 @@
 | 16 | 阻抗控制 | 支持层数 4/6/8/10/12/.../32，公差 ±10% | 8 层 + 85Ω±10%（见 CO-146 阻抗表） | **PASS** |
 | 17 | **过孔类型（盲/埋孔）** | **不支持盲/埋孔（仅通孔）** | **非通孔 476/716 支**：F.Cu->In1.Cu|BLIND_BURIED=153；F.Cu->In2.Cu|BLIND_BURIED=148；F.Cu->In4.Cu|BLIND_BURIED=7；F.Cu->In5.Cu|BLIND_BURIED=35；In2.Cu->In5.Cu|BLIND_BURIED=93；In4.Cu->B.Cu|BLIND_BURIED=1；In4.Cu->In5.Cu|BLIND_BURIED=1；In5.Cu->B.Cu|BLIND_BURIED=38 | **PASS** |
 
-- as-designed DRC 190 项 / JLC 限地板重跑 191 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 170 混比）
+- as-designed DRC 190 项 / JLC 限地板重跑 191 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical DRC 口径混比）

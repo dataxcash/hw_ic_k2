@@ -742,14 +742,14 @@ def main() -> int:
         shutil.copy2(s, t)
         parity[r] = (sha256(s) == sha256(t))
     (OUT / "06_rulings/jlc_dfm_hdi_m7t6.json").write_text(json.dumps(dfm, indent=1, ensure_ascii=False) + "\n")
-    card = ["# K2 P5 · DFM 逐项对 **JLC HDI 通道**（工艺 A 冻结 · 受审板 l8）", "",
+    card = [f"# K2 · DFM 逐项对 **JLC HDI 通道**（工艺 A 冻结 · 受审板 {BOARD.name}）",
             f"- board `{dfm['board']['sha16']}` · 判据锚 rev=6 · 源 = 机器实测（kicad-cli 10.0.5；JLC 限地板重跑）",
             f"- 汇总：**{dfm['n_pass']} PASS / {dfm['n_accept']} ACCEPT / {dfm['n_fail']} FAIL**（共 {dfm['n_items']} 项）", "",
-            "| # | 项 | JLC 限（HDI 通道） | l8 实测 | 判 |", "|---|---|---|---|---|"]
+            "| # | 项 | JLC 限（HDI 通道） | 实测 | 判 |", "|---|---|---|---|---|"]
     for i, it in enumerate(dfm["items"], 1):
         card.append(f"| {i} | {it['item']} | {it['jlc_limit']} | {it['measured']} | **{it['hdi']}** |")
     card += ["", f"- as-designed DRC {dfm['evidence']['as_designed_drc_n']} 项 / JLC 限地板重跑 "
-                 f"{dfm['evidence']['jlc_limit_drc_n']} 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 170 混比）"]
+                 f"{dfm['evidence']['jlc_limit_drc_n']} 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical DRC 口径混比）"]
     (OUT / "06_rulings/jlc_dfm_hdi_m7t6.md").write_text("\n".join(card) + "\n")
     (OUT / "07_verify/n01_g36_census.json").write_text(json.dumps({"board_sha16": sha16(BOARD),
         "gerber_dir": "01_gerber_rs274x", "g36_regions_per_copper_layer": g36_census()}, indent=1, ensure_ascii=False) + "\n")

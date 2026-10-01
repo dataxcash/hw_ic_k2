@@ -1,43 +1,96 @@
 {
  "artifact": "k2_m7t6_delivery_report_to_owner_v1",
  "ts": "2026-10-01",
- "engine_head": "73ddb9b6",
- "authority": "#K2-543 (open the Gerber gate conditionally) + #K2-550 (judging rows on the final board) + #K2-551 (package monitored PASS; conditional finalization) : with #K2-551 items 2 and 4 done, the m7t6 closure package is FINAL.",
- "state": "PACKAGE FINAL - for the supervisor's final check, then the OWNER's business decision (generate is not order; ordering/quoting/lead-time belong to the owner).",
+ "engine_head": "e6bb6a88",
+ "generated": "#K2-552 item 2 / M-ENG-REPORT-READING-DRIFT: this report is GENERATED - every reading below is copied programmatically from the in-register artifacts (never hand-typed).",
+ "source_artifacts": {
+  "nine_row_record": "pm_gate/artifacts/k2_v4/L2/EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT6_NINE_OF_NINE_RECORD_v1.json",
+  "package_manifest": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2/MANIFEST.json",
+  "delivery_note": "pm_gate/artifacts/k2_v4/L6/K2_M7T6_PACKAGE_DELIVERY_NOTE_v1.json"
+ },
+ "state": "PACKAGE FINAL (supervisor terminal check PASS on the package body, #K2-552 sec.5 item 1). Remaining: the owner's business decision/signature.",
  "package": {
   "dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2",
   "n_files": 58,
   "board": "k2_v4_8L.m7t6.kicad_pcb",
   "board_sha16": "a14610e0542e6314",
-  "tarball": "L6/DELIVERY_m7t6r2/",
   "dfm": {
    "pass": 16,
    "accept": 1,
    "fail": 0
   },
   "drill_total": 726,
-  "six_layers_note": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs"
+  "layers": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs"
  },
  "anchor_locked": {
   "board_in_repo": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb",
   "sha16_on_disk": "a14610e0542e6314",
   "commit": "73ddb9b6 (#K2-551 sec.2)",
-  "invariant": "package board == the board the nine-row record judged (#K2-548 sec.1)"
+  "invariant": "package board == the board the nine-row record judged (#K2-548 sec.1); verified by the supervisor (#K2-552 sec.2)"
  },
- "nine_rows": "the governing C1/C2/C6 are the nine-row record's own rows (the board is byte-identical): C1 unconnected 0; C2 total 135 <= 168, new_classes [] by the pinned caliber; C6 diff 0 with n_authorized 2 plus the supervisor-approved named residual MCU_VDD|In4.Cu -0.9128 (#K2-538 sec.2.2).",
- "c6_named_residual": "the delivered Gerber set is the --check-zones plot-time recomputed pour; on MCU_VDD|In4.Cu it is deeper outside the frame by ~+10.31 mm2 vs a 0.85 mm2 derived tolerance. Accepted by #K2-551 sec.3 item 1 as a NAMED RESIDUAL (a deeper plane pour; DFM unaffected). Disclosed in the package's DISCLOSURE.md and in the out-of-package note.",
- "dfm_itemized": "06_rulings/jlc_dfm_hdi_m7t6.{json,md} - 16 PASS / 1 ACCEPT / 0 FAIL; the single ACCEPT is the solder-mask dam (9 places < 0.09 mm) whose exception is PRE-REGISTERED in the capability judgement file; no 'possible/TBD' entries.",
- "positioning_note_vs_M6": "the packaged board is the m7t6 exam's judged board (a14610e0). The m7t6 run's chain input was the in-repo l14 work-line board; the exam's DERIVED (18-member relocated) result is the artifact judged by the nine rows. This package therefore carries the SAME board the acceptance record certifies - acceptance and delivery are not decoupled.",
- "finalization_evidence": {
-  "item2_anchor_board_committed": "73ddb9b6 (in-register PCB<->SPEC meta-gate governs the hw/ design-source area per #K2-547 sec.1; this product-tree artifact was committed with the hook disabled and NAMED in the message; the shared hook is unmodified)",
-  "item4_disclosure_regenerated": [
-   "DISCLOSURE.md carries no stale board-line literals (checked: zero)",
-   "its board anchor equals MANIFEST.board_sha16",
-   "the package remains generator output only (58 files; governance text lives outside, per #K2-551 sec.3 item 3)"
-  ]
+ "nine_rows": {
+  "source": "pm_gate/artifacts/k2_v4/L2/EDA_ENG_EXAM_A_QUINTUPLE_PRIME_ATTEMPT6_NINE_OF_NINE_RECORD_v1.json",
+  "verbatim_from_the_record": {
+   "C1_connectivity": {
+    "pass": true,
+    "reading": {
+     "unconnected": 0
+    }
+   },
+   "C2_drc_no_new_increase": {
+    "pass": true,
+    "reading": {
+     "total": 136,
+     "new_classes": []
+    }
+   },
+   "C3_skew": {
+    "pass": true,
+    "reading": {}
+   },
+   "C4_chamfer_preserved": {
+    "pass": true,
+    "reading": {}
+   },
+   "C5_routing_changed": {
+    "pass": true,
+    "reading": {}
+   },
+   "C6_outside_copper_unchanged": {
+    "pass": true,
+    "reading": {
+     "diff": 0,
+     "n_authorized": 2
+    }
+   },
+   "C7_hs_fanout_untouched": {
+    "pass": true,
+    "reading": {
+     "diff": 0
+    }
+   },
+   "C8_members_inside_frame": {
+    "pass": true,
+    "reading": {}
+   },
+   "C9_geometric_digest": {
+    "pass": true,
+    "reading": {}
+   }
+  },
+  "C1": "unconnected = 0",
+  "C2": "total = 136, new_classes = [] (pinned caliber; verbatim from the record)",
+  "C6": "diff = 0, n_authorized = 2"
  },
+ "c6_named_residual": {
+  "delivery_caliber": "+10.313904 mm2 outside-frame zone coverage on MCU_VDD|In4.Cu vs a derived tolerance of 0.846871 mm2 - the delivered Gerber set is the --check-zones plot-time recomputed pour (a deeper plane pour); real copper diff = 0.",
+  "different_gauge_note": "#K2-538 sec.2.2's 0.9128 mm2 is a HISTORICAL reading of a DIFFERENT gauge (the R-g avoidance-ring envelope). It is a positive area figure of that envelope caliber - it must NOT be mixed into this line and NOT written with a negative sign (#K2-552 sec.4 item 2).",
+  "accepted_by": "#K2-551 sec.3 item 1 (named residual; no zone/judgment/reference edits)"
+ },
+ "dfm_itemized": "06_rulings/jlc_dfm_hdi_m7t6.{json,md} - 16 PASS / 1 ACCEPT / 0 FAIL (17 items); the single ACCEPT is the solder-mask dam (9 places < 0.09 mm) whose exception is PRE-REGISTERED; no possible/TBD entries.",
+ "positioning_note_vs_M6": "the packaged board is the m7t6 exam's judged board (a14610e0). The m7t6 chain's input was the in-repo l14 work-line board; the exam's DERIVED 18-member relocated result is what the nine rows judged. The package therefore carries the SAME board the acceptance record certifies - acceptance and delivery are not decoupled.",
  "owner_decision_needed": [
-  "whether to order/quote (business)",
-  "signature / acceptance"
+  "order / quote (business)",
+  "signature / acceptance (the completion finding is in-repo; the human signature is the owner's)"
  ]
 }
