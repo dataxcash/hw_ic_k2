@@ -1,6 +1,6 @@
 # JLC（嘉立创）8 层打样**制造备注** — k2_v4_8L.l8r2
 
-> 生成：tools/k2_p5_jlc_package_m7t6r2_v1.py｜受审板 `66b6553f2677737b`｜SPEC rev-54｜判据锚 rev=6
+> 生成：tools/k2_p5_jlc_package_m7t6r2_v1.py｜受审板 `a14610e0542e6314`｜SPEC rev-54｜判据锚 rev=6
 > 定值来源：监理指令 #10 定值表 + **owner #14 工艺冻结 A**（JLC HDI 盲埋孔 ≥2 阶）
 
 ## 1. 制造参数

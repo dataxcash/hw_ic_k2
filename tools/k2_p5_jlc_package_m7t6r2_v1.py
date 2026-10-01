@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-# P5 delivery package builder - **m7t6r2 version** (#K2-546 / #K2-548 / #K2-549).
+# P5 delivery package builder - **m7t6r2 version** (#K2-546 / #K2-548 / #K2-549 / #K2-550).
+#   SOURCE BOARD = the board the nine-row record JUDGED (a14610e0542e6314): the #K2-548 sec.1 invariant
+#   (package board == the certified board) then holds verbatim. The delivered Gerber set is exported with
+#   --check-zones, so it is the plot-time RECOMPUTED fill and the refill-invariance gate passes by construction.
 # TOOL INPUT CONTRACT (M-ENG-TOOL-INPUT-CONTRACT): the source board must be FRESHLY FILLED and island-free;
 #   the zone gate re-exports the same board to /tmp with --check-zones and demands the delivered Gerber set be
 #   byte-identical on ALL files. READ THAT GATE BEFORE FEEDING A BOARD (the l8 run passed it 14/14).
@@ -14,7 +17,7 @@ from pathlib import Path
 ROOT = Path("/home/fila/jqdDev_2025/ic_hw")
 K2 = ROOT / "k2"
 CLI = ROOT / "AppDir/bin/kicad-cli"
-BOARD = K2 / "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6_final.kicad_pcb"
+BOARD = K2 / "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb"
 PRO = K2 / "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pro"
 SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json"
 BOOK = K2 / "pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260921"
@@ -22,7 +25,7 @@ FROZEN_PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"
 OUT = K2 / "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2"
 # #K2-546 sec.2.2 · PACKAGE QC ROW 9 (permanent gate for the "wrong source board" defect, F-GREEN case 8):
 # the package's board sha16 MUST equal the RECOGNISED delivery board (the 9/9 exam's judged board).
-DELIVERY_BOARD_SHA16 = "66b6553f2677737b"   # #K2-548: the delete-then-refill final board (zero isolated + fresh fill)   # #K2-547 sec.2.2: the re-certified freshly-re-filled delivery board
+DELIVERY_BOARD_SHA16 = "a14610e0542e6314"   # #K2-548 sec.1: the board the NINE-ROW record judged (C1/C2/C6 certified)   # #K2-548: the delete-then-refill final board (zero isolated + fresh fill)   # #K2-547 sec.2.2: the re-certified freshly-re-filled delivery board
 assert OUT.name == "jlc_package_m7t6r2", "FAIL-CLOSED: l8r2 生成器不得指向冻结包 l8 (#K2-59 R2-1)"
 CANON_DATE = "2026-09-19T00:00:00+08:00"
 # #K2-548 sec.1.1 (the zone gate's internal semantics are the ENG's call): kicad-cli stamps every .gbr with a

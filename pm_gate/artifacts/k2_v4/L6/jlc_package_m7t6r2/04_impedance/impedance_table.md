@@ -1,7 +1,7 @@
 # K2 P5 · 85Ω 差分阻抗表（受审板 l8 / SPEC rev-54 / JLC08161H）
 
 - 目标 **85.0Ω ±10%** ⇒ 窗口 76.5–93.5Ω
-- board `66b6553f2677737b` · SPEC `f3a48b866983c8db` · 判据锚 rev=6
+- board `a14610e0542e6314` · SPEC `f3a48b866983c8db` · 判据锚 rev=6
 - 模型：M1 = IPC-2141 族（复现 SPEC 一阶）；M2 = Hammerstad–Jensen + Cohn（独立交叉）
 - 几何源 = SPEC rev-54 `impedance.per_layer`；**l8 as-built 复验见下表末**
 

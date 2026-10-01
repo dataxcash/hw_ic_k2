@@ -1,10 +1,10 @@
-# K2 · **P5 交付记录**（受审板 `66b6553f2677737b`）· **由构建器生成**（勿手改）· 2026-10-01
+# K2 · **P5 交付记录**（受审板 `a14610e0542e6314`）· **由构建器生成**（勿手改）· 2026-10-01
 
 > 依据：#K2-36（P4 关门=通过 · P5 放行=批准）+ owner #14③。机读锚见包内 `MANIFEST.json`；本件为索引/记录，随构建刷新。
 
 ## 0. 一句话
 `k2/pm_gate/artifacts/k2_v4/L6/jlc_package_m7t6r2/`（**58 件 + `MANIFEST.json`**）
-· `MANIFEST.json` sha256 **`6921316b22da94ddaabbbb3ff7512b4ce6afa96d3ff8bbdf698d3493347e20ee`**
+· `MANIFEST.json` sha256 **`e8bc1d5aeed66fb1c4041d7094ead3ee2fb2ebadf35014ed8b5d958c11655d12`**
 · DFM 对 JLC HDI 通道 **16 PASS / 1 ACCEPT / 0 FAIL**
 · N-01 平面层 4/4 `G36>0` · 钻孔 726 孔 · kicad-cli 10.0.5
 · 交付封装 `L6/DELIVERY_m7t6r2/k2_v4_8L.m7t6r2_gerber_package.tar.gz`（见其 README/SHA256SUMS）
@@ -15,7 +15,7 @@
 `06_rulings/`（L2 裁定副本 parity=真 · `jlc_dfm_hdi_m7t6.{json,md}`）· `07_verify/`（**9 件验证**）· `DISCLOSURE.md` · `ORDER_NOTES.md` · `MANIFEST.json`
 
 ## 2. 锚
-受审板 `k2_v4_8L.m7t6_final.kicad_pcb` **`66b6553f2677737b`** · pro `e7e704ae8a4715b8` · SPEC rev-54 `f3a48b866983c8db` ·
+受审板 `k2_v4_8L.m7t6.kicad_pcb` **`a14610e0542e6314`** · pro `e7e704ae8a4715b8` · SPEC rev-54 `f3a48b866983c8db` ·
 判据 **rev=6（COUNTERSIGNED）**：`727d0995…`/`1937a40a…`/`eb3da49f…`（ENG 只读）· 冻结四源未动（见 `07_verify/anchor_selfcheck.json`）。
 
 ## 3. DFM（对 JLC HDI 通道）

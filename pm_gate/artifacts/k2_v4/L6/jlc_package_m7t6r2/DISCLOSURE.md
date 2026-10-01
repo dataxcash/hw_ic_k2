@@ -46,5 +46,5 @@ L2 冻结表 0.25/0.41 与板侧实测口径两套未对账；**板侧口径权�
 4. **正面丝印越出板框 3 处**（最大 2.877mm）：H2(fp.text, +2.877mm); H3(fp.text, +2.877mm); D2(fp.text, +1.198mm)。板厂按边框裁剪 ⇒ 位号图例可能缺损（装饰/可追溯性），**不影响可制造性/功能**；**铜层越界 = 0 处**（对照：`pads_within_outline` 0/0/0、copper-edge DRC 违规 0）。修法 = 移丝印文本 ⇒ 改板 ⇒ 另开 rev（本次不做）。见 `07_verify/silk_overhang.json`。
 
 ## 6. 锚自检（本包 07_verify/anchor_selfcheck.json）
-board `66b6553f2677737b` · pro `e7e704ae8a4715b8` · SPEC `f3a48b866983c8db` ·
+board `a14610e0542e6314` · pro `e7e704ae8a4715b8` · SPEC `f3a48b866983c8db` ·
 criteria rev=6（`727d0995…`/`1937a40a…`/`eb3da49f…`）· 冻结四源 `l4 d4e81f64…` 未动。
