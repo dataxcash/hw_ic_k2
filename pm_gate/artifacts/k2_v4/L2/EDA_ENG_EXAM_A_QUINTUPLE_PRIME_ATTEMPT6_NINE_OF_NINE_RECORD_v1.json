@@ -1,0 +1,153 @@
+{
+ "artifact": "eda_eng_exam_a_quintuple_prime_attempt6_nine_of_nine_record_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-540 sec.2 item 4 (green => the three declarations are filed with the reading); reading taken under #K2-541 sec.4.3 (both standalone proofs in: cache-off/cache-on ledger byte-identical + suite 183/183)",
+ "engine_head": "0040b98a1fbca860f1e95b9810a35f98f611ebf5",
+ "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/A5_FROM_PLACED_v1.kicad_pcb --erase-refs J9,J6,J11 --scenario pm_gate/artifacts/k2_v4/L2/EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json --work /tmp/opencode/k2v3",
+ "env": {
+  "K2_JOIN_ENABLE": "1",
+  "K2_NO_YIELD": "1"
+ },
+ "run_count": "1/1",
+ "state": "GRADED",
+ "verdict": "PASS",
+ "nine_rows": {
+  "C1_connectivity": {
+   "pass": true,
+   "reading": {
+    "unconnected": 0
+   }
+  },
+  "C2_drc_no_new_increase": {
+   "pass": true,
+   "reading": {
+    "total": 136,
+    "new_classes": []
+   }
+  },
+  "C3_skew": {
+   "pass": true,
+   "reading": {}
+  },
+  "C4_chamfer_preserved": {
+   "pass": true,
+   "reading": {}
+  },
+  "C5_routing_changed": {
+   "pass": true,
+   "reading": {}
+  },
+  "C6_outside_copper_unchanged": {
+   "pass": true,
+   "reading": {
+    "diff": 0,
+    "n_authorized": 2
+   }
+  },
+  "C7_hs_fanout_untouched": {
+   "pass": true,
+   "reading": {
+    "diff": 0
+   }
+  },
+  "C8_members_inside_frame": {
+   "pass": true,
+   "reading": {}
+  },
+  "C9_geometric_digest": {
+   "pass": true,
+   "reading": {}
+  }
+ },
+ "closing_witness": [
+  {
+   "stage": "erase_refs"
+  },
+  {
+   "stage": "pour_aware_unfill"
+  },
+  {
+   "stage": "port_plane_stitch",
+   "n_added": 98,
+   "n_refused": 0
+  },
+  {
+   "stage": "drawing_addendum_stitch",
+   "n_added": 28,
+   "n_refused": 0
+  },
+  {
+   "stage": "escape_layer_stitch",
+   "n_added": 27,
+   "n_refused": 0
+  },
+  {
+   "stage": "channels_computed"
+  },
+  {
+   "stage": "escape_keepout",
+   "n_refused": 0
+  },
+  {
+   "stage": "band_keepout"
+  },
+  {
+   "stage": "resolve_residual_before",
+   "unconnected": 1
+  },
+  {
+   "stage": "resolve_residual_second_pass"
+  },
+  {
+   "stage": "endpoint_yield_sequence"
+  },
+  {
+   "stage": "copper_dangling_audit"
+  },
+  {
+   "stage": "copper_join",
+   "enabled": true,
+   "n_one_end": 49,
+   "n_planned": 33,
+   "n_refused": 16
+  },
+  {
+   "stage": "endpoint_stitch_planned"
+  },
+  {
+   "stage": "endpoint_stitch_applied"
+  },
+  {
+   "stage": "refill_frame_discipline",
+   "adopted": true
+  },
+  {
+   "stage": "pour_islands_detected"
+  },
+  {
+   "stage": "pour_islands_repair"
+  },
+  {
+   "stage": "isolated_copper_disposed",
+   "n_disposed": 2
+  },
+  {
+   "stage": "landing_precondition_no_isolated_copper",
+   "pass": true
+  },
+  {
+   "stage": "per_block_C1_gate",
+   "pass": true
+  },
+  {
+   "stage": "M4_judge",
+   "verdict": "PASS"
+  },
+  {
+   "stage": "dead_stage_gate",
+   "pass": true
+  }
+ ],
+ "rule": "#K2-540 sec.2.4: 9/9 => (1) the true-model exam-A closure is declared (m7t6 is the supervisor's finding); (2) the stitch-safety family close condition 4 (whole-exam C1=0 AND new_classes=0) is MET; (3) the M-ENG-SNAP-START-WINDOW family close is declared.",
+ "note": "C1 reached 0 through the PRODUCT chain, not in the single maze pass: resolve_residual_before reports unconnected=1 and the residual second pass + copper_join (enabled, 33 planned stitches) close it; per_block_C1_gate then passes. R1840's inference that the exam must be RED because the first maze pass left the net open was WRONG - the reading is the instrument."
+}
