@@ -1,0 +1,84 @@
+{
+ "artifact": "k2_block_planner_standard_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-555 (R1852 approved) STEP 3a - the STANDARD IS DATA (auditable; never a code constant). This pins the objective, the enumeration law, the hard caps and the tie-break BEFORE any enumerator is written (declaration first), exactly as the construction order requires.",
+ "scope": "K2 is the TEST CASE; the standard is generic (no per-board special case).",
+ "objective": {
+  "form": "minimise  SUM_over_nets( blocks_crossed(net) * block_centre_distance(net) )  +  SUM(penalties)",
+  "terms": {
+   "blocks_crossed": "the number of DECLARED blocks a net's endpoints span (from the declared partition, a DATA input - never inferred here)",
+   "block_centre_distance": "Euclidean distance between the centres of the two blocks the net spans; a net inside ONE block contributes 0",
+   "hs_length_penalty": {
+    "applies_to": "the registered high-speed fanout nets",
+    "form": "max(0, routed_length - matched_pair_budget) * w_hs",
+    "w_hs": "registered below"
+   },
+   "power_proximity_penalty": {
+    "applies_to": "power nets vs their plane layer",
+    "form": "distance_to_plane_anchor * w_power",
+    "w_power": "registered below"
+   }
+  },
+  "weights": {
+   "w_blocks_crossed": 1.0,
+   "w_hs": 1.0,
+   "w_power": 1.0,
+   "note": "dimensionless-by-construction: the distance term is in mm and the crossing count is an integer; the weights are 1.0 and are REGISTERED (changing them is a standard revision, not a code edit)"
+  }
+ },
+ "enumeration_law": {
+  "positions_only": true,
+  "why": "block permutations are label-symmetric - enumerating them adds no solution, only cost",
+  "candidate_positions": {
+   "kind": "quantised lattice offsets",
+   "step_mm": "the declared quantisation (4 decimals on the registered frame)",
+   "hard_cap_per_block": 8
+  },
+  "hard_caps": {
+   "max_positions_per_block": 8,
+   "max_blocks_per_window": 4,
+   "why": "keeps the enumeration arithmetically bounded: <= 8^4 = 4096 combinations per window worst case, evaluated by the registered objective - no search, no backtracking"
+  },
+  "tie_break_tuple": [
+   "objective_value",
+   "sum_of_absolute_offsets",
+   "block_name",
+   "nx",
+   "ny",
+   "block_sort_key"
+  ],
+  "tie_break_note": "explicit and total: the same input always yields the same chosen placement"
+ },
+ "determinism_rules": {
+  "tolerances": "every geometric predicate carries an EXPLICIT tolerance; coordinates compare with 1e-3 mm (the 1e-6 boundary class was measured on this project)",
+  "no_randomness": true,
+  "no_backtracking": true,
+  "proof_harness": "two runs must produce byte-identical ledgers (the in-register K2MR_NOCACHE-style double run); the score table is part of the ledger"
+ },
+ "gates_reused_not_forked": {
+  "C2_caliber": "copy the registered caliber (total <= cap AND new_classes == []); never fork a second DRC caliber",
+  "C6_gauge": "use block.outside_copper_equivalent with its derived per-row tolerances; never fork",
+  "connectivity": "compare ISLAND PARTITIONS (f1.islands), never DRC rows (the DRC picks an arbitrary representative item)",
+  "blocked_counts": "the refusal counts are taken AFTER removing same-island no-ops (#K2-554/#K2-544: the polluted criterion)"
+ },
+ "acceptance": {
+  "exams": [
+   "K2 nine rows (true model)",
+   "R6 external board"
+  ],
+  "fail_closed": "C1 == 0 AND C2 PASS AND new_classes == [] => book the closure; otherwise name per-item causes and STOP (no second run is pre-authorised)"
+ },
+ "open_items_for_the_enumerator_step": {
+  "files": [
+   "the position enumerator + the score table writer"
+  ],
+  "must_not": [
+   "no permutation enumeration",
+   "no search beyond the hard caps",
+   "no per-board special case",
+   "no code constant for any weight or cap"
+  ]
+ },
+ "OWNER-ITEMS": 0,
+ "self_sha16": "98c38805c948cc42"
+}
