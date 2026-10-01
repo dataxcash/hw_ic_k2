@@ -1173,6 +1173,8 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
         edges.append((round(d, 3), na, ra[1], rb[1], la, lb, pa, pb))
     led = {"stage": "M15", "edges": len(edges), "added": [], "blocked": [], "summary": {}}
+    led["blocked_real"] = sum(1 for _b in blocked if _b.get("class") != "connected_via_port")
+    led["connected_via_port"] = sum(1 for _b in blocked if _b.get("class") == "connected_via_port")
     if order == "list" and not order_list:
         order_list = None
     if order == "list":
@@ -1226,7 +1228,15 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
                     import traceback as _tb; _tb.print_exc()
                 sol, why = None, "exception:%s(%s)" % (type(ex).__name__, str(ex)[:60])
             if sol is None:
-                _blocked.append({"net": net, "dist": dist, "why": why}); continue
+                # #K2-557 (R1852 STEP 4a): CLASSIFY the refusal so the rip-up criterion can later use the REAL
+                # block count. A `no-op-after-port-substitution(same-island)` refusal is NOT a block: the edge is
+                # already connected through the frame's port (measured: 245 of 268 refusals in the 9/9 era), yet it
+                # used to be counted as blocked and therefore washed out the "block count strictly drops" adoption
+                # test (three rip-up rounds read 268/268/268 and were never adopted). ADDITIVE ONLY: the entry keeps
+                # every existing key and gains a `class`; no decision changes in this step.
+                _blocked.append({"net": net, "dist": dist, "why": why,
+                                 "class": ("connected_via_port" if str(why).startswith("no-op-after-port-substitution")
+                                           else "blocked")}); continue
             nseg = 0; nvia = 0; ln = 0.0
             for (L, pl) in sol["legs"]:
                 for k in range(len(pl) - 1):
