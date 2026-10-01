@@ -1,0 +1,1728 @@
+{
+ "artifact": "k2_sec16_3_drawing_implementation_spec_v1",
+ "ts": "2026-09-30",
+ "status": "PROPOSED - NOT WIRED into the production chain (red line: no generator edits without approval)",
+ "authority": "#K2-439 sec.2.10 branch (C1>0 with port/policy OLD causes => sec.17.4 forced means change, sec.16.2 back to the scheme layer). This file is that means, expressed as frozen constants.",
+ "target_tool": "tools/k2_port_plane_stitch_v1.py (new, standalone, deterministic)",
+ "rect": [
+  22.95,
+  32.95,
+  51.5,
+  78.0
+ ],
+ "lines": [
+  {
+   "n": 1,
+   "kind": "port_stub",
+   "net": "NRST",
+   "layer": "F.Cu",
+   "near": [
+    51.5,
+    40.45
+   ],
+   "far": [
+    50.9,
+    40.45
+   ],
+   "why": "the crossing net ends in a dangling half-stub at x=51.5; a landing stub stopping AT the boundary restores the link and gives the maze an in-frame start cell (no-free-start-node)."
+  },
+  {
+   "n": 2,
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    29.65,
+    53.5
+   ],
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "why": "C90 pad 1 is an F.Cu-only SMD pad and no footprint has an In4 pad; the In4 P3V3_AUX plane is VERIFIED filled at this point, so a via is the only possible plane tie."
+  },
+  {
+   "n": 3,
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    50.95,
+    37.0
+   ],
+   "layers": [
+    "B.Cu",
+    "In4.Cu"
+   ],
+   "why": "tie the B.Cu fragment to the same In4 plane (verified filled here)."
+  },
+  {
+   "n": 3,
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    51.65,
+    39.1
+   ],
+   "layers": [
+    "In5.Cu",
+    "In4.Cu"
+   ],
+   "why": "R1380 fix: this In5-In4 tie via was at (51.5,38.75) - 0.05mm from PWR_BTN_OUT's dR port start (51.5,38.7), i.e. it OCCUPIED that port and starved the net (drawing-side obligation, #K2-449 sec.2.5(2)). Moved outward along the In5 fragment to (51.65,39.1) (an existing In5 fragment endpoint, ~0.43mm from the port => clears the 0.20mm requirement); declared outside_dR accordingly.",
+   "allow_outside_dR": true
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.75,
+    66.035
+   ],
+   "b": [
+    50.95,
+    66.035
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    51.05,
+    66.135
+   ],
+   "b": [
+    51.25,
+    66.135
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.65,
+    65.935
+   ],
+   "b": [
+    50.75,
+    66.035
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.45,
+    65.935
+   ],
+   "b": [
+    50.65,
+    65.935
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    51.25,
+    66.135
+   ],
+   "b": [
+    51.35,
+    66.235
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    51.35,
+    66.235
+   ],
+   "b": [
+    51.45,
+    66.235
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    45.95,
+    61.635
+   ],
+   "b": [
+    46.45,
+    62.135
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    46.55,
+    62.135
+   ],
+   "b": [
+    50.25,
+    65.835
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.95,
+    66.035
+   ],
+   "b": [
+    51.05,
+    66.135
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    51.5,
+    66.185
+   ],
+   "b": [
+    50.9,
+    66.185
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    46.45,
+    62.135
+   ],
+   "b": [
+    46.55,
+    62.135
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.35,
+    65.835
+   ],
+   "b": [
+    50.45,
+    65.935
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    50.25,
+    65.835
+   ],
+   "b": [
+    50.35,
+    65.835
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "F.Cu",
+   "a": [
+    33.75,
+    48.8375
+   ],
+   "b": [
+    33.75,
+    49.7375
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "via",
+   "net": "I2C1_SCL",
+   "at": [
+    45.95,
+    61.6375
+   ],
+   "layers": [
+    "F.Cu",
+    "In2.Cu"
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "via",
+   "net": "I2C1_SCL",
+   "at": [
+    33.75,
+    49.7375
+   ],
+   "layers": [
+    "F.Cu",
+    "In2.Cu"
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "In2.Cu",
+   "a": [
+    33.75,
+    49.7375
+   ],
+   "b": [
+    45.55,
+    61.5375
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "In2.Cu",
+   "a": [
+    45.55,
+    61.5375
+   ],
+   "b": [
+    45.75,
+    61.5375
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "In2.Cu",
+   "a": [
+    45.75,
+    61.5375
+   ],
+   "b": [
+    45.85,
+    61.6375
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SCL",
+   "layer": "In2.Cu",
+   "a": [
+    45.85,
+    61.6375
+   ],
+   "b": [
+    45.95,
+    61.6375
+   ],
+   "why": "R-h group-ordered draft (frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.95,
+    53.5375
+   ],
+   "b": [
+    48.95,
+    53.7375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    45.35,
+    58.3375
+   ],
+   "b": [
+    45.35,
+    62.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.15,
+    52.9375
+   ],
+   "b": [
+    49.15,
+    53.1375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.75,
+    54.3375
+   ],
+   "b": [
+    48.65,
+    54.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.35,
+    55.4375
+   ],
+   "b": [
+    48.35,
+    55.5375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    33.25,
+    47.8375
+   ],
+   "b": [
+    33.25,
+    48.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.55,
+    54.7375
+   ],
+   "b": [
+    48.55,
+    54.9375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    33.45,
+    47.7375
+   ],
+   "b": [
+    33.35,
+    47.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.35,
+    52.5375
+   ],
+   "b": [
+    49.25,
+    52.6375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    45.55,
+    58.3375
+   ],
+   "b": [
+    45.35,
+    58.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.65,
+    54.4375
+   ],
+   "b": [
+    48.65,
+    54.6375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.85,
+    54.0375
+   ],
+   "b": [
+    48.75,
+    54.1375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.25,
+    52.8375
+   ],
+   "b": [
+    49.15,
+    52.9375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    51.5,
+    67.455
+   ],
+   "b": [
+    50.9,
+    67.455
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.95,
+    53.7375
+   ],
+   "b": [
+    48.85,
+    53.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.35,
+    55.5375
+   ],
+   "b": [
+    45.55,
+    58.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.45,
+    55.3375
+   ],
+   "b": [
+    48.35,
+    55.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.05,
+    53.4375
+   ],
+   "b": [
+    48.95,
+    53.5375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.65,
+    54.6375
+   ],
+   "b": [
+    48.55,
+    54.7375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    45.95,
+    62.905
+   ],
+   "b": [
+    46.45,
+    62.905
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    33.35,
+    47.8375
+   ],
+   "b": [
+    33.25,
+    47.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.85,
+    53.8375
+   ],
+   "b": [
+    48.85,
+    54.0375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    51.5,
+    50.9375
+   ],
+   "b": [
+    51.5,
+    50.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    51.45,
+    50.3375
+   ],
+   "b": [
+    41.75,
+    50.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    39.15,
+    47.8375
+   ],
+   "b": [
+    39.05,
+    47.7375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.45,
+    55.0375
+   ],
+   "b": [
+    48.45,
+    55.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.25,
+    52.6375
+   ],
+   "b": [
+    49.25,
+    52.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.55,
+    54.9375
+   ],
+   "b": [
+    48.45,
+    55.0375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    39.25,
+    47.8375
+   ],
+   "b": [
+    39.15,
+    47.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    45.35,
+    62.3375
+   ],
+   "b": [
+    45.95,
+    62.9375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    41.75,
+    50.3375
+   ],
+   "b": [
+    39.25,
+    47.8375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    48.75,
+    54.1375
+   ],
+   "b": [
+    48.75,
+    54.3375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.35,
+    52.4375
+   ],
+   "b": [
+    49.35,
+    52.5375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    39.05,
+    47.7375
+   ],
+   "b": [
+    33.45,
+    47.7375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.05,
+    53.2375
+   ],
+   "b": [
+    49.05,
+    53.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    51.45,
+    50.3375
+   ],
+   "b": [
+    49.35,
+    52.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "F.Cu",
+   "a": [
+    49.15,
+    53.1375
+   ],
+   "b": [
+    49.05,
+    53.2375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "via",
+   "net": "I2C1_SDA",
+   "at": [
+    51.5,
+    50.4375
+   ],
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "via",
+   "net": "I2C1_SDA",
+   "at": [
+    46.45,
+    62.905
+   ],
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "via",
+   "net": "I2C1_SDA",
+   "at": [
+    51.5,
+    50.9375
+   ],
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.55,
+    62.705
+   ],
+   "b": [
+    48.75,
+    62.705
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.15,
+    62.205
+   ],
+   "b": [
+    50.35,
+    62.205
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.35,
+    62.205
+   ],
+   "b": [
+    50.45,
+    62.105
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.15,
+    62.905
+   ],
+   "b": [
+    48.25,
+    62.805
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.05,
+    62.605
+   ],
+   "b": [
+    49.15,
+    62.505
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.85,
+    62.605
+   ],
+   "b": [
+    49.05,
+    62.605
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.05,
+    61.905
+   ],
+   "b": [
+    51.25,
+    61.905
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.25,
+    62.805
+   ],
+   "b": [
+    48.45,
+    62.805
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.95,
+    62.005
+   ],
+   "b": [
+    51.05,
+    61.905
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.45,
+    62.105
+   ],
+   "b": [
+    50.65,
+    62.105
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.45,
+    62.805
+   ],
+   "b": [
+    48.55,
+    62.705
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.35,
+    62.505
+   ],
+   "b": [
+    49.45,
+    62.405
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.5,
+    61.8375
+   ],
+   "b": [
+    51.5,
+    50.9375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.5,
+    61.8375
+   ],
+   "b": [
+    51.5,
+    50.4375
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.65,
+    62.105
+   ],
+   "b": [
+    50.75,
+    62.005
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.45,
+    62.405
+   ],
+   "b": [
+    49.65,
+    62.405
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.15,
+    62.505
+   ],
+   "b": [
+    49.35,
+    62.505
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.35,
+    61.805
+   ],
+   "b": [
+    51.45,
+    61.805
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.25,
+    61.905
+   ],
+   "b": [
+    51.35,
+    61.805
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.75,
+    62.305
+   ],
+   "b": [
+    50.05,
+    62.305
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    46.45,
+    62.905
+   ],
+   "b": [
+    48.15,
+    62.905
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    49.65,
+    62.405
+   ],
+   "b": [
+    49.75,
+    62.305
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.75,
+    62.705
+   ],
+   "b": [
+    48.85,
+    62.605
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    51.5,
+    61.905
+   ],
+   "b": [
+    50.9,
+    61.905
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.75,
+    62.005
+   ],
+   "b": [
+    50.95,
+    62.005
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    50.05,
+    62.305
+   ],
+   "b": [
+    50.15,
+    62.205
+   ],
+   "why": "R-h group draft INCLUDING the joint (re-frozen after the bridge fix)"
+  },
+  {
+   "n": 5,
+   "kind": "track",
+   "net": "P3V3",
+   "layer": "F.Cu",
+   "a": [
+    43.4,
+    44.0
+   ],
+   "b": [
+    42.8,
+    39.0
+   ],
+   "why": "R-f (as ruled: the stub lands on the plane finger - MEASURED SATISFIED): C84.1 is now in a single cluster of 88 P3V3 items that INCLUDES one ZONE = the In4 P3V3 finger (prio 100, bbox x 34.27-58.42, y 34.02-40.25, filled at (42.8,39.0)). The remaining break is NOT the stub: the finger island does not merge with the MAIN P3V3 plane (prio 0, bbox x>=57.95, which carries the out-of-frame blind via at (81,60.6)) - KiCad connectivity confirms they are separate items."
+  },
+  {
+   "n": 5,
+   "kind": "via",
+   "net": "P3V3",
+   "at": [
+    42.8,
+    39.0
+   ],
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "why": "R-f (as ruled: the stub lands on the plane finger - MEASURED SATISFIED): C84.1 is now in a single cluster of 88 P3V3 items that INCLUDES one ZONE = the In4 P3V3 finger (prio 100, bbox x 34.27-58.42, y 34.02-40.25, filled at (42.8,39.0)). The remaining break is NOT the stub: the finger island does not merge with the MAIN P3V3 plane (prio 0, bbox x>=57.95, which carries the out-of-frame blind via at (81,60.6)) - KiCad connectivity confirms they are separate items."
+  },
+  {
+   "n": "R-g",
+   "kind": "track",
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "a": [
+    42.8,
+    35.5
+   ],
+   "b": [
+    58.5,
+    35.5
+   ],
+   "width": 0.25,
+   "allow_outside_dR": true,
+   "why": "R-g mechanism D corrected (#K2-447 sec.2.3 / the convergence order): the first bridge sat at y=39.0 and shorted the HS blind via @(58.0,39.3) and my own P3V3_AUX tie via @(51.5,38.75). This y was chosen by a VIA-AWARE free-slot scan of the full span 42.8..58.5 (an earlier scan filtered tracks by a single GetLayer() and so missed vias)."
+  },
+  {
+   "n": 5,
+   "kind": "via",
+   "net": "P3V3",
+   "at": [
+    36.7,
+    34.6
+   ],
+   "layers": [
+    "F.Cu",
+    "In4.Cu"
+   ],
+   "why": "#K2-447 sec.2.3 construction-layer completion: tie D2 pad 1 to the frozen bridge"
+  },
+  {
+   "n": 5,
+   "kind": "track",
+   "net": "P3V3",
+   "layer": "In4.Cu",
+   "a": [
+    36.7,
+    34.6
+   ],
+   "b": [
+    42.8,
+    35.5
+   ],
+   "width": 0.25,
+   "why": "determined tie from D2.1 to the frozen bridge line (both ends frozen)"
+  },
+  {
+   "n": 4,
+   "kind": "track",
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "a": [
+    48.15,
+    62.905
+   ],
+   "b": [
+    45.95,
+    62.905
+   ],
+   "width": 0.2,
+   "why": "R1376 determined fix: reach the E2.5 PAD (45.95,62.905) from the B.Cu ladder's west end (48.15,62.905) - same y, 2.2mm; this makes the cluster PAD-ANCHORED so the chain's isolated-copper disposal cannot remove it (the previous joint was disposed for lacking a pad)."
+  },
+  {
+   "n": 3,
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    50.95,
+    39.0
+   ],
+   "layers": [
+    "F.Cu",
+    "B.Cu"
+   ],
+   "why": "R1388 anchor fix: R1.2 is a P3V3_AUX pad at exactly (50.95,39.0); this via sits inside that pad, so it is PAD-ANCHORED."
+  },
+  {
+   "n": 3,
+   "kind": "track",
+   "net": "P3V3_AUX",
+   "layer": "B.Cu",
+   "a": [
+    50.95,
+    37.0
+   ],
+   "b": [
+    50.95,
+    39.0
+   ],
+   "width": 0.2,
+   "why": "R1388 anchor fix: one determined B.Cu segment (same x, 2.0mm) joining the previously pad-less via at (50.95,37.0) to the pad-anchored via at R1.2 (50.95,39.0)."
+  },
+  {
+   "n": "K2-527-a-via",
+   "kind": "via",
+   "net": "P3V3_AUX",
+   "at": [
+    52.35,
+    39.0
+   ],
+   "layers": [
+    "F.Cu",
+    "In5.Cu"
+   ],
+   "size": 0.45,
+   "drill": 0.25,
+   "allow_outside_dR": true,
+   "why": "#K2-532: owner-approved (a). The single DECLARED via for the P3V3_AUX open net plus its two legs; it crosses dR and is authorised BY THIS ORDER."
+  },
+  {
+   "n": "K2-527-a-legF",
+   "kind": "track",
+   "net": "P3V3_AUX",
+   "layer": "F.Cu",
+   "a": [
+    51.35,
+    39.0
+   ],
+   "b": [
+    52.35,
+    39.0
+   ],
+   "width": 0.2,
+   "allow_outside_dR": true,
+   "why": "#K2-532: owner-approved (a). The single DECLARED via for the P3V3_AUX open net plus its two legs; it crosses dR and is authorised BY THIS ORDER."
+  },
+  {
+   "n": "K2-527-a-legI5",
+   "kind": "track",
+   "net": "P3V3_AUX",
+   "layer": "In5.Cu",
+   "a": [
+    52.35,
+    39.0
+   ],
+   "b": [
+    51.55,
+    39.0
+   ],
+   "width": 0.2,
+   "allow_outside_dR": true,
+   "why": "#K2-532: owner-approved (a). The single DECLARED via for the P3V3_AUX open net plus its two legs; it crosses dR and is authorised BY THIS ORDER."
+  }
+ ],
+ "expected_effect": "each of the four residual nets gains a legal start/plane tie inside dR, so the maze is no longer refused at these endpoints; the outside copper is untouched (all added copper is at or inside dR).",
+ "OWNER-ITEMS": 0,
+ "v2_authority": "#K2-441 sec.2.4: R-e (I2C1 pair corridor) + R-f (line 5 lands on the plane finger) approved; no interface change.",
+ "R_e_pair_corridor": {
+  "net_pair": [
+   "I2C1_SCL",
+   "I2C1_SDA"
+  ],
+  "corridor_rect": [
+   50.4,
+   61.2,
+   51.5,
+   67.9
+  ],
+  "layers": [
+   "F.Cu",
+   "B.Cu"
+  ],
+  "slots": [
+   {
+    "net": "I2C1_SCL",
+    "at": [
+     51.5,
+     66.185
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "net": "I2C1_SDA",
+    "at": [
+     51.5,
+     67.455
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "net": "I2C1_SDA",
+    "at": [
+     51.5,
+     61.905
+    ],
+    "layer": "B.Cu"
+   }
+  ],
+  "slot_pitch_mm": 1.27,
+  "layer_change": "one shared change band inside the corridor (each net's via stays inside the rect)",
+  "rule": "#K2-441 sec.2.4 + sec.20 EVM policy: bus pairs are drawn as ONE group corridor (long runs straight, one layer change per group)."
+ },
+ "R_f_residual_blocker_named": {
+  "what": "the In4 P3V3 finger (carrying C84.1) and the In4 P3V3 main plane (carrying the out-of-frame blind via) are SEPARATE fill items, so the in-frame cluster cannot reach the goal.",
+  "machine_evidence": [
+   "pad cluster from C84.1: 88 items, classes {PCB_TRACK:75, PCB_VIA:7, PAD:5, ZONE:1}",
+   "finger zone prio 100: contains (42.8,39.0) but NOT (81,60.6)",
+   "main zone prio 0: contains (81,60.6) but NOT (42.8,39.0)"
+  ],
+  "why_the_ruled_R_f_cannot_fix_it": "the merge would need copper OUTSIDE dR (the main plane starts at x=57.95) => outside the approved R-f envelope and outside the frame; declaring the out-of-frame via a PORT was expressly not adopted.",
+  "proposed_minimal_fix_for_approval": [
+   "lower the finger's priority below the main plane's so the overlap region is filled by one of them contiguously, OR extend the finger outline so its fill physically merges with the main plane, OR accept a larger frame x-limit for this net. All three are ZONE/DOMAIN changes => a sec.16.2 scheme-layer decision."
+  ]
+ },
+ "R_h_frozen": {
+  "method": "#K2-442 sec.2.5(a): the in-register router drafted the pair ONCE offline on the cleared+stitched field (not an exam run), and the result was FROZEN into this spec as explicit track/via constants.",
+  "draft_source_drc": "/tmp/opencode/k2t/s1d_drc.json (SAME board, SAME moment)",
+  "added": {
+   "I2C1_SCL": {
+    "segments": 18,
+    "vias": 2
+   },
+   "I2C1_SDA": {
+    "segments": 36,
+    "vias": 3
+   }
+  },
+  "note": "line 4's slot stubs were replaced by the drafted route (the draft starts from those endpoints).",
+  "group_ordering": "FIXED: the pair is drafted as a GROUP - I2C1_SDA was re-drafted ON the board that already carries the I2C1_SCL lane, so the two lanes no longer cross (the single tracks_crossing in R1328 was MY two lanes, not the maze).",
+  "determined_joint_added": {
+   "authority": "#K2-447 sec.2.3 (conditionally pre-authorised N=1; the read-only determination was completed in the two prior windows and BOTH ends are frozen constants => construction layer)",
+   "items": [
+    "F.Cu lane (50.9,67.455)->(50.9,62.505)",
+    "via F.Cu-B.Cu @(50.9,62.505)",
+    "B.Cu lane (50.9,62.505)->(49.35,62.505)"
+   ]
+  },
+  "determined_joint_ATTEMPT": {
+   "authority": "#K2-447 sec.2.3",
+   "result": "NOT LANDED - reverted",
+   "why": "both ends ARE frozen constants, but the connecting geometry produced NEW DRC classes (attempt 1 at x=50.90: shorting+2 tracks_crossing; attempt 2 at the SDA column x=50.30: 5 shorting + 1 tracks_crossing). A connection that cannot be made by a determined line is MISSING DRAWING (sec.16.2), not a construction-layer matter. The pre-authorised N=1 was therefore NOT run - running a known-broken drawing would burn the quota.",
+   "next": "draft the JOINT itself once (drafter, same-source) and freeze it, exactly as the pair lanes were done - then the N=1 precondition is met."
+  },
+  "joint_frozen": null,
+  "joint_ATTEMPT_2": {
+   "authority": "#K2-447 sec.2.3 corrected method (same-source drafter, tools/k2_lane_draft_v1.py)",
+   "result": "NOT LANDED - reverted",
+   "draft_said": "ok=True (1 piece, 0 blocked, self-generated same-source DRC)",
+   "why_reverted": "re-freezing the drafted joint and applying it to the cleared field STILL yields 2 shorting_items => the frozen drawing is not DRC-clean => the joint precondition is NOT met and the pre-authorised N=1 stays UNCONSUMED.",
+   "next": "read-only diagnosis of the 2 shorting items (which frozen item vs which); NO further geometry hand-tuning (that pattern was accepted and stopped in R1352)."
+  },
+  "joint_frozen_R1366": {
+   "authority": "construction layer (#K2-447 sec.2.3): both ends are frozen constants; the earlier 2 shorts were the BRIDGE's (R1358), now fixed at y=35.5",
+   "items": {
+    "segments": 63,
+    "vias": 3
+   }
+  }
+ },
+ "R_g_buildability": {
+  "value": "relocation_listed",
+  "moved": [
+   "adds an In4 P3V3 track x 42.8..58.5 (the part x>51.5 is outside dR); it also clears the In4 MCU_VDD/P3V3_AUX fills around it"
+  ],
+  "why": "the finger/main merge region is outside dR; no in-frame mechanism exists",
+  "authority": "#K2-443 sec.2.2 / #K2-444 sec.2.3-2.6 (explain what moved, where, under which authority)",
+  "conservation": "same-net plane addition: capacity grows, demand unchanged => capacity >= demand",
+  "legacy_C6": "expected diff=0 (the predicate reads segments+vias; the added track is INSIDE?? no - it extends to x=58.5, so the legacy C6 WILL see its outside part as new segment geometry) => expect legacy C6 to show the added outside segment",
+  "note": "this is the first item that changes OUTSIDE SEGMENT/VAIA geometry, so the legacy C6 row is expected to move (unlike the zone-only changes)."
+ },
+ "R_g_diagnosis_R1358": {
+  "found": "the only 2 shorting_items on the joint-drafted build are BOTH caused by the R-g bridge track (P3V3 In4 (42.8,39.0)->(58.5,39.0), len 15.7mm):",
+  "shorts": [
+   {
+    "vs": "P3V3_AUX blind via In4-In5 @(51.5,38.75)",
+    "why": "the bridge runs along y=39.0 through x=51.5 where MY OWN line-3 tie via sits."
+   }
+  ],
+  "verification_gaps_owned": [
+   "the earlier 'corridor clear' check filtered tracks by a SINGLE GetLayer(), so VIAS (which span layers, e.g. the In2-In5 HS via occupying In4) were MISSED => the R-g corridor was never actually proven clear.",
+   "the so-called 'verified state' (67 added / 0 refused) was only an APPLY count - no DRC was run after the reverts, so the bridge's 2 shorts were carried into it unnoticed."
+  ],
+  "consequence": "the current 67-item spec is NOT DRC-clean either (same 2 shorts, from the bridge). The joint draft itself was fine.",
+  "next": {
+   "a": "re-draft R-g with a VIA-AWARE clearance check (a via occupies every layer between its pair => the corridor must be clear of vias on all of them), OR drop the bridge and let P3V3 stay on the finger island,",
+   "b": "then run a DRC on the stitched field BEFORE claiming any state is clean,",
+   "c": "the pre-authorised N=1 stays UNCONSUMED until then."
+  },
+  "rule_added": "a clearance check must enumerate ALL layers a via covers (not GetLayer()), and no 'verified state' may be claimed without a DRC on the built field.",
+  "FIXED_R1360": {
+   "binary": "(A) FEASIBILITY WITNESS at the drawing level",
+   "evidence": {
+    "free_slot_scan": "via-aware scan (all layers of every via) over the full span x 42.8..58.5 found free y slots; the bridge was re-placed at y=35.5",
+    "apply": "67 added / 0 refused",
+    "drc_on_the_stitched_field": {
+     "unconnected_items": 345,
+     "shorting_items": 0,
+     "tracks_crossing": 0,
+     "clearance": 0
+    },
+    "reading": "the frozen drawing (ports + plane ties + group lanes + the corrected bridge) introduces ZERO new DRC classes => the drawing is FEASIBLE; the 345 unconnected items are the expected pre-routing state of the cleared field."
+   },
+   "note": "this converts the earlier claim ('the bridge shorts the HS via and my own tie via') into a RESOLVED defect: the fault was the bridge's y, not the mechanism."
+  }
+ },
+ "I2C1_SDA_joint_localisation_R1374": {
+  "measured_on_the_R1372_judged_board": {
+   "present": [
+    "F.Cu port stub (51.5,67.455)->(50.9,67.455) [cluster size 4 = an ISOLATED fragment]",
+    "B.Cu ladder end (49.35,62.505) (pre-existing)"
+   ],
+   "ABSENT": [
+    "the joint's F.Cu lane at x=50.30: endpoints (50.30,67.455) and (50.30,62.505) are NOT on the board"
+   ],
+   "reading": "the joint's new copper was REMOVED by the chain's isolated-copper disposal - the SAME mechanism that removed the R-g bridge ZONE (M-ENG-ORPHAN-BRIDGE-DISPOSAL). The joint was anchored only to a 0.6mm stub whose cluster has no pad, so after routing/refill it is an orphan island and is disposed."
+  },
+  "contrast": "P3V3's added items ARE on the board (via @(36.7,34.6), bridge 15.7mm, D2 tie 6.166mm) because they are anchored through the pad tie - which is why P3V3 CLOSED.",
+  "gap_upgraded": "M-ENG-ORPHAN-BRIDGE-DISPOSAL: observation -> CONFIRMED GAP (second instance). Every added drawing piece must be PAD-ANCHORED (i.e. its cluster must contain a pad) or it will be disposed.",
+  "fix_direction": "re-draw the SDA joint so its lane terminates on a pad of the net (e.g. E2's or U1's I2C1_SDA pad) rather than on a bare stub end - i.e. the same 'anchor' rule that made the bridge work.",
+  "PWR_BTN_OUT": "not localised yet (the probe window found no items; the residual is U1 pad 13 <-> an In2 track of 2.4042mm). NOTE: it appeared only after my added In4 copper; must be localised before any further run."
+ },
+ "R1376_two_localisations": {
+  "PWR_BTN_OUT": {
+   "full_inventory": "U1.13 pad (33.25,57.163) + OUTSIDE items only: R3.1 pad & F.Cu via @(53.05,37.0), In2 (53.2,37.0)->(53.05,37.0), In2 (51.5,38.7)->(53.2,37.0)",
+   "reading": "this net has NO in-frame copper at all - the maze used to lay it and now does not. Its dR crossing stub starts at (51.5,38.7) on In2.",
+   "suspect": "the added In4 bridge corridor (x 42.8..58.5 at y=35.5) and/or the D2 tie may occupy the corridor the maze needs; must be checked (read-only) before concluding."
+  },
+  "I2C1_SDA": {
+   "present": "the B.Cu ladder (e.g. (49.15,62.505)->(49.35,62.505)) AND the F.Cu 0.6mm stub, as TWO separate items",
+   "absent": "my joint's new lane (x=50.30) and its via",
+   "why": "the ladder and the F.Cu stub are BOTH pad-less islands; my lane joined them into a bigger island that still contains NO pad => the chain's isolated-copper disposal removed it. Anchor rule confirmed again.",
+   "DETERMINED_FIX": "extend the B.Cu ladder's WEST end (48.15,62.905) to the E2.5 PAD at (45.95,62.905) - same y, 2.2mm apart => one B.Cu segment reaches a PAD => pad-anchored => it cannot be disposed."
+  },
+  "rule": "M-ENG-ORPHAN-BRIDGE-DISPOSAL (confirmed, 2nd instance): every added drawing piece's cluster MUST contain a pad.",
+  "SDA_fix_landed": "one B.Cu segment (48.15,62.905)->(45.95,62.905) reaching the E2.5 pad"
+ },
+ "prereq_R1380": {
+  "1_anchor_audit": {
+   "tool": "tools/k2_anchor_audit_v1.py (built this window, with regression test_C449)",
+   "first_run": "96 added -> 75 flagged padless",
+   "DEFECT_IN_THE_GATE": "the criterion is PER-PIECE ('does this piece's endpoint touch a pad or an existing route endpoint?'), which over-flags: most added pieces are mid-lane segments whose endpoints touch OTHER ADDED pieces. The correct semantics is CLUSTER-based: a piece is anchored iff its CONNECTED CLUSTER contains a pad. The gate must be fixed (union-find over coincident endpoints, vias joining their layer pair) before it can be used as a judge.",
+   "status": "BLOCKING - fix + re-run required before the N=1"
+  },
+  "2_PWR_BTN_OUT_DETERMINATION": {
+   "verdict": "DETERMINED: caused by MY drawing piece",
+   "evidence": "my added P3V3_AUX via In5-In4 @(51.5,38.75) sits 0.05mm from PWR_BTN_OUT's dR crossing stub start (51.5,38.7): |dy| = 0.05mm << the 0.20mm clearance.",
+   "reading": "the via occupies that port, so the net's in-frame route is starved (it had NO in-frame copper on the judged board). This is a DRAWING-SIDE obligation per #K2-449 sec.2.5(2).",
+   "fix": "move that tie via (via-aware) so it clears PWR_BTN_OUT's port by >= clearance; re-check with the (fixed) anchor gate + DRC."
+  },
+  "N1_status": "NOT RUN - the two prerequisites are not yet complete (fail-closed per #K2-449 sec.2.5)."
+ }
+}
