@@ -1,0 +1,106 @@
+{
+ "artifact": "eng_package_integrity_check_l14r1_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-545 sec.2.4: the package is submitted for the supervisor's verification; this is the ENGINE-side independent integrity check (read-only; the board was NOT recomputed).",
+ "engine_head": "69facef8",
+ "package": "pm_gate/artifacts/k2_v4/L6/jlc_package_l14r1",
+ "manifest_self_consistency": {
+  "files_checked": 53,
+  "bytes": 2232151,
+  "mismatches": [],
+  "verdict": "PASS"
+ },
+ "board_anchor": {
+  "manifest_board": "k2_v4_8L.l14.kicad_pcb",
+  "manifest_sha16": "26b9908948755c30",
+  "on_disk_sha16": "26b9908948755c30",
+  "verdict": "MATCH (the package is anchored to the in-repo l14 board pinned by #K2-545)"
+ },
+ "gbrjob_layer_declaration": {
+  "n_files": 13,
+  "layers": [
+   [
+    "k2_v4_8L.l14-F_Cu.gbr",
+    "Copper,L1,Top"
+   ],
+   [
+    "k2_v4_8L.l14-In1_Cu.gbr",
+    "Copper,L2,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-In2_Cu.gbr",
+    "Copper,L3,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-In3_Cu.gbr",
+    "Copper,L4,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-In4_Cu.gbr",
+    "Copper,L5,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-In5_Cu.gbr",
+    "Copper,L6,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-In6_Cu.gbr",
+    "Copper,L7,Inr"
+   ],
+   [
+    "k2_v4_8L.l14-B_Cu.gbr",
+    "Copper,L8,Bot"
+   ],
+   [
+    "k2_v4_8L.l14-F_Silkscreen.gbr",
+    "Legend,Top"
+   ],
+   [
+    "k2_v4_8L.l14-B_Silkscreen.gbr",
+    "Legend,Bot"
+   ],
+   [
+    "k2_v4_8L.l14-F_Mask.gbr",
+    "SolderMask,Top"
+   ],
+   [
+    "k2_v4_8L.l14-B_Mask.gbr",
+    "SolderMask,Bot"
+   ],
+   [
+    "k2_v4_8L.l14-Edge_Cuts.gbr",
+    "Profile"
+   ]
+  ],
+  "verdict": "8 copper (L1..L8) + Legend Top/Bot + SolderMask Top/Bot + Profile = the registered delivery definition"
+ },
+ "drill": {
+  "hits_per_file": {
+   "k2_v4_8L.l14-back-in5.drl": 37,
+   "k2_v4_8L.l14-front-in1.drl": 171,
+   "k2_v4_8L.l14-front-in2.drl": 134,
+   "k2_v4_8L.l14-front-in4.drl": 4,
+   "k2_v4_8L.l14-front-in5.drl": 19,
+   "k2_v4_8L.l14-in2-in5.drl": 92,
+   "k2_v4_8L.l14.drl": 299
+  },
+  "total": 756,
+  "manifest_total": 756,
+  "verdict": "MATCH",
+  "note": "the file split (through 299 + front-in1/in2/in4/in5 + in2-in5 + back-in5) shows the HDI blind/buried pairs are present"
+ },
+ "gerber_sanity": {
+  "G36_G37_balanced": true,
+  "M02_terminator": true,
+  "verdict": "PASS"
+ },
+ "dfm_summary": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0
+ },
+ "not_verified_here": [
+  "the board itself was NOT recomputed from the chain (that is the 9/9 exam's job); this check only verifies that the delivered bytes match the delivered manifest and that the package declares the registered layer set",
+  "the DFM items' underlying geometry measurements are the tool's (dfm_l8/shared code); this check does not re-derive them"
+ ]
+}
