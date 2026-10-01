@@ -70,7 +70,8 @@
    "silk_overlap": 14,
    "copper_sliver": 1
   },
-  "reading": "ZERO error-severity items; every remaining item is a WARNING class (courtyard/lib/silk/dangling/centering) - the DRC cap in C2 is 168 and the run reads 136 (total incl. these)"
+  "reading": "ZERO error-severity items; every remaining item is a WARNING class (courtyard/lib/silk/dangling/centering) - the DRC cap in C2 is 168 and the run reads 136 (total incl. these)",
+  "caliber_note": "s4_drc.json lists 187 violation items (ALL warning severity, 0 error) + 0 unconnected. C2's own total is 136: 187 - 51 `lib_footprint_issues` = 136 exactly => C2's caliber excludes the footprint-library check class, and nothing else. Derived arithmetically from the two readings in this run (not asserted)."
  },
  "delivery_definition_readiness": {
   "gerber_copper_layers": "NOT EMITTED (stopline)",
