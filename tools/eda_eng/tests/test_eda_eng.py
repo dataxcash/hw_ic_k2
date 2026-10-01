@@ -2057,6 +2057,24 @@ class T(unittest.TestCase):
                          "a one-ended stub must be preserved (escape stubs are one-ended by design)")
         self.assertEqual(mr.dangling_items(stub), [0], "the wide plan still names it (why R1664 broke C1)")
 
+    def test_C538_the_planners_via_radius_equals_what_stitch_actually_lays(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-528 / R1788). RED without it: the planner assumed via_r=0.175
+        while the registered stitch() lays size 0.45 => r=0.225, a 0.05mm optimistic error that let the edge-case pair
+        (J12.1's r=0.75 disc vs the site @(28.69,41.8), centre distance 1.1717 => 0.4217 edge) through although the
+        DRC reads 0.1967 < 0.200. GREEN: with the LAID radius that very site is refused."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe538", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        pad = ("12V_IN", "F.Cu", 28.46, 42.1, 29.96, 43.6, 0.0, "rect", 29.21, 42.85, 0.75, 0.75, 0.75, 0.0)
+        site = (28.69, 41.8)
+        self.assertTrue(m._leg_clear("P3V3", "F.Cu", site, site, [pad], 0.30 + max(0.0, 0.175 - 0.10)),
+                        "the OLD 0.175 assumption lets that site through - the false green")
+        self.assertFalse(m._leg_clear("P3V3", "F.Cu", site, site, [pad], 0.30 + max(0.0, 0.225 - 0.10)),
+                         "the LAID radius 0.225 REFUSES it (0.4217 < 0.425)")
+        src = open(os.path.join("tools", "k2_join_copper_v1.py"), encoding="utf-8").read()
+        self.assertIn("via_r=_VIA_SIZE / 2.0", src, "the verb must pass the laid radius, not an assumption")
+        self.assertIn('_VIA_SIZE = 0.45', src, "sourced from the register's own stitch default")
+
     def test_C528_the_gate_sees_hole_walls_of_existing_vias_and_pth_pads(self):
         """TIAN TIAO #1 engine asset + regression (#K2-528). R1764 named the missing ENTITY (a drill is a conductive
         wall) and R1766 found the deeper root: _leg_clear measured a POINT obstacle against the leg's START only, so a

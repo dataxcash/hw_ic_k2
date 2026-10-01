@@ -219,7 +219,11 @@ def main(argv=None):
     items = mr.board_items(a.board)
     pcmod = _mod("k2pcjoin", os.path.join(_HERE, "k2_pin_escape_precheck_v1.py"))
     import pcbnew as _P
-    pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len,
+    # #K2-528/R1788: the planner's via radius MUST be the radius the registered stitch() actually lays
+    # (k2_port_plane_stitch_v1: L.get("size", 0.45)); the old 0.175 assumption was 0.05mm smaller than the laid
+    # 0.225, which systematically widened the clearance verdict and let an edge-case pair (0.1967 vs 0.200) through.
+    _VIA_SIZE = 0.45
+    pj = plan_joins(items, rect, planner, mr, clear=a.clear, max_len=a.max_len, via_r=_VIA_SIZE / 2.0,
                     pad_rects=build_pad_rects(a.board, planner, pcmod, _P),
                     hole_walls=build_hole_walls(a.board, _P))
     lines = []
