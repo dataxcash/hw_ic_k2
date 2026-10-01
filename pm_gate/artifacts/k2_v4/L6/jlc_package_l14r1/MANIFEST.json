@@ -1,0 +1,252 @@
+{
+ "artifact": "k2_p5_jlc_fab_package_l8r2",
+ "schema": 1,
+ "revision": "P5-L8.2",
+ "nature": "P5 交付包（#K2-36 P5 放行 · owner #14③ 完工定义）",
+ "board": "k2_v4_8L.l14.kicad_pcb",
+ "board_sha16": "26b9908948755c30",
+ "pro_sha16": "e7e704ae8a4715b8",
+ "kicad_version": "10.0.5",
+ "criteria_anchor": "rev=6",
+ "commands": {
+  "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
+  "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report --report-path 02_drill_excellon/drill_report.txt",
+  "build": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l14r1_v1.py"
+ },
+ "canonicalization": {
+  "date_pattern": "\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:[+-]\\d{2}:\\d{2})?",
+  "replacement": "2026-09-19T00:00:00+08:00",
+  "files_normalized": 29
+ },
+ "dfm_summary": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0
+ },
+ "n01_g36_regions": {
+  "k2_v4_8L.l14-B_Cu.gbr": 0,
+  "k2_v4_8L.l14-F_Cu.gbr": 0,
+  "k2_v4_8L.l14-In1_Cu.gbr": 1,
+  "k2_v4_8L.l14-In2_Cu.gbr": 0,
+  "k2_v4_8L.l14-In3_Cu.gbr": 1,
+  "k2_v4_8L.l14-In4_Cu.gbr": 9,
+  "k2_v4_8L.l14-In5_Cu.gbr": 0,
+  "k2_v4_8L.l14-In6_Cu.gbr": 1
+ },
+ "drill_total": 756,
+ "n_files": 53,
+ "files": {
+  "01_gerber_rs274x/k2_v4_8L.l14-B_Cu.gbr": {
+   "sha256": "fbfcaaa279bc02b85378c13e2450f749578bd931349bbd6455731cd4edafd98a",
+   "bytes": 38674
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-B_Mask.gbr": {
+   "sha256": "461d210f8830fb92705cd9a1840731120c61862b67323c815e421f5c71b0ca7a",
+   "bytes": 30508
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-B_Silkscreen.gbr": {
+   "sha256": "95a60bd260a3ac900d50004d3c5d1c54dcbf8ffef984041e1f5c874a8b72b120",
+   "bytes": 464
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-Edge_Cuts.gbr": {
+   "sha256": "a1f4cd9cd02d75bc8f0a782cda94d5f69949dd39cae960108a83333eac92539a",
+   "bytes": 689
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-F_Cu.gbr": {
+   "sha256": "a2f6bbbf018f8bce55027f161c9bbae2957fd4e95c78a8c208695430fcd22ca3",
+   "bytes": 206084
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-F_Mask.gbr": {
+   "sha256": "ec037d82b59b23f77b188c0b330e88b1508643a727ce426ed8cc47bd1437fc58",
+   "bytes": 344537
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-F_Silkscreen.gbr": {
+   "sha256": "a4123eb4d9421ff0fa3705c965a7b4936779f3945f7311c2cecb585fe32fe715",
+   "bytes": 87974
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In1_Cu.gbr": {
+   "sha256": "4fd96db967ceea5fbfe3a7edc9a5992a7a82927e964fe6cdea06a70e710650d3",
+   "bytes": 258956
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In2_Cu.gbr": {
+   "sha256": "fe24e6f5cac60b95137b1e4ce0909c1843c5fd9c49d2832b340484ae04e2241f",
+   "bytes": 47996
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In3_Cu.gbr": {
+   "sha256": "1cc75ac907af6bae99e42ca77b98d9741cbd08b32b21b09a33eddc4b4a9b8a96",
+   "bytes": 215671
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In4_Cu.gbr": {
+   "sha256": "14106c2638124c38ad909db7ef26d4b7e01f836819b34eec18e524240829a7f6",
+   "bytes": 349020
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In5_Cu.gbr": {
+   "sha256": "5b6d78ed33a77f195d906f9a0e9133d90cdad08528d923a2042407f88c1e9a29",
+   "bytes": 166530
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-In6_Cu.gbr": {
+   "sha256": "fc89dc69d9abb3c41ec66eaac102494b4f3a28c877e1f0353f28a1abc00d44ef",
+   "bytes": 149587
+  },
+  "01_gerber_rs274x/k2_v4_8L.l14-job.gbrjob": {
+   "sha256": "683f5210dbc317bbef17b3d446009b317b94de88cc7cba99b6b0137ac9a8e441",
+   "bytes": 4870
+  },
+  "02_drill_excellon/drill_report.txt": {
+   "sha256": "d1b80fd633e8bb90376311930e2f12fc0a906173bc7c2ca2e1d6d05b7e1bcf38",
+   "bytes": 2475
+  },
+  "02_drill_excellon/k2_v4_8L.l14-back-in5-drl_map.svg": {
+   "sha256": "4ac1c9611a575419393715e50cbb6ee620a614fde744850e0b250edb63c9344c",
+   "bytes": 23432
+  },
+  "02_drill_excellon/k2_v4_8L.l14-back-in5.drl": {
+   "sha256": "32212c17b2853ac524f1b9afb35f49e7ae1b52548ccf73c8546f9e8dc7c1b833",
+   "bytes": 835
+  },
+  "02_drill_excellon/k2_v4_8L.l14-drl_map.svg": {
+   "sha256": "5935b2c553c75fbb424da77573b84546f2d69a8d20d5afd520fed4e4b6ffa52d",
+   "bytes": 84159
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in1-drl_map.svg": {
+   "sha256": "d1008e589519a6341927f269c19f48f44aad6378ecfd765c271301f48be2aa7e",
+   "bytes": 36545
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in1.drl": {
+   "sha256": "b18aa72efa667862a66e81cc5d3a8fd7c390cca457a07f8b6d31002e1707e8c8",
+   "bytes": 2764
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in2-drl_map.svg": {
+   "sha256": "f36f785275419a1f413f82d2c4746bb27c829daaf897eb55b0131aa09f3eb384",
+   "bytes": 33275
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in2.drl": {
+   "sha256": "1dc59f9e13a46f4104da665ec34e5541268fb6951fd6b3bf83085a1ed80a8ef1",
+   "bytes": 2165
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in4-drl_map.svg": {
+   "sha256": "25a0d5caaac9709d13ee259af8152013f5280e40c00c968a64067f464c91fd5f",
+   "bytes": 19535
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in4.drl": {
+   "sha256": "caf64c519332510945cf97395359feee9654f0181540bbfc2d75ff6dc380fbc3",
+   "bytes": 379
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in5-drl_map.svg": {
+   "sha256": "37e059f9e05b79ccfb21b7712fa65d47881cbe390416933c938bd515c08cfc7b",
+   "bytes": 22143
+  },
+  "02_drill_excellon/k2_v4_8L.l14-front-in5.drl": {
+   "sha256": "ae547cef34eadd7ccf65b2064fa0774a449cfa8b060d1cc5136c1eb984b5a0b4",
+   "bytes": 569
+  },
+  "02_drill_excellon/k2_v4_8L.l14-in2-in5-drl_map.svg": {
+   "sha256": "1236930d37aa6fbee57d03916ef945e8c476e43503816e1e7e3214d889198679",
+   "bytes": 29747
+  },
+  "02_drill_excellon/k2_v4_8L.l14-in2-in5.drl": {
+   "sha256": "2b840db2661e83b599009609f08b75baf01b6173413e97d1ea98c484800f8178",
+   "bytes": 1639
+  },
+  "02_drill_excellon/k2_v4_8L.l14.drl": {
+   "sha256": "907e58eb629dda112ae25b674171ef91c574d6190bc6771955bfed3bdd5c7d19",
+   "bytes": 4781
+  },
+  "03_stackup/HDI_stage_diagram.svg": {
+   "sha256": "1abdf779cc3829e7786fad267abc5508c71350fa22daa7e14afe377c0ef9084d",
+   "bytes": 4556
+  },
+  "03_stackup/JLC08161H_stackup.svg": {
+   "sha256": "44370475b258848f3763df9442ef874b14af4eb56374c60e54373f752b40b5b9",
+   "bytes": 3091
+  },
+  "04_impedance/impedance_table.json": {
+   "sha256": "27e8c2c624bd364e9b86b7f2921a1b1da86be0d1a2438ee89578abe0934bb3dd",
+   "bytes": 10469
+  },
+  "04_impedance/impedance_table.md": {
+   "sha256": "30f17e4a490e4d7020b1a4006de157d3e58a5b67f07c5276501d5dc00f926127",
+   "bytes": 2731
+  },
+  "05_layer_sequence.txt": {
+   "sha256": "5061bb5424b837b3357c53cfb63baf4d4e034b218080e281db8fdd27b4a5d031",
+   "bytes": 988
+  },
+  "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md": {
+   "sha256": "ef48da8f83393580328d828b6e13ea4a15a117405c9ca57c9f43844ce880162c",
+   "bytes": 3237
+  },
+  "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md": {
+   "sha256": "cec7bd86d39b71c85aedaaf64b9aa76f84208ceae86361e2677d6792ff3adac4",
+   "bytes": 1463
+  },
+  "06_rulings/L2_RULING_u6_thermal_v1.md": {
+   "sha256": "2c41056fc3a4de05d819fa710aab69f07a3cca633d124698a0b739ea05a03b22",
+   "bytes": 3571
+  },
+  "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md": {
+   "sha256": "e8e16228bf1ea0ebc975b3ae4c551dcf2e8285254ebb9078dfab1c8b14f2523f",
+   "bytes": 4938
+  },
+  "06_rulings/copy_parity.json": {
+   "sha256": "45cc92b0669574afeedab0f55860fe4bb510e14ed4aec6b174dc667bef283b0e",
+   "bytes": 200
+  },
+  "06_rulings/dfm_raw_readings.json": {
+   "sha256": "de0e4507a2f2bcb4e94483f02cccf59cce58686b8c6811de5e3cc7706558c41c",
+   "bytes": 1778
+  },
+  "06_rulings/jlc_dfm_hdi_l14.json": {
+   "sha256": "157b01cc19422811368275be9d3901494779c6416237c130e6fbb0a7f854968b",
+   "bytes": 6228
+  },
+  "06_rulings/jlc_dfm_hdi_l14.md": {
+   "sha256": "443d214c2ca73e6be012d366b701211b8ab793a7f40c2a0091efc3d9a16fd484",
+   "bytes": 2290
+  },
+  "07_verify/anchor_selfcheck.json": {
+   "sha256": "02cffd49f684ed67da17a386141b980231fe2e8f73ec3aae18073d5d07157272",
+   "bytes": 1280
+  },
+  "07_verify/drill_board_xcheck.json": {
+   "sha256": "0de006c7f5766118786f46c05a3693a1da447b21b684616f62342aa84f364eab",
+   "bytes": 659
+  },
+  "07_verify/drill_census.json": {
+   "sha256": "b66b9a699b62e2c91d223906e4d623930925a928e38b5922e406e93873f61b45",
+   "bytes": 1171
+  },
+  "07_verify/gerber_aperture_census.json": {
+   "sha256": "e6f55f9ccd515d85bbed8971dbb22168d60fc6075f1d6f620c6fb85adf96499c",
+   "bytes": 1908
+  },
+  "07_verify/gerber_extents.json": {
+   "sha256": "0470192cccfd0c0390714c9415514a0dde10445a8d8437ab7ae4bd9193c38a23",
+   "bytes": 3549
+  },
+  "07_verify/mask_accept_fix_proof.json": {
+   "sha256": "9c4685b493b79533ecb7ba604e8a58e736f10a2dcb3ed2c19106693abe7592c0",
+   "bytes": 993
+  },
+  "07_verify/n01_g36_census.json": {
+   "sha256": "a9ddd2addb61933bf75f30a1639615b83b3688bebda42c0b2e133cd085251a61",
+   "bytes": 556
+  },
+  "07_verify/silk_overhang.json": {
+   "sha256": "1cf07ff93887504b8591a77918142536b24df0610bfe0787a29e2660ddb47014",
+   "bytes": 1079
+  },
+  "07_verify/zone_refill_invariance.json": {
+   "sha256": "b81dc98f78599d872b5614cdab25d1ed59b314e8181fefc988e5fd73d843ca5c",
+   "bytes": 909
+  },
+  "DISCLOSURE.md": {
+   "sha256": "85b76bd5624ade9f0c1ede8aa71422eea9e3debca39018803b6d88322ac9767c",
+   "bytes": 4662
+  },
+  "ORDER_NOTES.md": {
+   "sha256": "6cfeb6178d6b083d18c8c38027e6bc86628ceb61108af5b45187b38115f8add9",
+   "bytes": 3842
+  }
+ }
+}
