@@ -291,7 +291,8 @@ def via_placeable(vx, vy, via_r, existing_vias, hole_clear=0.25, reach=1.0):
 
 
 def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_layers,
-                     clear=0.30, via_r=0.175, step=0.05, tol=0.02, existing_vias=None, hole_clear=0.25):
+                     clear=0.30, via_r=0.175, step=0.05, tol=0.02, existing_vias=None, hole_clear=0.25,
+                     existing_drills=None, via_drill_r=0.125):
     """#K2-508 ENGINE CAPABILITY —— **join 半（跨层）**：以**一枚过孔**把 `end`（在 `layer`）与 `target_pt`
     （在 `other_layer`）接上。过孔位置沿 `end→target_pt` **定步长采样**（有界 · 确定性 · 首中即取）：
     须**同时搭到两端之铜**（≤`via_r+tol`）且**在所跨每一层**（`span_layers`）与**每一个异网障碍**保持净距 ——
@@ -321,9 +322,24 @@ def via_join_for_end(net, layer, other_layer, end, target_pt, obstacles, span_la
                                       "why": "no clear via position joining %s -> %s" % (layer, other_layer)}}
 
 
+def hole_clearance_ok(vx, vy, drill_r, existing_drills, hole_clear=0.25, reach=2.0):
+    """#K2-534 ENGINE CAPABILITY: the NEW via's DRILL must keep `hole_clear` from every EXISTING drill.
+
+    The board's own rule (DRC: '"孔" 约束 间距 0.2495-0.2500 mm') is drill-wall to drill-wall and is NET-INDEPENDENT
+    - R1804 measured a real case: J13.4's PTH (drill_r 0.400) vs a join-placed via (drill_r 0.125) at centre distance
+    0.5000, i.e. 0.500 < 0.125+0.400+0.25 = 0.775. `existing_drills` = the per-layer (..., r=drill/2) records built
+    from the board; duplicates are harmless. Deterministic; the `reach` prefilter keeps it O(local).
+    """
+    for o in (existing_drills or ()):
+        d = math.hypot(float(o[2]) - vx, float(o[3]) - vy)
+        if d <= reach and d < drill_r + float(o[6]) + hole_clear:
+            return False
+    return True
+
+
 def via_hop_join(net, layer, other_layer, end, target_pt, obstacles, span_layers,
                  clear=0.30, via_r=0.175, step=0.1, max_len=2.0, tol=0.02,
-                 existing_vias=None, hole_clear=0.25):
+                 existing_vias=None, hole_clear=0.25, existing_drills=None, via_drill_r=0.125):
     """#K2-519 sec.2 item 1 ENGINE CAPABILITY —— **双跳连接器**（`legal alt path`）。
 
     `R1740` 已**闭式证明**该桩（`P3V3_AUX` · `E=(51.35,39.0)` F.Cu ↔ `T=(51.55,39.0)` In5 · 既有埋孔
@@ -346,6 +362,8 @@ def via_hop_join(net, layer, other_layer, end, target_pt, obstacles, span_layers
             vx, vy = x0 + dx * k * step, y0 + dy * k * step
             if not via_placeable(vx, vy, via_r, existing_vias, hole_clear):
                 continue                                                     # gate A
+            if not hole_clearance_ok(vx, vy, via_drill_r, existing_drills, hole_clear):
+                continue                                                     # gate A2: hole-to-hole
             if not all(_leg_clear(net, LZ, (vx, vy), (vx, vy), obstacles, need) for LZ in layers):
                 continue                                                     # gate B
             if not _leg_clear(net, layer, (x0, y0), (vx, vy), obstacles, clear):

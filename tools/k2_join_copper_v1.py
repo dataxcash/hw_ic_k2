@@ -228,12 +228,14 @@ def plan_joins(items, rect, planner, mr, clear=0.30, max_len=2.0, step=0.1, tol=
             span = span_names or [b.GetLayerName(L) for L in b.GetLayerSet().CuStack()]
             rv = planner.via_join_for_end(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                           clear=clear, via_r=via_r, step=0.05, tol=tol,
-                                          existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
+                                          existing_vias=[x_ for x_ in items if x_[0] == "VIA"],
+                                          existing_drills=hole_walls)
             if rv.get("join"):
                 got = rv["join"]; got["_kind"] = "via"; got["_other"] = ol; break
             rh = planner.via_hop_join(net, mr.LNAME[l], ol, (ex, ey), (qx, qy), obs2, span,
                                       clear=clear, via_r=via_r, step=0.1, max_len=max_len,
-                                      existing_vias=[x_ for x_ in items if x_[0] == "VIA"])
+                                      existing_vias=[x_ for x_ in items if x_[0] == "VIA"],
+                                      existing_drills=hole_walls)
             if rh.get("join"):
                 got = rh["join"]; got["_kind"] = "multi"; got["_other"] = ol; break
         if got:

@@ -2073,6 +2073,18 @@ class T(unittest.TestCase):
         self.assertTrue(m._leg_clear("GND", "In1.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "own net is skipped")
         self.assertTrue(m._leg_clear("X", "In2.Cu", (1.0, 1.0), (1.0, 1.0), [poly], 0.30), "other layer is skipped")
 
+    def test_C534b_hole_to_hole_is_gated(self):
+        """TIAN TIAO #1 engine asset + regression (#K2-534). Values taken from the PRINTED real case (penalty clause):
+        J13.4's PTH drill_r 0.400 @(24.13,46.54) vs the join-placed via drill_r 0.125 @(24.63,46.54) -> centre
+        distance 0.5000, required 0.125+0.400+0.25 = 0.775 -> REFUSED. A 0.87mm separation is clear."""
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("k2pe534b", os.path.join("tools", "k2_pin_escape_plan_v1.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+        pth = ("MCU_VDD", "F.Cu", 24.13, 46.54, 24.13, 46.54, 0.400)
+        self.assertFalse(m.hole_clearance_ok(24.63, 46.54, 0.125, [pth]), "0.500 < 0.775 => REFUSED (the real case)")
+        self.assertTrue(m.hole_clearance_ok(25.0, 46.54, 0.125, [pth]), "0.870 >= 0.775 => clear")
+        self.assertTrue(m.hole_clearance_ok(24.63, 46.54, 0.125, []), "no drills => clear")
+
     def test_C538_the_planners_via_radius_equals_what_stitch_actually_lays(self):
         """TIAN TIAO #1 engine asset + regression (#K2-528 / R1788). RED without it: the planner assumed via_r=0.175
         while the registered stitch() lays size 0.45 => r=0.225, a 0.05mm optimistic error that let the edge-case pair
