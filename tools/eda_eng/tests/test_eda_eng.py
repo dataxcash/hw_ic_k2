@@ -1815,6 +1815,28 @@ class T(unittest.TestCase):
         self.assertEqual(outs[0][1], outs[1][1], "the optimised via sweep must be byte-identical")
         mr.WALL_RECT, mr.EDGE_IN = _sw, _se
 
+    def test_C561_two_block_variant_exercises_the_cross_block_term(self):
+        """#K2-561/R1990: the single-block K2 case leaves the objective's cross-block term STRUCTURALLY 0. The
+        declared 2-block VARIANT and its score table are in-register, so the multi-block demonstration is pinned
+        here: positions-only, cap-bounded (8^2), a non-zero objective, named crossing nets and a deterministic
+        tie-break pick. This is the durable form of the demonstration (a data-variant run, not a board change)."""
+        import json
+        part = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                           "K2_BLOCK_PARTITION_DECLARATION_2BLOCK_VARIANT_v1.json"), encoding="utf-8"))
+        tab = json.load(open(os.path.join("pm_gate", "artifacts", "k2_v4", "L2",
+                                          "K2_BLOCK_PLANNER_SCORE_TABLE_2BLOCK_VARIANT_v1.json"), encoding="utf-8"))
+        self.assertEqual(len(part["blocks"]), 2, "the variant must declare exactly two blocks")
+        e = tab["enumeration"]
+        self.assertTrue(e["positions_only"], "positions only - never permutations")
+        self.assertEqual(e["n_combinations"], e["n_combinations_bound"],
+                         "the enumeration must reach exactly its registered bound")
+        self.assertEqual(e["n_combinations_bound"], 8 ** 2, "the bound is the registered cap squared (8 per block)")
+        self.assertTrue(e["cap_respected"], "the registered caps must be respected")
+        self.assertGreater(tab["chosen"]["objective"], 0.0, "the cross-block term must be non-zero on two blocks")
+        self.assertTrue(tab["objective_inputs"]["crossing_nets"], "at least one net must span both blocks")
+        self.assertEqual([list(o) for o in tab["chosen"]["offsets"]], [[0, 0], [0, 0]],
+                         "the deterministic tie-break picks the zero move (the incumbent layout is optimal here)")
+
     def test_C557_step4_ledger_counts_are_taken_after_the_passes_and_use_the_real_count(self):
         """#K2-557 (R1852 STEP 4, placement regression): the ledger's derived counts MUST be computed AFTER the
         passes have filled `blocked`, and the rip-up adoption test MUST use the REAL block count (a
