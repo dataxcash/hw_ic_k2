@@ -1,0 +1,1278 @@
+{
+ "artifact": "k2_block_planner_score_table_v1",
+ "ts": "2026-10-01",
+ "authority": "#K2-555 (R1852 approved) STEP 3b - the position-only enumerator and its score table.",
+ "standard": "K2_BLOCK_PLANNER_STANDARD_v1.json",
+ "standard_self_sha16": "dd0b2bcea7dbae0d",
+ "partition": "K2_BLOCK_PARTITION_DECLARATION_2BLOCK_VARIANT_v1.json",
+ "board_readonly": "k2_v4_8L.l14.kicad_pcb",
+ "enumeration": {
+  "positions_only": true,
+  "n_positions_per_block": 8,
+  "n_blocks": 2,
+  "n_combinations": 64,
+  "n_combinations_bound": 64,
+  "caps": {
+   "max_positions_per_block": 8,
+   "max_blocks_per_window": 4,
+   "why": "keeps the enumeration arithmetically bounded: <= 8^4 = 4096 combinations per window worst case, evaluated by the registered objective - no search, no backtracking"
+  },
+  "cap_respected": true
+ },
+ "objective_inputs": {
+  "crossing_nets": {
+   "GND": [
+    0,
+    1
+   ],
+   "MCU_VDD": [
+    0,
+    1
+   ],
+   "PERSTA#": [
+    0,
+    1
+   ],
+   "GPIO_LED": [
+    0,
+    1
+   ],
+   "P3V3_AUX": [
+    0,
+    1
+   ],
+   "I2C2_SCL": [
+    0,
+    1
+   ],
+   "I2C2_SDA": [
+    0,
+    1
+   ],
+   "UART_TX": [
+    0,
+    1
+   ],
+   "UART_RX": [
+    0,
+    1
+   ],
+   "SWDIO": [
+    0,
+    1
+   ],
+   "SWCLK_BOOT0": [
+    0,
+    1
+   ],
+   "I2C1_SCL": [
+    0,
+    1
+   ],
+   "I2C1_SDA": [
+    0,
+    1
+   ],
+   "P3V3": [
+    0,
+    1
+   ],
+   "SW_U2": [
+    0,
+    1
+   ],
+   "PWR_CTRL_OUT": [
+    0,
+    1
+   ]
+  },
+  "w": {
+   "w_blocks_crossed": 1.0,
+   "w_hs": 1.0,
+   "w_power": 1.0,
+   "note": "dimensionless-by-construction: the distance term is in mm and the crossing count is an integer; the weights are 1.0 and are REGISTERED (changing them is a standard revision, not a code edit)"
+  },
+  "single_block_note": "with ONE declared block the cross-block term is structurally 0 - the K2 test case therefore exercises the LAW (positions only, caps, tie-break, determinism) and not the cross-block optimisation; a multi-block K2 case would exercise the latter"
+ },
+ "score_table": [
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0001,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0002,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0001,
+     0.0
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     -0.0001
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0001
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0001,
+     0.0
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     -0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     -0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0001
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0001,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0003,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     -0.0002,
+     0.0
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0,
+     0.0002
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     -0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0,
+     0.0002
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  },
+  {
+   "offsets": [
+    [
+     0.0002,
+     0.0
+    ],
+    [
+     0.0002,
+     0.0
+    ]
+   ],
+   "objective": 228.4,
+   "offsets_abs_sum": 0.0004,
+   "blocks": [
+    "B1_left",
+    "B2_right"
+   ]
+  }
+ ],
+ "chosen": {
+  "offsets": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0
+   ]
+  ],
+  "objective": 228.4,
+  "offsets_abs_sum": 0.0,
+  "blocks": [
+   "B1_left",
+   "B2_right"
+  ]
+ },
+ "tie_break_used": [
+  "objective_value",
+  "sum_of_absolute_offsets",
+  "block_name",
+  "nx",
+  "ny",
+  "block_sort_key"
+ ],
+ "self_sha16": "aa12dbf8dbd7d96d"
+}

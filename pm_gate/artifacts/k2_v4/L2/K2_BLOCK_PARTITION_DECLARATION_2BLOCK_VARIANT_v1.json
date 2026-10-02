@@ -1,0 +1,74 @@
+{
+ "artifact": "k2_block_partition_declaration_2block_variant_v1",
+ "ts": "2026-10-02",
+ "authority": "#K2-561 (continue the capability line; do not idle) - a DECLARED 2-block VARIANT of the K2 test case, to exercise the objective's CROSS-BLOCK term (the single-block K2 case leaves it structurally 0). Declaration only: no design change, no board change.",
+ "lattice": {
+  "decimals": 4
+ },
+ "source_scenario": "EXAM_A_QUINTUPLE_PRIME_SCENARIO_v1.json",
+ "split": {
+  "axis": "x",
+  "at_mm": 37.225,
+  "rule": "a member goes to the block whose half contains its centre (deterministic)"
+ },
+ "blocks": [
+  {
+   "name": "B1_left",
+   "rects": [
+    [
+     22.95,
+     32.95,
+     37.225,
+     78.0
+    ]
+   ],
+   "members": [
+    "C73",
+    "C85",
+    "C86",
+    "C88",
+    "C90",
+    "J11",
+    "J12",
+    "J13",
+    "J6",
+    "J9",
+    "L1",
+    "R40",
+    "R41",
+    "U1",
+    "U2"
+   ],
+   "rect_union": true,
+   "is_rectangle": true
+  },
+  {
+   "name": "B2_right",
+   "rects": [
+    [
+     37.225,
+     32.95,
+     51.5,
+     78.0
+    ]
+   ],
+   "members": [
+    "C84",
+    "C87",
+    "D1",
+    "D2",
+    "E2",
+    "R1",
+    "R21",
+    "R28",
+    "U4",
+    "U5"
+   ],
+   "rect_union": true,
+   "is_rectangle": true
+  }
+ ],
+ "member_count": 25,
+ "note": "members without a position default to the left block (deterministic)",
+ "self_sha16": "52f61f4910d53b8f"
+}
