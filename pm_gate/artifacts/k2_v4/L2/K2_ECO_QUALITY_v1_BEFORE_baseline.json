@@ -1,0 +1,94 @@
+{
+ "artifact": "k2_eco_quality_v1_before_baseline",
+ "ts": "2026-10-02",
+ "authority": "#K2-564 (owner-ordered quality ECO, one window): this is the BEFORE half of the required before/after registration and the precise inventory the edit needs. Read-only.",
+ "board": {
+  "path": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb",
+  "sha256_16": "a14610e0542e6314",
+  "outline_mm": [
+   22.95,
+   32.95,
+   143.05,
+   79.05
+  ]
+ },
+ "D2": {
+  "before": {
+   "courtyard_bbox": [
+    35.45,
+    31.752,
+    41.95,
+    35.5
+   ],
+   "pads": [
+    [
+     "1",
+     36.7,
+     34.6,
+     2.5,
+     1.8
+    ],
+    [
+     "2",
+     40.7,
+     34.6,
+     2.5,
+     1.8
+    ]
+   ],
+   "body_to_top_edge_mm": -1.198,
+   "pads_to_top_edge_mm": 0.75
+  },
+  "target": "move D2 down (Y+) by ~2.0 mm into the empty area; only D2 moves; its two pad trace channels are reconnected",
+  "acceptance": "body-to-edge >= 2.5 mm, pads-to-edge >= 2.0 mm, DRC copper clearance clean"
+ },
+ "routing": {
+  "inventory_top_by_segments": {
+   "GND": {
+    "segments": 545,
+    "length_mm": 245.5,
+    "bends": 549,
+    "corners_90": 28
+   },
+   "PCIE_UP_OUT0_N_J2": {
+    "segments": 352,
+    "length_mm": 79.1,
+    "bends": 346,
+    "corners_90": 59
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "segments": 270,
+    "length_mm": 78.2,
+    "bends": 265,
+    "corners_90": 38
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "segments": 267,
+    "length_mm": 75.8,
+    "bends": 263,
+    "corners_90": 100
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "segments": 251,
+    "length_mm": 76.0,
+    "bends": 247,
+    "corners_90": 56
+   },
+   "I2C1_SDA": {
+    "segments": 237,
+    "length_mm": 168.3,
+    "bends": 220,
+    "corners_90": 3
+   }
+  },
+  "target": "all 90-deg corners on the two long J3->J2 / J4->J2 paths (measured 3 + 13) become 45/135; connectivity and layer set unchanged",
+  "length_hard_constraint": "intra-pair length matching and the registered skew/length table must stay compliant (the C3 skew row must not regress; the 9/9 reading: C3 PASS, max intra-pair delta 0.078764 mm vs the 0.15 mm limit)"
+ },
+ "C3_reference": {
+  "source": "the certified nine-row reading (L2/K2_STEP5_QC_CLOSURE_v1.json)",
+  "reading": "C3 PASS, max 0.078764 mm <= 0.15 mm limit"
+ },
+ "next_single_action": "the edit itself (D2 shift + the 45-135 reshaping + re-routing the affected channels), then the ONE full QC (DRC -> whole exam -> re-render), then the version-bumped package, then the AFTER half of this registration.",
+ "OWNER-ITEMS": 0,
+ "self_sha16": "99d5f141f8c58dc4"
+}
