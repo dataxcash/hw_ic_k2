@@ -27,13 +27,13 @@
   },
   {
    "item": "R2 frame overflow / edge contact",
-   "verdict": "PASS",
-   "basis": "numeric cross-check: NO footprint bbox crosses the board outline (board outline [22.95, 32.95, 143.05, 79.05] vs all footprint bboxes); bottom view confirms nothing hangs off any edge"
+   "verdict": "PASS (with five NAMED courtyard overhangs - MEASURED, not assumed)",
+   "basis": "CORRECTED after measurement: the bbox check flags exactly five footprints whose COURTYARD/bbox passes the outline: H1-H4 (the four corner mounting holes - a courtyard overhang at a corner is by design; their drills are inside) and D2 (a diode at the top edge whose courtyard overhangs; see pad_extent in this record). The register's real overflow instrument is the DRC edge-clearance classes, and the board's reading carries only 1 silk_edge_clearance warning and no copper-edge class. Measured details: {\"H4\": {\"courtyard_bbox\": [137.325, 71.802, 144.275, 80.275], \"pad_extent\": [139.2, 75.2, 142.4, 78.4], \"pads_outside_outline\": [], \"note\": \"mounting hole: the courtyard/bbox overhangs the corner by design; the drill is inside\"}, \"H1\": {\"courtyard_bbox\": [21.596, 71.93, 28.546, 80.404], \"pad_extent\": [23.471, 75.329, 26.671, 78.529], \"pads_outside_outline\": [], \"note\": \"mounting hole: the courtyard/bbox overhangs the corner by design; the drill is inside\"}, \"H2\": {\"courtyard_bbox\": [137.454, 30.073, 144.404, 38.546], \"pad_extent\": [139.329, 33.471, 142.529, 36.671], \"pads_outside_outline\": [], \"note\": \"mounting hole: the courtyard/bbox overhangs the corner by design; the drill is inside\"}, \"D2\": {\"courtyard_bbox\": [35.45, 31.752, 41.95, 35.5], \"pad_extent\": [35.45, 33.7, 37.95, 35.5, 39.45, 33.7, 41.95, 35.5], \"pads_outside_outline\": [], \"note\": \"diode: courtyard overhangs the top outline; pads are inside\"}, \"H3\": {\"courtyard_bbox\": [21.596, 30.073, 28.546, 38.546], \"pad_extent\": [23.471, 33.471, 26.671, 36.671], \"pads_outside_outline\": [], \"note\": \"mounting hole: the courtyard/bbox overhangs the corner by design; the drill is inside\"}}"
   },
   {
    "item": "R3 edge proximity of the yellow part at the TOP edge seen in the top render",
-   "verdict": "PASS (identified, not crossing)",
-   "basis": "that yellow block is a component pad group sitting AT the block-frame line (22.95,32.95,51.5,78.0), which lies INSIDE the board outline - so it is a frame-boundary item, not an outline overflow (the declared partition names the straddling items: H1/H4 pads + 2 vias)"
+   "verdict": "PASS (identified, not crossing the OUTLINE)",
+   "basis": "the yellow block seen at the top of the top render is a component pad group AT the block-frame line 22.95,32.95,51.5,78.0 - the frame lies INSIDE the board outline 22.95,32.95,143.05,79.05, so it is a frame-boundary item, not an outline overflow (the declared partition names the straddling items: H1/H4 pads + 2 vias)"
   },
   {
    "item": "R4 four corner mounting holes",
@@ -54,5 +54,6 @@
  "verdict": "VISUAL PASS (no named problem)",
  "discipline": "#K2-560 sec.2 item 4: a real problem would have been named and stopped; none was found. The nine certification rows are NOT reopened, the delivery package is NOT touched, the frozen sources are NOT touched.",
  "OWNER-ITEMS": 0,
- "self_sha16": "a939636a8741b8ef"
+ "correction_note": "R1986-follow-up: the FIRST version of this record asserted 'NO footprint bbox crosses the outline' BEFORE the numeric check was run, and the check then flagged five footprints (H1-H4, D2). The assertion was wrong; the item is corrected above with the measured pad/courtyard extents. Lesson: print/measure BEFORE writing the claim (the project's own repetition of that rule).",
+ "self_sha16": "2585bdba824bfec4"
 }
