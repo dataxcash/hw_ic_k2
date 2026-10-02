@@ -1,0 +1,116 @@
+{
+ "artifact": "k2_eco_quality_v1_closure",
+ "ts": "2026-10-02",
+ "engine_head": "294da1b5",
+ "authority": "#K2-564 (owner ECO) + #K2-565 (arcs mandatory) + #K2-566/#K2-567/#K2-568 (three rulings + approve route A + one-shot tag order)",
+ "state": "ECO CLOSED (one-shot QC PASS). Tag m7-m7t7.",
+ "new_board": {
+  "path": "L6/board/k2_v4_8L.m7t7.kicad_pcb",
+  "sha256_16": "7a99ab2e55e281b4",
+  "predecessor": {
+   "path": "L6/board/k2_v4_8L.m7t6.kicad_pcb",
+   "sha256_16": "a14610e0542e6314",
+   "kept_on_disk": true
+  }
+ },
+ "step_a_d2": {
+  "shift_mm": [
+   0,
+   2.5
+  ],
+  "acceptance": {
+   "body_to_edge_mm": 2.85,
+   "pads_to_edge_mm": 3.25,
+   "verdict": "PASS (>=2.5 / >=2.0)"
+  },
+  "connection_body": "D2 body moved +2.5mm; the in-pad via was KEPT at (36.7,34.6) (moving it landed on the In1/In3 GND plane fills and would have forced an out-of-scope zone refill) and the moved pad1 is joined to it by a new F.Cu leg; the In4 trunk is unchanged; the SW_U2 leg is re-routed.",
+  "step_a_finding": "the authorized +2.5mm put D2.1's pad box on top of the SW_U2 chain (18 overlapping segments = a P3V3<->SW_U2 short); #K2-568 approved route A (reroute the blocking chain)."
+ },
+ "step_a2_sw_u2_reroute": {
+  "what": "the SW_U2 tail that ran under D2 (F.Cu, x 33.95..38.85) is re-routed to dip below D2 and rise to the new pad2; the In5 via-stub of the same net is arc-rounded so the whole net obeys the arc standard.",
+  "arc_gauge": {
+   "same_layer_turns": 0,
+   "arcs": 92,
+   "non_tangent": 0,
+   "verdict": "PASS"
+  }
+ },
+ "step_b_refclk_arcs": {
+  "nets": [
+   "PCIE_REFCLK0_P",
+   "PCIE_REFCLK0_N",
+   "PCIE_REFCLK1_P",
+   "PCIE_REFCLK1_N"
+  ],
+  "arc_gauge": {
+   "same_layer_turns": 0,
+   "arcs": 188,
+   "non_tangent": 0,
+   "via_transitions": 4,
+   "verdict": "PASS"
+  },
+  "intra_pair_delta_mm": {
+   "PCIE_REFCLK0": 0.06129,
+   "PCIE_REFCLK1": 1e-05
+  }
+ },
+ "step_c_qc_one_shot": {
+  "drc": {
+   "total": 191,
+   "reference_total": 187,
+   "new_classes": [],
+   "unconnected": 0,
+   "instance_deltas_in_preexisting_classes": {
+    "track_not_centered_on_via": "30->34",
+    "track_dangling": "8->9",
+    "silk_edge_clearance": "1->0"
+   }
+  },
+  "nine_row_judge": {
+   "verdict": "PASS",
+   "C1_unconnected": 0,
+   "C2_total": 140,
+   "C2_limit": 168,
+   "C2_new_classes": [],
+   "C3_max_mm": 0.078764,
+   "C4_count": 3023,
+   "C5_element_set_diff": 2380,
+   "C6": "named-scope zero-difference: 0 out-of-scope diff (see ALLOWED_DIFF_SCOPE)",
+   "C7_hs_fanout_diff": 0
+  },
+  "render_visual": {
+   "what": "top/bottom + routing close-up through the ENG visual channel",
+   "reading": "the four REFCLK serpentines and the SW_U2 reroute read as smooth arcs; no straight-segment corners",
+   "verdict": "PASS"
+  }
+ },
+ "step_d_package": {
+  "path": "L6/jlc_package_m7t7",
+  "n_files": 60,
+  "board_sha16": "7a99ab2e55e281b4",
+  "shared_identity_gauge": {
+   "tool": "tools/package_identity_scan_v1.py",
+   "n_hits": 0,
+   "verdict": "CLEAN"
+  },
+  "dfm": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "record": "docs/K2-P5-DELIVERY-RECORD-m7t7-v1.md",
+  "tarball": "L6/DELIVERY_m7t7"
+ },
+ "owner_premise_disclosure": {
+  "statement": "the owner's premise 'D2 has 4-5mm clear directly below' is MEASURED FALSE: the SW_U2 switch-node chain runs directly under D2 (x 33.95..38.85, y 36.55..38.15). Disclosed here, not hidden; resolved by route A; no owner question raised because the goal was reachable (sec.11).",
+  "also": "#K2-564 sec.2's 689/706 table was the reader's ad-hoc 'nets shared by both connectors' script and includes GND (545 of 689/706 segments); the true scope is the two REFCLK pairs."
+ },
+ "tool": "tools/k2_arc_route_v1.py (M-ENG-ARC-ROUTING: fillet_polyline + measure_board)",
+ "redlines_checked": {
+  "frozen_sources": "untouched (a NEW spec file records the allowed-diff scope)",
+  "criteria_rev6": "read-only",
+  "l14_rev61": "untouched",
+  "old_delivery_anchor_a14610e0": "kept on disk, package jlc_package_m7t6r2 untouched"
+ },
+ "OWNER-ITEMS": 0
+}

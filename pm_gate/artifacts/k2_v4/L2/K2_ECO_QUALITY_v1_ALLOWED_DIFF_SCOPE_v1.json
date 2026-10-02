@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_eco_quality_v1_allowed_diff_scope",
+ "ts": "2026-10-02",
+ "authority": "#K2-566 sec.2 item 1 (new C6 = a NAMED-scope zero-difference gate) + #K2-568 sec.2 item 4 (the SW_U2 reroute is added to the allow-set by the version-bump mechanism; the frozen original SPEC is NOT touched).",
+ "reference_board": {
+  "path": "L6/board/k2_v4_8L.m7t6.kicad_pcb",
+  "sha256_16": "a14610e0542e6314",
+  "note": "the ECO-before certified board"
+ },
+ "new_board": {
+  "path": "L6/board/k2_v4_8L.m7t7.kicad_pcb",
+  "sha256_16": "7a99ab2e55e281b4"
+ },
+ "allowed_difference_scope": {
+  "nets": [
+   "P3V3",
+   "SW_U2",
+   "PCIE_REFCLK0_P",
+   "PCIE_REFCLK0_N",
+   "PCIE_REFCLK1_P",
+   "PCIE_REFCLK1_N"
+  ],
+  "layers": [
+   "F.Cu",
+   "In2.Cu",
+   "In5.Cu"
+  ],
+  "what": [
+   "D2 body + its connection body (in-pad via KEPT in place; In4 trunk untouched; a new F.Cu leg pad1->via) and the driven P3V3 segment",
+   "the SW_U2 reroute geometry (its blocking tail below D2 + the In5 via-stub, both arc'd)",
+   "the four REFCLK nets' arc geometry"
+  ]
+ },
+ "measured": {
+  "elements_added": 293,
+  "elements_removed": 137,
+  "nets_touched": [
+   "P3V3",
+   "PCIE_REFCLK0_N",
+   "PCIE_REFCLK0_P",
+   "PCIE_REFCLK1_N",
+   "PCIE_REFCLK1_P",
+   "SW_U2"
+  ],
+  "layers_touched": [
+   "F.Cu",
+   "In2.Cu",
+   "In5.Cu"
+  ],
+  "outside_scope_diff": 0
+ },
+ "rule": "C6 = zero difference OUTSIDE this named scope (fail-closed). All measured differences fall inside the scope.",
+ "OWNER-ITEMS": 0
+}

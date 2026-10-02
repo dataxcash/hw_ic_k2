@@ -1,0 +1,249 @@
+{
+ "board": {
+  "path": "k2_v4_8L.m7t7.kicad_pcb",
+  "sha16": "7a99ab2e55e281b4"
+ },
+ "preconditions": {
+  "P0_frozen_A": true,
+  "P1_gate_board_is_delivery": true
+ },
+ "evidence": {
+  "capability_source": "m13_v57_co146_jlc8_capability.json",
+  "as_designed_drc_n": 194,
+  "as_designed_drc_by_type": {
+   "copper_sliver": 1,
+   "isolated_copper": 3,
+   "lib_footprint_issues": 51,
+   "missing_courtyard": 51,
+   "silk_over_copper": 30,
+   "silk_overlap": 14,
+   "track_dangling": 9,
+   "track_not_centered_on_via": 34,
+   "via_dangling": 1
+  },
+  "jlc_limit_drc_n": 195,
+  "jlc_limit_drc_by_type": {
+   "copper_sliver": 1,
+   "isolated_copper": 3,
+   "lib_footprint_issues": 51,
+   "missing_courtyard": 51,
+   "silk_over_copper": 30,
+   "silk_overlap": 14,
+   "solder_mask_bridge": 1,
+   "track_dangling": 9,
+   "track_not_centered_on_via": 34,
+   "via_dangling": 1
+  }
+ },
+ "as_built": {
+  "board": "k2_v4_8L.m7t7.kicad_pcb",
+  "board_sha16": "7a99ab2e55e281b4",
+  "n_copper_layers": 8,
+  "copper_layers": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In5.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ],
+  "board_size_mm": [
+   120.1,
+   46.1
+  ],
+  "n_tracks": 7272,
+  "n_vias": 716,
+  "min_track_width_mm": 0.16,
+  "track_width_hist": {
+   "0.16": 2797,
+   "0.2": 2106,
+   "0.205": 2362,
+   "0.25": 7
+  },
+  "min_track_width_by_layer": {
+   "B.Cu": 0.2,
+   "F.Cu": 0.2,
+   "In2.Cu": 0.16,
+   "In4.Cu": 0.25,
+   "In5.Cu": 0.16
+  },
+  "via_drill_hist_mm": {
+   "0.2": 705,
+   "0.25": 11
+  },
+  "via_diameter_hist_mm": {
+   "0.35": 705,
+   "0.45": 11
+  },
+  "min_via_drill_mm": 0.2,
+  "min_via_diameter_mm": 0.35,
+  "min_via_annular_mm": 0.075,
+  "via_type_census": {
+   "F.Cu->B.Cu|THROUGH": 240,
+   "F.Cu->In1.Cu|BLIND_BURIED": 153,
+   "F.Cu->In2.Cu|BLIND_BURIED": 148,
+   "F.Cu->In4.Cu|BLIND_BURIED": 7,
+   "F.Cu->In5.Cu|BLIND_BURIED": 35,
+   "In2.Cu->In5.Cu|BLIND_BURIED": 93,
+   "In4.Cu->B.Cu|BLIND_BURIED": 1,
+   "In4.Cu->In5.Cu|BLIND_BURIED": 1,
+   "In5.Cu->B.Cu|BLIND_BURIED": 38
+  },
+  "n_non_through_vias": 476,
+  "min_via_hole_to_hole_mm": 0.25,
+  "pth_drill_hist_mm": {
+   "0.8": 6
+  },
+  "min_pth_drill_mm": 0.8,
+  "npth_drill_hist_mm": {
+   "3.2": 4
+  },
+  "min_npth_drill_mm": 3.2,
+  "n_zones": 18
+ },
+ "items": [
+  {
+   "item": "板尺寸",
+   "jlc_limit": "≤656×586mm 且 ≥3×3mm",
+   "measured": "120.1×46.1mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "层数",
+   "jlc_limit": "1–32 层（阻抗控制支持 4/6/8/10/12/32）",
+   "measured": "8 层",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "外层铜厚",
+   "jlc_limit": "1 oz / 2 oz",
+   "measured": "1 oz（SPEC stackup / 监理定值）",
+   "note": "声明值=监理定值",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "内层铜厚",
+   "jlc_limit": "0.5 oz / 1 oz / 2 oz",
+   "measured": "0.5 oz（SPEC stackup / JLC 默认）",
+   "note": "声明值=监理定值",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "成品板厚",
+   "jlc_limit": "1.6mm ±10%",
+   "measured": "1.6mm（JLC08161H）",
+   "note": "声明值",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "最小线宽",
+   "jlc_limit": "≥0.09mm (3.5mil)",
+   "measured": "0.16mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "最小线距（域外，netclass 0.1/0.175/0.2 全 ≥3.5mil）",
+   "jlc_limit": "≥0.09mm",
+   "measured": "JLC 限 DRC clearance 违规 = 0",
+   "note": "含逃逸域按 0.09mm 收紧后重跑",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "最小过孔孔壁",
+   "jlc_limit": "≥0.15mm（本板按 JLC 建议值 ≥0.2mm 判）",
+   "measured": "0.2mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "最小过孔盘径",
+   "jlc_limit": "≥0.25mm",
+   "measured": "0.35mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "过孔环宽（单边）",
+   "jlc_limit": "盘径 ≥ 孔径+0.15mm（⇒ 单边 ≥0.075mm）",
+   "measured": "0.075mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "过孔孔到孔",
+   "jlc_limit": "≥0.2mm",
+   "measured": "0.25mm",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "NPTH 最小孔径",
+   "jlc_limit": "≥0.5mm",
+   "measured": "3.2mm（['3.2']）",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "铜到板边",
+   "jlc_limit": "≥0.2mm",
+   "measured": "板规 min_copper_edge_clearance=0.30mm；JLC 限 DRC copper_edge_clearance 违规 = 0",
+   "note": "",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "阻焊桥 / 阻焊-铜净距",
+   "jlc_limit": "桥 ≥0.1mm；开窗到邻近铜 ≥0.09mm",
+   "measured": "JLC 限 DRC solder_mask_bridge 违规 = 1",
+   "note": "9 处阻焊坝 <0.09mm（阈值扫描：4 处 ∈[0.05,0.06) · 1 处 ∈[0.06,0.07) · 4 处 ∈[0.08,0.09)）；JLC 能力表 0.10mm 为**最小可保证桥宽**（非必须存在桥）⇒ 板厂按『无阻焊坝』印制；承 CO-147 R3 先例 ACCEPT，随单工程评审；影响面 = 装配焊接注意，不妨碍 Gerber 可制造性",
+   "machine_std": "FAIL",
+   "hdi": "ACCEPT_L2_WITH_FAB_REVIEW"
+  },
+  {
+   "item": "表面处理",
+   "jlc_limit": "6 层及以上不支持 HASL ⇒ 须 ENIG",
+   "measured": "沉金 ENIG",
+   "note": "监理定值一致",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "阻抗控制",
+   "jlc_limit": "支持层数 4/6/8/10/12/.../32，公差 ±10%",
+   "measured": "8 层 + 85Ω±10%（见 CO-146 阻抗表）",
+   "note": "终判 = JLC 阻抗控制服务",
+   "machine_std": "PASS",
+   "hdi": "PASS"
+  },
+  {
+   "item": "**过孔类型（盲/埋孔）**",
+   "jlc_limit": "**不支持盲/埋孔（仅通孔）**",
+   "measured": "**非通孔 476/716 支**：F.Cu->In1.Cu|BLIND_BURIED=153；F.Cu->In2.Cu|BLIND_BURIED=148；F.Cu->In4.Cu|BLIND_BURIED=7；F.Cu->In5.Cu|BLIND_BURIED=35；In2.Cu->In5.Cu|BLIND_BURIED=93；In4.Cu->B.Cu|BLIND_BURIED=1；In4.Cu->In5.Cu|BLIND_BURIED=1；In5.Cu->B.Cu|BLIND_BURIED=38",
+   "note": "工艺 A 冻结（#14 owner）：JLC **HDI/advanced 通道**支持盲埋孔（标准通道页明文 Not supported 系另一通道）",
+   "machine_std": "FAIL",
+   "hdi": "PASS"
+  }
+ ],
+ "n_items": 17,
+ "n_pass": 16,
+ "n_accept": 1,
+ "n_fail": 0,
+ "fails": []
+}
