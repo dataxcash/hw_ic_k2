@@ -1,0 +1,160 @@
+{
+ "artifact": "k2_m7t7_delivery_report_to_owner_v1",
+ "ts": "2026-10-02",
+ "engine_head": "294da1b5",
+ "generated": "#K2-570 sec.5 (the ordered bump) + M-ENG-REPORT-READING-DRIFT: GENERATED - every reading below is copied programmatically from the in-register artifacts (never hand-typed).",
+ "source_artifacts": {
+  "eco_closure": "pm_gate/artifacts/k2_v4/L2/K2_ECO_QUALITY_v1_CLOSURE_v1.json",
+  "allowed_diff_scope": "pm_gate/artifacts/k2_v4/L2/K2_ECO_QUALITY_v1_ALLOWED_DIFF_SCOPE_v1.json",
+  "package_manifest": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t7/MANIFEST.json"
+ },
+ "state": "ECO CLOSED (one-shot QC PASS); package FINAL. Remaining: the owner's business decision / signature (生成≠下单).",
+ "package": {
+  "dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t7",
+  "n_files": 60,
+  "board": "k2_v4_8L.m7t7.kicad_pcb",
+  "board_sha16": "7a99ab2e55e281b4",
+  "dfm": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "drill_total": 726,
+  "layers": "8 copper (F/In1..In6/B) + mask F/B + silk F/B + edge + .gbrjob; Excellon with the HDI blind/buried pairs",
+  "manifest_identity": {
+   "artifact": "k2_p5_jlc_fab_package_m7t7",
+   "revision": "M7T7",
+   "nature": "K2 m7t6 closure package - JLC HDI channel, process A frozen; packaged board k2_v4_8L.m7t7.kicad_pcb"
+  },
+  "manifest_files_listed": 60,
+  "shared_identity_gauge": {
+   "tool": "tools/package_identity_scan_v1.py",
+   "n_hits": 0,
+   "verdict": "CLEAN"
+  }
+ },
+ "anchor_locked": {
+  "board_in_repo": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t7.kicad_pcb",
+  "sha16_on_disk": "7a99ab2e55e281b4",
+  "commit": "62c2750b (#K2-564/565/566/567/568 ECO closure)",
+  "invariant": "the package board == the ECO board the one-shot QC judged; the delivered Gerber set is the --check-zones plot-time recompute.",
+  "predecessor": {
+   "path": "L6/board/k2_v4_8L.m7t6.kicad_pcb",
+   "sha256_16": "a14610e0542e6314",
+   "kept_on_disk": true
+  }
+ },
+ "nine_rows": {
+  "source": "pm_gate/artifacts/k2_v4/L2/K2_ECO_QUALITY_v1_CLOSURE_v1.json",
+  "C1": "unconnected = 0",
+  "C2": "total = 140 <= 168, new_classes = [] (pinned caliber)",
+  "C3": "max intra-pair delta = 0.078764 mm (SAME as the predecessor reading)",
+  "C4": "45-deg segment count = 3023 (ref 2637)",
+  "C5": "routing changed: element_set_diff = 2380",
+  "C6": "named-scope zero-difference: 0 out-of-scope diff (see ALLOWED_DIFF_SCOPE)",
+  "C7": "hs fanout diff = 0",
+  "verdict": "PASS"
+ },
+ "c6_named_scope": {
+  "caliber": "C6 = zero difference OUTSIDE this named scope (fail-closed). All measured differences fall inside the scope.",
+  "allowed_nets": [
+   "P3V3",
+   "SW_U2",
+   "PCIE_REFCLK0_P",
+   "PCIE_REFCLK0_N",
+   "PCIE_REFCLK1_P",
+   "PCIE_REFCLK1_N"
+  ],
+  "allowed_layers": [
+   "F.Cu",
+   "In2.Cu",
+   "In5.Cu"
+  ],
+  "measured": {
+   "elements_added": 293,
+   "elements_removed": 137,
+   "nets_touched": [
+    "P3V3",
+    "PCIE_REFCLK0_N",
+    "PCIE_REFCLK0_P",
+    "PCIE_REFCLK1_N",
+    "PCIE_REFCLK1_P",
+    "SW_U2"
+   ],
+   "layers_touched": [
+    "F.Cu",
+    "In2.Cu",
+    "In5.Cu"
+   ],
+   "outside_scope_diff": 0
+  }
+ },
+ "eco_summary": {
+  "step_a_d2": {
+   "shift_mm": [
+    0,
+    2.5
+   ],
+   "acceptance": {
+    "body_to_edge_mm": 2.85,
+    "pads_to_edge_mm": 3.25,
+    "verdict": "PASS (>=2.5 / >=2.0)"
+   },
+   "connection_body": "D2 body moved +2.5mm; the in-pad via was KEPT at (36.7,34.6) (moving it landed on the In1/In3 GND plane fills and would have forced an out-of-scope zone refill) and the moved pad1 is joined to it by a new F.Cu leg; the In4 trunk is unchanged; the SW_U2 leg is re-routed.",
+   "step_a_finding": "the authorized +2.5mm put D2.1's pad box on top of the SW_U2 chain (18 overlapping segments = a P3V3<->SW_U2 short); #K2-568 approved route A (reroute the blocking chain)."
+  },
+  "step_a2_sw_u2_reroute": {
+   "what": "the SW_U2 tail that ran under D2 (F.Cu, x 33.95..38.85) is re-routed to dip below D2 and rise to the new pad2; the In5 via-stub of the same net is arc-rounded so the whole net obeys the arc standard.",
+   "arc_gauge": {
+    "same_layer_turns": 0,
+    "arcs": 92,
+    "non_tangent": 0,
+    "verdict": "PASS"
+   }
+  },
+  "step_b_refclk_arcs": {
+   "nets": [
+    "PCIE_REFCLK0_P",
+    "PCIE_REFCLK0_N",
+    "PCIE_REFCLK1_P",
+    "PCIE_REFCLK1_N"
+   ],
+   "arc_gauge": {
+    "same_layer_turns": 0,
+    "arcs": 188,
+    "non_tangent": 0,
+    "via_transitions": 4,
+    "verdict": "PASS"
+   },
+   "intra_pair_delta_mm": {
+    "PCIE_REFCLK0": 0.06129,
+    "PCIE_REFCLK1": 1e-05
+   }
+  },
+  "render_visual": {
+   "what": "top/bottom + routing close-up through the ENG visual channel",
+   "reading": "the four REFCLK serpentines and the SW_U2 reroute read as smooth arcs; no straight-segment corners",
+   "verdict": "PASS"
+  }
+ },
+ "disclosures_from_the_ECO": {
+  "1_owner_premise": {
+   "statement": "the owner's premise 'D2 has 4-5mm clear directly below' is MEASURED FALSE: the SW_U2 switch-node chain runs directly under D2 (x 33.95..38.85, y 36.55..38.15). Disclosed here, not hidden; resolved by route A; no owner question raised because the goal was reachable (sec.11).",
+   "also": "#K2-564 sec.2's 689/706 table was the reader's ad-hoc 'nets shared by both connectors' script and includes GND (545 of 689/706 segments); the true scope is the two REFCLK pairs."
+  },
+  "2_sw_u2_dive_value": {
+   "landed": "y = 38.32 mm",
+   "ruled_suggestion": "y ~ 38.6",
+   "why": "38.6 collides with U2 pad8 (top 38.645); the 38.65 first attempt was caught by the pre-QC DRC (clearance/hole_clearance). 38.32 is the only narrow corridor clearing BOTH D2 pad1 (bottom 38.0) and U2 pad8 (top 38.645).",
+   "ratified": "#K2-570 sec.2"
+  },
+  "3_product_board_qc_caliber": "for a product-tree ECO board the full QC = the nine-row judge caliber (verify C1-C5) + C6 named-scope zero-difference + C7=0 + the arc gauge + the re-render; the wipe_resolve regeneration chain is reserved for exam/regeneration boards (it regenerates from l14 and does not cover a post-edited product board). Ratified by #K2-570 sec.3."
+ },
+ "redlines": {
+  "old_delivery_anchor": "L6/board/k2_v4_8L.m7t6.kicad_pcb (a14610e0542e6314) + jlc_package_m7t6r2 KEPT on disk",
+  "frozen_four_sources": "untouched",
+  "criteria_rev6": "read-only",
+  "exam_line": "l14/rev-61 untouched"
+ },
+ "OWNER-ITEMS": 0
+}
