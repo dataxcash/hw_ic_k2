@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_m7t6_final_board_visual_review_v1",
+ "ts": "2026-10-02",
+ "authority": "#K2-560 - the render visual-inspection window (the visual dimension was missing: the m7t6 final board and the R1852 capability line had numeric evidence only).",
+ "board": {
+  "path": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t6.kicad_pcb",
+  "sha256_16": "a14610e0542e6314",
+  "outline_mm": [
+   22.95,
+   32.95,
+   143.05,
+   79.05
+  ],
+  "footprints": 55
+ },
+ "renders": {
+  "top": "L6/evidence_visual/m7t6_top.png",
+  "bottom": "L6/evidence_visual/m7t6_bottom.png",
+  "tool": "kicad-cli pcb render --width 1800 --height 1200 --quality high",
+  "inspected_through": "the ENG visual channel (view_image) - not by inference"
+ },
+ "checklist_R1_R6": [
+  {
+   "item": "R1 component overlap",
+   "verdict": "PASS",
+   "basis": "top view: every refdes is individually legible and every body is separated; no silhouette merges"
+  },
+  {
+   "item": "R2 frame overflow / edge contact",
+   "verdict": "PASS",
+   "basis": "numeric cross-check: NO footprint bbox crosses the board outline (board outline [22.95, 32.95, 143.05, 79.05] vs all footprint bboxes); bottom view confirms nothing hangs off any edge"
+  },
+  {
+   "item": "R3 edge proximity of the yellow part at the TOP edge seen in the top render",
+   "verdict": "PASS (identified, not crossing)",
+   "basis": "that yellow block is a component pad group sitting AT the block-frame line (22.95,32.95,51.5,78.0), which lies INSIDE the board outline - so it is a frame-boundary item, not an outline overflow (the declared partition names the straddling items: H1/H4 pads + 2 vias)"
+  },
+  {
+   "item": "R4 four corner mounting holes",
+   "verdict": "PASS",
+   "basis": "top and bottom renders both show one grey hole at each of the four corners (H1/H4 named on the top silkscreen); NPTH/hole footprints: ['H1', 'H2', 'H3', 'H4']"
+  },
+  {
+   "item": "R5 high-speed area vs connector relative position",
+   "verdict": "PASS",
+   "basis": "the right-hand high-pin-count connectors sit at the board edge with their fanout running left into the mid-board BGA (U6) - the routed geometry is continuous with no part placed across a connector's escape lanes"
+  },
+  {
+   "item": "R6 thermal / dense-area anomalies",
+   "verdict": "PASS",
+   "basis": "no thermal-relief anomaly or congestion blob visible; the densest zone (U6 BGA fanout) matches the in-register routing intent"
+  }
+ ],
+ "verdict": "VISUAL PASS (no named problem)",
+ "discipline": "#K2-560 sec.2 item 4: a real problem would have been named and stopped; none was found. The nine certification rows are NOT reopened, the delivery package is NOT touched, the frozen sources are NOT touched.",
+ "OWNER-ITEMS": 0,
+ "self_sha16": "a939636a8741b8ef"
+}
