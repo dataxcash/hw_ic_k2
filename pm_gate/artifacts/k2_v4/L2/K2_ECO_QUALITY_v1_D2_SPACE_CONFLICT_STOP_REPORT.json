@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_eco_quality_v1_d2_space_conflict_stop_report",
+ "ts": "2026-10-02",
+ "engine_head": "294da1b5",
+ "authority": "#K2-566 sec.3 ('一次性成图协议' + fail-closed: 'QC 任一条不过 ⇒ 具名停手报监，不硬凑、不预授第二次'). The protocol's first step IS a machine self-check; it FAILED, so this is a named stop, not a forced edit.",
+ "verdict": "STOP (fail-closed). The authorized D2 shift (sec.2 item 2: ΔY = +2.5 mm) is NOT IMPLEMENTABLE on this board: it shorts D2.1 onto the SW_U2 net.",
+ "finding": {
+  "what": "D2.1 (net P3V3) carries an in-pad via and sits at (36.7,34.6). Shifting D2 down by +2.5 mm puts D2.1's pad box at [35.45,37.95] x [36.20,38.00]. The SW_U2 net (D2.2's own net, routed from D2.2 to U2.1) runs a 45-deg serpentine/chain directly under D2, occupying x 33.95..38.85 at y 36.55..38.15.",
+  "evidence": {"overlapping_SW_U2_segments_in_moved_D2pad1_box": 18,
+               "example_segments": ["(36.75,37.25)->(36.55,37.25)", "(37.05,37.15)->(36.85,37.15)", "(37.45,36.95)->(37.35,37.05)", "(37.95,36.85)->(37.75,36.85)"],
+               "result": "P3V3 <-> SW_U2 SHORT (copper overlap, not just clearance)"},
+  "why_the_ruling_missed_it": "#K2-566 sec.2 item 2 checked the moved body against U4 ('距 U4 净空尚余 ~1.2mm') but did not read the SW_U2 chain that lies immediately beneath D2 (the owner's premise '正下方 4-5mm 全空' is falsified by that chain)."
+ },
+ "infeasibility_proof": {
+  "chain_clearance_needs": "D2.1 pad top y = 33.7+Δ must stay >= (min SW_U2 y over the pad x-range = 36.85) - clearance(0.20)  =>  Δ <= 1.15 mm",
+  "acceptance_needs": "pads-to-edge >= 2.0 => Δ >= 1.25 ; body-to-edge >= 2.5 => Δ >= 2.15",
+  "conclusion": "no downward shift satisfies even the WEAKER acceptance bound (1.25) without crossing the SW_U2 chain (needs <=1.15). The D2 'do not touch the edge' requirement is therefore UNSATISFIABLE on the current routing without re-routing SW_U2."
+ },
+ "options_needing_a_ruling": [
+  "A) authorise re-routing the SW_U2 chain: move its portion out of D2's new footprint (dip below y~38.6 in x 35..42, then to U2.1) - a real change to a second net (SW_U2, the switch node), with its own length/DRC check.",
+  "B) shrink the D2 shift to <=1.15 mm: keeps the chain, but FAILS both acceptance bounds (pads 1.9 / body 1.5) - i.e. the owner's anti-edge goal is not met.",
+  "C) move D2 in a DIFFERENT direction (e.g. +X to the empty area) - not ordered; would need a new ruling.",
+  "D) accept a smaller, explicitly-stated margin: e.g. pads-to-edge >= 1.5 (Δ=1.15) - violates the stated 2.0.",
+  "NOTE: the ruling's 'SW_U2 leg translates with D2' already implies re-routing SW_U2 (its chain anchor (38.85,36.55) must follow D2.2); the physical BLOCKER is the chain body, not the leg."
+ ],
+ "routing_half_status": "READY and independent of this blocker: candidate /tmp/opencode/eco564/cand_arc2.kicad_pcb (sha 4c9784287d28820e) already satisfies #K2-565 (188 tangent arcs, 0 same-layer straight-segment turns, C1-C5 PASS, C3 byte-identical). It just needs D2 applied before the one-shot QC.",
+ "redlines_checked": {"frozen_sources":"untouched","criteria_rev6":"read-only","l14_rev61":"untouched",
+   "delivery_anchor_a14610e0":"NOT modified - no board built this window","worker":"none","temp":"/tmp/opencode only"},
+ "OWNER-ITEMS": 0
+}
