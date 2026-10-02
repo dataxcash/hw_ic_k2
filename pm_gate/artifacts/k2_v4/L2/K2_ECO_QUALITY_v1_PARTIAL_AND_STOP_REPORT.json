@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_eco_quality_v1_partial_and_stop_report",
+ "ts": "2026-10-02",
+ "engine_head": "294da1b5",
+ "authority": "#K2-564 sec.6 ('QC 全过 ⇒ 版本 bump 重出'); R2002 = the BEFORE half. This is the AFTER-half PARTIAL + a NAMED stop-and-report (Constitution: '发现真问题 ⇒ 具名停手报监，不改板'; '冲突即停机'; sec.0 rule1: do not narrow an owner requirement).",
+ "state": "PARTIAL: the ROUTING half is DONE and independently verified on a candidate board. The D2 half and the C6 declaration are BLOCKED on named conflicts (below). No commit of a changed delivery board.",
+ "step0_metric_reproduction": {
+  "what": "the #K2-564 sec.2 table (J3->J2 689 seg / 539.4 mm / 17 bends / 3 right-angles; J4->J2 706 / 512.1 / 16 / 13) was NOT from a path-tracer - it is the reader's OWN ad-hoc script (opencode part prt_0fceec7d9001, call call_05a9c89e).",
+  "how": "the script groups 'all segments whose net has a pad on BOTH connectors' -> J3∩J2 = {GND, PCIE_REFCLK0_P, PCIE_REFCLK0_N, PERSTA#}; J4∩J2 = {GND, PCIE_REFCLK1_P, PCIE_REFCLK1_N, PERSTB#}. GND contributes 545 of the 689/706 segments (a plane), and the corner count runs on a greedy, order-dependent F.Cu chain.",
+  "reproduced_exactly": {
+   "J3->J2": {"segs": 689, "total_mm": 539.4, "bends": 17, "right_angles": 3},
+   "J4->J2": {"segs": 706, "total_mm": 512.1, "bends": 16, "right_angles": 13}
+  },
+  "where_the_16_right_angles_are": {
+   "PCIE_REFCLK0_N": 3,
+   "PCIE_REFCLK1_P": "2 orthogonal + 7 apexes of the 0.42 mm length-tuning serpentine",
+   "PCIE_REFCLK1_N": 4,
+   "note": "PCIE_REFCLK0_P carries 3 REAL orthogonal corners the greedy chain MISSES. GND / PERSTA# / PERSTB# contribute 0."
+  }
+ },
+ "routing_half_DONE": {
+  "targets": ["PCIE_REFCLK0_P", "PCIE_REFCLK0_N", "PCIE_REFCLK1_P", "PCIE_REFCLK1_N"],
+  "method": "every orthogonal corner replaced by a 45 deg chamfer; the triangular length-tuning folds reshaped to 45-deg-turn trapezoids (no 90 deg turn left anywhere on the four F.Cu routes); layer set and pad/via endpoints unchanged.",
+  "length_preserved": "each pair's intra-pair delta is restored to its ORIGINAL value by tuning the P meander extra (meander length is exactly S+E, so the restore is exact).",
+  "candidate_board": {"path": "/tmp/opencode/eco564/cand_refclk.kicad_pcb", "sha256_16": "5a46ccba8fda3cef"},
+  "gauge_after": {"J3->J2": {"right_angles": 0}, "J4->J2": {"right_angles": 0}},
+  "official_judge_C1_C5": {"verdict": "PASS",
+    "C1": {"unconnected": 0},
+    "C2": {"total": 137, "limit": 168, "new_classes": []},
+    "C3": {"max_mm": 0.078764, "limit": 0.15, "note": "byte-identical to the registered reading (REFCLK is not in verify.PAIRS; PCIE_DN0..7 untouched)"},
+    "C4": {"count": 3048, "ref": 2637},
+    "C5": {"element_set_diff": 2269}},
+  "C6_C7": {"C7_hs_fanout_untouched": {"diff": 0},
+            "C6_outside_copper_unchanged": {"equivalent": false, "unauthorized_added": 114, "removed": 57, "n_authorized": 0}}
+ },
+ "conflicts_named": [
+  {"id": "C6-FRAME", "severity": "BLOCKING",
+   "finding": "the ECO's own acceptance requires 'C6 具名合规'. C6 compares copper OUTSIDE the exam frame [22.95,32.95,51.5,78.0]. The J3/J4->J2 signal routes start at x~58 and run to x~135 - i.e. entirely OUTSIDE that frame. Any reshuffle of them is an out-of-frame copper change: measured 114 added / 57 removed, all UNAUTHORIZED.",
+   "why_blocking": "making C6 pass requires an in-register authorization (tools/eda_eng/block.py::declared_outside_keys reads it from the drawing SPEC). Adding that declaration = a SPEC/drawing change, which sec.4 red-lines ('未获批不得改生成器/SPEC/原理图').",
+   "needed": "either (a) a ruling authorizing the in-register declaration (with its named scope = the REFCLK0/REFCLK1 nets), or (b) a ruling that C6 does not apply to the delivery board (which is not an exam-block board), or (c) a re-scoped ECO whose edited routes lie INSIDE the frame."},
+  {"id": "D2-DISTANCE", "severity": "NEEDS-RULING (does not block the routing half)",
+   "finding": "sec.2 orders 'Y+ ~2.0 mm' but sec.5 acceptance is 'body-to-edge >= 2.5 mm'. With the ECO's OWN nominal body figure (sec.2: '本体距边 ~0.35 mm', i.e. the SMA body top at y=33.3), +2.0 mm gives only 2.35 mm - SHORT of 2.5. The BEFORE baseline's -1.198 mm came from the footprint BOUNDING BOX (dominated by the silk refdes text), not the body; under that reading +2.0 mm gives only 0.80 mm and the acceptance would need +3.70 mm.",
+   "also": "D2 pad 1 carries an IN-PAD via (P3V3, F.Cu-In4) and its In4 trunk (36.7,34.6)->(42.8,35.5)->(58.5,35.5). '只动 D2' is therefore under-specified: the via + trunk must move with the pad. Pad 2 (SW_U2) reconnects via a 45 deg leg into the SW_U2 chain at y~37-38.",
+   "needed": "one ruling: 'body' = nominal SMA body (=> shift >= 2.15 mm, use 2.5 mm) or 'body' = footprint bbox (=> shift >= 3.70 mm). Also confirm the via+trunk may move with D2."},
+  {"id": "SERPENTINE-SPACE", "severity": "OBSERVATION (acceptance still met)",
+   "finding": "the compensating folds sit in a boxed corridor: component pads at y~61.5-62.0 above, and DS320_STRAP copper at y~63.89 below (REFCLK1_P baseline 63.282). A 'regular' wide 45-deg serpentine therefore cannot be grown into the free straight-run; the fix keeps the folds within their clearance envelope (apex flats ~0.1 mm). This satisfies 'right-angles = 0' and preserves length/clearance, but the owner's aesthetic complaint ('三角形折线') is only PARTIALLY addressed.",
+   "needed": "none to pass the acceptance; a re-route into more space would need a new, larger movable region (a new work order)."}
+ ],
+ "capacity": "This window completed the ROUTING half (verified). The remaining ECO steps (D2 shift, C6 declaration, the full exam re-run, the version-bumped package, the AFTER registration) are NOT completed in this window - the C6 declaration and the D2 distance both need a ruling first, and the rules forbid forcing a half-product.",
+ "redlines_checked": {"frozen_four_sources": "untouched (SPEC 0bd52ed4..., manifest a8ef3ea8..., PCB fb07d25a..., rules 0a459839...)",
+   "criteria_rev6": "read-only, untouched", "board_freeze_l14_rev61": "untouched",
+   "delivery_anchor_a14610e0": "the delivered board file was NOT modified; all work is on a /tmp copy (cand sha 5a46ccba)",
+   "worker": "none; temp /tmp/opencode only; no same-input re-runs (each candidate is a new input)"},
+ "OWNER-ITEMS": 0
+}
