@@ -578,12 +578,13 @@ def _kinks_and_rmin(chain):
     return kinks, (min(r) if r else None)
 
 
-def apply(src, dst, report_path):
+def apply(src, dst, report_path, scope="all"):
     import pcbnew as P
     b = P.LoadBoard(src)
     names = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
     netcode = {ni.GetNetname(): c for c, ni in b.GetNetInfo().NetsByNetcode().items()}
-    TARGETS = ["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] + TARGET_OUT
+    TARGETS = (["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] if scope == "refclk"
+               else ["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] + TARGET_OUT)
     fail = []
     NNR = {}                                           # per-net report extras
 
@@ -594,6 +595,8 @@ def apply(src, dst, report_path):
                 t += P.ToMM(x.GetLength())
         return t
 
+    tracktot = {}                                      # pre-write (the SWIG board is flaky after mutation)
+    for net in TARGETS: tracktot[net] = track_total(net)
     orig = {}                                          # net -> list of chains (all layers)
     for net in TARGETS:
         chs = load_chains(b, net)
@@ -629,7 +632,7 @@ def apply(src, dst, report_path):
             fail.append("PCIE_REFCLK1_P: %s" % ex)
     # --- OUT nets: rebuild every chain on its OWN layer; the WAVE chain (largest) absorbs
     #     the net's total length delta via its amplitude, so the NET length is preserved.
-    for net in TARGET_OUT:
+    for net in (TARGET_OUT if scope != "refclk" else []):
         try:
             rebuilt = []
             exempt = []
@@ -693,8 +696,9 @@ def apply(src, dst, report_path):
     laymap = {"F.Cu": P.F_Cu, "In5.Cu": P.In5_Cu, "In2.Cu": P.In2_Cu, "B.Cu": P.B_Cu}
     def pt(p): return P.VECTOR2I(int(round(p[0] * 1e6)), int(round(p[1] * 1e6)))
     for net, chains in newc.items():
-        for ch in chains:
-            lay = ch[0][5]; w = ch[0][6]
+        for kk, ch in enumerate(chains):
+            src0 = orig[net][kk][0]
+            lay = src0[5]; w = src0[6]
             for e in ch:
                 if e[0] == "S":
                     s = P.PCB_TRACK(b); s.SetStart(pt(e[1])); s.SetEnd(pt(e[2])); s.SetWidth(int(round(w * 1e6)))
@@ -743,8 +747,10 @@ def apply(src, dst, report_path):
             if r is not None: arcmin = min(arcmin, r)
         rep["per_net"][net] = {"final_len": round(tot, 4), "kinks": kn,
                                "arc_min": None if arcmin > 1e8 else round(arcmin, 4)}
-    rep["refclk_pair_delta"] = round(abs(rep["per_net"]["PCIE_REFCLK1_P"]["final_len"]
-                                         - rep["per_net"]["PCIE_REFCLK1_N"]["final_len"]), 5)
+    if "PCIE_REFCLK1_P" in rep["per_net"] and "PCIE_REFCLK1_N" in rep["per_net"]:
+        rep["refclk_pair_delta"] = round(abs(rep["per_net"]["PCIE_REFCLK1_P"]["final_len"]
+                                             - rep["per_net"]["PCIE_REFCLK1_N"]["final_len"]), 5)
+    rep["scope"] = scope
     ok = True
     for net, d in rep["per_net"].items():
         if d["kinks"] != 0: ok = False
@@ -785,7 +791,8 @@ if __name__ == "__main__":
                           "pair_delta": rep["refclk_pair_delta"]}, ensure_ascii=False))
         raise SystemExit(0 if ok else 1)
     if len(sys.argv) >= 4 and sys.argv[1] == "apply":
-        rep = apply(sys.argv[2], sys.argv[3], "/tmp/opencode/eco_arc_v2/apply_report.json")
+        rep = apply(sys.argv[2], sys.argv[3], "/tmp/opencode/eco_arc_v2/apply_report.json",
+                    sys.argv[4] if len(sys.argv) > 4 else "all")
         print(json.dumps({"selftest": "PASS", "applied": True, "all_ok": rep["all_ok"],
                           "pair_delta": rep.get("refclk_pair_delta"), "per_net": rep["per_net"]}, ensure_ascii=False))
         raise SystemExit(0 if rep["all_ok"] else 1)
