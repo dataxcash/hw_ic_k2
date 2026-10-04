@@ -44,6 +44,13 @@ rep = {
    "1_owner_premise": c["owner_premise_disclosure"],
    "2_sw_u2_dive_value": {"landed": "y = 38.32 mm", "ruled_suggestion": "y ~ 38.6",
      "why": "38.6 collides with U2 pad8 (top 38.645); the 38.65 first attempt was caught by the pre-QC DRC (clearance/hole_clearance). 38.32 is the only narrow corridor clearing BOTH D2 pad1 (bottom 38.0) and U2 pad8 (top 38.645).", "ratified": "#K2-570 sec.2"},
+   "4_arc_rework_attempt": {
+     "what": "OWNER-ORDERED arc rework (task #K2-ARC-V2 / R1 / R1a / R1b / R1c): replace the residual FAKE arcs on the four REFCLK nets and the fine zig-zag teeth on the seven PCIE_UP_OUT*_J2 nets with true arcs (R>=0.25 / >=0.15), same layer/width/net, lengths preserved.",
+     "carrier": "copper-level census (R1c): the teeth are on In5.Cu (90 corners, 15/10/12/17/16/11/9); In2=long-straight ridges, B=stubs, F=fan-in ladders (0 corners).",
+     "outcome": "FAIL (terminal, #K2-573 sec.3 item 3): the tool's wave-rebuild could not build 5 of the 7 OUT In5 teeth chains (1 index error + 4 'no teeth'); the clock side PASSED; all-or-nothing write => the candidate board m7t8 was NOT produced.",
+     "board_state": "the delivered board m7t7 is UNCHANGED (sha 7a99ab2e55e281b4); zero partial write; zero downstream impact.",
+     "residual": "the OUT nets' fine teeth (In5.Cu) remain as-drawn (the residual fake-corner item stays OPEN and is disclosed here, not hidden).",
+     "rework_window": "one (exhausted); no second window (per #K2-573 sec.3 item 3)."},
    "3_product_board_qc_caliber": "for a product-tree ECO board the full QC = the nine-row judge caliber (verify C1-C5) + C6 named-scope zero-difference + C7=0 + the arc gauge + the re-render; the wipe_resolve regeneration chain is reserved for exam/regeneration boards (it regenerates from l14 and does not cover a post-edited product board). Ratified by #K2-570 sec.3."},
  "redlines": {"old_delivery_anchor": "L6/board/k2_v4_8L.m7t6.kicad_pcb (a14610e0542e6314) + jlc_package_m7t6r2 KEPT on disk",
    "frozen_four_sources": "untouched", "criteria_rev6": "read-only", "exam_line": "l14/rev-61 untouched"},
