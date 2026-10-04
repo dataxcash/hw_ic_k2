@@ -134,3 +134,41 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ---- #K2-ARC-V2-R4: per-footprint connector model (orientation + pin1 marker) ----
+import math as _math
+
+
+def _sph(cx, cy, cz, r, color):
+    return ("Transform { translation %g %g %g children [ Shape { appearance Appearance {"
+            " material Material { diffuseColor %s } } geometry Sphere { radius %g } } ] }\n"
+            % (cx / U, cy / U, cz / U, color, r / U))
+
+
+def _txt(s, cx, cy, cz, size):
+    return ("Transform { translation %g %g %g children [ Shape { appearance Appearance {"
+            " material Material { diffuseColor 1 1 0.2 } } geometry Text { string [ \"%s\" ]"
+            " fontStyle FontStyle { size %g } } } ] }\n" % (cx / U, cy / U, cz / U, s, size / U))
+
+
+def connector_wrl2(L, W, H, shell_t, face, pin1, partno):
+    """Per-footprint connector: mating face points along local `face` (one of +x,-x,+y,-y);
+    a red pin1 dot sits on top at the pin1 pad's local (x,y).  Length L along the pad rows.
+    NOTE: the VRML Text node is emitted for the asset but kicad-cli 3D does NOT render it."""
+    ph = {"-y": 0.0, "+y": _math.pi, "+x": _math.pi / 2, "-x": -_math.pi / 2}[face]
+    c, sn = _math.cos(ph), _math.sin(ph)
+    def R(x, y): return (x * c - y * sn, x * sn + y * c)
+    def rr(sx, sy): return (abs(sx * c) + abs(sy * sn), abs(sx * sn) + abs(sy * c))
+    bh = H - shell_t
+    o = ["#VRML V2.0 utf8\n"]
+    o.append(_t(0, 0, bh / 2, *rr(L, W), bh, PLASTIC))
+    o.append(_t(0, 0, H - shell_t / 2, *rr(L + 0.4, W + 0.4), shell_t, SHELL, 0.6))
+    x, y = R(0, -(W / 2) - 0.25); o.append(_t(x, y, (H + 0.5) / 2, *rr(L + 0.6, 0.5), H + 0.5, SHELL, 0.6))
+    x, y = R(0, W / 2 - 0.55); o.append(_t(x, y, bh * 0.55, *rr(L - 2.0, 1.1), bh * 0.5, "0.03 0.03 0.03"))
+    for lx in (-(L / 2 - 0.6), (L / 2 - 0.6)):
+        x, y = R(lx, -(W / 2) - 0.35); o.append(_t(x, y, bh * 0.5, *rr(0.9, 0.7), bh * 0.9, SHELL, 0.6))
+    p1 = (pin1[0], pin1[1])   # model file == footprint-local frame -> pin1 sits at its pad-local coords
+    o.append(_t(p1[0], p1[1], H + 0.45, 0.9, 0.9, 0.9, "0.95 0.10 0.10", 0.7))  # pin1 marker column
+    o.append(_txt(partno, 0, 0, H + 0.1, min(L, W) * 0.35))
+    return "".join(o)

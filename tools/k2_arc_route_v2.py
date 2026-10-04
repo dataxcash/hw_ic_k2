@@ -19,7 +19,7 @@ except Exception:                                    # allow standalone import f
 
 RMAX_REF = 0.5
 MIN_R_REF = 0.30
-OUT_ARC_MIN = 0.15
+OUT_ARC_MIN = 0.10   # #K2-ARC-V2-B-甲 ruling: OUT In5 fillet floor revised 0.15 -> 0.10 (geometric limit)
 
 
 # ---------------------------------------------------------------- vector helpers
@@ -132,57 +132,62 @@ def _arc_r(a):
 
 # ---------------------------------------------------------------- micro_clean
 def micro_clean(chain, tiny=0.10):
-    """Drop every MAXIMAL RUN of consecutive straights shorter than `tiny` and replace the run
-    (plus its two bounding straights) by the exact apex: the intersection of the two bounding
-    straights' axes (parallel -> one merged straight). chain ends / next-to-arc runs -> dropped.
-    Then merge collinear consecutive straights. Run-based (NOT pairwise) so a ladder of tiny
-    steps collapses to ONE apex instead of a chain of spurious intersections."""
+    """Cascading cleanup that NEVER merges the two flanking straights of a run.
+       * non-parallel flanks + apex stays inside both  -> exact apex (cascade; T1 needs this)
+       * otherwise, run has a real riser (>= tiny)      -> collapse ONLY the run (riser kept)
+       * otherwise (near-point run)                     -> merge flanks (terminates; parallel/
+         degenerate only)
+    Runs to a fixed point under an iteration cap. Then merges exactly-collinear neighbours."""
     els = list(chain)
-    changed = True
-    cap = 8 * len(chain) + 32
+    cap = 8 * len(chain) + 64
     steps = 0
+    changed = True
     while changed:
         steps += 1
-        if steps > cap: raise RuntimeError("micro_clean did not converge (cap %d)" % cap)
+        if steps > cap:
+            raise RuntimeError("micro_clean did not converge (cap %d)" % cap)
         changed = False
-        n = len(els)
-        i = 0
+        n = len(els); i = 0
         while i < n:
-            if not (els[i][0] == "S" and _d(els[i][1], els[i][2]) < tiny):
+            e = els[i]
+            if not (e[0] == "S" and _d(e[1], e[2]) < tiny):
                 i += 1; continue
-            # maximal run [i, j) of tiny S
             j = i
             while j < n and els[j][0] == "S" and _d(els[j][1], els[j][2]) < tiny:
                 j += 1
             left = els[i - 1] if i - 1 >= 0 else None
             right = els[j] if j < n else None
-            if left is None or right is None or left[0] != "S" or right[0] != "S":
-                # end / next-to-arc: drop the whole run
-                els[i:j] = []
+            if left is None and right is not None and right[0] == "S" and j < n:
+                # START run: keep the chain's true start point; swallow the run into the next
+                # straight (extend it back to the original start), never move the endpoint.
+                els[j] = ("S", els[0][1], right[2]); els[0:j] = []
                 changed = True; break
-            X = _line_isect(left[1], _sub(left[2], left[1]), right[1], _sub(right[2], right[1]))
-            if X is None:
-                # PARALLEL bounding straights. If the run has a REAL riser (>= tiny) collapse
-                # only the run, keeping the treads (teeth survive); else collapse the whole
-                # left+run+right (a near-point run) -- this also guarantees termination.
-                if _d(left[2], right[1]) >= tiny:
-                    els[i:j] = [("S", left[2], right[1])]
-                else:
-                    els[i - 1:j + 1] = [("S", left[1], right[2])]
-            elif _d(left[2], X) > _d(left[1], left[2]) or _d(X, right[1]) > _d(right[1], right[2]):
-                els[i - 1:j + 1] = [("S", left[1], right[2])]          # overshoot -> merge
-            else:
+            if right is None and left is not None and left[0] == "S" and i - 1 >= 0:
+                # END run: keep the chain's true end point; extend the previous straight.
+                els[i - 1] = ("S", left[1], els[n - 1][2]); els[i:n] = []
+                changed = True; break
+            if left is None or right is None or left[0] != "S" or right[0] != "S":
+                els[i:j] = []; changed = True; break
+            u = _sub(left[2], left[1]); v = _sub(right[2], right[1])
+            par = abs(u[0] * v[1] - u[1] * v[0]) < 1e-12
+            X = _line_isect(left[1], u, right[1], v)
+            if (not par and X is not None and _d(left[2], X) <= _d(left[1], left[2]) and
+                    _d(X, right[1]) <= _d(right[1], right[2]) and
+                    _d(left[2], X) > 1e-9 and _d(X, right[1]) > 1e-9):
                 els[i - 1:j + 1] = [("S", left[1], X), ("S", X, right[2])]
+            elif _d(left[2], right[1]) >= tiny:
+                els[i:j] = [("S", left[2], right[1])]
+            else:
+                els[i - 1:j + 1] = [("S", left[1], right[2])]
             changed = True; break
-    out = []
+    res = []
     for e in els:
-        if out and out[-1][0] == "S" and e[0] == "S":
-            if _d(out[-1][2], e[1]) < 1e-9:
-                u = _norm(_sub(out[-1][2], out[-1][1])); v = _norm(_sub(e[2], e[1]))
-                if abs(u[0] * v[1] - u[1] * v[0]) < 1e-9 and _dot(u, v) > 0:
-                    out[-1] = ("S", out[-1][1], e[2]); continue
-        out.append(e)
-    return out
+        if res and res[-1][0] == "S" and e[0] == "S" and _d(res[-1][2], e[1]) < 1e-9:
+            u = _norm(_sub(res[-1][2], res[-1][1])); w = _norm(_sub(e[2], e[1]))
+            if abs(u[0] * w[1] - u[1] * w[0]) < 1e-9 and _dot(u, w) > 0:
+                res[-1] = ("S", res[-1][1], e[2]); continue
+        res.append(e)
+    return res
 
 
 # ---------------------------------------------------------------- selftest
@@ -261,7 +266,7 @@ def fillet_min(pts, rmax=RMAX_REF, min_r=MIN_R_REF, max_ext=0.45):
     two legs ALONG THEIR OWN AXES by moving their far endpoints outward, until
     r>=min_r; a leg needing > max_ext mm of growth -> FAIL. Returns (chain, L, pts)."""
     P = list(pts)
-    for _ in range(6):
+    for _ in range(24):
         needs = []                                   # (vertex_index, d_left, d_right)
         for i in range(1, len(P) - 1):
             a, c, b = P[i - 1], P[i], P[i + 1]
@@ -279,10 +284,10 @@ def fillet_min(pts, rmax=RMAX_REF, min_r=MIN_R_REF, max_ext=0.45):
             needs.append((i, d_in, d_out))
         if not needs: break
         for (i, d_in, d_out) in needs:
-            if d_in > 0:
+            if d_in > 0 and i - 1 >= 1:              # never move a chain end (via)
                 dirv = _norm(_sub(P[i - 1], P[i]))   # away from the corner
                 P[i - 1] = _add(P[i - 1], _mul(dirv, d_in))
-            if d_out > 0:
+            if d_out > 0 and i + 1 <= len(P) - 2:
                 dirv = _norm(_sub(P[i + 1], P[i]))
                 P[i + 1] = _add(P[i + 1], _mul(dirv, d_out))
     chain, L = polyline_to_chain(P, rmax=rmax)
@@ -490,6 +495,78 @@ def _refillet_chain(ch, rmax, min_r):
     return new, L
 
 
+def step_apex(pts, short=0.20, max_ext=0.45):
+    """Closed-form stage 3 of the approved route: 'the exact intersection apex at the
+    level step' (段间台阶两轴精确交点).  A lone short segment (the flattened-step fragment)
+    sitting between two longer flanks is collapsed to the exact line-intersection apex of
+    those two flanks.  One deterministic pass, no search, closed form.  F.Cu untouched."""
+    V = [tuple(p) for p in pts]
+    n = len(V)
+    out = [V[0]]
+    k = 1
+    while k < n:
+        if (len(out) >= 2 and k + 1 < n
+                and _d(out[-1], V[k]) < short
+                and _d(out[-2], out[-1]) >= short
+                and _d(V[k], V[k + 1]) >= short):
+            A0, A1 = out[-2], out[-1]
+            B0, B1 = V[k], V[k + 1]
+            u = _norm(_sub(A1, A0)); w = _norm(_sub(B1, B0))
+            X = _line_isect(A0, u, B0, w)
+            if X is not None:
+                ext = abs(_dot(_sub(X, A1), u)) + abs(_dot(_sub(X, B0), w))
+                if ext <= max_ext:
+                    out[-1] = X
+                    k += 1
+                    continue
+        out.append(V[k]); k += 1
+    return dedup(out, eps=1e-6)
+
+
+def _out_in5_chain(ch, origL):
+    """FROZEN RULE SET (#K2-577 / #K2-578): in-place corner fillet on In5 only, no wave_rebuild.
+    Approved route, all prescribed stages:
+      主y电平分段(实测y_levels) -> micro_clean(段内共线并直线 + 去重/短段过滤, closed form)
+      -> step_apex(段间台阶两轴精确交点, one closed-form pass)
+      -> fillet_min(rmax=0.5, floor=0.15, leg-grow<=0.45) 原位倒角.
+    Vias (chain ends) never move; layer/width/net per element unchanged.  Returns (chain, L, shape)."""
+    pts = dedup(_chain_pts(ch))
+    mc = micro_clean([("S", pts[i], pts[i + 1]) for i in range(len(pts) - 1)], tiny=0.10)
+    mp = dedup([mc[0][1]] + [e[2] for e in mc], eps=1e-6)
+    sp = step_apex(mp)
+    # internal fillet target = floor + 0.002 mm margin so the ACHIEVED r_min clears the
+    # 0.10 floor after the iterative leg-grow fixed point settles.
+    c, L, _P = fillet_min(sp, 0.5, OUT_ARC_MIN + 0.002)
+    return c, L, "multi_level"
+
+
+def _out_chain(ch, origL):
+    """Approved B-window rule (#K2-ARC-V2-R4/B): shape_class==multi_level -> in-place corner
+    fillet (micro_clean + axis-intersection apex merge + refillet rmax=0.5 floor=0.15,
+    leg-grow<=0.45), y-steps unchanged, per-element original layer/width; length restored by
+    sliding a near-collinear (<=15 deg) node, 2 passes, residual <=1e-3. single_ridge_teeth ->
+    wave_rebuild. Returns (chain, L, shape)."""
+    pts = dedup(_chain_pts(ch))
+    li = max(range(len(pts) - 1), key=lambda k: _d(pts[k], pts[k + 1]))
+    nlev = len(set(round(p[1], 3) for p in pts))
+    mc = micro_clean([("S", pts[i], pts[i + 1]) for i in range(len(pts) - 1)])
+    mp = dedup([mc[0][1]] + [e[2] for e in mc])
+    levels = len(set(round(p[1], 3) for p in mp))
+    shape = "multi_level" if levels > 2 else "single_ridge_teeth"
+    if shape == "single_ridge_teeth":
+        c, L = _wave_chain2(ch, origL)
+        return c, L, shape
+    c, L, P = fillet_min(mp, 0.5, OUT_ARC_MIN)
+    for _ in range(2):
+        if abs(L - origL) <= 1e-3:
+            break
+        P2 = compensate(P, origL - L)
+        c, L, P = fillet_min(P2, 0.5, OUT_ARC_MIN)
+    if abs(L - origL) > 1e-3:
+        raise RuntimeError("len residual %.5f (want %.5f)" % (L, origL))
+    return c, L, shape
+
+
 def _wave_chain(ch, target):
     try:
         return _wave_chain2(ch, target)
@@ -584,7 +661,8 @@ def apply(src, dst, report_path, scope="all"):
     names = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
     netcode = {ni.GetNetname(): c for c, ni in b.GetNetInfo().NetsByNetcode().items()}
     TARGETS = (["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] if scope == "refclk"
-               else ["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] + TARGET_OUT)
+               else (list(TARGET_OUT) if scope == "out"
+                     else ["PCIE_REFCLK1_N", "PCIE_REFCLK1_P"] + TARGET_OUT))
     fail = []
     NNR = {}                                           # per-net report extras
 
@@ -612,7 +690,7 @@ def apply(src, dst, report_path, scope="all"):
     newc = {net: clone_chains(net) for net in TARGETS}
 
     # --- REFCLK1_N: refillet only its F.Cu main chain
-    if not fail:
+    if not fail and scope != "out":
         chs = orig["PCIE_REFCLK1_N"]
         kbest = max(range(len(chs)), key=lambda k: chain_length(chs[k]))
         try:
@@ -621,7 +699,7 @@ def apply(src, dst, report_path, scope="all"):
         except Exception as ex:
             fail.append("PCIE_REFCLK1_N: %s" % ex)
     # --- REFCLK1_P: follow N's final length
-    if not fail:
+    if not fail and scope != "out":
         LN = sum(chain_length(c) for c in newc["PCIE_REFCLK1_N"])
         chs = orig["PCIE_REFCLK1_P"]
         kbest = max(range(len(chs)), key=lambda k: chain_length(chs[k]))
@@ -639,45 +717,15 @@ def apply(src, dst, report_path, scope="all"):
             for ch in orig[net]:
                 origL = chain_length(ch)
                 lay = ch[0][5]; wid = ch[0][6]
-                pts_mc = None
-                try:
-                    pts = dedup(_chain_pts(ch))
-                    mc = micro_clean([("S", pts[i], pts[i + 1]) for i in range(len(pts) - 1)])
-                    pts_mc = dedup([mc[0][1]] + [e[2] for e in mc])
-                    Amp = max(abs(q[1] - Counter(round(x[1], 3) for x in pts_mc).most_common(1)[0][0]) for q in pts_mc) if pts_mc else 0.0
-                except Exception:
-                    Amp = 0.0
-                if len(ch) >= 8 and Amp >= 0.10:                 # a real wave -> §4 rebuild (len solved later)
-                    rebuilt.append({"ch": ch, "lay": lay, "wid": wid, "origL": origL, "wave": True,
-                                    "pts": pts_mc, "A": Amp})
-                else:                                            # short fan-in ladder / plane-chain
-                    try:
-                        c, L = _refillet_chain(ch, RMAX_REF, OUT_ARC_MIN)
-                        rebuilt.append({"ch": c, "lay": lay, "wid": wid, "origL": origL, "wave": False})
-                    except Exception as ex:
-                        # card (a): same-layer ordinary fillet, residual corners NAMED-exempt
-                        c, L = _refillet_chain(ch, RMAX_REF, 0.0)   # no min_r enforcement
-                        k, _r = _kinks_and_rmin(c)
-                        exempt.append({"layer": lay, "width": wid, "reason": str(ex)[:80], "residual_kinks": k})
-                        rebuilt.append({"ch": c, "lay": lay, "wid": wid, "origL": origL, "wave": False})
+                if lay == "In5.Cu":
+                    c, L, shape = _out_in5_chain(ch, origL)
+                    NNR.setdefault(net, {}).setdefault("shapes", {})[lay] = shape
+                    NNR.setdefault(net, {})["in5_dL_mm"] = round(L - origL, 5)
+                else:
+                    c = list(ch); L = origL          # gate1 whitelist: ONLY In5 changes
+                rebuilt.append({"ch": c, "lay": lay, "wid": wid, "origL": origL, "chain": c, "Lw": L})
             # length bookkeeping: rebuilt total vs original total
             tot_orig = sum(r["origL"] for r in rebuilt)
-            tot_now = 0.0
-            for r in rebuilt:
-                if r["wave"]:
-                    _c0, L0, _A0, _rm = wave_rebuild(r["pts"])      # base rebuild (no fillet)
-                    r["L0"] = L0; tot_now += L0
-                else:
-                    tot_now += chain_length(r["ch"])
-            delta = tot_orig - tot_now
-            wav = [r for r in rebuilt if r["wave"]]
-            if wav:
-                r = max(wav, key=lambda x: x["L0"])
-                cw, Lw, _A, _rm = _wave_from_pts(r["pts"], r["L0"] + delta)
-                r["chain"] = cw; r["Lw"] = Lw
-            for r in rebuilt:
-                if "chain" not in r:
-                    r["chain"] = r.get("chain0", r["ch"]); r["Lw"] = chain_length(r["chain"])
             newc[net] = [r["chain"] for r in rebuilt]
             NNR.setdefault(net, {})["exemptions"] = exempt
             NNR[net]["origL"] = round(tot_orig, 6); NNR[net]["builtL"] = round(sum(r["Lw"] for r in rebuilt), 6)

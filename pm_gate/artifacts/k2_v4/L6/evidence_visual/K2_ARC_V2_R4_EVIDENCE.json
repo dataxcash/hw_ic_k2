@@ -1,0 +1,99 @@
+{
+ "card": "#K2-ARC-V2-R4 render rework (board = m7t8a candidate; board file ZERO write)",
+ "board_file_under_render": "/tmp/opencode/eco_arc_v2/k2_v4_8L.m7t8a_cand.kicad_pcb",
+ "board_files_touched": "NONE (models injected into a /tmp COPY)",
+ "evidence_1_orientation_triple_table": {
+  "J4": {
+   "footprint_rot_deg": 0.0,
+   "model_entry_axis_local": "-y",
+   "board_edge_face": "+y",
+   "pin1_world_mm": [
+    54.1,
+    61.45
+   ]
+  },
+  "J2": {
+   "footprint_rot_deg": 0.0,
+   "model_entry_axis_local": "+x",
+   "board_edge_face": "+x",
+   "pin1_world_mm": [
+    132.65,
+    42.9
+   ]
+  },
+  "J3": {
+   "footprint_rot_deg": 180.0,
+   "model_entry_axis_local": "-y",
+   "board_edge_face": "-y",
+   "pin1_world_mm": [
+    64.9,
+    45.75
+   ]
+  }
+ },
+ "evidence_2_model_orientation_rewrite": "tools/k2_render_3d.py::connector_wrl2 - per-footprint geometry with the mating face along the board-edge direction (local), length along the pad rows",
+ "evidence_3_pin1_marker": {
+  "marker": "red box column on top at the pin1 pad's footprint-local (x,y)",
+  "world_coords_mm": {
+   "J4": [
+    54.1,
+    61.45
+   ],
+   "J2": [
+    132.65,
+    42.9
+   ],
+   "J3": [
+    64.9,
+    45.75
+   ]
+  },
+  "pixel_verified_distance_mm": {
+   "J2": 0.163,
+   "J3": 0.052,
+   "J4": 0.065
+  },
+  "tolerance_mm": 2.0,
+  "all_within_2mm": true,
+  "affine_fit": {
+   "px": [
+    82.59769678369581,
+    9.644894412396907
+   ],
+   "py": [
+    47.58880698984238,
+    9.648304477730823
+   ]
+  },
+  "residual_mm": {
+   "J2": {
+    "dx_mm": 0.001,
+    "dy_mm": -0.0,
+    "dist_mm": 0.001
+   },
+   "J3": {
+    "dx_mm": -0.005,
+    "dy_mm": 0.0,
+    "dist_mm": 0.005
+   },
+   "J4": {
+    "dx_mm": 0.005,
+    "dy_mm": -0.0,
+    "dist_mm": 0.005
+   }
+  }
+ },
+ "evidence_4_model_text": {
+  "status": "STOPPED - kicad-cli 3D does NOT render VRML Text (nor Sphere)",
+  "probe": "/tmp/opencode/eco_arc_v2/r4probe/probe.wrl (Box + Text 'TXT') rendered -> only the Box appears",
+  "evidence_png": "/tmp/opencode/eco_arc_v2/r4probe/probe_text_evidence.png",
+  "board_silkscreen_fallback": "NOT TAKEN (forbidden this window per #K2-ARC-V2-R4/B; needs a separate ruling + board change)"
+ },
+ "renders": {
+  "top": "k2/pm_gate/artifacts/k2_v4/L6/evidence_visual/m7t8a_top.png",
+  "bottom": "k2/pm_gate/artifacts/k2_v4/L6/evidence_visual/m7t8a_bottom.png",
+  "iso": "k2/pm_gate/artifacts/k2_v4/L6/evidence_visual/m7t8a_iso.png"
+ },
+ "verification_image": "/tmp/opencode/eco_arc_v2/r4_pin1_verify.png",
+ "note": "orientation fixed for the one connector that was wrong (J2 SlimSAS now long-axis along Y, mating face +X/R-edge); J3/J4 were already at -Y/+Y"
+}
