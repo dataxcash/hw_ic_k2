@@ -8,7 +8,16 @@
 
 ## 预览
 
-施工交付板（`hw/k2_v4_8L.l4.kicad_pcb`，120 × 46 mm）顶视图：
+**当前施工交付版（`m7t8a`）**——标注版 3D 渲染（连接器进线方向、pin1 圆点、器件型号均已对照板文件核验）：
+
+![K2 PCB — 3D 渲染·标注版（等轴测）](docs/images/k2_m7t8a_3d_iso_annotated.png)
+
+同一交付版的顶视图（`pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb`）：
+
+![K2 PCB — 3D 渲染（顶视）](docs/images/k2_m7t8a_top.png)
+
+<details>
+<summary>历史预览（l4 版，2025-09）</summary>
 
 ![K2 PCB — 2D 顶视图](docs/images/k2_pcb_top.png)
 
@@ -16,7 +25,9 @@
 
 ![K2 PCB — 3D 渲染（顶视）](docs/images/k2_pcb_3d.png)
 
-*3D 渲染对标准封装使用 KiCad 官方模型；MCIO（SFF-1016）与 SlimSAS（SFF-8654）连接器无厂商 3D 模型，由封装几何自建的简化模型代替。*
+</details>
+
+*3D 渲染对标准封装使用 KiCad 官方模型；MCIO（SFF-1016）与 SlimSAS（SFF-8654）连接器无厂商 3D 模型，由封装几何自建的简化模型代替（进线方向与 pin1 圆点按各封装在板上的实际摆位放置）。*
 
 ## 概述
 
@@ -68,7 +79,7 @@ K2 位于主控主机与工卡设备之间。一路 SlimSAS x8 上行承载 8 �
 | 文件 | 含义 |
 |---|---|
 | `hw/k2_v4_8L.kicad_pcb` | **设计源**（冻结输入） |
-| `hw/k2_v4_8L.l4.kicad_pcb` | **施工交付板**（可打样） |
+| `pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb` | **施工交付板**（可打样） |
 
 ## 文档
 
