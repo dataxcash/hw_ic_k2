@@ -1,0 +1,280 @@
+{
+ "artifact": "k2_p5_jlc_fab_package_m7t8a",
+ "schema": 1,
+ "revision": "M7T8A",
+ "nature": "K2 m7t6 closure package - JLC HDI channel, process A frozen; packaged board k2_v4_8L.m7t8a.kicad_pcb",
+ "board": "k2_v4_8L.m7t8a.kicad_pcb",
+ "board_sha16": "5ab6f4bd0adbaadb",
+ "pro_sha16": "e7e704ae8a4715b8",
+ "kicad_version": "10.0.5",
+ "criteria_anchor": "rev=6",
+ "commands": {
+  "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
+  "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report --report-path 02_drill_excellon/drill_report.txt",
+  "build": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_m7t8a_v1.py"
+ },
+ "canonicalization": {
+  "date_pattern": "\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:[+-]\\d{2}:\\d{2})?",
+  "replacement": "2026-09-19T00:00:00+08:00",
+  "files_normalized": 33
+ },
+ "dfm_summary": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0
+ },
+ "n01_g36_regions": {
+  "k2_v4_8L.m7t8a-B_Cu.gbr": 0,
+  "k2_v4_8L.m7t8a-F_Cu.gbr": 0,
+  "k2_v4_8L.m7t8a-In1_Cu.gbr": 1,
+  "k2_v4_8L.m7t8a-In2_Cu.gbr": 0,
+  "k2_v4_8L.m7t8a-In3_Cu.gbr": 1,
+  "k2_v4_8L.m7t8a-In4_Cu.gbr": 10,
+  "k2_v4_8L.m7t8a-In5_Cu.gbr": 0,
+  "k2_v4_8L.m7t8a-In6_Cu.gbr": 1
+ },
+ "drill_total": 726,
+ "n_files": 60,
+ "files": {
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-B_Cu.gbr": {
+   "sha256": "755c936a41eaf165ea65ab58970b8e124d5cfcfe0f836b8a6a4609e1f0b12a07",
+   "bytes": 39402
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-B_Mask.gbr": {
+   "sha256": "ce08e91fb6ec8a32b58005b055bce835a08855ea572e7a6b0390e9f8e6a80a11",
+   "bytes": 22206
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-B_Silkscreen.gbr": {
+   "sha256": "a86cdd0bd926aba69ffffa20397307becd29c06daf52cafcdff2390260806b49",
+   "bytes": 472
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-Edge_Cuts.gbr": {
+   "sha256": "f38a534e871b6f9a29c9321a1d74a11f3884ae3d5dd9729d50756d4c5109c8c7",
+   "bytes": 697
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-F_Cu.gbr": {
+   "sha256": "b48889818f113b85565ae8212785ab318ec788c2ff981bf1d4ef196de91030f6",
+   "bytes": 226705
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-F_Mask.gbr": {
+   "sha256": "76b38c522cfd39b15ec08b8031e1c710ce51a6c147ec14f83ff459005c8482c1",
+   "bytes": 336235
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-F_Silkscreen.gbr": {
+   "sha256": "7fea92caa521512d4fcd805a432d1400a726a11f557b3c46c6d3db2f2cc9e1c5",
+   "bytes": 84766
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In1_Cu.gbr": {
+   "sha256": "97fa316cb328bc424a34b4fc71a162dccf3fcd952e20535ecb7cf02aa4e4df42",
+   "bytes": 245933
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In2_Cu.gbr": {
+   "sha256": "545ca6029fe31747ca0811c56bd0899790f9018dcf9fabc26adeb81f5f203bfe",
+   "bytes": 58076
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In3_Cu.gbr": {
+   "sha256": "1c9640afc77798ec6b30cb12280f562ed41a2c7e4786f3b50fe762e7866cecad",
+   "bytes": 198346
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In4_Cu.gbr": {
+   "sha256": "e3c72d95bc66eb750feafdaacadd185fd8c66357259c42e64af71f83a89aba5e",
+   "bytes": 328163
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In5_Cu.gbr": {
+   "sha256": "c4fabe7e8c7d98ca5a23db4c6ee3e93ccbc14d591c6fe2a3d69c14a9da5dff2f",
+   "bytes": 175766
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-In6_Cu.gbr": {
+   "sha256": "d38971176912ffe25b40712f6e8b8bc029b3719cc557fab7b3993a38f23e0006",
+   "bytes": 125211
+  },
+  "01_gerber_rs274x/k2_v4_8L.m7t8a-job.gbrjob": {
+   "sha256": "c415f45d3b6637588e6fd23e7c666209fbeb8425131b1f4313b4e6b8d748ec65",
+   "bytes": 4898
+  },
+  "02_drill_excellon/drill_report.txt": {
+   "sha256": "fb99c214cb7e2a4e61c9340a786dcc9de47543b7e61a3e9618037e809bdc2ae0",
+   "bytes": 3104
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-back-in4-drl_map.svg": {
+   "sha256": "ff6f416e3225f38395910431d5f10ea083be4268ba40c2d02f7caf7999acdbd5",
+   "bytes": 19780
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-back-in4.drl": {
+   "sha256": "dafd7a031c016aa24fe0d9da747b9f0893d22e868981fb8b88042473a7e67ee7",
+   "bytes": 338
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-back-in5-drl_map.svg": {
+   "sha256": "49ad03a43a4489ebc20b4ab57136468c1f40a5d1a995e0169b20798c774bee62",
+   "bytes": 24980
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-back-in5.drl": {
+   "sha256": "25967a7004247536df62b0faeb2a484365796ac700c6b0fbea3e8adf03ed05e0",
+   "bytes": 846
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-drl_map.svg": {
+   "sha256": "9905462d397e1666d8e02e98789df1d6e9a4b713a363b479a65c0bce8967cf85",
+   "bytes": 95953
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in1-drl_map.svg": {
+   "sha256": "63718b000448bb6abd9cbfabaa30605cb1f78aed324c44b1c7ac743b8eee8959",
+   "bytes": 35869
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in1.drl": {
+   "sha256": "19074f346cdea4541ee4161a414653afe47da4590bd77b546af62c9587d81bf5",
+   "bytes": 2506
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in2-drl_map.svg": {
+   "sha256": "bcd66794d8603edfb5ca009b5d958aaf4c21c42fac5ade4ad6f1600fd5395a2c",
+   "bytes": 50544
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in2.drl": {
+   "sha256": "431f558344730ae384c6bc39bf090e4f67a359889b11681c34a671569f983e8a",
+   "bytes": 2425
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in4-drl_map.svg": {
+   "sha256": "6fa4fc2f03a2874a199ee94fdca9c1d210866b9c0ed4db24b8bdca93b68900ab",
+   "bytes": 35451
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in4.drl": {
+   "sha256": "e8c7e7cc232449f1938ed344fd784589cb63e2884923d8279da008a3d8f359c7",
+   "bytes": 473
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in5-drl_map.svg": {
+   "sha256": "52a4d3456a8c5f407650cb9f8632b2490637e74120953a7969a915cb6d695d5a",
+   "bytes": 23781
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-front-in5.drl": {
+   "sha256": "55fd8b93656137ba645680113501a57a5db3ce4aeadb70c83afb159c5e9e47cf",
+   "bytes": 796
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-in2-in5-drl_map.svg": {
+   "sha256": "7717bf30848ea47816b46cbca19a6bdf00bbe35434fc48230a90896d7f0c5058",
+   "bytes": 29995
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-in2-in5.drl": {
+   "sha256": "33180fbad61703cb37a65e078de161816bbe60ae926aaef32c0ea044de87eb8c",
+   "bytes": 1652
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-in4-in5-drl_map.svg": {
+   "sha256": "5400538e94874e2539a19e6559a8bef58334a78cb74b56b7a802525837297702",
+   "bytes": 19779
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a-in4-in5.drl": {
+   "sha256": "13938e960b8b13de47d964dfa951280ae4495aa3087e9f31d8a7889eedbb2f9f",
+   "bytes": 339
+  },
+  "02_drill_excellon/k2_v4_8L.m7t8a.drl": {
+   "sha256": "69f31325c0ee636cb02cc31e8a8bd39312af0ad5e7cece2afb505f6d227b1969",
+   "bytes": 4117
+  },
+  "03_stackup/HDI_stage_diagram.svg": {
+   "sha256": "3e5a0cb56fdb333227bf7748d28d9fc3467c17309b345882502f4f7e02e3823a",
+   "bytes": 5413
+  },
+  "03_stackup/JLC08161H_stackup.svg": {
+   "sha256": "44370475b258848f3763df9442ef874b14af4eb56374c60e54373f752b40b5b9",
+   "bytes": 3091
+  },
+  "04_impedance/impedance_table.json": {
+   "sha256": "06ff73078e867a354102488a9aa521b4dfc4305f9d113c95b4d4f3d8271b4d32",
+   "bytes": 10474
+  },
+  "04_impedance/impedance_table.md": {
+   "sha256": "27dfda8f7017e789770ea47f052e7cb19d5da4508e5f211207373b0ed31196a6",
+   "bytes": 2757
+  },
+  "05_layer_sequence.txt": {
+   "sha256": "89a84b08ed280e7050f72684ef09a9e467c7583d5a0ba146b15fe21a0b292d4e",
+   "bytes": 1001
+  },
+  "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md": {
+   "sha256": "ef48da8f83393580328d828b6e13ea4a15a117405c9ca57c9f43844ce880162c",
+   "bytes": 3237
+  },
+  "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md": {
+   "sha256": "cec7bd86d39b71c85aedaaf64b9aa76f84208ceae86361e2677d6792ff3adac4",
+   "bytes": 1463
+  },
+  "06_rulings/L2_RULING_u6_thermal_v1.md": {
+   "sha256": "2c41056fc3a4de05d819fa710aab69f07a3cca633d124698a0b739ea05a03b22",
+   "bytes": 3571
+  },
+  "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md": {
+   "sha256": "e8e16228bf1ea0ebc975b3ae4c551dcf2e8285254ebb9078dfab1c8b14f2523f",
+   "bytes": 4938
+  },
+  "06_rulings/copy_parity.json": {
+   "sha256": "45cc92b0669574afeedab0f55860fe4bb510e14ed4aec6b174dc667bef283b0e",
+   "bytes": 200
+  },
+  "06_rulings/dfm_raw_readings.json": {
+   "sha256": "a16f427d6353de85ea8083af935f566c24ba8f1b7e400eafb3b59bd97af4af68",
+   "bytes": 1906
+  },
+  "06_rulings/jlc_dfm_hdi_m7t6.json": {
+   "sha256": "9ae7623f9f6e4c3b1f0fab6c9529a2186af4221f069a473cae97b477e28c8769",
+   "bytes": 6420
+  },
+  "06_rulings/jlc_dfm_hdi_m7t6.md": {
+   "sha256": "72393205fdb0d50fb9c5fd3b1b4cb0877dc24d2a7de1d36595a1b58c002f4601",
+   "bytes": 2373
+  },
+  "07_verify/anchor_selfcheck.json": {
+   "sha256": "ef60e3189c61b0f6d709289777bdfd81baeb7ee9ad1c77cd55e8f227d0d36d7f",
+   "bytes": 1344
+  },
+  "07_verify/drill_board_xcheck.json": {
+   "sha256": "76f719761821165c7460c60e9a73fed873e740216a45d5b35d4e6bee9eaa11ae",
+   "bytes": 799
+  },
+  "07_verify/drill_census.json": {
+   "sha256": "cd33ff011925202f957d2fbddeb49e0fce0d4f9edcb0ad12bd1b494ef5501879",
+   "bytes": 1585
+  },
+  "07_verify/gerber_aperture_census.json": {
+   "sha256": "a7251f35a8d5e8ee9b21e9aa888de5f9b584300bbee581dba06882d9d7d9e2f5",
+   "bytes": 2145
+  },
+  "07_verify/gerber_extents.json": {
+   "sha256": "43aad9dd1eac807610b564bf3b04ebb751bf2e80d073425edd52ff8aa88b849e",
+   "bytes": 3576
+  },
+  "07_verify/legacy_token_sanitize.json": {
+   "sha256": "a4dd0a440c6c298f8395c1de41a33ece8861ff90a7a7a281978462668095ff05",
+   "bytes": 416
+  },
+  "07_verify/manifest_self_describe.json": {
+   "sha256": "3fc4472b9ea4ada5ec2b6547905b78ef5d83eb48c9e13652f405e991f0038bdb",
+   "bytes": 359
+  },
+  "07_verify/mask_accept_fix_proof.json": {
+   "sha256": "cbc76bae2c445c8e01f4befdb26832b66afd0b7842d72f61d01b2ada9816fd87",
+   "bytes": 995
+  },
+  "07_verify/n01_g36_census.json": {
+   "sha256": "ab71269bddc9cd6f46456385f07d46a3fc32bcb51b81919e0153f93be415b289",
+   "bytes": 573
+  },
+  "07_verify/n10_delivery_board_identity.json": {
+   "sha256": "c4507c9fb00b5b0c0efeac4618f7d484cd66698f3dabe466c8c41aa52ce33c2b",
+   "bytes": 364
+  },
+  "07_verify/silk_overhang.json": {
+   "sha256": "88b7aa982abebd3e95fce68fd5f081419b64f7ccba1057781493529b025c2cf7",
+   "bytes": 671
+  },
+  "07_verify/zone_refill_invariance.json": {
+   "sha256": "dd8f81c8b62b935b0d4647c4c05f5fe3efe5473dc0397cebcd381e6f648c4d01",
+   "bytes": 937
+  },
+  "DISCLOSURE.md": {
+   "sha256": "a2def02bb529d7dde414202b3e3cd835f132c06df1cbd4c02e806b514fc54402",
+   "bytes": 1322
+  },
+  "ORDER_NOTES.md": {
+   "sha256": "23b573d99fcdcd9e1232612254c8b1434498f097ff8c94fc16792e6d1b0cbd41",
+   "bytes": 3949
+  }
+ }
+}

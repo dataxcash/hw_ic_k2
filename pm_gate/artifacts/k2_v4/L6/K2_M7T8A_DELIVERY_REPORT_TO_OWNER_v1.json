@@ -1,0 +1,219 @@
+{
+ "artifact": "k2_m7t8a_delivery_report_to_owner_v1",
+ "ts": "2026-10-05",
+ "generated": "#K2-580 sec.3 (m7t8a promotion ④ closure) + M-ENG-REPORT-READING-DRIFT: GENERATED - every hardware reading below is copied programmatically from the in-register artifacts (never hand-typed).",
+ "source_artifacts": {
+  "package_manifest": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t8a/MANIFEST.json",
+  "nine_row_readout": "pm_gate/artifacts/k2_v4/L6/K2_M7T8A_NINE_ROW_readout.json",
+  "c7_disclosure_evidence": "pm_gate/artifacts/k2_v4/L6/K2_M7T8A_C7_disclosure_evidence.json"
+ },
+ "state": "m7t8a PROMOTED (owner #K2-ARC-V2-CLOSE item 4): anchor + package FINAL + nine-row read; C7's 6 readings are attributed (see disclosure 6). Remaining: the owner's business decision / signature (生成≠下单).",
+ "package": {
+  "dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_m7t8a",
+  "n_files": 60,
+  "board": "k2_v4_8L.m7t8a.kicad_pcb",
+  "board_sha16": "5ab6f4bd0adbaadb",
+  "dfm": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "drill_total": 726,
+  "manifest_identity": {
+   "artifact": "k2_p5_jlc_fab_package_m7t8a",
+   "revision": "M7T8A",
+   "nature": "K2 m7t6 closure package - JLC HDI channel, process A frozen; packaged board k2_v4_8L.m7t8a.kicad_pcb"
+  },
+  "manifest_files_listed": 60
+ },
+ "anchor_locked": {
+  "board_in_repo": "pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb",
+  "sha16_on_disk": "5ab6f4bd0adbaadb",
+  "predecessor": "L6/board/k2_v4_8L.m7t7.kicad_pcb (7a99ab2e55e281b4, kept on disk)",
+  "invariant": "the package board == the promoted board (PACKAGE QC ROW 9 identity holds: MANIFEST board_sha16 == on-disk sha16)."
+ },
+ "nine_rows": {
+  "source": "pm_gate/artifacts/k2_v4/L6/K2_M7T8A_NINE_ROW_readout.json",
+  "C1": "unconnected = 0",
+  "C2": "cand_total 191, ref_total 191, new_classes []",
+  "C3": "pair_deltas_mm = {'PCIE_REFCLK0_P|PCIE_REFCLK0_N': 0.06124, 'PCIE_REFCLK1_P|PCIE_REFCLK1_N': 0.00064}",
+  "C5": "element_set_diff: removed 127 / added 96",
+  "C6": "touched = ['PCIE_REFCLK1_N', 'PCIE_REFCLK1_P'] ; out_of_scope = {}",
+  "C7": "hs-pad fanout: 6 readings differ (all attributed in disclosure 6)",
+  "GAUGE_RK": {
+   "PCIE_REFCLK1_N": {
+    "n_arcs": 12,
+    "r_min": 0.2919,
+    "r_limit": 0.25,
+    "below_limit": 0,
+    "kinks": 0
+   },
+   "PCIE_REFCLK1_P": {
+    "n_arcs": 39,
+    "r_min": 0.3,
+    "r_limit": 0.25,
+    "below_limit": 0,
+    "kinks": 0
+   }
+  },
+  "verdict": "FAIL",
+  "verdict_note": "FAIL is caused SOLELY by C7; every C7 reading is a named, attributed disclosure (disclosure 6), not an un-attributed defect."
+ },
+ "disclosures_from_the_ECO": {
+  "1_owner_premise": {
+   "statement": "the owner's premise 'D2 has 4-5mm clear directly below' is MEASURED FALSE: the SW_U2 switch-node chain runs directly under D2 (x 33.95..38.85, y 36.55..38.15). Disclosed here, not hidden; resolved by route A; no owner question raised because the goal was reachable (sec.11).",
+   "also": "#K2-564 sec.2's 689/706 table was the reader's ad-hoc 'nets shared by both connectors' script and includes GND (545 of 689/706 segments); the true scope is the two REFCLK pairs."
+  },
+  "2_sw_u2_dive_value": {
+   "landed": "y = 38.32 mm",
+   "ratified": "#K2-570 sec.2",
+   "why": "38.6 collides with U2 pad8 (top 38.645); 38.32 is the only narrow corridor clearing BOTH D2 pad1 (bottom 38.0) and U2 pad8 (top 38.645)."
+  },
+  "3_product_board_qc_caliber": "for a product-tree ECO board the full QC = the nine-row judge caliber + C6 named-scope + the arc gauge + the re-render; the wipe_resolve regeneration chain is reserved for exam/regeneration boards. Ratified by #K2-570 sec.3.",
+  "4_arc_rework_terminal": {
+   "what": "OWNER-ORDERED arc rework: REFCLK1_P/N rebuilt with TANGENT arcs (this ECO); the seven OUT In5 equal-length teeth kept as-is.",
+   "refclk1_result": "ACCEPTED: REFCLK1_N 12 arcs r_min 0.2919 mm, REFCLK1_P 39 arcs r_min 0.30 mm (>= 0.25), kinks 0.",
+   "out_in5_disposition": "the 7 OUT In5 functional equal-length teeth are EXEMPTED from the arc gauge (precedent #K2-572 sec.a / #K2-566); kept as-shipped, zero change (owner 2026-10-05 directive).",
+   "optional_future_ECO": "full rounding of the OUT teeth needs a budgeted waveform redraw (symmetric/square); owner may order it - not started."
+  },
+  "5_r4_render_evidence": {
+   "what": "owner-facing review renders of the m7t8a candidate: per-footprint connector 3D models (orientation + pin1), three views, review-annotated copy.",
+   "orientation_triple": {
+    "J2": "SlimSAS SFF-8654, fp rot 0, entry axis +x, faces R-edge",
+    "J3": "MCIO SFF-1016, fp rot 180, entry axis -y, faces T-edge",
+    "J4": "MCIO SFF-1016, fp rot 0, entry axis -y, faces B-edge"
+   },
+   "pin1": "pixel-verified within 0.163 / 0.052 / 0.065 mm of the pin1 pads",
+   "model_text_item": "STOPPED: kicad-cli's VRML renderer draws neither Text nor Sphere; part numbers shown via the review-annotated image overlay instead (no board change).",
+   "J9_disclosure": "no J9 footprint on this board (only J2/J3/J4/J12/J13); UART_RX/UART_TX land on U1."
+  },
+  "6_c7_fanout_neighbourhood_disclosure": {
+   "plain_language": "These 6 C7 readings are a MEASUREMENT-WINDOW effect: C7 sums the copper of ALL in-scope nets inside each pad's 2 mm window. 3 readings are the reworked net's OWN fanout (expected for a re-draw); the other 3 are neighbouring pads whose own net did NOT move one bit of copper - the reading shifted only because REFCLK1's re-drawn copper falls inside their 2 mm window. Evidence attached; the gauge is unchanged.",
+   "measurement_command": "PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_eco_quality_judge_v2.py --cand L6/board/k2_v4_8L.m7t8a.kicad_pcb --ref L6/board/k2_v4_8L.m7t7.kicad_pcb",
+   "measurement_location": "k2/tools/k2_eco_quality_judge_v2.py:214-219 (C7 loop) ; near_pad() :148 ; board_inventory() :38",
+   "lines": [
+    {
+     "pad": "J2.23",
+     "net": "PCIE_UP_OUT5_P_J2",
+     "delta_mm": -0.2071,
+     "class": "neighbour-window",
+     "own_net_delta_mm": 0.0
+    },
+    {
+     "pad": "J2.29",
+     "net": "PCIE_REFCLK1_P",
+     "delta_mm": -0.4142,
+     "class": "own-net-expected",
+     "own_net_delta_mm": -0.2071
+    },
+    {
+     "pad": "J2.33",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "delta_mm": -0.2071,
+     "class": "neighbour-window",
+     "own_net_delta_mm": 0.0
+    },
+    {
+     "pad": "J2.35",
+     "net": "PCIE_UP_OUT7_P_J2",
+     "delta_mm": -0.2071,
+     "class": "neighbour-window",
+     "own_net_delta_mm": 0.0
+    },
+    {
+     "pad": "J4.A11",
+     "net": "PCIE_REFCLK1_P",
+     "delta_mm": 0.2744,
+     "class": "own-net-expected",
+     "own_net_delta_mm": 0.1561
+    },
+    {
+     "pad": "J4.A12",
+     "net": "PCIE_REFCLK1_N",
+     "delta_mm": 0.2744,
+     "class": "own-net-expected",
+     "own_net_delta_mm": 0.1183
+    }
+   ],
+   "own_net_3": {
+    "note": "the reworked net's own fanout changed - expected for this ECO (authorized)",
+    "rows": [
+     {
+      "pad": "J2.29",
+      "net": "PCIE_REFCLK1_P",
+      "total_delta_mm": -0.4142,
+      "own_net_delta_mm": -0.2071,
+      "class": "EXPECTED change of this ECO (the reworked net's own fanout)",
+      "authority": "owner 2026-10-05 directive + ECO #K2-ARC-V2-CLOSE"
+     },
+     {
+      "pad": "J4.A11",
+      "net": "PCIE_REFCLK1_P",
+      "total_delta_mm": 0.2744,
+      "own_net_delta_mm": 0.1561,
+      "class": "EXPECTED change of this ECO (the reworked net's own fanout)",
+      "authority": "owner 2026-10-05 directive + ECO #K2-ARC-V2-CLOSE"
+     },
+     {
+      "pad": "J4.A12",
+      "net": "PCIE_REFCLK1_N",
+      "total_delta_mm": 0.2744,
+      "own_net_delta_mm": 0.1183,
+      "class": "EXPECTED change of this ECO (the reworked net's own fanout)",
+      "authority": "owner 2026-10-05 directive + ECO #K2-ARC-V2-CLOSE"
+     }
+    ]
+   },
+   "neighbour_3": {
+    "c6_touched_set": [
+     "PCIE_REFCLK1_N",
+     "PCIE_REFCLK1_P"
+    ],
+    "note": "these 3 pads sit on UNTOUCHED nets (C6 touched-set proves zero change); their own-net delta is exactly 0.0000; the -0.2071 is the REFCLK1 rework copper in their window",
+    "identical_delta_reproduced": true,
+    "delta_mm": -0.2071,
+    "rows": [
+     {
+      "pad": "J2.23",
+      "net": "PCIE_UP_OUT5_P_J2",
+      "total_delta_mm": -0.2071,
+      "own_net_delta_mm": 0.0,
+      "attribution": "PCIE_REFCLK1_P/N arc-rework copper falls inside this pad's 2 mm measurement window",
+      "window_scope_elems": [
+       43,
+       43
+      ]
+     },
+     {
+      "pad": "J2.33",
+      "net": "PCIE_UP_OUT6_N_J2",
+      "total_delta_mm": -0.2071,
+      "own_net_delta_mm": 0.0,
+      "attribution": "PCIE_REFCLK1_P/N arc-rework copper falls inside this pad's 2 mm measurement window",
+      "window_scope_elems": [
+       55,
+       55
+      ]
+     },
+     {
+      "pad": "J2.35",
+      "net": "PCIE_UP_OUT7_P_J2",
+      "total_delta_mm": -0.2071,
+      "own_net_delta_mm": 0.0,
+      "attribution": "PCIE_REFCLK1_P/N arc-rework copper falls inside this pad's 2 mm measurement window",
+      "window_scope_elems": [
+       50,
+       50
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "redlines": {
+  "old_anchor_kept": "L6/board/k2_v4_8L.m7t7.kicad_pcb (7a99ab2e55e281b4) + jlc_package_m7t7 KEPT on disk",
+  "frozen_four_sources": "untouched",
+  "criteria_rev6": "read-only (C7 gauge unchanged, #K2-580)",
+  "exam_line": "l14/rev-61 untouched"
+ }
+}
