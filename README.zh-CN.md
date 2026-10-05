@@ -12,20 +12,7 @@
 
 ![K2 PCB — 3D 渲染·标注版（等轴测）](docs/images/k2_m7t8a_3d_iso_annotated.png)
 
-同一交付版的顶视图（`pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb`）：
-
-![K2 PCB — 3D 渲染（顶视）](docs/images/k2_m7t8a_top.png)
-
-<details>
-<summary>历史预览（l4 版，2025-09）</summary>
-
-![K2 PCB — 2D 顶视图](docs/images/k2_pcb_top.png)
-
-![K2 PCB — 3D 渲染（等轴测）](docs/images/k2_pcb_3d_iso.png)
-
-![K2 PCB — 3D 渲染（顶视）](docs/images/k2_pcb_3d.png)
-
-</details>
+板文件：`pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb`
 
 *3D 渲染对标准封装使用 KiCad 官方模型；MCIO（SFF-1016）与 SlimSAS（SFF-8654）连接器无厂商 3D 模型，由封装几何自建的简化模型代替（进线方向与 pin1 圆点按各封装在板上的实际摆位放置）。*
 

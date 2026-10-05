@@ -14,20 +14,7 @@ directions, pin-1 markers and part labels verified against the board):
 
 ![K2 PCB — 3D render, annotated (isometric)](docs/images/k2_m7t8a_3d_iso_annotated.png)
 
-Top view of the same release board (`pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb`):
-
-![K2 PCB — 3D render (top)](docs/images/k2_m7t8a_top.png)
-
-<details>
-<summary>Earlier preview (l4 revision, Sep 2025)</summary>
-
-![K2 PCB — 2D top view](docs/images/k2_pcb_top.png)
-
-![K2 PCB — 3D render (isometric)](docs/images/k2_pcb_3d_iso.png)
-
-![K2 PCB — 3D render (top)](docs/images/k2_pcb_3d.png)
-
-</details>
+Board file: `pm_gate/artifacts/k2_v4/L6/board/k2_v4_8L.m7t8a.kicad_pcb`
 
 *3D renders use KiCad stock models for standard packages. The MCIO (SFF-1016) and
 SlimSAS (SFF-8654) connectors have no vendor 3D models and are represented by
